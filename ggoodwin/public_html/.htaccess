@@ -1,0 +1,13 @@
+# begin file .htaccess
+AuthUserFile /var/www/htpasswd
+AuthGroupFile /dev/null
+AuthName "By Invitation Only"
+AuthType Basic
+
+order deny,allow
+deny from all
+allow from .wellesley.edu
+allow from 149.130.
+require valid-user 
+satisfy any
+# end file .htaccess

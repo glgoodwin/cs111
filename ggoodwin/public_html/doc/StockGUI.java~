@@ -1,0 +1,122 @@
+/**Gabe Goodwin
+   StockGUI.java
+   CS230 Final Project
+
+
+   This class will create a GUI to display the information collected by the StockInfo Class. 
+**/
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
+ 
+public class StockGUI{
+
+
+    public StockGUI(){
+	this.init();
+    }
+
+
+
+
+
+    /** Calls upon the helper methods to put the GUI together**/
+    public void init(){
+	JPanel wholeGUI= new JPanel();
+	wholeGUI.setLayout(new GridLayout(2,2));
+	wholeGUI.add(makeULPanel());
+	//	add(makeURPanel());
+	//	add(makeLLPanel());
+	//add(makeLRPanel());
+		  
+
+
+    }
+
+
+    /**Creates the Upper Left Panel for the GUI that will display the current Day's sTock information for the given stock(s).**/
+    public JPanel makeULPanel(){
+	JPanel P1 = new JPanel();
+	P1.setLayout(new GridLayout(2,1));
+
+
+	JPanel P12 = new JPanel();
+	P12.setLayout(new BorderLayout(2,2));
+
+
+	//add P11 to P1
+	P1.add(stock1TodayPanel);
+	
+	
+	
+	JTextArea textStock2 = new JTextArea(" ",2,5);//text area for second stock symbol
+	return P1;
+    }
+    }
+
+/**Creates the top half of the UL panel. Keeps track of information for Stock1. Takes a string representing whether the signal is buy or sell**/ 
+
+    public JPanel stock1TodayPanel(String pic){
+       
+	JPanel P11 = new JPanel();
+	P11.setLayout(new BorderLayout(2,2));
+
+	//creates the components for top half of ULPanel
+	JLabel stockText1 = new JLabel("Enter a stock Symbol: ");
+	JTextArea textStock1 = new JTextArea(" ",2,5);//text area for first stock Symbol
+	//needs actionListener
+	JLabel priceText1 = new JLabel("Closing Price: ");
+	JLabel textPrice1 = new JLabel("$$$.$$");
+	//needs action Listener
+	JLabel signalText1 = new JLabel("Signal: ");
+	JPanel sigPanel = makeSigPanel(pic);
+	
+
+	//adds components to Panel
+	P11.add(stockText1,BorderLayout.NORTH);
+	P11.add(priceText1,BorderLayout.NORTH);
+	P11.add(signalText1,BorderLayout.NORTH);
+	P11.add(textStock1, BorderLayout.CENTER);
+	P11.add(textPrice1, BorderLayout.CENTER);
+	P11.add(sigPanel, BorderLayout.EAST);
+
+
+    }
+
+    public JPanel makeSigPanel(String pic){
+	JPanel eastPanel = new JPanel();
+	JPanel imgPanel = new ShowImage(pic);
+	
+	eastPanel.setLayout(new BorderLayout(20,20));
+	eastPanel.add(imgPanel, BorderLayout.CENTER);
+	return eastPanel;
+    }
+	
+	
+    
+
+
+    public static void main(String[] args){
+	StockGUI gui = new StockGUI();
+	JFrame frame = new JFrame("Test");
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	frame.getContentPane().add(gui);
+	
+	frame.pack();
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	frame.setVisible(true);
+	frame.setDefaultLookAndFeelDecorated(true);
+	frame.setSize(800,500);
+    }
+
+
+
+
+
+
+
+}//ends StockGUI class
+
+

@@ -1,0 +1,37 @@
+;; Standard definitions for HoilecStreams language
+
+;; Promises
+(def (force promise) (promise))
+
+;; Note: (delay E) is syntactic sugar for (make-promise (fun () E))
+(def (make-promise thunk) 
+  (bindpar ((flag (cell #f))
+	    (memo (cell #f)))
+    (fun () 
+      (if (^ flag)
+	  (^ memo)
+	  (bind val (thunk)
+	    (seq (:= memo val)
+		 (:= flag #t)
+		 val))))))
+
+;; Streams
+;; Note: (sprep E1 E2) is syntactic sugar for (list E1 (delay E2))
+(def (shead stream) (nth 1 stream))
+(def (stail stream) (force (nth 2 stream)))
+(def (sempty) #e) ;; Identify empty list and empty stream 
+(def (sempty? stream) (empty? stream))
+
+;; Returns a list of the first n elements of the stream
+(def (sprefix n stream)
+  (if (= n 0)
+      #e
+      (prep (shead stream)
+	    (sprefix (- n 1) (stail stream)))))
+
+;; Maps a function over a stream 
+(def (smap f stream)
+  (if (sempty? stream)
+      stream
+      (sprep (f (shead stream)) (smap f (stail stream)))))
+

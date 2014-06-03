@@ -1,0 +1,12 @@
+{states}
+<A>, <C,E>, <D,F,E>, <>, <B,E>, <E>, <D,G,E>, <E,G>, <G>, <D,E>
+{start state}
+<A>
+{accepting states}
+<A>, <C,E>, <D,F,E>, <B,E>, <E>, <D,G,E>, <E,G>, <D,E>
+{transitions}
+<A>, a -> <C,E>; <A>, b -> <D,F,E>; <C,E>, a -> <B,E>; <C,E>, b -> <>; <D,F,E>, 
+b -> <D,G,E>; <D,F,E>, a -> <E>; <D,G,E>, b -> <D,G,E>; <D,G,E>, a -> <E,G>; <E,
+G>, a -> <E,G>; <E,G>, b -> <G>; <G>, a -> <E,G>; <G>, b -> <G>; <E>, a -> <>; <
+E>, b -> <>; <>, a -> <>; <>, b -> <>; <D,E>, a -> <E>; <D,E>, b -> <D,E>; <B,E>
+, a -> <C,E>; <B,E>, b -> <D,E>

@@ -1,0 +1,12 @@
+{states}
+W,X,Y,Z
+{start state}
+W  
+{accepting states}
+X  
+{transitions}
+W,a -> X; W,b -> Z;
+X,a -> X; X,b -> Y;
+Y,a -> X; Y,b -> Y;
+Z,a -> Z; Z,b -> Z  
+

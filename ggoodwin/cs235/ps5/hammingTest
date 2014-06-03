@@ -1,0 +1,90 @@
+Standard ML of New Jersey Version 110.65 with Forlan Version 2.8 loaded
+val it = () : unit
+- use "ps5.sml";
+[opening ps5.sml]
+[opening ../utils/DFATest.sml]
+[autoloading]
+[autoloading done]
+structure DFATest :
+  sig
+    val testOnString : dfa -> string -> bool
+    val mismatches : dfa -> (string -> bool) -> string list -> string list
+    val testOnStrings : dfa -> (string -> bool) -> string list -> bool
+    val genStrings : int * char list -> string list
+    val testOnAlphabet : dfa -> (string -> bool) -> char list -> int -> bool
+  end
+val it = () : unit
+[opening ../utils/FATest.sml]
+structure FATest :
+  sig
+    val testOnString : fa -> string -> bool
+    val mismatches : fa -> (string -> bool) -> string list -> string list
+    val testOnStrings : fa -> (string -> bool) -> string list -> bool
+    val genStrings : int * char list -> string list
+    val testOnAlphabet : fa -> (string -> bool) -> char list -> int -> bool
+  end
+val it = () : unit
+opening DFATest
+  val testOnString : dfa -> string -> bool
+  val mismatches : dfa -> (string -> bool) -> string list -> string list
+  val testOnStrings : dfa -> (string -> bool) -> string list -> bool
+  val genStrings : int * char list -> string list
+  val testOnAlphabet : dfa -> (string -> bool) -> char list -> int -> bool
+[autoloading]
+[autoloading done]
+val faToDFA = fn : fa -> dfa
+val dfaToFA = fn : dfa -> fa
+val revString = fn : string -> string
+val test_ab_and_bc = fn : int -> bool
+val test_ab_or_bc = fn : int -> bool
+val test_ab_minus_bc = fn : int -> bool
+val test_neither_ab_nor_bc = fn : int -> bool
+val isHamming = fn : int -> bool
+val nonstandard = fn : string -> bool
+val digitChars = [#"0",#"1",#"2",#"3",#"4",#"5",#"6",#"7",#"8",#"9"]
+  : char list
+val intFromString = fn : string -> int
+val testNonstandard = fn : fa -> int -> bool
+val testMultiple = fn : int -> fa -> int -> bool
+val testHamming = fn : fa -> int -> bool
+val testMultipleOf2FA = fn : int -> bool
+val testMultipleOf3FA = fn : int -> bool
+val testMultipleOf5FA = fn : int -> bool
+val testNonstandardFA = fn : int -> bool
+val testHammingDFA = fn : int -> bool
+val writeHammingDFA = fn : unit -> unit
+val buildHammingDFA = fn : fa -> fa -> fa -> fa -> dfa
+val it = () : unit
+- testMultipleOf2FA 5;
+Passed all test cases
+val it = true : bool
+- testMultipleOf3FA 5;
+Passed all test cases
+val it = true : bool
+- testMultipleOf5FA 5;
+Passed all test cases
+val it = true : bool
+- testNonstandardFA 5; 
+- - testNonstandardFA 5; 
+stdIn:10.1 Error: expression or pattern begins with infix identifier "-"
+stdIn:10.1-10.22 Error: operator and operand don't agree [tycon mismatch]
+  operator domain: 'Z * 'Z
+  operand:         int -> bool
+  in expression:
+    - testNonstandardFA
+- - testNonstandardFA 5; 
+stdIn:1.1 Error: expression or pattern begins with infix identifier "-"
+stdIn:1.1-1.22 Error: operator and operand don't agree [tycon mismatch]
+  operator domain: 'Z * 'Z
+  operand:         int -> bool
+  in expression:
+    - testNonstandardFA
+- testNonstandardFA 5; 
+Passed all test cases
+val it = true : bool
+- writeHammingDFA ();
+val it = () : unit
+- testHammingDFA 5;
+Passed all test cases
+val it = true : bool
+- 

@@ -1,0 +1,64 @@
+(* A tree-based representation of sets that remembers
+   the structure of set operations created the set. *)
+module OperationTreeSet : SET = struct
+
+  module LSU = ListSetUtils
+
+  type 'a set = 
+      Empty 
+    | Insert of 'a * 'a set
+    | Delete of 'a * 'a set
+    | Union  of 'a set * 'a set
+    | Intersection of 'a set * 'a set
+    | Difference of 'a set * 'a set
+
+  let empty = Empty 
+  let insert x s = Insert(x,s)
+  let singleton x = Insert(x, Empty)
+  let delete x s = Delete(x, s)
+  let union s1 s2 = Union(s1,s2)
+  let intersection s1 s2 = Intersection(s1,s2)
+  let difference s1 s2 = Difference(s1,s2)
+
+  let rec toList s = (* Replace this stub. You may use operations in ListSetUtils, 
+                        using the abbreviation LSU defined above. *)
+    match s with 
+      Empty -> []
+    | Insert(y,s') -> []
+    | Delete(y,s') -> []
+    | Union(s1,s2) -> []
+    | Intersection(s1,s2) -> []
+    | Difference(s1,s2) -> []
+
+  let rec fromList xs = Empty (* Replace this stub. You should define this in terms of
+                                 a "balanced" tree of Union, Insert, and Empty nodes *)
+
+  let rec member x s = (* Replace this stub. Do *not* use toList in this definition! *)
+    match s with 
+      Empty -> true
+    | Insert(y,s') -> true
+    | Delete(y,s') -> true
+    | Union(s1,s2) -> true
+    | Intersection(s1,s2) -> true
+    | Difference(s1,s2) -> true
+
+  let size s = 17 (* Replace this stub. You *may* use toList in this definition. *)
+
+  let isEmpty s = false (* Replace this stub. You *may* use toList in this definition. *)
+
+  let rec toSexp eltToSexp s = (* Replace this stub. This function returns an 
+                                  s-expression that shows the structure of the tree. 
+                                  See the PS4 Problem 3 description for examples *) 
+    match s with 
+      Empty -> Sexp.Seq []
+    | Insert(y,s') -> Sexp.Seq []
+    | Delete(y,s') -> Sexp.Seq []
+    | Union(s1,s2) -> Sexp.Seq []
+    | Difference(s1,s2) -> Sexp.Seq []
+    | Intersection(s1,s2) -> Sexp.Seq []
+
+  let rec fromSexp eltFromSexp sexp = Empty (* Replace this stub *)
+
+  let rec toString eltToString s = StringUtils.listToString eltToString (toList s)
+
+end

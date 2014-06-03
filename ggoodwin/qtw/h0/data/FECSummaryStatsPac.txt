@@ -1,0 +1,3 @@
+1: Total Number of Super Pacs: 72
+ 2:Super Pacs with 0 contributions: 28
+ 3: Super Pacs with 50+ contributions: ['FREEDOMWORKS FOR AMERICA', 'DRAFT HERMAN CAIN', 'Make Us Great Again', 'CLUB FOR GROWTH ACTION', 'American Crossroads', 'Americans for a Better Tomorrow, Tomorrow, Inc.']

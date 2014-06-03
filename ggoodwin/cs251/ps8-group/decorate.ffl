@@ -1,0 +1,12 @@
+(def (decorate ornaments tree)
+  (nth 1 (visit tree ornaments ornaments)))
+
+;; Flesh out the following skeleton for PS8 Problem 2
+(def (visit tree ornaments orns)
+  (cond ((not (list? tree))
+	 (bind orn (head orns)
+	   (list "exp1" "exp2")))
+	((empty? tree) (list "exp3" "exp4"))
+	(else (bind visit-head (visit (head tree) "exp5" "exp6")
+		(bind visit-tail (visit (tail tree) "exp7" "exp8")
+		  (list "exp9" "exp10"))))))

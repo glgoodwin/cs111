@@ -1,0 +1,13 @@
+(def (make-stack) (cell #e))
+
+(def (stack-empty? stk) (empty? (^ stk)))
+
+(def (top stk) (head (^ stk)))
+
+(def (push! val stk)
+  (:= stk (prep val (^ stk))))
+
+(def (pop! stk)
+  (bind t (top stk)
+    (seq (:= stk (tail (^ stk)))
+         t)))

@@ -1,0 +1,3 @@
+(fofl (a) (try 100)
+  (def (add-a x) (+ x a))
+  (def (try a) (add-a (* 2 a))))

@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" xmlns:s25="http://www.collegenet.com/s25" style="display:none;">
+<s:htmlstructure b:name="s25:rsrv_wiz_summary" b:behavior="S25RsrvWizEditor::Summary">
+<div><s:innercontent/></div>
+</s:htmlstructure>
+<s:behavior b:name="S25RsrvWizEditor::Summary" b:behavior="S25RsrvWizEditor">
+<s:initatt c:purpose="summary" c:lock_attempts="0"/>
+<s:event b:on="Paint">
+
+<s:variable b:name="lThis" b:scope="local" b:select="ancestor::*[@c:editor='true'][1]"/>
+<s:variable b:name="lMode" b:scope="local" b:select="ancestor::s25:rsrv_wiz[1]/@c:mode"/>
+<s:variable b:name="lEvent" b:scope="local" b:select="$lThis/$tEvWiz/$tRespXml/r25:events/r25:event"/>
+<s:variable b:name="lProfileID" b:scope="local" b:select="string($lThis/$tEvWiz/@c:profile_id)"/>
+<s:variable b:name="lProfile" b:scope="local" b:select="$lEvent/r25:profile[r25:profile_id = $lProfileID]"/>
+<s:variable b:name="lScheduler" b:scope="local" b:select="string($lEvent//r25:role[r25:role_id='-2']/r25:contact/r25:contact_name)"/>
+<s:task b:test="string-length($lScheduler) = 0" b:action="assign" b:target="$lScheduler" b:select="'not set'"/>
+<s:variable b:name="lRequestor" b:scope="local" b:select="string($lEvent//r25:role[r25:role_id='-1']/r25:contact/r25:contact_name)"/>
+<s:task b:test="string-length($lRequestor) = 0" b:action="assign" b:target="$lRequestor" b:select="'not set'"/>
+<s:variable b:name="lEventID" b:scope="local" b:select="string($lEvent//r25:event_id)"/>
+<s:variable b:name="lEventName" b:scope="local" b:select="string($lEvent//r25:event_name)"/>
+<s:variable b:name="lFavStatus" b:scope="local" b:select="string($lEvent//r25:favorite)"/>
+<s:variable b:name="tFavAction" b:scope="tag" b:select=""/>
+<s:variable b:name="lEventState" b:scope="local" b:select="string($lEvent//r25:state_name)"/>
+<s:variable b:name="lEventReference" b:scope="local" b:select="string($lEvent//r25:event_locator)"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tReference" b:value="{concat($tEvWiz/'Event Reference:',' ', $lEventReference)}"/>
+<s:task b:action="show" b:target="$tEvWiz/$tReference"/>
+<s:variable b:name="lEventModDate" b:scope="local" b:select="string($lEvent//r25:last_mod_dt)"/>
+<s:variable b:name="lDateTimePattern" b:select="concat(id('Prefs')/$tDatePattern,' ',id('Prefs')/$tTimePattern)"/>
+<s:task b:test="id('Prefs')/$tTimeDisplay = 12" b:action="assign" b:target="$lDateTimePattern" b:select="concat($lDateTimePattern, 'a')"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tTimestamp" b:value="{concat($tEvWiz/'Last Saved:', ' ', s25_format_date(string($lEventModDate), $lDateTimePattern) )}"/>
+<s:task b:action="show" b:target="$tEvWiz/$tTimestamp"/>
+<s:variable b:name="lEventStateName" b:scope="local" b:select="string($lEvent//r25:state_name)"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tCrumbContainer//div[@b:behavior='S25RsrvWizCrumbLabel'][@c:name='state']/span[@c:id='label']/div[@class='s25rsrvwiz-crumb-label-value']" b:value="{$lEventStateName}"/>
+<s:variable b:name="lEditText" b:scope="local" b:select="'Edit (inc. Event Registration)'"/>
+<s:if b:test="$tEvWiz/$tRegistrationExists = 'F'">
+<s:task b:action="assign" b:target="$lEditText" b:select="'Edit'"/>
+</s:if>
+<s:task b:test="string-length($lEventState) = 0" b:action="assign" b:target="$lEventState" b:select="'not set'"/>
+<s:variable b:name="lTodoTxt" b:select="'Active To Do Tasks'"/>
+<s:variable b:name="lActiveTodoCount" b:select="count($lEvent/r25:todo[r25:cur_todo_state = '1'])"/>
+<s:if b:test="$lActiveTodoCount = 1">
+<s:task b:action="assign" b:target="$lTodoTxt" b:select="'Active To Do Task'"/>
+</s:if>
+<s:variable b:name="lNotificationTxt" b:select="'Active Notification Tasks'"/>
+<s:variable b:name="lActiveNotificationCount" b:select="count($lEvent/r25:approval[r25:approval_type_id = '1' and r25:approval_state = '1'])"/>
+<s:if b:test="$lActiveNotificationCount = 1">
+<s:task b:action="assign" b:target="$lNotificationTxt" b:select="'Active Notification Task'"/>
+</s:if>
+<s:variable b:name="lAssignmentTxt" b:select="'Active Assignment Tasks'"/>
+<s:variable b:name="lActiveAssignmentCount" b:select="count($lEvent/r25:approval[r25:approval_type_id = '2' and r25:approval_state = '1'])"/>
+<s:when b:test="$lActiveAssignmentCount = 1">
+<s:task b:action="assign" b:target="$lAssignmentTxt" b:select="'Active Assignment Task'"/>
+</s:when>
+<s:variable b:name="lSuccessMsg" b:select="''"/>
+<s:if b:test="string(id('Pref_config_BPE_event_get')) = 'configurations'">
+<s:variable b:name="lSecGroupsConfig" b:select=""/>
+<s:task b:action="string2xml" b:variable="$lSecGroupsConfig" b:source="id('Pref_25L_rsrvwiz_secgroups')"/>
+<s:variable b:name="lSecurityGroup" b:select="tokenize(string(id('WSSessionMgr')/@c:security-group), ',')[1]"/>
+<s:variable b:name="lCreationSuccessMsg" b:select="string($lSecGroupsConfig//security_group[@group_id = $lSecurityGroup]/creation_success_msg)"/>
+<s:variable b:name="lEditSuccessMsg" b:select="string($lSecGroupsConfig//security_group[@group_id = $lSecurityGroup]/edit_success_msg)"/>
+<s:choose>
+<s:when b:test="$lMode = 'edit' and not(string-length($lEditSuccessMsg) = 0)">
+<s:task b:action="assign" b:target="$lSuccessMsg" b:select="string($lEditSuccessMsg)"/>
+</s:when>
+<s:when b:test="not($lMode = 'edit') and not(string-length($lCreationSuccessMsg) = 0)">
+<s:task b:action="assign" b:target="$lSuccessMsg" b:select="string($lCreationSuccessMsg)"/>
+</s:when>
+</s:choose>
+</s:if>
+<s:if b:test="string-length($lSuccessMsg) = 0">
+<s:choose>
+<s:when b:test="$lMode = 'edit'">
+<s:task b:action="assign" b:target="$lSuccessMsg" b:select="'This event has been successfully saved.'"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$lSuccessMsg" b:select="'This event has been successfully saved.'"/>
+</s:otherwise>
+</s:choose>
+</s:if>
+<s:render b:destination="$tContent" b:mode="replacechildren">
+<div c:purpose="summaryDetails" class="summaryDetails">
+<div class="SaveSuccess"><s:textnode b:label="{$lSuccessMsg}"/></div>
+<span c:id="messages" style="display:none">
+<div class="contentHeader">... But We Had to Make Some Changes</div>
+<div class="contentOptions" c:id="messages_content"/>
+</span>
+<div class="contentHeader" c:id="regWarning" style="display:none;">
+Attention: Registration Form
+</div>
+<div class="contentOptions" c:id="regWarning" style="display:none;">
+You have modified an event that has a registration form. Please verify that the registration form matches the event updates.
+</div>
+<table width="100%">
+<tr valign="top">
+<td width="49%">
+<div class="contentHeader">
+Event Details
+</div>
+<div class="contentOptions">
+<div><b>Event Reference:</b> <s:textnode b:label="{$lEventReference}"/></div>
+<div><b>Event State:</b> <s:textnode b:label="{$lEventState}"/></div>
+<div><b>Scheduler:</b> <s:textnode b:label="{$lScheduler}"/></div>
+<div><b>Requestor:</b> <s:textnode b:label="{$lRequestor}"/></div>
+</div>
+<span c:id="constraints" style="display:none">
+<div class="contentHeader">
+Event Constraints
+</div>
+<div class="contentOptions">
+<div c:id="exception_constraints" class="icon-warning" style="display:none">
+<div style="margin-bottom:5px"/>
+</div>
+<div c:id="warning_constraints" class="icon-warning" style="display:none">
+<div style="margin-bottom:5px"/>
+</div>
+</div>
+</span>
+<span c:id="preferences" style="display:none">
+<div class="contentHeader">
+Event Preferences
+</div>
+<div class="contentOptions"/>
+</span>
+<span c:id="workflow">
+<div class="contentHeader">
+Event Tasks
+</div>
+<div class="contentOptions">
+<div c:id="workflow_todos" style="display:none"><b><s:textnode b:label="{$lActiveTodoCount}"/></b> <s:textnode b:label="{$lTodoTxt}"/></div>
+<div c:id="workflow_notifications" style="display:none"><b><s:textnode b:label="{$lActiveNotificationCount}"/></b> <s:textnode b:label="{$lNotificationTxt}"/></div>
+<div c:id="workflow_assignments" style="display:none"><b><s:textnode b:label="{$lActiveAssignmentCount}"/></b> <s:textnode b:label="{$lAssignmentTxt}"/></div>
+<div c:id="workflow_none" style="display:none"><i>No Active Tasks</i></div>
+</div>
+</span>
+</td>
+<td width="2%"/>
+<td width="49%">
+<div class="contentHeader">What&apos;s Next?</div>
+<div class="contentOptions">
+<div class="summaryAction">
+<b:button class="EventSummaryBtn" b:behavior="S25Object" c:obj_type="event" c:obj_id="{$lEventID}" c:obj_name="{$lEventName}">
+<s:event b:on="command">
+<s:super/>
+<s:task b:action="trigger" b:event="Cancel" b:target="ancestor::s25:rsrv_wiz[1]"/>
+</s:event>
+View Details	
+</b:button>
+<span>View the Event Details page for this event. The full range of actions are available to you from there.</span>
+</div>
+<div class="summaryAction">
+<b:button class="EventSummaryBtn">
+<s:event b:on="command">
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz[1]/@c:mode = 'edit'">
+<s:task b:action="trigger" b:event="command" b:target="ancestor::s25:rsrv_wiz[1]/$tCrumbContainer//s25:rsrv_wiz_crumb[1]"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="ReEdit" b:target="ancestor::s25:rsrv_wiz[1]"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:textnode b:label="{$lEditText}"/>
+</b:button>
+<span>Need to make some more edits to this event? Click this button to start editing.</span>
+</div>
+<div class="summaryAction">
+<b:button class="EventSummaryBtn" b:behavior="S25Object" c:obj_type="event" c:obj_action="email">
+<s:event b:on="command">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('EvDetailsEmailModal')))" b:action="trigger" b:event="RenderEvDetailsEmailModal" b:target="id('Modals')"/>
+<s:with b:target="id('EvDetailsEmail')">
+<s:task b:action="set" b:target="@c:event_id" b:value="{$lEventID}"/>
+<s:task b:action="set" b:target="@c:event_name" b:value="{$lEventName}"/>
+</s:with>
+<s:super/>
+</s:event>
+Email
+</b:button>
+<span>Email the details of this event to its stakeholders or anyone else.</span>
+</div>
+</div>
+<div class="contentHeader">More Event Options</div>
+<div class="contentOptions">
+<span class="summaryLinks">
+
+<div class="additionalOption icon-print" c:id="print" b:action="trigger" b:event="OnClickPrint" b:target="ancestor::s25:rsrv_wiz[1]" style="display:none">
+<a href="javascript:void(0)" onclick="return false">Download PDF</a>
+</div>
+
+<div class="additionalOption icon-clone" b:behavior="S25Object" c:obj_type="event" c:obj_action="clone" c:obj_id="{$lEventID}">
+<a href="javascript:void(0)" onclick="return false">Copy</a>
+</div>
+<div class="additionalOption icon-task" c:id="create_todo" b:behavior="S25RsrvWizSummary::CreateToDo" c:obj_id="{$lEventID}" style="display:none;">
+<a href="javascript:void(0)" onclick="return false">Create &quot;To Do&quot;</a>
+</div>
+<div class="additionalOption icon-related" b:behavior="S25RsrvWizSummary::CreateRelationship" c:obj_id="{$lEventID}" style="width:225px">
+<a href="javascript:void(0)" onclick="return false">Establish Relationships</a>
+</div>
+<div class="additionalOption icon-ownership" c:id="take_ownership" b:behavior="S25RsrvWizSummary::TakeOwnership" c:obj_id="{$lEventID}" style="width:250px; display:none;">
+<a href="javascript:void(0)" onclick="return false">Take Ownership of this Event</a>
+</div>								
+<div class="additionalOption icon-vcal" c:id="vcal" b:behavior="S25ToDoObj" c:obj_id="{$lEventID}" c:obj_type="event" style="width:225px; display:none;">
+<a href="javascript:void(0)" onclick="return false">Check vCalendar To Do&apos;s	</a>
+</div>								
+<div class="additionalOption icon-favorite" c:purpose="FavStatus" c:id="FavoriteRemove" style="width:300px; display:none">
+<s:event b:on="command">
+<s:with b:target="ancestor::s25:rsrv_wiz_summary[1]">
+<s:task b:action="assign" b:target="$tFavAction" b:scope="tag" b:select="'remove'"/>
+<s:task b:action="trigger" b:event="ToggleFavStatus"/>
+</s:with>
+</s:event>
+<a href="javascript:void(0)" onclick="return false">
+Starred Event (Remove from Starred?)
+</a>
+</div>
+<div class="additionalOption icon-favorite-off" c:purpose="FavStatus" c:id="FavoriteAdd" style="width:300px; display:none">
+<s:event b:on="command">
+<s:with b:target="ancestor::s25:rsrv_wiz_summary[1]">
+<s:task b:action="assign" b:target="$tFavAction" b:scope="tag" b:select="'add'"/>
+<s:task b:action="trigger" b:event="ToggleFavStatus"/>
+</s:with>
+</s:event>
+<a href="javascript:void(0)" onclick="return false">
+Add to Starred?
+</a>
+</div>
+</span>
+<br style="clear:both"/>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</s:render>
+<s:if b:test="id('FLS_CREATE_TODO') = 'F'">
+<s:task b:action="show" b:target="$tContent//div[@c:id='create_todo']"/>		
+</s:if>
+<s:if b:test="id('FLS_EMAIL') = 'F'">
+<s:task b:action="show" b:target="$tContent//div[@c:id='email']"/>		
+</s:if>
+<s:if b:test="$tEvWiz/$tOLS = 'F'">
+<s:if b:test="id('FLS_EVENT_SECURITY') = 'F'">
+<s:variable b:name="lOwnUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'event_ols.xml',  '?event_id=',$tEvWiz/@c:event_id,'&amp;perm=OWN')"/>
+<s:variable b:name="lOwnXml" b:scope="local" b:select=""/>
+<s:task b:action="load" b:url="{$lOwnUrl}" b:method="GET" b:destination="$lOwnXml" b:mode="aslastchild"/>
+<s:task b:action="string2xml" b:variable="$lOwnXml"/>
+<s:if b:test="$lOwnXml//r25:access_level = 'F'">			
+<s:task b:action="show" b:target="$tContent//div[@c:id='take_ownership']"/>				
+</s:if>
+</s:if>
+<s:if b:test="string-length($lEvent/r25:alien_uid) gt 0">
+<s:task b:action="show" b:target="$tContent//div[@c:id='vcal']"/>		
+</s:if>
+</s:if>
+<s:if b:test="$lThis/$tEvWiz/$tRespXml/r25:events/r25:messages[r25:msg_id = 'EV_W_EXCEPT']">
+<s:render b:destination="$tContent//div[@c:id='exception_constraints']/div" b:mode="aslastchild"><b xmlns="">Exception Constraints</b></s:render>
+<s:variable b:name="lReservationWithExceptionID" b:select="''"/>
+<s:variable b:name="lReservationWithExceptionStartDate" b:select="''"/>
+<s:for-each b:target="distinct-values($lThis/$tEvWiz/$tRespXml/r25:events/r25:messages[r25:msg_id = 'EV_W_EXCEPT']/r25:msg_object_id)">
+<s:task b:action="assign" b:target="$lReservationWithExceptionID" b:select="string($_target)"/>
+<s:task b:action="assign" b:target="$lReservationWithExceptionStartDate" b:select="$lEvent//r25:reservation[r25:reservation_id = $lReservationWithExceptionID]/r25:reservation_start_dt"/>
+<s:render b:destination="$tContent//div[@c:id='exception_constraints']" b:mode="aslastchild">
+<span class="s25evdetails-preference"><s:textnode b:label="{s25_format_date(string($lReservationWithExceptionStartDate), id('Prefs')/$tDatePattern )}"/></span>
+</s:render>
+</s:for-each>
+<s:task b:action="show" b:target="$tContent//div[@c:id='exception_constraints']"/>
+<s:task b:action="show" b:target="$tContent//span[@c:id='constraints']"/>
+</s:if>
+<s:if b:test="$lProfile/r25:reservation[r25:reservation_state = '3']">
+<s:render b:destination="$tContent//div[@c:id='warning_constraints']/div" b:mode="aslastchild"><b xmlns="">Warning Constraints</b></s:render>
+<s:for-each b:target="$lProfile/r25:reservation[r25:reservation_state = '3']">
+<s:render b:destination="$tContent//div[@c:id='warning_constraints']" b:mode="aslastchild">
+<span class="s25evdetails-preference"><s:textnode b:label="{s25_format_date(string($_target/r25:event_start_dt), id('Prefs')/$tDatePattern )}"/></span>
+</s:render>
+</s:for-each>
+<s:task b:action="show" b:target="$tContent//div[@c:id='warning_constraints']"/>
+<s:task b:action="show" b:target="$tContent//span[@c:id='constraints']"/>
+</s:if>
+<s:variable b:name="lMessages" b:select="$tContent/div[@c:purpose='summaryDetails']/span[@c:id='messages']"/>
+<s:if b:test="$lThis/$tEvWiz/$tRespXml/r25:events/r25:messages[r25:msg_id = 'EV_I_MAKEDRAFT']">
+<s:render b:destination="$lMessages/div[@c:id='messages_content']" b:mode="aslastchild">
+<div style="line-height:125%">
+<div>
+<b>Converted to Draft</b><br/>
+We were unable to route your event into a folder, so it was converted into a Draft state. Any locations or resources you assigned have been saved as preferences for this event. This event will not become active until it leaves Draft mode. Please consult your system administrator for more information.
+</div>
+</div>
+</s:render>
+<s:task b:action="show" b:target="$lMessages"/>
+</s:if>
+<s:if b:test="$lThis/$tEvWiz/$tRespXml/r25:events/r25:messages[r25:msg_id = 'EV_W_EXCEPT']">
+<s:render b:destination="$lMessages/div[@c:id='messages_content']" b:mode="aslastchild">
+<div style="line-height:125%">
+<div>
+<b>Exception Constraint</b><br/>
+Because of an existing restriction in this event&apos;s cabinet during certain timeframes, one or all of your occurrences were not scheduled. View event details to see which occurrences were scheduled. Please consult your system administrator for more information.
+</div>
+</div>
+</s:render>
+<s:task b:action="show" b:target="$lMessages"/>
+</s:if>
+<s:if b:test="$lThis/$tEvWiz/$tRespXml/r25:events/r25:messages[r25:msg_id = 'EV_W_CHGDATE']">
+<s:render b:destination="$lMessages/div[@c:id='messages_content']" b:mode="aslastchild">
+<div style="line-height:125%">
+<div>
+<b>Date Constraint</b><br/>
+Because of date boundary restrictions in this event&apos;s cabinet, one or more of your occurrences were not scheduled. Please consult your system administrator for more information.
+</div>
+</div>
+</s:render>
+<s:task b:action="show" b:target="$lMessages"/>
+</s:if>
+<s:if b:test="$lThis/$tEvWiz/$tRespXml/r25:events/r25:messages[r25:msg_id = 'EV_W_WARNING']">
+<s:render b:destination="$lMessages/div[@c:id='messages_content']" b:mode="aslastchild">
+<div style="line-height:125%">
+<div>
+<b>Constraint Warning</b><br/>
+One or more of your event occurrences has been labeled with a constraint warning, probably due to another significant event occurring at your institution at the same time. Please consult your system administrator for more information.
+</div>
+</div>
+</s:render>
+<s:task b:action="show" b:target="$lMessages"/>
+</s:if>
+<s:task b:test="$lActiveTodoCount gt 0" b:action="show" b:target="$tContent//div[@c:id='workflow_todos']"/>
+<s:task b:test="$lActiveNotificationCount gt 0" b:action="show" b:target="$tContent//div[@c:id='workflow_notifications']"/>
+<s:task b:test="$lActiveAssignmentCount gt 0" b:action="show" b:target="$tContent//div[@c:id='workflow_assignments']"/>
+<s:if b:test="$lActiveTodoCount = 0 and $lActiveNotificationCount = 0 and $lActiveAssignmentCount = 0">
+<s:task b:action="show" b:target="$tContent//div[@c:id='workflow_none']"/>
+</s:if>
+<s:if b:test="not(id('WSSessionMgr')/@c:user-type = 'web')">
+<s:task b:test="$lFavStatus='T'" b:action="show" b:target="$tContent//div[@c:purpose='FavStatus' and @c:id='FavoriteRemove']"/>
+<s:task b:test="$lFavStatus='F'" b:action="show" b:target="$tContent//div[@c:purpose='FavStatus' and @c:id='FavoriteAdd']"/>
+</s:if>
+<s:if b:test="string($tEvWiz/$tPrintIcon/style::display) ne 'none'">
+<s:task b:action="show" b:target="$tContent//div[@c:id='print']"/>
+</s:if>
+<s:if b:test="$lProfile/r25:space_pref">
+<s:variable b:name="lSpaceQueryID" b:select="string($lProfile/r25:space_pref/r25:sp_query_id)"/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'space_search.xml?query_id=',$lSpaceQueryID,  '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/space_preferences.xsl')}" b:destination="$tContent//span[@c:id='preferences']/div[@class='contentOptions']" b:mode="aslastchild"/>
+<s:task b:action="show" b:target="$tContent//span[@c:id='preferences']"/>
+</s:if>
+<s:if b:test="$lProfile/r25:resource_pref">
+<s:variable b:name="lResourceQueryID" b:select="string($lProfile/r25:resource_pref/r25:rs_query_id)"/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'resource_search.xml?query_id=',$lResourceQueryID,  '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/resource_preferences.xsl')}" b:destination="$tContent//span[@c:id='preferences']/div[@class='contentOptions']" b:mode="aslastchild"/>
+<s:task b:action="show" b:target="$tContent//span[@c:id='preferences']"/>
+</s:if>
+<s:variable b:name="tType" b:select="'event'"/>
+<s:variable b:name="tId" b:select="string($lEvent/r25:event_id)"/>
+<s:variable b:name="tName" b:select="string($lEvent/r25:event_name)"/>
+<s:task b:action="trigger" b:target="id('RecentlyViewedObjects')" b:event="AddObject" b:async="true"/>
+</s:event>
+<s:event b:on="select">
+<s:super/>
+<s:variable b:name="lMode" b:scope="local" b:select="ancestor::s25:rsrv_wiz[1]/@c:mode"/>
+<s:task b:test="$lMode = 'reserve'" b:action="set" b:target="ancestor::s25:rsrv_wiz[1]/@c:mode" b:value="post-create"/>
+<s:task b:test="$lMode = 'edit'" b:action="trigger" b:event="CheckAWForm" b:target="."/>
+<s:task b:test="$lMode = 'edit'" b:action="trigger" b:event="UpdateData" b:target="."/>		
+<s:task b:action="trigger" b:event="SendEmails" b:target="."/>		
+<s:task b:action="focus" b:target=".//b:button[@c:id='cancel']"/>
+<s:if b:test="$lMode = 'edit'">
+<s:variable b:name="lEventID" b:scope="local" b:select="string(ancestor::*[@c:editor='true'][1]/$tEvWiz/$tRespXml/r25:events/r25:event/r25:event_id)"/>
+<s:task b:action="trigger" b:event="UnlockEvent" b:target="id('Controller')"/>
+<s:with b:target="ancestor::s25:rsrv_wiz[1]">
+<s:setatt c:locked="false"/>
+</s:with>
+</s:if>
+</s:event>
+<s:event b:on="LockNewEvent">
+<s:variable b:name="lEventID" b:scope="local" b:select="string(ancestor::s25:rsrv_wiz/$tRespXml//r25:event_id)"/>
+<s:variable b:name="lLockCheck" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix, 'locks.xml','?lock_item_type=1','&amp;lock_item_id=',$lEventID)}" b:destination="$lLockCheck">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lLockCheck"/>
+<s:choose>
+<s:when b:test="$lLockCheck/r25:locks/r25:lock">
+<s:task b:action="set" b:target="@c:lock_attempts" b:value="{number(@c:lock_attempts) + 1}"/>
+<s:if b:test="number(@c:lock_attempts) lt 4">
+<s:variable b:name="lRsrvWizPurpose" b:select="string(ancestor::s25:rsrv_wiz[1]/@c:purpose)"/>
+<s:script><![CDATA[
+
+var purpose = _vars['lRsrvWizPurpose'][0];
+window.setTimeout("bpc.execute('<s:task b:action=\"msg\" b:value=\"### retrigger LockNewEvent\" /><s:task b:action=\"trigger\" b:event=\"LockNewEvent\" b:target=\"//s25:rsrv_wiz[@c:purpose=\\'" + purpose + "\\']//s25:rsrv_wiz_summary[1]\" />', _current)", 3000);
+
+]]></s:script>
+</s:if>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lLockResult" b:scope="local" b:select="''"/>
+<s:task b:action="trigger" b:event="LockEvent" b:target="id('Controller')"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="UpdateData">
+<s:variable b:name="lThis" b:scope="local" b:select="ancestor::*[@c:editor='true'][1]"/>
+<s:variable b:name="lEvent" b:scope="local" b:select="$lThis/$tEvWiz/$tRespXml/r25:events/r25:event"/>
+<s:variable b:name="lScheduler" b:scope="local" b:select="string($lEvent//r25:role[r25:role_id='-2']/r25:contact/r25:contact_name)"/>
+<s:task b:test="string-length($lScheduler) = 0" b:action="assign" b:target="$lScheduler" b:select="'not set'"/>
+<s:variable b:name="lRequestor" b:scope="local" b:select="string($lEvent//r25:role[r25:role_id='-1']/r25:contact/r25:contact_name)"/>
+<s:task b:test="string-length($lRequestor) = 0" b:action="assign" b:target="$lRequestor" b:select="'not set'"/>
+<s:variable b:name="lEventState" b:scope="local" b:select="string($lEvent//r25:state_name)"/>	
+<s:variable b:name="lEventReference" b:scope="local" b:select="string($lEvent//r25:event_locator)"/>
+<s:with b:target="div[@c:id='container']/div[@c:id='content']/div[@c:purpose='summaryDetails']/table/tr/td[1]/div[@class='contentOptions']">
+<s:render b:destination="." b:mode="replacechildren">
+<div><b>Event Reference:</b> <s:textnode b:label="{$lEventReference}"/></div>
+<div><b>Event State:</b> <s:textnode b:label="{$lEventState}"/></div>
+<div><b>Scheduler:</b> <s:textnode b:label="{$lScheduler}"/></div>
+<div><b>Requestor:</b> <s:textnode b:label="{$lRequestor}"/></div>
+</s:render>
+</s:with>
+</s:event>
+<s:event b:on="CheckAWForm">
+<s:variable b:name="lMode" b:scope="local" b:select="ancestor::s25:rsrv_wiz[1]/@c:mode"/>
+<s:variable b:name="lAllowReg" b:scope="local" b:select="$tEvWiz/$tEvent/r25:custom_attribute[r25:attribute_id='-16']/r25:attribute_value/text()"/>
+<s:variable b:name="lFormCode" b:scope="local" b:select="$tEvWiz/$tEvent/r25:custom_attribute[r25:attribute_id='-17']/r25:attribute_value/text()"/>
+<s:variable b:name="lShowWarn" b:scope="local" b:select="'F'"/>
+<s:if b:test="$lAllowReg='Yes' and string-length($lFormCode) ne 0">
+<s:task b:action="assign" b:target="$lShowWarn" b:scope="local" b:select="'T'"/>
+</s:if>
+<s:choose>
+<s:when b:test="$lMode = 'edit' and $lShowWarn = 'T'">
+<s:task b:action="show" b:target=".//div[@c:id='regWarning']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="hide" b:target=".//*[@c:id='regWarning'][1]"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="SendEmails">
+<s:variable b:name="lEvent" b:select="$tEvWiz/$tRespXml/r25:events/r25:event"/>
+<s:variable b:name="lEventID" b:select="string($lEvent//r25:event_id)"/>
+<s:variable b:name="lEventName" b:select="string($lEvent//r25:event_name)"/>
+<s:variable b:name="lEventTitle" b:select="string($lEvent//r25:event_title)"/>
+<s:variable b:name="lEventReference" b:select="string($lEvent//r25:event_locator)"/>
+<s:variable b:name="lLocation" b:select="''"/>
+<s:script><![CDATA[
+
+var url = location.href.substring(0, location.href.indexOf('#'));
+bpc.setVariable('lLocation', [url]);
+
+]]></s:script>
+<s:variable b:name="lEventUrl" b:select="concat($lLocation,'#details&amp;obj_type=event&amp;obj_id=', $lEventID)"/>
+<s:variable b:name="lMode" b:select="ancestor::s25:rsrv_wiz[1]/@c:mode"/>
+<s:variable b:name="lEmailPostXml">
+<r25:email>
+<r25:mail>
+<r25:recipient>
+<r25:to/>
+</r25:recipient>
+<r25:subject/>
+<r25:body>
+<r25:text>
+</r25:text>
+</r25:body>
+</r25:mail>
+</r25:email>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lEmailPostXml"/>
+<s:choose>
+<s:when b:test="$lMode = 'new'">
+<s:task b:action="settext" b:target="$lEmailPostXml/r25:email/r25:mail/r25:subject" b:value="{concat('Event Created: ', $lEventName)}"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lEmailPostXml/r25:email/r25:mail/r25:subject" b:value="{concat('Event Edited: ', $lEventName)}"/>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="br" b:select="'&lt;br/&gt;'"/>
+<s:variable b:name="lDefaultText" b:select="concat($br, $br, '------------------------------------------------------------------', $br, $br, 'EVENT_DETAILS:', $br, $br, 'EVENT_NAME: ', $lEventName)"/>
+<s:task b:test="string-length($lEventTitle) gt 0" b:action="assign" b:target="$lDefaultText" b:select="concat($lDefaultText, $br, 'EVENT_TITLE: ', $lEventTitle)"/>
+<s:task b:action="assign" b:target="$lDefaultText" b:select="concat($lDefaultText, $br, 'EVENT_REFERENCE: ', $lEventReference)"/>
+<s:task b:action="assign" b:target="$lDefaultText" b:select="concat($lDefaultText, $br, 'YOUR_ROLE: ROLE_NAME')"/>
+<s:task b:action="assign" b:target="$lDefaultText" b:select="concat($lDefaultText, $br, $br, 'EVENT_DETAILS_URL: ', '&lt;a href=&#34;', $lEventUrl, '&#34;&gt;', $lEventUrl, '&lt;/a&gt;', $br, $br)"/>
+<s:task b:action="assign" b:target="$lDefaultText" b:select="concat($lDefaultText, $br, $br)"/>
+<s:task b:action="assign" b:target="$lDefaultText" b:select="replace($lDefaultText, 'EVENT_DETAILS_URL', 'Event Details URL')"/>
+<s:task b:action="assign" b:target="$lDefaultText" b:select="replace($lDefaultText, 'EVENT_DETAILS', 'EVENT DETAILS')"/>
+<s:task b:action="assign" b:target="$lDefaultText" b:select="replace($lDefaultText, 'EVENT_NAME', 'Event Name')"/>
+<s:task b:action="assign" b:target="$lDefaultText" b:select="replace($lDefaultText, 'EVENT_TITLE', 'Event Title')"/>
+<s:task b:action="assign" b:target="$lDefaultText" b:select="replace($lDefaultText, 'EVENT_REFERENCE', 'Event Reference')"/>
+<s:task b:action="assign" b:target="$lDefaultText" b:select="replace($lDefaultText, 'YOUR_ROLE', 'Your Role')"/>
+<s:script><![CDATA[
+
+var msg = _vars['lDefaultText'][0];
+msg = msg.replace(/&/g,'&amp;')
+bpc.setVariable('lDefaultText', ['<html><body>'+msg+'</body></html>'], 'local');
+
+]]></s:script>				
+<s:variable b:name="lRequestorID" b:select="string($lEvent/r25:role[r25:role_id = '-1']/r25:contact/r25:contact_id)"/>
+<s:variable b:name="lSchedulerID" b:select="string($lEvent/r25:role[r25:role_id = '-2']/r25:contact/r25:contact_id)"/>
+<s:variable b:name="lEmailRolesXml" b:select="string(id('Pref_25L_rsrvwiz_email_roles'))"/>
+<s:task b:action="string2xml" b:variable="$lEmailRolesXml"/>
+<s:if b:test="$lEmailRolesXml//email_role[@role_id = '-1' and @active = 'Yes'] and (not($lRequestorID = $lSchedulerID) or not($lEmailRolesXml//email_role[@role_id = '-2' and @active = 'Yes']) ) ">
+<s:task b:action="settext" b:target="$lEmailPostXml/r25:email/r25:mail/r25:recipient/r25:to" b:value="Requestor"/>
+<s:variable b:name="lRequestorText" b:select="string($lDefaultText)"/>
+<s:task b:action="assign" b:target="$lRequestorText" b:select="replace($lRequestorText, 'ROLE_NAME', 'Requestor')"/>
+<s:task b:action="xml2string" b:variable="$lEmailPostXml"/>
+<s:task b:action="assign" b:target="$lEmailPostXml" b:select="concat(substring-before($lEmailPostXml,'&lt;r25:text&gt;'), '&lt;r25:text&gt;', $lRequestorText, '&lt;/r25:text&gt;', substring-after($lEmailPostXml,'&lt;/r25:text&gt;') )"/>
+<s:task b:action="string2xml" b:variable="$lEmailPostXml"/>
+<s:task b:action="copy" b:source="$lEmailRolesXml//email_role[@role_id = '-1']/email_role_msg/text()" b:destination="$lEmailPostXml/r25:email/r25:mail/r25:body/r25:text" b:mode="asfirstchild"/>
+<s:task b:action="xml2string" b:variable="$lEmailPostXml"/>
+<s:variable b:name="lPostResp" b:select=""/>
+<s:task b:action="load" b:method="POST" b:url="{id('Config')/$tWsPrefix,'event.mail','?event_id=',$lEventID}" b:data="{$lEmailPostXml}" b:destination="$lPostResp">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lEmailPostXml"/>
+</s:if>
+<s:if b:test="$lEmailRolesXml//email_role[@role_id = '-2' and @active = 'Yes']">
+<s:task b:action="settext" b:target="$lEmailPostXml/r25:email/r25:mail/r25:recipient/r25:to" b:value="Scheduler"/>
+<s:variable b:name="lSchedulerText" b:select="string($lDefaultText)"/>
+<s:task b:action="assign" b:target="$lSchedulerText" b:select="replace($lSchedulerText, 'ROLE_NAME', 'Scheduler')"/>
+<s:task b:action="xml2string" b:variable="$lEmailPostXml"/>
+<s:task b:action="assign" b:target="$lEmailPostXml" b:select="concat(substring-before($lEmailPostXml,'&lt;r25:text&gt;'), '&lt;r25:text&gt;', $lSchedulerText, '&lt;/r25:text&gt;', substring-after($lEmailPostXml,'&lt;/r25:text&gt;') )"/>
+<s:task b:action="string2xml" b:variable="$lEmailPostXml"/>
+<s:task b:action="copy" b:source="$lEmailRolesXml//email_role[@role_id = '-2']/email_role_msg/text()" b:destination="$lEmailPostXml/r25:email/r25:mail/r25:body/r25:text" b:mode="asfirstchild"/>
+<s:task b:action="xml2string" b:variable="$lEmailPostXml"/>
+<s:variable b:name="lPostResp" b:select=""/>
+<s:task b:action="load" b:method="POST" b:url="{id('Config')/$tWsPrefix,'event.mail','?event_id=',$lEventID}" b:data="{$lEmailPostXml}" b:destination="$lPostResp">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lEmailPostXml"/>
+</s:if>
+</s:event>
+<s:event b:on="Reset">
+<s:super/>
+</s:event>
+<s:event b:on="Validate"/>
+<s:event b:on="Save"/>
+<s:event b:on="ToggleFavStatus">
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'favorites.xml?object_type=1&amp;object_id=',$tEvWiz/$tRespXml//r25:event_id)"/>
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:variable b:name="lMethod" b:scope="local" b:select=""/>
+<s:choose>
+<s:when b:test="$tFavAction = 'remove'">
+<s:task b:action="hide" b:target="$tContent//div[@c:purpose='FavStatus' and @c:id='FavoriteRemove']"/>
+<s:task b:action="show" b:target="$tContent//div[@c:purpose='FavStatus' and @c:id='FavoriteAdd']"/>
+<s:task b:action="assign" b:target="$lMethod" b:scope="local" b:select="'DELETE'"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="hide" b:target="$tContent//div[@c:purpose='FavStatus' and @c:id='FavoriteAdd']"/>
+<s:task b:action="show" b:target="$tContent//div[@c:purpose='FavStatus' and @c:id='FavoriteRemove']"/>
+<s:task b:action="assign" b:target="$lMethod" b:scope="local" b:select="'PUT'"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="load" b:url="{$lUrl}" b:method="{$lMethod}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+</s:event>
+</s:behavior>
+<s:behavior b:name="S25RsrvWizSummary::TakeOwnership">
+<s:event b:on="command">
+<s:variable b:name="lEventID" b:scope="local" b:select="@c:obj_id"/>
+<s:variable b:name="lData">
+<r25:object_ownership>
+<r25:object status="mod">
+<r25:object_id/>
+<r25:object_type>1</r25:object_type>
+<r25:owner_username/>
+</r25:object>
+</r25:object_ownership>			
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lData"/>
+<s:variable b:name="lUser" b:scope="local" b:select="id('WSSessionMgr')/@c:user-name"/>
+<s:task b:action="settext" b:target="$lData/r25:object_ownership/r25:object/r25:owner_username" b:value="{$lUser}"/>
+<s:task b:action="settext" b:target="$lData/r25:object_ownership/r25:object/r25:object_id" b:value="{$lEventID}"/>
+<s:task b:action="xml2string" b:variable="$lData"/>
+<s:variable b:name="lResp" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="PUT" b:url="{concat(id('Config')/$tWsPrefix,'event_owner.xml?event_id=',$lEventID)}" b:data="{$lData}" b:destination="$lResp">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lResp"/>
+<s:variable b:name="lMsg" b:scope="local" b:select="$lResp//r25:msg_id"/>
+<s:choose>
+<s:when b:test="$lResp//r25:msg_id = 'EV_I_SAVED'">
+<s:task b:action="alert" b:value="You are now the owner of this event."/>					
+</s:when>
+<s:when b:test="$lResp//r25:msg_id = 'EV_E_NOLOCK'">
+<s:task b:action="alert" b:value="This event is currently locked. Please try again later."/>					
+</s:when>
+<s:otherwise>
+<s:task b:action="alert" b:value="Sorry, you were not set to the owner of this event. Please try again later."/>									
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>	
+<s:behavior b:name="S25RsrvWizSummary::CreateToDo">
+<s:event b:on="command">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('CreateToDoModal')))" b:action="trigger" b:event="RenderCreateToDoModal" b:target="id('Modals')"/>
+<s:variable b:name="lEventID" b:scope="local" b:select="@c:obj_id"/>
+<s:with b:target="id('CreateToDo')">
+<s:task b:action="set" b:target="@c:event_id" b:value="{$lEventID}"/>
+<s:task b:action="set" b:target="@c:lock_event" b:value="False"/>
+<s:task b:action="trigger" b:event="Paint"/>
+</s:with>
+<s:task b:action="trigger" b:event="open" b:target="id('CreateToDoModal')"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="S25RsrvWizSummary::CreateRelationship">
+<s:event b:on="command">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('Related')))" b:action="trigger" b:event="RenderRelatedModal" b:target="id('Modals')"/>
+<s:variable b:name="lEventID" b:scope="local" b:select="@c:obj_id"/>
+<s:with b:target="id('Related')">
+<s:task b:action="set" b:target="@c:event_id" b:value="{$lEventID}"/>
+<s:task b:action="set" b:target="@c:lock_event" b:value="False"/>
+<s:task b:action="trigger" b:event="Paint"/>
+</s:with>
+<s:task b:action="trigger" b:event="open" b:target="id('RelatedModal')"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="S25ToDoObj" b:behavior="S25Object">
+<s:event b:on="command">
+<s:if b:test="not(id('s25-tabitem-events')/@c:forceview)">
+<s:with b:target="id('s25-tabitem-events')">
+<s:setatt c:forceview="Task List"/>
+</s:with>
+</s:if>
+<s:super/>
+</s:event>
+</s:behavior>
+</div>

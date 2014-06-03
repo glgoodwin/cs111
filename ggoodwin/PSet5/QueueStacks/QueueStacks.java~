@@ -1,0 +1,37 @@
+public class QueueStacks implements QueueInterface{
+
+    //instance variables
+    Stack<E> firstHalf;
+    Stack<E> secHalf;
+
+    //constructor
+    public QueueStacks(){
+	firstHalf = new Stack<E>;
+	secHalf = new Stack<E>;
+	
+    }
+    
+    public boolean empty(){
+	return firstHalf.isEmpty() && secHalf.isEmpty();
+
+    }
+
+    public void enQ(E newItem){
+	secHalf.push(newItem);
+    }
+
+    public E deQ() throws QueueException{
+	try{
+	    if(!firstHalf.isEmpty()){
+		return firstHalf.pop();
+	    }else{ 
+		return 
+
+
+	}
+
+
+    }
+    
+
+}

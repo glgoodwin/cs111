@@ -1,0 +1,13 @@
+(hoilec (x) (fact x)
+  (def (fact n) 
+    (bindpar ((num (cell n))
+	      (ans (cell 1)))
+      (bindrec 
+        ((loop (fun () 
+		 (if (= (^ num) 0) 
+		     (^ ans) 
+		     (seq 
+		      (:= ans (* (^ num) (^ ans)))
+		      (:= num (- (^ num) 1))
+		      (loop))))))
+	(loop)))))

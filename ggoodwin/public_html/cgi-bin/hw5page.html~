@@ -1,0 +1,48 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML lang="en">
+<head>
+    <title>Insert Actor into WMDB</title>
+</head>
+
+
+
+<h1>Insert Actor into WMDB</h1>
+
+<p>Fill in the personal data, and as many movies as you wish.  The
+  birthdate field is optional.  This enters data into the MySQL
+  database called <strong>webdb</strong>.
+
+<form method=post action="/~ggoodwin/cgi-bin/hw5CGI.cgi">
+
+  <fieldset>
+    <legend>Actor's Personal Data</legend>
+    <table>
+      <tr><td><label for="actornm" accesskey="i">(i) Actor's ID/NM:</label></td><td><input type="text" name="actornm" id="actornm"></td></tr>
+      <tr><td><label for="actorname" accesskey="n">(n) Actor Name:</label></td><td><input type="text" name="actorname" id="actorname"></td></tr>
+      <tr><td><label for="actorbday" accesskey="b">(b) Actor's Date of Birth:</label></td><td><input type="text" name="actorbday" id="actorbday"></td></tr>
+    </table>
+  </fieldset>
+
+  <fieldset>
+    <legend>Actor's Filmography</legend>
+    <table>
+    <tr><th>&nbsp;</th><th>Movie id (tt)</th><th>Movie Title</th><th>Release Year</th></tr>
+    
+    <tr><td>0</td><td><input type='text' name='movie0_tt' id='' value=''></td><td><input type='text' name='movie0_title' id='' value=''></td><td><input type='text' name='movie0_year' id='' value=''></td></tr>
+<tr><td>1</td><td><input type='text' name='movie1_tt' id='' value=''></td><td><input type='text' name='movie1_title' id='' value=''></td><td><input type='text' name='movie1_year' id='' value=''></td></tr>
+<tr><td>2</td><td><input type='text' name='movie2_tt' id='' value=''></td><td><input type='text' name='movie2_title' id='' value=''></td><td><input type='text' name='movie2_year' id='' value=''></td></tr>
+<tr><td>3</td><td><input type='text' name='movie3_tt' id='' value=''></td><td><input type='text' name='movie3_title' id='' value=''></td><td><input type='text' name='movie3_year' id='' value=''></td></tr>
+<tr><td>4</td><td><input type='text' name='movie4_tt' id='' value=''></td><td><input type='text' name='movie4_title' id='' value=''></td><td><input type='text' name='movie4_year' id='' value=''></td></tr>
+
+    </table>
+  </fieldset>    
+
+  <p>
+    <input type='reset' value='reset'>
+    <input type='button' value='new form' onClick="window.location='hw5page.html'">
+    <input type='submit' name='submit' value='Add Data'>
+</form>
+
+<body>
+</html>

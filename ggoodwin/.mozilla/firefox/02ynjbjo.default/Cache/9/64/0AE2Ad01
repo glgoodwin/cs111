@@ -1,0 +1,1874 @@
+<HTML>
+<!--This file created 11/12/00 8:49 PM by Claris Home Page version 3.0 30 Day Trial-->
+<HEAD>
+<TITLE>Notes on OCaml</TITLE>
+<META NAME=GENERATOR CONTENT="Claris Home Page 3.0 30 Day Trial">
+<X-CLARIS-WINDOW TOP=48 BOTTOM=851 LEFT=354 RIGHT=1050> <X-CLARIS-TAGVIEW MODE=minimal> 
+<style type="text/css"><!--
+--></style>
+<link rel="stylesheet" href="../../general.css">
+<link rel="stylesheet" href="../../general.css">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<table width="100%" border="1" cellspacing="0" cellpadding="4" bgcolor="#FFDDCC">
+  <tr>
+    <td> <font size="+2">A Concise Introduction to Objective Caml<br>
+      </font> Copyright &copy; 1998, 2000 by David Matuszek </td>
+  </tr>
+</table>
+<UL>
+  <LI><A HREF="#General">General</A></LI>
+  <LI><A HREF="#Identifiers">Identifiers</A></LI>
+  <LI><A HREF="#Types">Types</A></LI>
+  <LI><A HREF="#Built-In Functions">Built-In Functions</A> 
+    <UL>
+      <LI><A HREF="#Standard boolean operators">Standard bool operators</A></LI>
+      <LI><A HREF="#intops">Standard arithmetic operators on integers</A></LI>
+      <LI><a href="#floatops">Standard arithmetic operators on reals</a></LI>
+      <LI><A HREF="#Coercions">Coercions</A></LI>
+      <LI><A HREF="#Comparisons">Comparisons</A></LI>
+      <LI><A HREF="#Operations with strings">Operations with strings</A></LI>
+      <LI><A HREF="#Operations on characters">Operations on characters</A></LI>
+      <LI><A HREF="#Operations on lists">Operations on lists</A></LI>
+      <LI><A HREF="#Operations on tuples">Operations on tuples</A></LI>
+      <LI><A HREF="#Functions with side effects">Functions with side effects</A></LI>
+    </UL>
+  </LI>
+  <LI><A HREF="#Expressions">Expressions (but not statements)</A> 
+    <UL>
+      <LI><a href="#Case expressions">Match expressions</a></LI>
+      <LI><a href="#If expressions">If expressions</a></LI>
+      <LI><A HREF="#Sequence of expressions">Sequence of expressions</A></LI>
+      <LI><A HREF="#Exceptions">Exceptions</A></LI>
+    </UL>
+  </LI>
+  <LI><A HREF="#Functions">Functions</A> 
+    <UL>
+      <LI><A HREF="#Patterns in functions">Patterns in functions</A></LI>
+      <li><a href="#Mutually recursive functions">Mutually recursive functions</a></li>
+      <li><a href="#Local variables in functions">Local variables in functions</a></li>
+      <LI><A HREF="#Anonymous functions">Anonymous functions</A></LI>
+      <LI><A HREF="#Polymorphic functions">Polymorphic functions</A></LI>
+      <LI><A HREF="#Higher-order functions">Higher-order functions</A></LI>
+      <LI><A HREF="#Curried functions">Curried functions</A></LI>
+      <li><a href="#Redefining functions">Redefining functions</a></li>
+    </UL>
+  </LI>
+  <li><a href="#Omissions">Omissions</a></li>
+  <li><a href="#Resources">Resources</a></li>
+</UL>
+
+<H2><A NAME=General></A>General</H2>
+
+<P> Caml is a dialect of ML, developed primarily in France. This paper describes 
+  <a href="http://caml.inria.fr/ocaml/">Objective Caml version 3.01</a>, or OCaml 
+  (pronounced &quot;oh-camel&quot;) for short; it does not go into the object-oriented 
+  features of OCaml, however. Another dialect, Caml Lite 0.74, has almost identical 
+  syntax, but the modules and many of the functions in the modules differ to a 
+  greater or lesser extent.</P>
+
+<P>OCaml is case-sensitive.</P>
+
+<P>OCaml is interactive; you start it up, then you type expressions (at the prompt) 
+  to be evaluated. OCaml responds with both the value and the type of the result. 
+  Example:</P>
+
+<BLOCKQUOTE><CODE># </CODE><B><CODE>3 * 4;;<BR>
+  </CODE></B><code>- : int = 12</code></BLOCKQUOTE>
+
+<P>Every expression ends with with <b>two</b> semicolons.</P>
+<P>The<code> # </code>sign is OCaml's usual input prompt. In this paper, I typically 
+  include the prompt in one-line examples, and leave it off longer examples that 
+  are best loaded from a file. Similarly, I use boldface to indicate user input 
+  that is typed in at a prompt.</P>
+<P>To define a constant, use the form:</P>
+
+<BLOCKQUOTE><CODE><b>let pi = 3.1416;;</b></CODE></BLOCKQUOTE>
+
+<P>Most values in OCaml are <i>immutable</i> (constants). However, arrays and strings 
+  can be altered in place.</P>
+<P>OCaml is an<I> expression-oriented </I>language, not a statement-oriented language. 
+  That is, everything in it is considered to be an expression and to have a value. 
+  A few expressions that are executed for their side effects rather than their 
+  value (mostly output expressions) return the<I> unit</I>,<CODE> ()</CODE>, as 
+  their value--this is like<CODE> void </CODE>in C or Java.</P>
+
+<P>To define a function, use one of the forms:</P>
+<table border="1" cellspacing="0" cellpadding="8">
+  <tr>
+    <td><code><b>let sum (x, y) = x + y;;</b></code></td>
+    <td><code><b>let add x y = x + y;;</b></code></td>
+  </tr>
+</table>
+<P>For reasons which will be explained later, if you use parentheses around the 
+  arguments in the definition, you must use parentheses in the function call. 
+  If you omit parentheses in the function definition, you must omit them in the 
+  function call. Hence:</P>
+<BLOCKQUOTE> 
+  <p><code># <b>sum 3 5;;</b><br>
+    - : int = 8 <br>
+    # <b>add (3, 5);;</b> <br>
+    - : int = 8</code></p>
+  <CODE></CODE></BLOCKQUOTE>
+
+<P>OCaml is strongly typed; however, OCaml almost always figures out the types for 
+  itself. If you need to help it along, you can specify the type of any identifier 
+  by following it by a colon and the name of the type, enclosed in parentheses, 
+  anywhere the identifier occurs (not just in the parameter list). For example, 
+  in the function</P>
+
+<BLOCKQUOTE><CODE><b>let max (x, y) = if x &gt; y then x else y;;</b></CODE></BLOCKQUOTE>
+
+<P>the variables<CODE> x </CODE>and<CODE> y </CODE>could be int, float, char, 
+  or string. To define this function to use only char values, give OCaml a hint 
+  by attaching<CODE> :char </CODE>to any one of the variables, anyplace in the 
+  function. For example, you could say</P>
+
+<table border="0" cellspacing="0" cellpadding="4">
+  <tr> 
+    <td>&nbsp;</td>
+    <td><code><b>let max (x:char) (y) = if x &gt; y then x else y;;</b></code></td>
+  </tr>
+  <tr> 
+    <td>or</td>
+    <td><code><b>let max (x) (y:char) = if x &gt; y then x else y;;</b></code></td>
+  </tr>
+  <tr> 
+    <td>or</td>
+    <td><code><b>let max (x) (y) = if x &gt; y then (x:char) else y;;</b></code></td>
+  </tr>
+  <tr> 
+    <td colspan="2">or any of several other possibilities.</td>
+  </tr>
+</table>
+<P>To execute the expressions in file<CODE> myFile.sml </CODE>(usually definitions 
+  that you are testing), use</P>
+
+<BLOCKQUOTE><CODE><b>use "myFile.sml";;</b></CODE></BLOCKQUOTE>
+
+<P>Predefined OCaml functions are in groups called<I> modules</I>, often organized 
+  around some particular data type. A module is like a function library. The collection 
+  of these modules is called the<I> common basis</I>. The most common functions 
+  are in the "<code>Pervasives</code> module," which means you don't have to do 
+  anything special to use them. For less commonly used functions, you have to 
+  either prefix the function name with the name of the module, or you have to 
+  "open" the module. Opening the module means making the contents visible to the 
+  program.</P>
+<P>For example, the following sequence shows that the function<code> length </code>is 
+  not defined for strings until the<code> open&nbsp;String </code>command is issued:</P>
+<blockquote><code># <b>length "hello";;</b> <br>
+  Characters 0-6: Unbound value length <br>
+  # <b>open String;;</b> <br>
+  # <b>length "hello";; </b><br>
+  - : int = 5</code></blockquote>
+<P>Note: Caml Light uses a slightly different syntax--<code> #open &quot;string&quot;;; 
+  </code>-- where the<code> # </code>is typed by the user. The functions provided 
+  by each module are also different, often only in having a different name.</P>
+<P>Finally, comments are indicated as:</P>
+
+<BLOCKQUOTE><CODE>(* This is a comment (* and comments may be nested.
+   *) *)</CODE></BLOCKQUOTE>
+
+<P>&nbsp;</P>
+
+<H2><A NAME=Identifiers></A>Identifiers</H2>
+
+<P>Identifiers must begin with a <i>lowercase</i> letter or underscore, and may 
+  contain letters, digits, underscores, and single quotes. Most implementations 
+  also recognize accented characters, such as &eacute;<CODE>.</CODE></P>
+
+<P>Alphanumeric identifiers beginning with a<CODE> ' </CODE>(single
+quote) are used only for type identifiers. Often OCaml will use<CODE> 'a
+</CODE>to indicate a variable (unknown or arbitrary) type. For
+example, <CODE>'a&nbsp;list</CODE> means a list whose elements are of
+type<CODE> 'a</CODE>. Additional variable types are indicated
+by<CODE> 'b</CODE>,<CODE> 'c</CODE>, and so on.</P>
+
+<P>The variable<CODE> _ </CODE>(an underscore all by itself) is used as a "wildcard" 
+  or "don't care" variable, for example,</P>
+<blockquote> 
+  <p><code>let second (_, x) = x;;</code></p>
+</blockquote>
+<P>&nbsp;</P>
+
+<H2><A NAME=Types></A>Types</H2>
+
+<P>There are several primitive types in OCaml; the following table gives
+the most important ones.</P>
+
+<P>
+<TABLE BORDER=1 BGCOLOR="#FFEEE6" CELLPADDING=4 WIDTH="100%">
+  <TR BGCOLOR="#FFDDCC">
+      <TH HEIGHT=13>
+         <P ALIGN=left>Primitive type</P>
+      </TH>
+      <TH HEIGHT=13>
+         <P ALIGN=left>Examples</P>
+      </TH>
+      <TH HEIGHT=13>
+         <P ALIGN=left>Notes</P>
+      </TH>
+   </TR>
+   <TR>
+      
+    <TD height="61"> 
+      <P><CODE>int</CODE></P>
+      </TD>
+      
+    <TD height="61"> 
+      <P><CODE>0, 5, 42, -17, 0x00FF, 0o77, 0b1101</CODE></P>
+      </TD>
+      
+    <TD height="61"> 
+      <P><CODE>- </CODE>is used for unary minus; there is no unary + 
+      <HR>
+      <CODE>0x </CODE>or<code> 0X </code>starts a hexadecimal number;<code> 0o 
+      </code>or<code> 0O </code>starts an octal number; and <code>0b </code>or<code> 
+      0B </code>starts a binary number</TD>
+   </TR>
+   <TR>
+      <TD>
+         
+      <P><CODE>float</CODE></P>
+      </TD>
+      <TD>
+         
+      <P><CODE>0.0, -5.3, 1.7e14, 1.7e+14, 1e-10</CODE></P>
+      </TD>
+      <TD>
+         
+      <P>Can't start with a decimal point</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         
+      <P><CODE>bool</CODE></P>
+      </TD>
+      <TD>
+         <P><CODE>true, false</CODE></P>
+      </TD>
+      <TD>
+         <P>These are the only bool values.</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         <P><CODE>string</CODE></P>
+      </TD>
+      <TD>
+         <P><CODE>"", "One\nTwo"</CODE></P>
+      </TD>
+      <TD>
+         <P><CODE>"\n" </CODE>is newline,<BR>
+         <CODE>"\t" </CODE>is tab,<BR>
+         <CODE>"\\" </CODE>is backslash</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         <P><CODE>char</CODE></P>
+      </TD>
+      <TD>
+         
+      <P><CODE>'a', '\n'</CODE></P>
+      </TD>
+      <TD>
+         
+      <P>Single quotes for chars, double quotes for strings.</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         <P><CODE>unit</CODE></P>
+      </TD>
+      <TD>
+         <P><CODE>()</CODE></P>
+      </TD>
+      <TD>
+         <P>This<B> is </B>a value. It is the only value of its type,
+         and is often used when the value isn't important (much
+         like<CODE> void </CODE>in C).</P>
+      </TD>
+   </TR>
+</TABLE>
+<P>There are three families of constructed types in OCaml: lists, tuples, and functions.</P>
+<P><b>Lists</b> are enclosed in brackets and the list elements are separated by 
+  semicolons. All elements in a list must be of the same type.</P>
+<P><b>Tuples </b>are usually enclosed in parentheses, and the elements are separated 
+  by commas. The elements of a tuple may be of different types.</P>
+<P><b>Functions</b> are<I> first-class </I>objects: they can be created, manipulated, 
+  passed as parameters, and otherwise treated like other kinds of values. (However, 
+  when OCaml prints the result of an expression, and that result is a function, 
+  OCaml doesn't print out the entire function; it just prints the word<B><CODE> 
+  fn</CODE></B>.) Every function takes exactly one parameter as input and returns 
+  one value as its result; however, that parameter and that result may each be 
+  of a constructed type, such as a tuple.</P>
+
+<P>The following table gives a few examples of constructed types.
+<B>Pay special attention to the second column, </B>which shows how OCaml
+expresses type information.</P>
+
+<P>
+<TABLE BORDER=1 BGCOLOR="#FFEEE6" CELLPADDING=4>
+  <TR BGCOLOR="#FFDDCC">
+      <TH>
+         <P ALIGN=left>Example expression</P>
+      </TH>
+      <TH>
+         <P ALIGN=left>Expression type</P>
+      </TH>
+      <TH>
+         <P ALIGN=left>Notes</P>
+      </TH>
+   </TR>
+   <TR>
+      <TD>
+         
+      <P><CODE>&#91;2; 3; 5; 7]</CODE></P>
+      </TD>
+      <TD>
+         <P><CODE>int list</CODE></P>
+      </TD>
+      <TD>
+         <P>Lists may be of any length, but all elements must be of
+         the same type.</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         
+      <P><CODE>[]</CODE></P>
+      </TD>
+      <TD>
+         <P><CODE>'a list</CODE></P>
+      </TD>
+      <TD>
+         
+      <P>The empty list can be represented by<CODE> &#91;&#93;</CODE>. The type 
+        of this list is allowed to be unknown.</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         <P><CODE>(5, "hello", ~16)</CODE></P>
+      </TD>
+      <TD>
+         <P><CODE>int * string * int</CODE></P>
+      </TD>
+      <TD>
+         <P>The type of a tuple depends on its length and the types
+         in each position.</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         
+      <P><CODE>("abc", &#91;1; 2; 3&#93;)</CODE></P>
+      </TD>
+      <TD>
+         <P><CODE>string * int list</CODE></P>
+      </TD>
+      <TD>
+         <P>Tuples can contain lists, and vice versa.</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         <P><CODE>(3.5)</CODE></P>
+      </TD>
+      <TD>
+         
+      <P><CODE>float</CODE></P>
+      </TD>
+      <TD>
+         <P>A tuple with one element is the same as that one
+         element.</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         
+      <P><CODE>let double x = 2.0 *. x;;</CODE></P>
+      </TD>
+      
+    <TD> 
+      <P><CODE>float -&gt; float</CODE></P>
+      </TD>
+      <TD>
+         <P>All functions take exactly<B> one</B> parameter, and
+         parentheses are optional.</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         
+      <P><CODE>let sum (x, y) = x + y;;</CODE></P>
+      </TD>
+      <TD>
+         <P><CODE>int * int -&gt; int</CODE></P>
+      </TD>
+      <TD>
+         <P>In this example the<B> one</B> parameter is a tuple.</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         
+      <P><CODE>let hi () =<BR>
+        &nbsp;&nbsp;print_string "hello\n";;</CODE></P>
+      </TD>
+      <TD>
+         <P><CODE>unit -&gt; unit</CODE></P>
+      </TD>
+      <TD>
+         <P>In this example the <B>one</B> parameter is the "unit,"
+         and so is the result.</P>
+      </TD>
+   </TR>
+   <TR>
+      <TD>
+         <P><CODE>(double, &#91;sum&#93;)</CODE></P>
+      </TD>
+      <TD>
+         
+      <P><CODE>(float -&gt; float) *<BR>
+         (int * int -&gt; int) list</CODE></P>
+      </TD>
+      <TD>
+         <P>Functions are values, and can be put into lists and
+         tuples.</P>
+      </TD>
+   </TR>
+</TABLE>
+<p></P>
+
+<P>&nbsp;</P>
+
+<H2><A NAME="Built-In Functions"></A>Built-In Functions</H2>
+<p>This section lists the most generally useful of the built-in functions; it 
+  is not a complete listing. See the appropriate reference manual for additional 
+  functions.</p>
+<p>An <i>operator</i> is just a function with a special syntax. Syntax that is 
+  added just for the sake of convenience, and not for any technical reasons, is 
+  called<i> syntactic sugar. </i>In OCaml, operators can be &quot;de-sugared&quot; 
+  by enclosing them in parentheses, for example:</p>
+<blockquote> 
+  <p><code># <b>(+) 3 5;;</b><br>
+    - : int = 8</code></p>
+</blockquote>
+<p>This also provides a handy way to peek at the type of an operator:</p>
+<blockquote> 
+  <p><code># <b>(+);;</b><br>
+    - : int -> int -> int = &lt;fun&gt;</code></p>
+</blockquote>
+<H3><A NAME="Standard boolean operators"></A>Standard bool
+operators:</H3>
+
+<P>
+<TABLE BORDER=1 BGCOLOR="#FFEEE6" CELLPADDING=4>
+  <TR BGCOLOR="#FFDDCC">
+      
+    <TH> 
+      <P ALIGN=left>Function</P>
+      </TH>
+      
+    <TH> 
+      <P ALIGN=left>Examples</P>
+      </TH>
+      
+    <TH> 
+      <P ALIGN=left>Notes</P>
+      </TH>
+   </TR>
+   <TR>
+      
+    <TD> 
+      <P><CODE>not : bool -&gt; bool</CODE></P>
+      </TD>
+      
+    <TD> 
+      <P><CODE>not true, not (i = j)</CODE></P>
+      </TD>
+      
+    <TD> 
+      <P>(Prefix) Unary negation.</P>
+      </TD>
+   </TR>
+   <TR>
+      
+    <TD> 
+      <P><CODE>&amp;&amp; : bool * bool -&gt; bool</CODE></P>
+      </TD>
+      
+    <TD> 
+      <P><CODE>(i = j) &amp;&amp; (j = k)</CODE></P>
+      </TD>
+      
+    <TD> 
+      <P>(Infix, left associative) Conjunction, with short-circuit evaluation.</P>
+      </TD>
+   </TR>
+   <TR>
+      
+    <TD> 
+      <P><CODE>|| : bool * bool -&gt; bool</CODE></P>
+      </TD>
+      
+    <TD> 
+      <P><CODE>(i = j) || (j = k)</CODE></P>
+      </TD>
+      
+    <TD> 
+      <P>(Infix, left associative) Disjunction, with short-circuit
+         evaluation.</P>
+      </TD>
+   </TR>
+</TABLE>
+ 
+&nbsp;
+<H3><A NAME="intops"></A>Standard arithmetic operators on integers:</H3>
+
+<P>
+<TABLE BORDER=1 BGCOLOR="#FFEEE6" CELLPADDING=4 WIDTH="100%">
+  <TR BGCOLOR="#FFDDCC"> 
+    <TH> 
+      <P ALIGN=left>Function</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Examples</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Notes</P>
+    </TH>
+  </TR>
+  <TR> 
+    <TD> 
+      <P>
+      <CODE>- : int -&gt; int<BR>
+      </CODE></TD>
+    <TD> 
+      <P><CODE>-5, -limit </CODE></P>
+    </TD>
+    <TD> 
+      <P>(Prefix) Unary negation.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P>
+      <CODE>* : int * int -&gt; int</CODE></TD>
+    <TD> 
+      <P><CODE>2 * limit </CODE></P>
+    </TD>
+    <TD> 
+      <P>(Infix, left associative) Multiplication; operands and result are all 
+        ints.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>/ : int * int -&gt; int</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>7 / 3, score / average</CODE></P>
+    </TD>
+    <TD> 
+      <P>(Infix, left associative) Division; truncates fractional part.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>mod : int * int -&gt; int</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>limit mod 2</CODE></P>
+    </TD>
+    <TD> 
+      <P>(Infix, left associative) Modulus; result has sign of first operand.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P>
+      <CODE>+ : int * int -&gt; int</CODE></TD>
+    <TD> 
+      <P><CODE>2 + 2, limit + 1 </CODE></P>
+    </TD>
+    <TD> 
+      <P>(Infix, left associative) Addition.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P>
+      <CODE>- : int * int -&gt; int </CODE></TD>
+    <TD> 
+      <P><CODE>2 - 2, limit - 1 </CODE></P>
+    </TD>
+    <TD> 
+      <P>(Infix, left associative) Subtraction.</P>
+    </TD>
+  </TR>
+  <TR>
+    <TD><code>abs : int -&gt; int</code></TD>
+    <TD><code>abs (-5)</code></TD>
+    <TD>(Prefix) Absolute value.</TD>
+  </TR>
+</TABLE>
+<p></P>
+
+<h3>&nbsp;</h3>
+<h3><a name="floatops"></a>Standard arithmetic operators on real numbers:</h3>
+<p>
+<table border=1 bgcolor="#FFEEE6" cellpadding=4 width="100%">
+  <tr bgcolor="#FFDDCC"> 
+    <th> 
+      <p align=left>Function</p>
+    </th>
+    <th> 
+      <p align=left>Examples</p>
+    </th>
+    <th> 
+      <p align=left>Notes</p>
+    </th>
+  </tr>
+  <tr> 
+    <td><code>** : float *. float -&gt; float</code> 
+      <p></p>
+    </td>
+    <td><code>15.5 ** 2.0</code></td>
+    <td>(Infix, right associative) Exponentiation.</td>
+  </tr>
+  <tr> 
+    <td><code>sqrt : float -&gt; float</code></td>
+    <td><code>sqrt 8.0</code></td>
+    <td>(Prefix) Square root.</td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code> -. : float -&gt; float</code> 
+      <p></p>
+    </td>
+    <td> 
+      <p><code> -1e10, -average</code></p>
+    </td>
+    <td> 
+      <p>(Prefix) Unary negation.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p>
+      <code> *. : float *. float -&gt; float</code> 
+      <p></p>
+    </td>
+    <td> 
+      <p><code> 3.1416 *. r *. r</code></p>
+    </td>
+    <td> 
+      <p>(Infix, left associative) Multiplication; operands and result are all 
+        real numbers.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code>/. : float * float -&gt; float</code></p>
+    </td>
+    <td> 
+      <p><code>7.0 /. 3.5, score /. average</code></p>
+    </td>
+    <td> 
+      <p>(Infix, left associative) Division of real numbers.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code> +. : float * float -&gt; float</code> 
+      <p></p>
+    </td>
+    <td> 
+      <p><code>score +. 1.0</code></p>
+    </td>
+    <td> 
+      <p>(Infix, left associative) Addition of real numbers.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code> -. : float * float -&gt; float</code> 
+      <p></p>
+    </td>
+    <td> 
+      <p><code>score -. 1.0</code></p>
+    </td>
+    <td> 
+      <p>(Infix, left associative) Subtraction of real numbers.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td><code>** : float *. float -&gt; float</code> 
+      <p></p>
+    </td>
+    <td><code>15.5 ** 2.0</code></td>
+    <td>(Infix, right associative) Exponentiation.</td>
+  </tr>
+  <tr> 
+    <td><code>sqrt : float -&gt; float</code></td>
+    <td><code>sqrt 8.0</code></td>
+    <td>Square root.</td>
+  </tr>
+  <tr> 
+    <td><code>ceil : float -&gt; float</code></td>
+    <td><code>ceil 9.5</code></td>
+    <td>Round up to nearest integer (but result is still a real number).</td>
+  </tr>
+  <tr> 
+    <td><code>floor : float -&gt; float</code></td>
+    <td><code>floor 9.5</code></td>
+    <td>Round down to nearest integer (but result is still a real number).</td>
+  </tr>
+  <tr>
+    <td><code>exp, log, log10, cos, sin, tan, acos, ... : float -&gt; float</code></td>
+    <td><code>exp 10.0</code></td>
+    <td>The usual transcendental functions.</td>
+  </tr>
+</table>
+<P>&nbsp;</P>
+
+<H3><A NAME=Coercions></A>Coercions</H3>
+
+<P>
+<TABLE BORDER=1 BGCOLOR="#FFEEE6" CELLPADDING=4 WIDTH="100%">
+  <TR BGCOLOR="#FFDDCC"> 
+    <TH> 
+      <P ALIGN=left>Function</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Examples</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Notes</P>
+    </TH>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>float : int -&gt; float</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>float 5, float (5)</CODE></P>
+    </TD>
+    <TD> 
+      <P>Convert integer to real.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>truncate : float -&gt; int</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>truncate average</CODE></P>
+    </TD>
+    <TD> 
+      <P>Fractional part is discarded.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>int_of_char : char -&gt; int</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>int_of_char 'a'</CODE></P>
+    </TD>
+    <TD> 
+      <P>ASCII value of character.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>char_of_int: int -&gt; char</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>char_of_int 97</CODE></P>
+    </TD>
+    <TD> 
+      <P>Character corresponding to ASCII value; <br>
+        argument must be in range 0..255.</P>
+    </TD>
+  </TR>
+  <tr> 
+    <td> 
+      <p><code>int_of_string : string -&gt; int</code></p>
+    </td>
+    <td> 
+      <p><code>int_of_string &quot;54&quot;</code></p>
+    </td>
+    <td> 
+      <p>Convert string to integer.</p>
+    </td>
+  </tr>
+  <TR> 
+    <TD> 
+      <P><CODE>string_of_int : int -&gt; string</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>string_of_int 54</CODE></P>
+    </TD>
+    <TD> 
+      <P>Convert integer to string.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD><code>float_of_string : string -&gt; float</code></TD>
+    <TD><code>float_of_string &quot;3.78&quot;</code></TD>
+    <TD>Convert string to float.</TD>
+  </TR>
+  <TR> 
+    <TD><code>string_of_float : float -&gt; string</code></TD>
+    <TD><code>string_of_float 3.78</code></TD>
+    <TD>Convert float to string.</TD>
+  </TR>
+  <TR> 
+    <TD><code>bool_of_string : string -&gt; bool</code></TD>
+    <TD><code>bool_of_string &quot;true&quot;</code></TD>
+    <TD>Convert string to bool.</TD>
+  </TR>
+  <TR> 
+    <TD><code>string_of_bool : bool -&gt; string</code></TD>
+    <TD><code>string_of_bool true</code></TD>
+    <TD>Convert bool to string.</TD>
+  </TR>
+</TABLE>
+<p></P>
+
+<P>&nbsp;</P>
+
+<H3><A NAME=Comparisons></A>Comparisons</H3>
+
+<P>
+<TABLE BORDER=1 BGCOLOR="#FFEEE6" CELLPADDING=4 WIDTH="100%">
+  <TR BGCOLOR="#FFDDCC"> 
+    <TH WIDTH=175> 
+      <P ALIGN=left>Function</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Examples</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Notes</P>
+    </TH>
+  </TR>
+  <TR> 
+    <TD WIDTH=175> 
+      <P><CODE>&lt; : 'a * 'a -&gt; bool</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>i &lt; 0</CODE></P>
+    </TD>
+    <TD> 
+      <P>Less than.<CODE> a' </CODE>can be <CODE>int, float, char, </CODE>or<CODE> 
+        string</CODE>.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD WIDTH=175> 
+      <P><CODE>&lt;= : 'a * 'a -&gt; bool</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>x &lt;= 0.0</CODE></P>
+    </TD>
+    <TD> 
+      <P>Less than or equal to.<CODE> a' </CODE>can be <CODE>int, float, char, 
+        </CODE>or<CODE> string</CODE>.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD WIDTH=175> 
+      <P><CODE>= : 'a * 'a -&gt; bool</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>s = "abc"</CODE></P>
+    </TD>
+    <TD> 
+      <P>Equals.<CODE> a' </CODE>can be <CODE>int, char, </CODE>or<CODE> string, 
+        </CODE>but not<CODE> float.</CODE></P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD WIDTH=175> 
+      <P><CODE>&lt;&gt; : 'a * 'a -&gt; bool</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>ch &lt;&gt; '\n'</CODE></P>
+    </TD>
+    <TD> 
+      <P>Not equal.<CODE> a' </CODE>can be <CODE>int, char, </CODE>or<CODE> string, 
+        </CODE>but not<CODE> float.</CODE></P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD WIDTH=175> 
+      <P><CODE>&gt;= : 'a * 'a -&gt; bool</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>i &gt;= j</CODE></P>
+    </TD>
+    <TD> 
+      <P>Greater than or equal to.<CODE> a' </CODE>can be <CODE>int, float, char, 
+        </CODE>or<CODE> string</CODE>.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD WIDTH=175> 
+      <P><CODE>&gt; : 'a * 'a -&gt; bool</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>x &gt; y</CODE></P>
+    </TD>
+    <TD> 
+      <P>Greater than.<CODE> a' </CODE>can be <CODE>int, float, char, </CODE>or<CODE> 
+        string</CODE>.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD WIDTH=175><code>== : 'a -> 'a -> bool</code></TD>
+    <TD><code>x == y</code></TD>
+    <TD>Physical equality; meaning is somewhat implementation-dependent.</TD>
+  </TR>
+  <TR> 
+    <TD WIDTH=175><code>!= : 'a -> 'a -> bool</code></TD>
+    <TD><code>x != y</code></TD>
+    <TD>Physical inequality; meaning is somewhat implementation-dependent.</TD>
+  </TR>
+  <TR> 
+    <TD WIDTH=175><code>max : 'a -> 'a -> 'a</code></TD>
+    <TD><code>max 'a' 'v', max 0 n</code></TD>
+    <TD>Returns the larger of the two arguments.</TD>
+  </TR>
+  <TR> 
+    <TD WIDTH=175><code>min : 'a -> 'a -> 'a</code></TD>
+    <TD><code>min ch1 ch2</code></TD>
+    <TD>Returns the smaller of the two arguments.</TD>
+  </TR>
+</TABLE>
+<p></P>
+
+<P>&nbsp;</P>
+
+<H3><A NAME="Operations with strings"></A>Operations with
+strings</H3>
+
+<P>The operators<CODE> &lt;&nbsp;&nbsp;&lt;=&nbsp;&nbsp;=&nbsp;&nbsp;!=&nbsp;&nbsp;&gt;=&nbsp;&nbsp;&gt; 
+  </CODE>can be applied to strings for lexical comparisons. Many of the following 
+  operations can be used only by opening the <code>String</code> module or prefixing 
+  the name of the operation with <code>String</code> (e.g. <code>String.length&nbsp;&quot;hello&quot;</code>).</P>
+
+<P>
+<TABLE BORDER=1 BGCOLOR="#FFEEE6" CELLPADDING=4 WIDTH="100%">
+  <TR BGCOLOR="#FFDDCC"> 
+    <TH> 
+      <P ALIGN=left>Function</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Examples</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Notes</P>
+    </TH>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>^ : string * string -&gt; string</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>"Hello, " ^ name</CODE></P>
+    </TD>
+    <TD> 
+      <P>Infix concatenation of two strings.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>String.concat : string -&gt; string list -&gt; string</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>String.concat &quot; and &quot; &#91;"ab"; "c"; "de"&#93;</CODE></P>
+    </TD>
+    <TD> 
+      <P>Concatenates the strings of the list with the first argument inserted 
+        between each pair. </P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>String.length : string -&gt; int</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>String.length "hello"</CODE></P>
+    </TD>
+    <TD> 
+      <P>Number of characters in string.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD><code>String.get : string -> int -> char</code></TD>
+    <TD><code>String.get &quot;hello&quot; 0</code></TD>
+    <TD>Return a given character of the string, counting from 0.</TD>
+  </TR>
+  <TR> 
+    <TD><code>String.set : string -> int -> char -> unit</code></TD>
+    <TD><code>String.set name 4 's'</code></TD>
+    <TD>Modifies the original string by changing the character at the given location.</TD>
+  </TR>
+  <TR> 
+    <TD><code>String.index : string -&gt; char -&gt; int</code></TD>
+    <TD><code>String.index &quot;radar&quot; 'a'</code></TD>
+    <TD>Returns the position of the first occurrence of the char in the string.</TD>
+  </TR>
+  <TR> 
+    <TD><code>String.rindex : string -&gt; char -&gt; int</code></TD>
+    <TD><code>String.rindex &quot;radar&quot; 'a'</code></TD>
+    <TD>Returns the position of the last occurrence of the char in the string.</TD>
+  </TR>
+  <TR> 
+    <TD><code>String.contains : string -&gt; char -&gt; bool</code></TD>
+    <TD><code>String.contains &quot;radar&quot; 'a'</code></TD>
+    <TD>Tests whether the char occurs in the string.</TD>
+  </TR>
+  <TR> 
+    <TD><code>String.sub : string -&gt; int -&gt; int -&gt; string</code></TD>
+    <TD><code>String.sub &quot;abcdefg&quot; p n</code></TD>
+    <TD>Returns a substring of length<code> n </code>starting at position <code>p</code>.</TD>
+  </TR>
+  <TR> 
+    <TD><code>String.make : int -&gt; char -&gt; string</code></TD>
+    <TD><code>String.make n c</code></TD>
+    <TD>Returns a string consisting of<code> n </code>copies of character<code> 
+      c</code>.</TD>
+  </TR>
+  <TR> 
+    <TD><code>String.uppercase : string -&gt; string</code></TD>
+    <TD><code>String.uppercase &quot;OCaml&quot;</code></TD>
+    <TD>Returns a copy of the string with all letters translated to uppercase.</TD>
+  </TR>
+  <TR> 
+    <TD><code>String.lowercase : string -&gt; string</code></TD>
+    <TD><code>String.lowercase &quot;OCaml&quot;</code></TD>
+    <TD>Returns a copy of the string with all letters translated to lowercase.</TD>
+  </TR>
+  <TR> 
+    <TD><code>String.capitalize : string -&gt; string</code></TD>
+    <TD><code>String.capitalize &quot;OCaml&quot;</code></TD>
+    <TD>Returns a copy of the string with the first character translated to uppercase.</TD>
+  </TR>
+  <TR> 
+    <TD><code>String.uncapitalize : string -&gt; string</code></TD>
+    <TD><code>String.uncapitalize &quot;OCaml&quot;</code></TD>
+    <TD>Returns a copy of the string with the first character translated to lowercase.</TD>
+  </TR>
+</TABLE>
+<p>Special syntactic sugar for accessing characters of a string:</p>
+<table border="1" cellspacing="0" cellpadding="8" bgcolor="#FFEEE6">
+  <tr>
+    <td><code>s.[i]</code></td>
+    <td>Returns the<code> i<sup>th</sup> </code>character of string<code> s</code>.</td>
+  </tr>
+  <tr>
+    <td><code>s.[i] &lt;- c</code></td>
+    <td>Sets the<code> i<sup>th</sup> </code>character of string<code> s </code>to<code> 
+      c</code>.</td>
+  </tr>
+</table>
+<p>&nbsp; </p>
+<H3><A NAME="Operations on characters"></A>Operations on
+characters</H3>
+
+<P>The operators<CODE>
+&lt;&nbsp;&nbsp;&lt;=&nbsp;&nbsp;=&nbsp;&nbsp;!=&nbsp;&nbsp;&gt;=&nbsp;&nbsp;&gt;
+</CODE>can be applied to characters.</P>
+
+<P>The following functions <CODE></CODE>are in the<CODE> Char </CODE>structure. 
+  To use these functions without typing <b><code> </code></b><code> Char. </code>each 
+  time, enter<B><CODE> open Char;;</CODE></B>.</P>
+
+<P>
+<TABLE BORDER=1 BGCOLOR="#FFEEE6" CELLPADDING=4>
+  <TR BGCOLOR="#FFDDCC"> 
+    <TH> 
+      <P ALIGN=left>Function</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Notes</P>
+    </TH>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>Char.uppercase : char -&gt; char</CODE></P>
+    </TD>
+    <TD> 
+      <P>Given a lowercase letter, returns the corresponding capital letter. Given 
+        any other character, returns that same character.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>Char.lowercase : char -&gt; char</CODE></P>
+    </TD>
+    <TD> 
+      <P>Given a capital letter, returns the corresponding lowercase letter. Given 
+        any other character, returns that same character.</P>
+    </TD>
+  </TR>
+  <TR>
+    <TD><code>Char.escaped : char -&gt; string</code></TD>
+    <TD>Returns a string consisting of the single character. The name refers to 
+      the fact that the character may be escaped (quoted).</TD>
+  </TR>
+</TABLE>
+<p></P>
+
+<P>&nbsp;</P>
+
+<H3><A NAME="Operations on lists"></A>Operations on lists</H3>
+
+<P>A list is a set of elements, all of the same type, enclosed in brackets and 
+  separated by semicolons. Example:<CODE> &#91;"hello"; "bonjour"; "guten&nbsp;Tag"&#93;</CODE>. 
+  The type of this example is<CODE> string&nbsp;list</CODE>.</P>
+
+<P>The empty list is represented by<CODE> &#91;&#93;</CODE>.</P>
+<P>Only the<code> :: </code>operator (LISP cons) and <code>@</code> operator (list 
+  concatenation) can be used without opening the <code>List</code> module or prefixing 
+  the function name with<code> List.</code> .</P>
+
+<P>
+<TABLE BORDER=1 BGCOLOR="#FFEEE6" CELLPADDING=4 WIDTH="100%">
+  <TR BGCOLOR="#FFDDCC"> 
+    <TH> 
+      <P ALIGN=left>Function</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Examples</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Notes</P>
+    </TH>
+  </TR>
+  <TR> 
+    <TD><code>:: : 'a -&gt; 'a list -&gt; 'a list</code></TD>
+    <TD><code>5 :: [6; 7]</code></TD>
+    <TD>Add an element to the front of the list. This operator is right associative.</TD>
+  </TR>
+  <TR> 
+    <TD><code>@ : 'a list -> 'a list -> 'a list</code></TD>
+    <TD><code>[5] @ [6; 7]</code></TD>
+    <TD>List concatenation.</TD>
+  </TR>
+  <TR> 
+    <TD><code>List.length : 'a list -&gt; int</code></TD>
+    <TD><code>List.length [5; 6; 7]</code></TD>
+    <TD>Number of elements in the list</TD>
+  </TR>
+  <tr> 
+    <td> 
+      <p><code>List.hd : 'a list -&gt; 'a</code></p>
+    </td>
+    <td> 
+      <p><code>List.hd &#91;3; 5; 7&#93;</code></p>
+    </td>
+    <td> 
+      <p>The "head" of a list is its first element. Same as<code> car </code>in 
+        LISP.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code>List.tl : 'a list -&gt; 'a list</code></p>
+    </td>
+    <td> 
+      <p><code>List.tl &#91;3; 5; 7&#93;</code></p>
+    </td>
+    <td> 
+      <p>The "tail" of a list is the list with its first element removed. Same 
+        as<code> cdr </code>in LISP.</p>
+    </td>
+  </tr>
+  <TR> 
+    <TD><code>List.nth : 'a list -> int -> 'a</code></TD>
+    <TD><code>List.nth [3; 5; 7] 2</code></TD>
+    <TD>Returns the nth element of a list, counting from zero.</TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>List.rev : 'a list -&gt; 'a list</CODE></P>
+    </TD>
+    <TD> 
+      <P><CODE>List.rev &#91;1; 2; 3&#93;</CODE></P>
+    </TD>
+    <TD> 
+      <P>Reverse the list.</P>
+    </TD>
+  </TR>
+</TABLE>
+<p></P>
+
+<P>&nbsp;</P>
+
+<H3><A NAME="Operations on tuples"></A>Operations on tuples</H3>
+
+<P>Remember that a tuple consists of zero or more values, separated by commas 
+  and enclosed in parentheses. The parentheses can usually (but not always) be 
+  omitted. </P>
+<P>If<CODE> T </CODE>is a pair (a tuple of two elements), then<CODE> fst(T) </CODE>is 
+  the first element and<CODE> snd(T) </CODE>is the second element. Standard ML 
+  defines additional operations on tuples, but OCaml does not. </P>
+<P>The type of a tuple describes the number and type of each element in the tuple. 
+  For example,</P>
+<blockquote>
+  <pre># <b>("John Q. Student", 97, 'A');;</b>
+- : string * int * char = "John Q. Student", 97, 'A'</pre>
+</blockquote>
+<P>Sometimes you may want a function to return more than one value. That isn't 
+  possible, but the next best thing is to return a tuple of values.</P>
+<blockquote> 
+  <pre># <b>let divide x y = x / y, x mod y;;</b>
+val divide : int -> int -> int * int = &lt;fun&gt;
+# <b>divide 20 3;;</b>
+- : int * int = 6, 2
+</pre>
+</blockquote>
+<p>You can easily define functions to work with tuples, by using patterns. For 
+  example:</p>
+<blockquote> 
+  <pre># <b>let third_of_four (_, _, x, _) = x;;</b>
+val third_of_four : 'a * 'b * 'c * 'd -> 'c = &lt;fun&gt;
+# <b>third_of_four ('a', 'b', 'c', 'd');;</b>
+ - : char = 'c'
+
+</pre>
+</blockquote>
+<H3><A NAME="Functions with side effects"></A>Functions with side
+effects</H3>
+
+<P>The most useful functions with side effects are the I/O functions. Since OCaml 
+  automatically prints the values of expressions entered at the prompt, you can 
+  often avoid doing any explicit I/O.</P>
+
+<P>
+<TABLE BORDER=1 BGCOLOR="#FFEEE6" CELLPADDING=4 WIDTH="100%">
+  <TR BGCOLOR="#FFDDCC"> 
+    <TH> 
+      <P ALIGN=left>Function</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Examples</P>
+    </TH>
+    <TH> 
+      <P ALIGN=left>Notes</P>
+    </TH>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><code>print_char : char -&gt; unit</code></P>
+    </TD>
+    <TD> 
+      <P><CODE>print_char 'a'</CODE></P>
+    </TD>
+    <TD> 
+      <P>Prints one character</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD><code>print_int : int -> unit</code></TD>
+    <TD><code>print_int (x + 1)</code></TD>
+    <TD>Prints an integer.</TD>
+  </TR>
+  <TR> 
+    <TD><code>print_float : float -> unit</code></TD>
+    <TD><code>print_float 5.3</code></TD>
+    <TD>Prints a real number.</TD>
+  </TR>
+  <tr> 
+    <td><code>print_string : string -> unit</code></td>
+    <td><code>print_string mystring</code></td>
+    <td>Prints a string.</td>
+  </tr>
+  <TR> 
+    <TD><code>print_endline : string -> unit</code></TD>
+    <TD><code>print_endline &quot;Hello&quot;</code></TD>
+    <TD>Prints a string followed by a newline.</TD>
+  </TR>
+  <TR> 
+    <TD><code>print_newline : unit -> unit</code></TD>
+    <TD><code>print_newline &quot;Hello&quot;</code></TD>
+    <TD>Prints a string followed by a newline, then flushes the buffer.</TD>
+  </TR>
+</TABLE>
+<P>The printing functions all return the unit,<code> ()</code>, which is OCaml's 
+  way of saying that nothing important is returned.</P>
+
+<P>
+<TABLE BORDER=1 BGCOLOR="#FFEEE6" CELLPADDING=4>
+  <TR BGCOLOR="#FFDDCC"> 
+    <TH> 
+      <P ALIGN=left>Function</P>
+    </TH>
+    <TH>Examples</TH>
+    <TH> 
+      <P ALIGN=left>Notes</P>
+    </TH>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><code>read_line : unit -> string</code></P>
+    </TD>
+    <TD><code>read_line ()</code></TD>
+    <TD> 
+      <P>Reads a string from standard input.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><CODE>read_int : unit -> int</CODE></P>
+    </TD>
+    <TD><code>read_int ()</code></TD>
+    <TD> 
+      <P>Reads an integer from standard input.</P>
+    </TD>
+  </TR>
+  <TR> 
+    <TD> 
+      <P><code>read_float : unit -> float</code></P>
+    </TD>
+    <TD><code>read_float ()</code></TD>
+    <TD> 
+      <P>Reads a real number from standard input.</P>
+    </TD>
+  </TR>
+</TABLE>
+<p></P>
+
+<p></P>
+
+<P>&nbsp;</P>
+
+<H2><A NAME=Expressions></A>Expressions (but not statements)</H2>
+
+<P>OCaml is a purely functional language: everything is built from
+functions. Functions return values. Statements don't return values,
+they have side effects. There are no statements in OCaml. Things in OCaml
+that look like statements are actually expressions, and return
+values.</P>
+
+<P>The<I> state </I>of a program is the collection of values in the
+environment. Statements, especially assignment statements, have<I>
+side effects</I>--that is, they change the state of a program by
+altering values in the environment. To understand what a program is
+doing, you have to know the state of the program. Since states can be
+very large, understanding a program can be difficult.</P>
+
+<P>OCaml claims to be <I>stateless. </I>That is, you don't need to know
+about any environmental variables in order to understand a program.
+Everything you need is either in the function parameters or in the
+execution stack (the set of function calls that got you to this
+point). In theory, this should make an OCaml program easier to
+understand than a program in a nonfunctional language. There is
+actually some truth in this point of view.</P>
+
+<P>Because you can open structures and define and redefine values and functions 
+  at the prompt, the argument that OCaml is stateless is a little difficult to 
+  justify. However, if all your functions are defined in a file, and you just 
+  read in that file and use the functions, the stateless nature of OCaml is more 
+  obvious.</P>
+
+<P>&nbsp;</P>
+
+<H3><A NAME="Case expressions"></A>Match expressions</H3>
+
+<P>The<I> match expression </I>looks like this:</P>
+
+<BLOCKQUOTE><CODE>match </CODE><I><CODE>&lt;expression&gt;</CODE></I><CODE> with 
+  </CODE><I><CODE>&lt;match&gt;</CODE></I></BLOCKQUOTE>
+
+<P>where a<I> <code>&lt;match&gt; </code></I>has the form:</P>
+
+<BLOCKQUOTE><CODE>&nbsp;&nbsp;&nbsp;</CODE><I><CODE>&lt;pattern<SUB>1</SUB>&gt;</CODE></I><CODE>&nbsp;-&gt;&nbsp;</CODE><I><CODE>&lt;expression<SUB>1</SUB>&gt;</CODE></I><CODE> 
+  | </CODE><I><CODE><BR>
+  &nbsp;&nbsp;&nbsp;&lt;pattern<SUB>2</SUB>&gt;</CODE></I><CODE>&nbsp;-&gt;&nbsp;</CODE><I><CODE>&lt;expression<SUB>2</SUB>&gt; 
+  </CODE></I><CODE>|</CODE><I><CODE> <BR>
+  &nbsp;&nbsp;&nbsp;. . .<BR>
+  &nbsp;&nbsp;&nbsp;&lt;pattern<SUB>N</SUB>&gt;</CODE></I><CODE>&nbsp;-&gt;&nbsp;</CODE><I><CODE>&lt;expression<SUB>N</SUB>&gt;</CODE></I></BLOCKQUOTE>
+
+<P>First, the initial<code><I> &lt;expression&gt; </I></code>is evaluated, then 
+  its value is compared against each of the <I><code>&lt;patterns&gt;</code></I>. 
+  When a matching<I> <code>&lt;pattern<SUB>i</SUB>&gt;</code> </I>is found, the 
+  corresponding<I> <code>&lt;expression<SUB>i</SUB>&gt;</code> </I>is evaluated 
+  and becomes the value of the case expression.</P>
+
+<P>The most common patterns are</P>
+
+<UL>
+  <LI>&nbsp;a variable (matches anything),</LI>
+  <LI>&nbsp;a tuple, such as<code> (x, y)</code>,</LI>
+  <LI> &nbsp;a literal (constant) value, such as<CODE> 5 </CODE>or<CODE> "abc"</CODE>,</LI>
+  <LI>&nbsp;an expression<CODE> x::xs</CODE>, to match the head and tail of a 
+    nonempty list, and</LI>
+  <LI>&nbsp;an<code> as </code>expression to have a name for the entire actual 
+    parameter as well as its parts; for example,<CODE> L as x::xs</CODE>, which 
+    matches the same things as<code> x::xs</code>, but also assigns to<code> L 
+    </code>the entire list.</LI>
+</UL>
+
+<P>Examples:</P>
+
+<BLOCKQUOTE><CODE>match (n + 1) with 1 -&gt; "a" | 2 -&gt; "b" | 3 -&gt; "c" | 
+  4 -&gt; "d";;</CODE> 
+  <P><CODE>match myList with &#91;&#93; -&gt; "empty" | x::xs -&gt; "nonempty";;</CODE></P>
+</BLOCKQUOTE>
+
+<P>Because every expression must have a value, OCaml will warn you if it
+does not think you have a pattern for every possible case.</P>
+
+<P>When expressions are nested, it can be difficult to tell exactly where the 
+  case expression ends. As with any expression, it doesn't hurt to put parentheses 
+  around it, as for example,</P>
+
+<BLOCKQUOTE><CODE>(match (n + 1) with 1 -&gt; "a" | 2 -&gt; "b" | 3 -&gt; "c" 
+  | 4 -&gt; "d");;</CODE></BLOCKQUOTE>
+
+<P>&nbsp;</P>
+
+<H3><a name="If expressions"></a>If expressions</H3>
+<p>The <i>if expression</i> looks like this:</p>
+<blockquote><code>if </code><i><code>&lt;bool expression&gt;</code></i><code> 
+  then </code><i><code>&lt;expression<sub>1</sub>&gt;</code></i><code> else </code><i><code>&lt;expression<sub>2</sub>&gt;</code></i></blockquote>
+<p>If the<code> <i>&lt;bool expression&gt;</i> </code>is true, then<code> <i>&lt;expression<sub>1</sub>&gt;</i></code><i> 
+  </i>is evaluated and is the value of the expression, otherwise<code> <i>&lt;expression<sub>2</sub>&gt;</i></code> 
+  is evaluated and is the value of the expression.</p>
+<p>Since the if expression is an expression and not a statement, it must have 
+  a value; therefore, the <code> else </code>part is required.</p>
+<p>The if expression is really shorthand for the following match expression:</p>
+<blockquote> 
+  <p><code>match </code><i><code>&lt;bool expression&gt;</code></i><code> with 
+    true -&gt; </code><i><code>&lt;expression<sub>1</sub>&gt;</code></i><code> 
+    | false -&gt; </code><i><code>&lt;expression<sub>2</sub>&gt;</code></i> </p>
+</blockquote>
+<p>When the OCaml compiler detects an error in an if expression, it reports the error 
+  as though it occurred in the corresponding case expression.</p>
+<p>&nbsp;</p>
+<h3></h3>
+<H3><A NAME="Sequence of expressions"></A>Sequence of expressions</H3>
+
+<P>We can execute a sequence of expressions by separating them with
+semicolons and enclosing the group in parentheses; the value of the
+sequence is the value of the last expression in the sequence. Any
+values produced by earlier expressions are discarded. This is only
+useful with expressions that are evaluated for their side
+effects.</P>
+
+<BLOCKQUOTE>
+  <pre>let name = "Dave" in
+  (print_string "Hello, "; print_string name; print_string "\n");;</pre>
+</BLOCKQUOTE>
+
+<P>OCaml is supposed to be a purely functional language, which means that it has 
+  no expressions with side effects. However, printing output<I> is </I>a side 
+  effect, and output is the primary use of side effects in OCaml. Output operations 
+  produce the unit,<CODE> ()</CODE>, as their value. OCaml therefore expects all 
+  the expressions (except the last) in a semicolon-separated list to have a unit 
+  value, and will warn you if that isn't the case.</P>
+
+<P>&nbsp;</P>
+
+<H3><A NAME=Exceptions></A>Exceptions</H3>
+
+<P>An "exception" is an error. You can declare new types of
+exceptions, with or without a parameter, as follows:</P>
+
+<BLOCKQUOTE><CODE>exception <I>&lt;Name&gt;</I> ;;<BR>
+  exception <I>&lt;Name&gt;</I> of <I>&lt;type&gt;</I> ;;</CODE></BLOCKQUOTE>
+
+<P>The name of an exception must begin with a capital letter. For example:</P>
+<blockquote>
+  <p><code>exception FormatError of int * string;;</code></p>
+</blockquote>
+<P>To signal that one of these exceptions has occurred, use</P>
+
+<BLOCKQUOTE><CODE>raise (<I>&lt;name&gt; arguments</I>);;</CODE></BLOCKQUOTE>
+
+<P>The way you use exceptions is as follows:</P>
+
+<BLOCKQUOTE><code>try </code><I><code>&lt;expression&gt; </code></I><code>with 
+  <I>&lt;match&gt;</I></code></BLOCKQUOTE>
+
+<P>If no exception is raised, the result of the<code> try </code>is the result 
+  of the<i><code> &lt;expression&gt;</code></i>. If an exception is raised, the 
+  first rule in<I> <code>&lt;match&gt; </code></I>that matches the expression 
+  will be executed. If you raise an exception and fail to handle it, OCaml will 
+  give you an "uncaught exception" error.</P>
+<P>Note that the results of the match must all have the same type as the result 
+  of a correct<i><code> &lt;expression&gt;</code></i>. However, it's okay to use 
+  a sequence of expressions for printing, ended with a value of the correct type, 
+  as in the following example.</P>
+<P>Example:</P>
+<blockquote> 
+  <pre>exception WrongOrder of int*int;;
+
+
+let rec fromTo (m, n) =
+  if m &gt; n then raise (WrongOrder(m, n))
+  else if m = n then [m]
+       else m::fromTo(m + 1, n);;
+
+let makeList (m, n) =
+  try fromTo (m, n)
+  with WrongOrder(m, n) -&gt;
+    (print_int m;
+     print_string " is greater than ";
+     print_int n;
+     print_newline ();
+     []);;
+    </pre>
+</blockquote>
+<H2><A NAME=Functions></A>Functions</H2>
+
+<P>The usual form of a function definition is</P>
+
+<BLOCKQUOTE><CODE>let <I>&lt;name&gt; &lt;parameter&gt;</I> = <I>&lt;expression&gt;</I> 
+  ;;</CODE></BLOCKQUOTE>
+
+<P><b>A function always has exactly one parameter, and returns one result. </b>It 
+  often <i>appears</i> that a function takes more than one argument or returns 
+  more than one result, but appearances can be misleading. For instance,</P>
+
+<BLOCKQUOTE> 
+  <p><CODE>let swap (x, y) = (y, x);;</CODE></p>
+</BLOCKQUOTE>
+<p>In this case, the one argument is a tuple, and the one result is a tuple.</p>
+<BLOCKQUOTE> 
+  <p><CODE>print_newline ();;</CODE></p>
+</BLOCKQUOTE>
+<p>Here, the one argument is the <i>unit</i>,<code> ()</code>, which <i>is</i> 
+  a value--it is<i> not </i>syntax to indicate an empty parameter list. Similarly, 
+  the unit is returned as a result. Finally,</p>
+<BLOCKQUOTE>
+  <p><CODE>let max x y = if x &gt; y then x else y;;</CODE></p>
+</BLOCKQUOTE>
+
+<P>This is an operation called <i>currying</i>, in which<code> max </code>takes 
+  the single argument<code> x</code>, and returns a <i>new function</i> which 
+  takes the single argument<code> y</code>. Currying is explained in more detail 
+  later in this paper.</P>
+
+<P>It doesn't hurt to use a tuple of length 1 in place of a single
+parameter; the following are equivalent definitions:</P>
+
+<BLOCKQUOTE><CODE>let score &nbsp;x&nbsp; = if x &lt; 0 then 0 else x;;<BR>
+  let score (x) = if x &lt; 0 then 0 else x;;</CODE></BLOCKQUOTE>
+
+<P>Functions that don't use their parameter must still have one; they
+can be given the unit as the parameter:</P>
+
+<BLOCKQUOTE><CODE>let tab () = print_char '\t';;</CODE></BLOCKQUOTE>
+
+<P>Similarly, a function can only return one value, but that value
+can easily be a tuple. For example,</P>
+
+<BLOCKQUOTE><CODE>let vectorAdd ((x1, y1), (x2, y2)) = (x1 + x2, y1 + y2);;</CODE></BLOCKQUOTE>
+
+<P>Recursive functions must include the keyword<code> rec</code>, for example:</P>
+<blockquote> 
+  <p><code>let rec firstDigit (x: int) =<br>
+    &nbsp;&nbsp; if x &lt; 10 then x else firstDigit (x / 10);;</code></p>
+</blockquote>
+<H4><a name="Patterns in functions"></a>Patterns in functions</H4>
+<p>Simple functions consist of only a single case, but more complex functions 
+  typically use pattern matching to separate cases. Consider the well-known Fibonacci 
+  function,</p>
+<blockquote> 
+  <p><tt>fib(0) = fib(1) = 1<br>
+    fib(n) = fib(n-1) + fib(n-2), for n &gt; 1</tt></p>
+</blockquote>
+<p>We can implement this in OCaml as follows:</p>
+<blockquote> 
+  <pre>let rec fibonacci x =
+  match x with
+    0 -> 1
+  | 1 -> 1
+  | n -> fibonacci (x - 1) + fibonacci (x - 2);;</pre>
+</blockquote>
+<p>Using a<code> match </code>in this way is so common that there is a special 
+  syntax for it, as follows:</p>
+<blockquote> 
+  <pre>let rec fibonacci2 = function
+    0 -> 1
+  | 1 -> 1
+  | n -> fibonacci2 (n - 1) + fibonacci2 (n - 2);;</pre>
+</blockquote>
+<p>Notice that:</p>
+<ul>
+  <li>The parameter (in this case,<code> x</code>) is omitted</li>
+  <li>The word<code> function </code>replaces<code> match x with</code></li>
+  <li>Instead of using parameter<code> x</code>, the parameter is matched against 
+    a variable<code> n</code>, which can then be used in place of<code> x</code></li>
+</ul>
+<p>Examples:</p>
+<blockquote>
+  <pre>let rec length = function
+    [] -&gt; 0
+  | (x :: xs) -&gt; 1 + length xs;;</pre> 
+  <p>
+  <pre>let rec member = function
+    (e, []) -&gt; false
+  | (e, x::xs) -&gt;
+      if (e = x)
+        then true
+        else member (e, xs) ;; </pre>
+</blockquote>
+<h4></h4>
+<H4><A NAME="Mutually recursive functions"></A><B>Mutually recursive functions</B></H4>
+
+<P>Functions must be defined before they are used. To define mutually recursive 
+  functions (functions that call one another), use<CODE> let&nbsp;rec...and...and...</CODE>. 
+  The following example (to return every other element of a list) is adapted from 
+  <I>Elements of Caml Programming </I>by Jeffrey D. Ullman:</P>
+
+<BLOCKQUOTE> 
+  <pre>let rec
+   take (ls) =
+      if ls = [] then []
+      else List.hd(ls) :: skip(List.tl(ls))
+and
+   skip (ls) =
+      if ls = [] then []
+      else take(List.tl(ls)) ;;</pre>
+</BLOCKQUOTE>
+
+<H4><A NAME="Local variables in functions"></A>Local variables in
+functions</H4>
+
+<P>It is sometimes convenient to declare local variables and functions using<CODE> 
+  let...in... </CODE>For example,</P>
+
+<BLOCKQUOTE> 
+  <pre># <b>let circleData (radius:float) =
+    let pi = 3.1415926536 in
+    let circumference = 2.0 *. pi *. radius in
+    let area radius = pi *. radius *. radius in
+      (circumference, area radius)
+;;</b>
+          val circleData : float -> float * float = &lt;fun&gt; 
+# <b>circleData 10.0;;</b>
+- : float * float = 62.831853072, 314.15926536
+</pre>
+</BLOCKQUOTE>
+The<code> let </code>and<code> let...in </code>expressions work with patterns, 
+so it is possible to do "multiple assignment" by assigning one tuple to another, 
+as for example 
+<BLOCKQUOTE> 
+  <pre># <b>let x, y, z = 5, 10, "hello";;</b>
+val x : int = 5
+val y : int = 10
+val z : string = "hello"
+# <b>let (a, b) = (6, 7) in (b, a, b);;</b>
+- : int * int * int = 7, 6, 7
+</pre>
+</BLOCKQUOTE>
+It is useful to know that multiple assignments happen simultaneously rather than 
+one after another, so that the following code correctly swaps two values: 
+<BLOCKQUOTE> 
+  <pre># <b>let swap (x, y) = y, x;;</b>
+val swap : 'a * 'b -> 'b * 'a = <fun>
+# <b>swap (3, 5);;</b>
+- : int * int = 5, 3
+</pre>
+</BLOCKQUOTE>
+
+<H4><A NAME="Anonymous functions"></A>Anonymous functions</H4>
+
+<P>Matches can also be used to define anonymous functions:</P>
+
+<BLOCKQUOTE><CODE>(fun x -&gt; x + 1) 3</CODE></BLOCKQUOTE>
+
+<P>(Result is 4.) Anonymous functions cannot be recursive because, being anonymous, 
+  they have no name by which you can call them. However, an anonymous function 
+  can be given a name in the usual way, by using<code> let</code>:</P>
+<blockquote>
+  <pre># <b>let incr = fun x -> x + 1;;</b>
+val incr : int -> int = &lt;fun&gt;
+# <b>incr 5;;</b>
+- : int = 6</pre>
+</blockquote>
+
+<H4><A NAME="Polymorphic functions"></A>Polymorphic functions</H4>
+
+<P>In other languages, "polymorphic" means that you have two or more
+functions with the same name; in OCaml it means that a single function
+can handle more than one type of parameter.</P>
+
+<P>An example of a built-in polymorphic function is the list function<CODE> List.hd</CODE>; 
+  it returns the first element of any type of list.</P>
+
+<P>OCaml functions that you write will be polymorphic if their parameters are used 
+  only with polymorphic functions and operators. For example, the following function 
+  to reverse the two components of a 2-tuple is polymorphic:</P>
+
+<BLOCKQUOTE><CODE>let revPair (x, y) = (y, x);;</CODE></BLOCKQUOTE>
+
+<P>To write a polymorphic function, you need to <I>avoid:</I></P>
+
+<UL>
+  <LI>arithmetic operators (because OCaml needs to know whether the arithmetic 
+    is integer or floating point),</LI>
+  <LI>string concatenation</LI>
+  <LI>boolean operators</LI>
+  <LI>type conversion operators.</LI>
+</UL>
+
+<P>You<I> can </I>use:</P>
+
+<UL>
+  <LI>lists and the list operators<CODE> hd</CODE>,<CODE> tl</CODE>,<CODE> ::</CODE>,<CODE> 
+    @</CODE>, along with the constant<CODE> []</CODE></LI>
+  <LI>the equality tests<CODE> = </CODE>and<CODE> !=</CODE>.</LI>
+</UL>
+
+<H4><A NAME="Higher-order functions"></A>Higher-order functions</H4>
+
+<P>A higher-order function is one which takes a function (or a function-containing 
+  structure) as an argument, or produces a function (or function-containing structure) 
+  as its result, or both. For example,</P>
+<blockquote> 
+  <pre># <b>let test (f, x) = f x;;</b>
+val test : ('a -> 'b) * 'a -> 'b = &lt;fun&gt;
+# <b>test (List.hd, [1;2;3]);;</b>
+- : int = 1
+# <b>test (List.tl, [1;2;3]);;</b>
+# - : int list = [2; 3]</pre>
+</blockquote>
+<P>Notice in particular the type returned when<CODE> test </CODE>is defined:<code> 
+  ('a&nbsp;-&gt;&nbsp;'b)&nbsp;*&nbsp;'a&nbsp;-&gt;&nbsp;'b</code>. Here, <CODE>('a&nbsp;-&gt;&nbsp;'b)</CODE> 
+  is a function from type<code> 'a </code>to type<code> 'b</code>, type <CODE>'a 
+  </CODE>is the needed parameter type, and<code> 'b </code>is the result type.</P>
+
+<H4><A NAME="Curried functions"></A>Curried functions</H4>
+
+<P>As was stated earlier, every function takes exactly one argument
+and produces one result.</P>
+
+<P>A curried function is a higher-order function that takes an
+argument and produces as result a new function with that argument
+embedded in the function. For example,</P>
+
+<BLOCKQUOTE> 
+  <pre># <b>let incr x y = x + y;;</b>
+val incr : int -> int -> int = &lt;fun&gt;
+# <b>incr 5 3;;</b>
+- : int = 8
+# <b>(incr 5) 3;;</b>
+- : int = 8
+# <b>let incr5 = incr 5;;</b>
+val incr5 : int -> int = &lt;fun&gt;
+# <b>incr5 3;;</b>
+- : int = 8</pre>
+</BLOCKQUOTE>
+
+<P>Notice the way the function<CODE> incr </CODE>is defined, as if it
+had two blank-separated arguments. In fact,<CODE> incr </CODE>takes
+one argument,<CODE> x</CODE>, and produces the curried function<CODE>
+(incr&nbsp;x)</CODE>, which then has<CODE> y </CODE>as an argument.
+Now<CODE> incr </CODE>can be called as<CODE> incr&nbsp;5&nbsp;3
+</CODE>or as<CODE> (incr&nbsp;5)&nbsp;3</CODE>, but <I>cannot</I> be
+called as<CODE> incr&nbsp;(5,&nbsp;3)</CODE>. This is because<CODE>
+incr </CODE>takes one argument, an integer, and returns a function as
+a result; it does<I> not </I>take a tuple as an argument.</P>
+
+<P>The fact that<CODE> incr 5 </CODE>returns a function as a result is further 
+  emphasized in the assignment of this value (a function that adds 5 to its argument) 
+  to the variable <CODE>incr5</CODE>,. Note also that we don't need to specify 
+  a parameter; a function is just another kind of value. We could, if we wished, 
+  have defined<CODE> incr5 </CODE>by<CODE> let&nbsp;incr5&nbsp;x&nbsp;=&nbsp;incr&nbsp;5&nbsp;x;;&nbsp;</CODE>with 
+  exactly the same result.</P>
+
+<P><B><CODE>map</CODE></B></P>
+
+<P><CODE>List.map</CODE> is a curried function that takes a function that applies 
+  to one thing of type<CODE> 'a </CODE>and produces a function that applies to 
+  a list<CODE> 'a</CODE>. For example,</P>
+
+<BLOCKQUOTE> 
+  <pre># <b>truncate 5.8;;</b>
+- : int = 5
+# <b>List.map truncate [2.7; 3.1; 3.8; 9.4; 6.5];;</b>
+- : int list = [2; 3; 3; 9; 6]
+# <b>(List.map truncate) [2.7; 3.1; 3.8; 9.4; 6.5];;</b>
+- : int list = [2; 3; 3; 9; 6]
+# <b>let listTrunc = List.map truncate;;</b>
+val listTrunc : float list -> int list = &lt;fun&gt;
+# <b>listTrunc [2.7; 3.1; 3.8; 9.4; 6.5];;</b>
+- : int list = [2; 3; 3; 9; 6]</pre>
+</BLOCKQUOTE>
+
+<P><B><CODE>List.filter</CODE></B></P>
+
+<P>The function<CODE> List.filter </CODE>takes a bool test and
+returns a function that will extract from a list those elements that
+pass the test.</P>
+
+<BLOCKQUOTE> 
+  <pre># <b>List.filter (fun x -> x > 0) [3; 0; 2; -5; -8; 4];;</b>
+- : int list = [3; 2; 4]</pre>
+</BLOCKQUOTE>
+
+<h4><a name="Redefining functions"></a>Redefining functions</h4>
+<p><b><i>Important: </i></b>When you define a function, you may use other values 
+  (including other functions) in the definition. Later changes to those values 
+  do not change the meaning of the function you have defined. For example, look 
+  at the following sequence (for clarity, only some of OCaml's responses are shown):</p>
+<blockquote> 
+  <pre>#<b> let x = 3;;</b>
+#<b> let aa () = 5;;</b>
+#<b> let bb () = aa () + x;;</b>
+#<b> bb ();;</b>
+- : int = 8
+#<b> let x = 17;;</b>
+#<b> let aa () = 83;;</b>
+#<b> bb ();;</b>
+- : int = 8</pre>
+</blockquote>
+<p>Here,<code> bb() </code>was defined in terms of<code> aa() </code>and<code> 
+  x</code>. Calling<code> bb() </code>gave the result<code> 8</code>. Later changes 
+  to<code> aa() </code>and<code> x </code><i>did not affect</i> the definition 
+  of<code> bb()</code>.</p>
+<p>The above may seem strange, but there is a parallel in algorithmic languages. 
+  Consider the sequence of statements<code> a := 5; b := a; a := 10; </code>You 
+  would not expect the value of<code> b </code>to change just because the value 
+  of<code> a </code>changed. In OCaml, functions are values, and they are treated 
+  just like any other values.</p>
+<p>A definition is said to have <i>referential transparency</i> if its meaning 
+  does not depend on the context it is in. Functions in OCaml have referential 
+  transparency, that is, changing the context (other variables and other functions) 
+  does not change the meaning of any functions you have already defined. This 
+  fact can be crucial when you are debugging a program, because you are likely 
+  to be redefining functions fairly frequently.</p>
+<p>&nbsp;</p>
+<h2><a name="Omissions"></a>Omissions</h2>
+<p>This is a brief document, and a great deal has been omitted. Among the more 
+  important omissions are records, arrays, the input/output system, most of the 
+  module system, and practically everything having to do with object-oriented 
+  programming. Loops, also, have been omitted, but they are not terribly useful 
+  in a purely functional language, anyway. More information (and more trustworthy 
+  information!) can be obtained from the documents mentioned in the next section.</p>
+<p>&nbsp;</p>
+<h2></h2>
+<h2><a name="Resources"></a>Resources</h2>
+<P><b>The Objective Caml system release 3.01</b>, Documentation and user's manual. 
+  Xavier Leroy (with Damien Doligez, Jacques Garrigue, Didier Rémy and Jérôme 
+  Vouillon), March 8, 2001. This is available at <a href="http://caml.inria.fr/ocaml/htmlman/index.html">http://caml.inria.fr/ocaml/htmlman/index.html</a> 
+  and on the <a href="http://burks.bton.ac.uk/">Burks 5 CD</a>.</P>
+<P><b>An introduction to OCAML for CSE 120</b>. Peter Buneman, October 1, 2000. 
+  This is available as an Acrobat document at <a href="http://www.seas.upenn.edu:8080/%7Ecse120/resources/primer/primer.pdf">http://www.seas.upenn.edu:8080/~cse120/resources/primer/primer.pdf</a> 
+  and as a postscript document at <a href="http://www.seas.upenn.edu:8080/%7Ecse120/resources/primer/primer.ps">http://www.seas.upenn.edu:8080/~cse120/resources/primer/primer.ps</a>.</P>
+<P><b>An OCaml book,</b> apparently nameless, by Jason Hickey, at <a href="http://www.cs.caltech.edu/cs134/cs134b/book.pdf">http://www.cs.caltech.edu/cs134/cs134b/book.pdf</a>.</P>
+
+</BODY>
+</HTML>

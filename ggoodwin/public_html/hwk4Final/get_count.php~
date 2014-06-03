@@ -1,0 +1,47 @@
+
+
+<?php
+
+
+// QUERY2: GET COUNT
+
+$count = " SELECT count(name) FROM person WHERE name like '%$textvalue%'"; 
+$resulting_count = $dbh->query($count);
+if(PEAR::isError($resulting_count)) {
+    die('Failed to issue query, error message : ' . $resulting_count->getMessage());
+ }
+
+print ($resulting_count);
+
+
+
+//echo "("count(name) $count")";
+
+//if (("count(name) $count")>1){
+// echo "more than one ";
+// }else {
+// echo "only one ";
+// }
+
+
+// PRINT OUT RESULTS OF QUERY2
+//while($row = $resulting_count->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+//  echo "<li> nm " . $row['nm'] . ": " . $row['name'] . "\n";
+//}
+ 
+
+
+
+
+
+  //function getCount($count_item, $query) {
+
+  //$theCount = count($count_item) $query
+  // return $theCount;
+
+  //}
+
+
+
+
+?>

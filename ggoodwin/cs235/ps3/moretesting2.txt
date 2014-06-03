@@ -1,0 +1,45 @@
+Standard ML of New Jersey v110.68 [built: Thu Dec 11 21:18:30 2008]
+- use"ps3.sml";
+[opening ps3.sml]
+[autoloading]
+[library $SMLNJ-BASIS/basis.cm is stable]
+[autoloading done]
+val extend = fn : string * string list -> string list
+val caesar = fn : int * string -> string
+val twist = fn : char * string -> string
+val transform = fn : string -> string
+val first = fn : string -> string
+val butFirst = fn : string -> string
+val LTests =
+  ["","a","b","aa","ab","ba","bb","aaa","aab","aba","abb","baa",...]
+  : string list
+val transform2 = fn : string -> string
+val countabRec = fn : string -> int * int
+val countabIter = fn : string -> int * int
+val isInL1 = fn : string -> bool
+val genstringsHelp = fn : string list * string list -> string list
+val genStrings = fn : int * char list -> string list
+val it = () : unit
+- countabRec "abracadabra";
+val it = (5,2) : int * int
+- countabRec "Abracadabra";
+val it = (4,2) : int * int
+- countabRec "Barbara";
+val it = (3,1) : int * int
+- countabRec "dog";
+val it = (0,0) : int * int
+- countabRec "there once was a man from Nantucket";
+val it = (4,0) : int * int
+- countabRec "Mary had a little lamb";
+val it = (4,1) : int * int
+- countabIter "abracadabra";
+val it = (5,2) : int * int
+- countabIter "Abracadabra";
+val it = (4,2) : int * int
+- countabIter "Barbara";
+val it = (3,1) : int * int
+- countabIter "How can we educate children if they can't even fit inside the building?";
+val it = (3,1) : int * int
+- countabIter "Happy Halloween!";
+val it = (2,0) : int * int
+- 

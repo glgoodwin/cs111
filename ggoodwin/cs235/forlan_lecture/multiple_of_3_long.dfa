@@ -1,0 +1,13 @@
+{states}
+<0Mod3>, <1Mod3>, <2Mod3>
+{start state}
+<0Mod3>
+{accepting states}
+<0Mod3>
+{transitions}
+<0Mod3>,0 -> <0Mod3>;
+<0Mod3>,1 -> <1Mod3>;
+<1Mod3>,0 -> <2Mod3>;
+<1Mod3>,1 -> <0Mod3>;
+<2Mod3>,0 -> <1Mod3>;
+<2Mod3>,1 -> <2Mod3>

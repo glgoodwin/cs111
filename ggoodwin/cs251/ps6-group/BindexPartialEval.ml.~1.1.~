@@ -1,0 +1,17 @@
+module BindexPartialEval = struct
+
+  open FunUtils
+  open ListUtils
+  open Bindex
+
+  
+
+  let rec partialEval (Pgm(fmls,body)) = 
+    (* replace this stub *)
+    Pgm(fmls, body)
+
+  and peval exp env = 
+    (* replace this stub *)
+    exp
+
+end

@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c">
+<s:default b:tag="form" b:attribute="b:behavior" b:value="form"/>
+<s:default b:tag="input" b:attribute="b:behavior" b:value="form-field-input"/>
+<s:default b:tag="select" b:attribute="b:behavior" b:value="form-field-select"/>
+<s:behavior b:name="form-field-generic">
+<s:event b:on="construct">
+<s:variable b:name="tOrigValue" b:select="@value" b:scope="tag"/>
+<s:variable b:name="tRefValue" b:select="@value" b:scope="tag"/>
+<s:if b:test="@c:ref">
+<s:task b:action="assign" b:target="$tRefValue" b:select="xpath(@c:ref)"/>
+</s:if>
+<s:setatt c:init="1"/>
+</s:event>
+<s:event b:on="load">
+<s:if b:test="@c:ref">
+<s:task b:action="assign" b:target="$tOrigValue" b:select="xpath(@c:ref)"/>
+<s:task b:action="assign" b:target="$tRefValue" b:select="xpath(@c:ref)"/>
+<s:setatt value="{normalize-space($tRefValue)}"/>
+<s:setatt c:status="est"/>
+</s:if>
+</s:event>
+<s:event b:on="change">
+<s:if b:test="@c:init">
+<s:task b:action="assign" b:target="$tOrigValue" b:select="@value"/>
+<s:task b:action="trigger" b:event="change" b:target="ancestor::form"/>
+<s:setatt c:status="mod"/>
+</s:if>
+</s:event>
+<s:event b:on="blur">
+<s:task b:action="trigger" b:event="validate"/>
+</s:event>
+<s:event b:on="focus" b:test="not(@type='submit' or @type='button' or @type='radio' or @type='checkbox')">
+</s:event>
+<s:event b:on="validate">
+<s:choose>
+<s:when b:test="@b:valid=''"/>
+<s:when b:test="@b:valid='true'">
+<s:task b:action="trigger" b:event="valid"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="invalid"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="valid">
+<s:setstyle b:background-color="#ffffff"/>
+<s:task b:action="hide" b:target="id('form-field-info')"/>
+<s:choose>
+<s:when b:test="@type='radio'">
+<s:task b:action="trigger" b:event="valid" b:usebehavior="form-field-radio"/>
+</s:when>
+<s:when b:test="@type='checkbox'">
+<s:task b:action="trigger" b:event="valid" b:usebehavior="form-field-checkbox"/>
+</s:when>
+<s:otherwise>
+<s:parallel>
+<s:if b:test="@c:ref">
+<s:if b:test="count($tRefValue) = 0">
+<s:task b:action="assign" b:target="$tRefValue" b:select="xpath(@c:ref)"/>
+</s:if>
+<s:task b:action="settext" b:target="$tRefValue" b:value="{@value}"/>
+</s:if>
+</s:parallel>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="valid" b:target="ancestor::form"/>
+</s:event>
+<s:event b:on="invalid">
+<s:if b:test="not(@type='radio')">
+<s:setstyle b:background-color="#ffe0e0"/>
+</s:if>
+</s:event>
+<s:event b:on="mouseenter">
+<s:if b:test="@b:valid and @b:valid != 'true'">
+<s:task b:action="set" b:target="id('form-field-info')/@innerHTML" b:value="{@b:infomsg}"/>
+<s:task b:action="show" b:target="id('form-field-info')"/>
+<s:task b:action="position" b:type="place" b:target="id('form-field-info')" b:destination="." b:position="after-pointer"/>
+</s:if>
+</s:event>
+<s:event b:on="mouseleave">
+<s:task b:action="hide" b:target="id('form-field-info')"/>
+</s:event>
+<s:event b:on="step-validated">
+<s:if b:test="not(@value='')">
+<s:render b:destination="id('b-current-step-overview')" b:mode="aslastchild">
+<div>
+<s:textnode b:label="{@value}"/>
+</div>
+</s:render>
+</s:if>
+</s:event>
+</s:behavior>
+<s:behavior b:name="form-field-input" b:behavior="form-field-generic">
+<s:event b:on="construct" b:test="@type='text' or @type='password'">
+<s:super/>
+<s:task b:action="addclass" b:value="input-text"/>
+</s:event>
+<s:event b:on="construct" b:test="@type='checkbox'">
+<s:super/>
+<s:task b:action="trigger" b:event="construct" b:usebehavior="form-field-checkbox"/>
+</s:event>
+<s:event b:on="load">
+<s:super/>
+</s:event>
+<s:event b:on="validate" b:test="@type='text'">
+<s:choose>
+<s:when b:test="@b:disabled='true'">
+<s:setatt b:valid=""/>
+</s:when>
+<s:when b:test="@b:required='true' and regexp(@value, '^[ ]*$')">
+<s:setatt b:valid="required" b:infomsg="This is a required field"/>
+</s:when>
+<s:when b:test="@b:servervalidation='true'">
+<s:task b:action="send" b:target="." b:url="server.aspx" b:destination="."/>
+</s:when>
+<s:when b:test="@b:validation='month' and (not(number(@value)) or number(@value) &lt; 1 or number(@value) &gt; 12)">
+<s:setatt b:valid="false" b:infomsg="The month should be filled in as a number between 1 and 12"/>
+</s:when>
+<s:when b:test="@b:validation='year' and (not(number(@value)) or number(@value) &lt; 1900 or number(@value) &gt; 2100)">
+<s:setatt b:valid="false" b:infomsg="The given year is not valid"/>
+</s:when>
+<s:when b:test="@b:validation='email' and not(regexp(@value, '^.+@(.+\.)+[a-zA-Z]{2,}$'))">
+<s:setatt b:valid="false" b:infomsg="The email address should be in the form user@domain.com"/>
+</s:when>
+<s:when b:test="@b:validation='zipcode' and not(regexp(@value, '^[1-9][0-9]{3} ?[a-zA-Z]{2}$'))">
+<s:setatt b:valid="false" b:infomsg="A zipcode should be in the form 8888AA"/>
+</s:when>
+<s:when b:test="@b:validation='number'">
+<s:choose>
+<s:when b:test="@value=''">
+<s:setatt b:valid="true"/>
+</s:when>
+<s:when b:test="number(@value) ge 0">
+<s:setatt b:valid="true"/>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="false" b:infomsg="This must be a number (0 or greater)"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:when b:test="@b:validation='percent'">
+<s:choose>
+<s:when b:test="@value=''">
+<s:setatt b:valid="true"/>
+</s:when>
+<s:when b:test="number(@value) &gt; -1 and number(@value) &lt; 101">
+<s:setatt b:valid="true"/>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="false" b:infomsg="This must be a number between 0 and 100"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:when b:test="@b:xpathcheck and xpath(@b:xpathcheck)">
+<s:choose>
+<s:when b:test="@b:info">
+<s:setatt b:valid="false" b:infomsg="{@b:info}"/>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="false" b:infomsg="Field is invalid"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:when b:test="@b:pattern and not(regexp(@value, @b:pattern))">
+<s:choose>
+<s:when b:test="@b:info">
+<s:task b:action="set" b:target="@b:infomsg" b:value="{@b:info}"/>
+<s:setatt b:valid="false"/>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="false" b:infomsg="Field is invalid"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:when b:test="@c:unique">
+<s:variable b:name="lList" b:select="xpath(@c:unique)" b:scope="local"/>
+<s:variable b:name="lValue" b:select="normalize-space(@value)" b:scope="local"/>
+<s:variable b:name="lOldValue" b:select="normalize-space(@c:oldvalue)" b:scope="local"/>
+<s:variable b:name="lCount" b:select="number(count($lList[. = $lValue]))"/>
+<s:choose>
+<s:when b:test="($lOldValue = '') or (not($lOldValue = '') and (not($lValue = $lOldValue)))">
+<s:choose>
+<s:when b:test="$lCount &gt; 0">
+<s:choose>
+<s:when b:test="@b:info">
+<s:task b:action="set" b:target="@b:infomsg" b:value="{@b:info}"/>
+<s:setatt b:valid="false"/>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="false" b:infomsg="Field is not unique"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="true"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="true"/>
+</s:otherwise>
+</s:choose>						
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="true"/>
+</s:otherwise>
+</s:choose>
+<s:super/>
+</s:event>
+<s:event b:on="validate" b:test="@type='password'">
+<s:choose>
+<s:when b:test="@b:disabled='true'">
+<s:setatt b:valid=""/>
+</s:when>
+<s:when b:test="@b:required='true' and regexp(@value, '^[ ]*$')">
+<s:setatt b:valid="required" b:infomsg="This is a required field"/>
+</s:when>
+<s:when b:test="@b:xpathcheck and xpath(@b:xpathcheck)">
+<s:choose>
+<s:when b:test="@b:info">
+<s:setatt b:valid="false" b:infomsg="{@b:info}"/>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="false" b:infomsg="Field is invalid"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:when b:test="@name = 'confirm-password'">
+<s:choose>
+<s:when b:test="@value != ancestor::form[1]//input[@name='password']/@value">
+<s:setatt b:valid="false" b:infomsg="Your validation password does not match the password"/>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="true"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="true"/>
+</s:otherwise>
+</s:choose>
+<s:super/>
+</s:event>
+<s:event b:on="validate" b:test="@type='radio'">
+<s:task b:action="trigger" b:event="validate" b:usebehavior="form-field-radio"/>
+</s:event>
+<s:event b:on="validate" b:test="@type='checkbox'">
+<s:task b:action="trigger" b:event="validate" b:usebehavior="form-field-checkbox"/>
+</s:event>
+<s:event b:on="change" b:test="@type='checkbox'">
+<s:task b:action="trigger" b:event="change" b:usebehavior="form-field-checkbox"/>
+</s:event>
+<s:event b:on="step-validated">
+<s:choose>
+<s:when b:test="@type='radio'">
+<s:task b:action="trigger" b:event="step-validated" b:usebehavior="form-field-radio"/>
+</s:when>
+<s:when b:test="@type='checkbox'">
+<s:task b:action="trigger" b:event="step-validated" b:usebehavior="form-field-checkbox"/>
+</s:when>
+<s:otherwise>
+<s:super/>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:behavior b:name="form-field-textarea" b:behavior="form-field-generic">
+<s:event b:on="construct">
+<s:super/>
+<s:task b:action="addclass" b:value="input-text"/>
+</s:event>
+<s:event b:on="validate">
+<s:choose>
+<s:when b:test="@b:disabled='true'">
+<s:setatt b:valid=""/>
+</s:when>
+<s:when b:test="@b:required='true' and matches(@value, '^[ ]*$')">
+<s:setatt b:valid="required" b:infomsg="This is a required field"/>
+</s:when>
+<s:when b:test="@b:servervalidation='true'">
+<s:task b:action="send" b:target="." b:url="server.aspx" b:destination="."/>
+</s:when>
+<s:when b:test="@b:pattern and not(matches(@value, @b:pattern))">
+<s:choose>
+<s:when b:test="@b:info">
+<s:task b:action="set" b:target="@b:infomsg" b:value="{@b:info}"/>
+<s:setatt b:valid="false"/>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="false" b:infomsg="Field is invalid"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="true"/>
+</s:otherwise>
+</s:choose>
+<s:super/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="form-field-checkbox" b:behavior="form-field-generic">
+<s:event b:on="construct">
+<s:super/>
+<s:choose>
+<s:when b:test="@b:state = 'selected'">
+<s:task b:action="assign" b:target="$tOrigValue" b:select="@b:value"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$tOrigValue" b:select=""/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="addclass" b:value="input-checkbox"/>
+<s:variable b:name="tGroup" b:select="" b:scope="tag"/>
+<s:variable b:name="tNoGroup" b:select="'true'" b:scope="tag"/>
+<s:if b:test="ancestor::b:group[@name = current()/@name]">
+<s:task b:action="assign" b:target="$tGroup" b:select="ancestor::b:group[@name = current()/@name]" b:scope="tag"/>
+<s:task b:action="assign" b:target="$tNoGroup" b:select="'false'"/>
+</s:if>
+</s:event>
+<s:event b:on="load">
+<s:super/>
+</s:event>
+<s:event b:on="validate">
+<s:variable b:name="lOptions" b:select="." b:scope="local"/>
+<s:if b:test="@c:init">
+<s:if b:test="$tNoGroup = 'false'">
+<s:task b:action="assign" b:target="$lOptions" b:select="$tGroup/$tOptionList"/>
+</s:if>
+</s:if>
+<s:variable b:name="lNumSel" b:select="count($lOptions[@b:state = 'selected'])"/>
+<s:choose>
+<s:when b:test="@b:disabled='true'">
+<s:setatt b:valid=""/>
+</s:when>
+<s:when b:test="$lOptions[@b:required = 'true'] and $lNumSel = 0">
+<s:setatt b:valid="required" b:infomsg="At least one value needs to be checked"/>
+</s:when>
+<s:when b:test="$lNumSel &lt; $lOptions/@b:minoccurs">
+<s:setatt b:valid="false" b:infomsg="{concat('You have to select at least ', $lOptions/@b:minoccurs, ' checkbox(es)')}"/>
+</s:when>
+<s:when b:test="$lOptions/@b:maxoccurs and $lNumSel &gt; $lOptions/@b:maxoccurs">
+<s:setatt b:valid="false" b:infomsg="{concat('You cannot select more than ', $lOptions/@b:maxoccurs, ' checkbox(es)')}"/>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="true"/>
+</s:otherwise>
+</s:choose>
+<s:super/>
+</s:event>
+<s:event b:on="click" b:action="select-deselect"/>
+<s:event b:on="valid">
+<s:choose>
+<s:when b:test="@c:init">
+<s:choose>
+<s:when b:test="$tNoGroup = 'false'">
+<s:if b:test="$tGroup/@c:ref">
+<s:task b:action="settext" b:target="$tGroup/$tRefValue" b:value="{string-join($tGroup/$tOptionList[@b:state='selected']/@b:value, ' ')}"/>
+</s:if>
+</s:when>
+<s:otherwise>
+<s:if b:test="@c:ref">
+<s:variable b:name="lnewValue" b:select=""/>
+<s:if b:test="@b:novalue">
+<s:task b:action="assign" b:target="$lnewValue" b:select="@b:novalue"/>
+</s:if>
+<s:if b:test="@b:state = 'selected'">
+<s:task b:action="assign" b:target="$lnewValue" b:select="@b:value"/>
+</s:if>
+<s:task b:action="settext" b:target="xpath(@c:ref)" b:value="{$lnewValue}"/>
+</s:if>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:if b:test="@c:ref">
+<s:variable b:name="lnewValue" b:select=""/>
+<s:if b:test="@b:novalue">
+<s:task b:action="assign" b:target="$lnewValue" b:select="@b:novalue"/>
+</s:if>
+<s:if b:test="@b:state = 'selected'">
+<s:task b:action="assign" b:target="$lnewValue" b:select="@b:value"/>
+</s:if>
+<s:task b:action="settext" b:target="xpath(@c:ref)" b:value="{$lnewValue}"/>
+</s:if>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="change">
+<s:super/>
+<s:if b:test="@c:init">
+<s:variable b:name="lNewValue" b:select="" b:scope="local"/>
+<s:if b:test="@b:novalue">
+<s:task b:action="assign" b:target="$lnewValue" b:select="@b:novalue"/>
+</s:if>
+<s:choose>
+<s:when b:test="$tNoGroup = 'false'">
+<s:task b:action="assign" b:target="$lNewValue" b:select="string-join($tGroup/$tOptionList[@b:state='selected']/@b:value, ' ')"/>
+</s:when>
+<s:otherwise>
+<s:if b:test="@b:state = 'selected'">
+<s:task b:action="assign" b:target="$lNewValue" b:select="@b:value"/>
+</s:if>
+</s:otherwise>
+</s:choose>
+<s:if b:test="not($lNewValue = $tOrigValue)">
+<s:task b:action="assign" b:target="$tOrigValue" b:select="$lNewValue"/>
+<s:task b:action="trigger" b:event="change" b:target="ancestor::form"/>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="step-validated" b:test="@b:state='selected'">
+<s:render b:destination="id('b-current-step-overview')" b:mode="aslastchild">
+<div>
+<s:textnode b:label="{../label/text()}"/>
+</div>
+</s:render>
+</s:event>
+</s:behavior>
+<s:behavior b:name="form-field-radio" b:behavior="form-field-generic">
+<s:event b:on="construct">
+<s:super/>
+<s:task b:action="addclass" b:value="form-field-radio"/>
+</s:event>
+<s:event b:on="validate">
+<s:choose>
+<s:when b:test="@b:disabled='true'">
+<s:setatt b:valid=""/>
+</s:when>
+<s:when b:test="ancestor::form[1]//input[@name = current()/@name][@b:required = 'true'] and count(ancestor::form[1]//input[@name = current()/@name][@b:state = 'selected']) = 0">
+<s:setatt b:valid="required" b:infomsg="At least one value needs to be checked"/>
+</s:when>
+<s:otherwise>
+<s:with b:target="ancestor::form[1]//input[@name = current()/@name]">
+<s:setatt b:valid="true"/>
+</s:with>
+</s:otherwise>
+</s:choose>
+<s:super/>
+</s:event>
+<s:event b:on="step-validated" b:test="@b:state='selected'">
+<s:render b:destination="id('b-current-step-overview')" b:mode="aslastchild">
+<div>
+<s:textnode b:label="{../label/text()}"/>
+</div>
+</s:render>
+</s:event>
+<s:event b:on="invalid"/>
+</s:behavior>
+<s:behavior b:name="form-field-select" b:behavior="form-field-generic">
+<s:event b:on="construct">
+<s:super/>
+<s:task b:action="addclass" b:value="form-field-select"/>
+<s:if b:test="@b:maxoccurs &gt; 1 or @b:minoccurs &gt; 1">
+<s:setatt multiple="yes"/>
+</s:if>
+</s:event>
+<s:event b:on="validate">
+<s:choose>
+<s:when b:test="@b:disabled='true'">
+<s:setatt b:valid=""/>
+</s:when>
+<s:when b:test="@b:required='true' and matches(@value, '^[ ]*$')">
+<s:setatt b:valid="required" b:infomsg="This is a required field"/>
+</s:when>
+<s:when b:test="@b:minoccurs and count(option[@b:state='selected']) &lt; @b:minoccurs">
+<s:setatt b:valid="false"/>
+<s:task b:action="set" b:target="@b:infomsg" b:value="{concat('You have to select at least ', @b:minoccurs, ' option(s)')}"/>
+</s:when>
+<s:when b:test="@b:maxoccurs and count(option[@b:state='selected']) &gt; @b:maxoccurs">
+<s:task b:action="set" b:target="@b:infomsg" b:value="{concat(string('You cannot select more than '), @b:maxoccurs, ' option(s)')}"/>
+<s:setatt b:valid="false"/>
+</s:when>
+<s:when b:test="@b:xpathcheck and xpath(@b:xpathcheck)">
+<s:choose>
+<s:when b:test="@b:info">
+<s:setatt b:valid="false" b:infomsg="{@b:info}"/>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="false" b:infomsg="Field is invalid"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="true"/>
+</s:otherwise>
+</s:choose>
+<s:super/>
+</s:event>
+<s:event b:on="focus">
+</s:event>
+<s:event b:on="assign">
+<s:task b:action="remove" b:target="option/@b:state"/>
+<s:with b:target="option[@value=ancestor-or-self::select/@value]">
+<s:setatt b:state="selected"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="b-spinner-extra" b:behavior="b-spinner">
+<s:event b:on="construct">
+<s:super/>
+<s:task b:action="trigger" b:event="construct" b:usebehavior="form-field-generic"/>
+<s:task b:action="assign" b:target="$tOrigValue" b:select="@b:value"/>
+<s:setatt b:focusitem="true"/>
+<s:if b:test="@c:ref and not(@b:value)">
+<s:setatt b:value="{xpath(@c:ref)}"/>
+</s:if>
+</s:event>
+<s:event b:on="load">
+<s:if b:test="@c:ref">
+<s:task b:action="assign" b:target="$tOrigValue" b:select="xpath(@c:ref)"/>
+<s:task b:action="assign" b:target="$tRefValue" b:select="xpath(@c:ref)"/>
+<s:setatt b:value="{$tRefValue}"/>
+<s:setatt c:status="est"/>
+</s:if>
+</s:event>
+<s:event b:on="validate">
+<s:choose>
+<s:when b:test="@b:disabled='true'">
+<s:setatt b:valid=""/>
+</s:when>
+<s:when b:test="@b:required='true' and regexp(@value, '^[ ]*$')">
+<s:setatt b:valid="required" b:infomsg="This is a required field"/>
+</s:when>
+<s:when b:test="number(@value) or number(@value) = 0">
+<s:setatt b:valid="false" b:infomsg="This must be a number"/>
+</s:when>
+<s:when b:test="@b:xpathcheck and xpath(@b:xpathcheck)">
+<s:choose>
+<s:when b:test="@b:info">
+<s:setatt b:valid="false" b:infomsg="{@b:info}"/>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="false" b:infomsg="Field is invalid"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="true"/>
+</s:otherwise>
+</s:choose>
+<s:choose>
+<s:when b:test="@b:valid=''"/>
+<s:when b:test="@b:valid='true'">
+<s:task b:action="trigger" b:event="valid"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="invalid"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="focus">
+<s:task b:action="addclass" b:value="focus"/>
+<s:super/>
+</s:event>
+<s:event b:on="blur">
+<s:task b:action="removeclass" b:value="focus"/>
+<s:super/>
+<s:task b:action="trigger" b:event="validate"/>
+</s:event>
+<s:event b:on="up">
+<s:super/>
+<s:task b:action="trigger" b:event="validate"/>
+</s:event>
+<s:event b:on="down">
+<s:super/>
+<s:task b:action="trigger" b:event="validate"/>
+</s:event>
+<s:event b:on="valid">
+<s:task b:action="hide" b:target="id('form-field-info')"/>
+<s:super/>
+<s:task b:action="removeclass" b:value="invalid"/>
+<s:task b:action="removeclass" b:value="focus"/>
+<s:if b:test="@c:ref">
+<s:task b:action="settext" b:target="$tRefValue" b:value="{@b:value}"/>
+</s:if>
+<s:task b:action="trigger" b:event="change"/>
+</s:event>
+<s:event b:on="invalid">
+<s:task b:action="removeclass" b:value="focus"/>
+<s:task b:action="addclass" b:value="invalid"/>
+</s:event>
+<s:event b:on="change">
+<s:super/>
+<s:if b:test="@c:init">
+<s:if b:test="not(@b:value = $tOrigValue)">
+<s:task b:action="assign" b:target="$tOrigValue" b:select="@b:value"/>
+<s:task b:action="trigger" b:event="change" b:target="ancestor::form"/>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="mouseenter">
+<s:if b:test="@b:valid and @b:valid != 'true'">
+<s:task b:action="set" b:target="id('form-field-info')/@innerHTML" b:value="{@b:infomsg}"/>
+<s:task b:action="show" b:target="id('form-field-info')"/>
+<s:task b:action="position" b:type="place" b:target="id('form-field-info')" b:destination="." b:position="after-pointer"/>
+</s:if>
+</s:event>
+<s:event b:on="mouseleave">
+<s:task b:action="hide" b:target="id('form-field-info')"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="form">
+<s:event b:on="submit">
+<s:choose>
+<s:when b:test=".//b:step">
+<s:task b:action="send"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:target=".//*" b:event="validate"/>
+<s:choose>
+<s:when b:test=".//*[@b:valid = 'false' or @b:valid='required']">
+<s:task b:action="alert" b:value="The form is not filled in correctly"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="send"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="validateform">
+</s:event>
+</s:behavior>
+<s:htmlstructure b:name="b:step" b:behavior="b-step">
+<div style="display:none">
+<s:innercontent/>
+</div>
+</s:htmlstructure>
+<s:behavior b:name="b-step">
+<s:initatt b:valid="false"/>
+<s:event b:on="construct" b:test="position() = 1" b:action="trigger" b:event="select"/>
+<s:event b:on="direct-select">
+<s:choose>
+<s:when b:test="preceding-sibling::b:step[@b:valid='false']">
+<s:task b:action="alert" b:value="You first have to fill in the current step before you can go to the next one."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="select"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="select">
+<s:task b:action="show"/>
+<s:task b:action="deselect" b:target="preceding-sibling::b:step | following-sibling::b:step"/>
+<s:task b:action="hide" b:target="preceding-sibling::b:step | following-sibling::b:step"/>
+<s:if b:test="position() = last()">
+<s:task b:action="remove" b:target="id('form_review')/node()"/>
+<s:task b:action="copy" b:source="//b:step-overview[not(@b:exclude-from-summary)]/node()" b:destination="id('form_review')" b:mode="aslastchild"/>
+</s:if>
+</s:event>
+<s:event b:on="deselect" b:action="hide"/>
+<s:event b:on="next">
+<s:task b:action="trigger" b:target=".//*[not(@b:valid = 'true')][not(ancestor::b:group/@b:disabled='true')]" b:event="validate"/>
+<s:choose>
+<s:when b:test="not(.//*[@b:valid][@b:valid != 'true'][not(ancestor::b:group/@b:disabled='true')])">
+<s:choose>
+<s:when b:test="following-sibling::b:step">
+<s:if b:test="id('b-current-step-overview')">
+<s:task b:action="remove" b:target="id('b-current-step-overview')/node()"/>
+<s:task b:action="trigger" b:target=".//*[not(ancestor::b:group/@b:disabled='true')]" b:event="step-validated"/>
+</s:if>
+<s:setatt b:valid="true"/>
+<s:task b:action="select" b:target="following-sibling::b:step[1]"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="submit" b:target="ancestor::form[1]"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:setatt b:valid="false"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="previous" b:action="select" b:target="preceding-sibling::b:step[1]"/>
+</s:behavior>
+<s:htmlstructure b:name="b:group" b:behavior="b-group">
+<div style="display:none">
+<s:innercontent/>
+</div>
+</s:htmlstructure>
+<s:behavior b:name="b-group">
+<s:initatt b:disabled="true"/>
+<s:event b:on="construct">
+<s:if b:test="@c:ref">
+<s:variable b:name="tRefValue" b:select="xpath(@c:ref)" b:scope="tag"/>
+</s:if>
+<s:variable b:name="tOptionList" b:select=".//input[@name=current()/@name]" b:scope="tag"/>
+</s:event>
+<s:event b:on="select">
+<s:task b:action="show"/>
+<s:task b:action="enable"/>
+</s:event>
+<s:event b:on="deselect">
+<s:task b:action="hide"/>
+<s:task b:action="disable"/>
+</s:event>
+</s:behavior>
+<s:htmlstructure b:name="b:step-overview" b:behavior="b-step-overview">
+<div>
+<b class="b-step-overview-heading">
+<s:value-of b:select="{@b:label}"/>
+</b>
+<div b:step="1" style="padding:2px 0 10px 6px;color:#333;">
+<s:innercontent/>
+</div>
+</div>
+</s:htmlstructure>
+<s:behavior b:name="b-step-overview">
+<s:event b:on="construct">
+<s:if b:test="position() = 1">
+<s:setatt id="b-current-step-overview"/>
+</s:if>
+<s:setatt b:followstate="//b:step[@b:step = current()/@b:step]"/>
+</s:event>
+<s:event b:on="click" b:action="trigger" b:event="direct-select" b:target="//b:step[@b:step=current()/@b:step]"/>
+<s:event b:on="select">
+<s:task b:action="remove" b:target="id('b-current-step-overview')/@id"/>
+<s:setatt id="b-current-step-overview"/>
+<s:task b:action="addclass" b:value="b-step-overview-sel"/>
+<s:setstyle b:color="#000000"/>
+</s:event>
+<s:event b:on="deselect">
+<s:task b:action="removeclass" b:value="b-step-overview-sel"/>
+<s:setstyle b:color="#999999"/>
+</s:event>
+</s:behavior>
+<div id="form-field-info" class="form-field-info" style="display:none">Your input was invalid</div>
+</div>

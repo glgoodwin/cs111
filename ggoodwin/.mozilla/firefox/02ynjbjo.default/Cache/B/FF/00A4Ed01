@@ -1,0 +1,1655 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" xmlns:s25="http://www.collegenet.com/s25" xmlns:bx="http://www.collegenet.com/bx" style="display:none;">
+<div id="Controller" c:purpose="Controller">
+<div c:purpose="inbox" style="display:none;">
+<selected_obj obj_type="" obj_id="" obj_name="" profile_id="" mode="" favorite=""/>
+<selected_space obj_id="" obj_name="" favorite=""/>
+<selected_event obj_id="" obj_name="" favorite="" date=""/>
+<selected_resource obj_id="" obj_name="" favorite=""/>
+<rsrv_wizard mode="" thread="" start_dt="" end_dt="">
+</rsrv_wizard>
+<recent>
+</recent>
+<selected_event_search cabinet="" type="" sponsor="" category="" role="" state=""/>
+<selected_space_search grouping="" search=""/>
+<selected_resource_search grouping="" search=""/>
+</div>
+<div c:purpose="outbox" style="display:none;"/>
+<div c:purpose="eventQ" id="eventQ" style="display:none;"/>
+<s:variable b:name="tInbox" b:scope="tag" b:select="div[@c:purpose = 'inbox']"/>
+<s:variable b:name="tOutbox" b:scope="tag" b:select="div[@c:purpose = 'outbox']"/>
+<s:variable b:name="tEventQ" b:scope="tag" b:select="div[@c:purpose = 'eventQ']"/>
+<s:variable b:name="tSelectedObj" b:scope="tag" b:select=""/>
+<s:variable b:name="tSelectedCell" b:scope="tag" b:select=""/>
+<s:variable b:name="tHttpStatus" b:scope="tag" b:select=""/>
+<s:variable b:name="tRespStr" b:scope="tag" b:select=""/>
+<s:variable b:name="tRespXml" b:scope="tag" b:select=""/>
+<s:variable b:name="tNewRsrvCount" b:scope="tag" b:select="number(0)"/>
+<s:variable b:name="tPublisherUsername" b:scope="tag" b:select="''"/>
+<s:variable b:name="tPublisherPassword" b:scope="tag" b:select="''"/>
+<div id="LockedEvents" style="display:none">
+</div>
+<div id="LockedContacts" style="display:none">
+</div>
+<div id="PendingSpaceReservations" style="display:none">
+</div>
+<div id="PendingResourceReservations" style="display:none">
+</div>
+<div id="RecentlyViewedObjects">
+<s:event b:on="AddObject">
+<s:if b:test="exists($tType) and exists($tId) and exists($tName)">
+<s:choose>
+<s:when b:test="exists(recent_object[@obj_type = $tType and @obj_id = $tId])">
+<s:task b:action="settext" b:target="recent_object[@obj_type = $tType and @obj_id = $tId]" b:value="{$tName}"/>
+<s:task b:action="move" b:source="recent_object[@obj_type = $tType and @obj_id = $tId]" b:destination="." b:mode="asfirstchild"/>
+</s:when>
+<s:otherwise>
+<s:render b:destination="." b:mode="asfirstchild">
+<recent_object obj_type="{$tType}" obj_id="{$tId}"><s:textnode b:label="{$tName}"/></recent_object>
+</s:render>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="BroadcastUpdate" b:target="."/>
+</s:if>
+</s:event>
+<s:event b:on="RemoveObject">
+<s:if b:test="exists($tType) and exists($tId) and exists($tName)">
+<s:task b:action="remove" b:target="recent_object[@obj_type = $tType and @obj_id = $tId]"/>
+<s:task b:action="trigger" b:event="BroadcastUpdate" b:target="."/>
+</s:if>
+</s:event>		
+<s:event b:on="BroadcastUpdate" b:async="true">
+<s:if b:test="id('My25Live_RecentlyViewed')">
+<s:task b:action="trigger" b:event="PaintRecentlyViewed" b:target="id('My25Live')"/>
+</s:if>
+</s:event>
+</div>
+<s:event b:on="construct">
+<s:variable b:name="pElm" b:scope="local" b:select="."/>
+<s:variable b:name="pHandler" b:scope="local" b:select="'ObserveLayoutMgr'"/>
+<s:task b:action="trigger" b:event="RegisterObserver" b:target="id('LayoutMgr')"/>
+<s:task b:action="assign" b:target="$pHandler" b:scope="local" b:select="'ObserveSessionMgr'"/>
+<s:task b:action="trigger" b:event="RegisterObserver" b:target="id('WSSessionMgr')"/>
+<s:task b:action="assign" b:target="$pHandler" b:scope="local" b:select="'ObservePrefs'"/>
+<s:task b:action="trigger" b:event="RegisterObserver" b:target="id('Prefs')"/>
+<s:task b:action="trigger" b:event="Login" b:target="id('WSSessionMgr')"/>
+<s:task b:action="trigger" b:event="LoadFLS" b:target="."/>
+<s:task b:action="trigger" b:event="Load" b:target="id('Prefs')"/>
+<s:event b:action="msg" b:value="@@@ Controller: construct: trigger ShowWelcome (if logged in)"/>
+<s:task b:test="id('WSSessionMgr')/@c:logged-in = 'true'" b:action="trigger" b:event="ShowWelcome" b:target="id('LayoutMgr')"/>
+<s:task b:action="trigger" b:event="Paint" b:target="id('LayoutMgr')"/>
+<s:setatt c:init="1"/>
+</s:event>
+<s:event b:on="LoadFLS">
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'fls.xml', '?otransform=',id('Config')/$tXslPrefix,'fls.foal', '&amp;cache')}" b:destination="." b:mode="aslastchild">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+</s:event>
+<s:event b:on="SignOut">
+<s:render b:destination="$tEventQ" b:mode="aslastchild">
+<div c:name="KillAllLocks" c:depends="SignOut" c:target="id('Controller')"/>				
+<div c:name="DeleteReportRuns" c:depends="SignOut" c:target="id('Controller')"/>				
+<div c:name="DeleteAllPendingSpaceRsrvs" c:depends="SignOut" c:target="id('Controller')"/>
+<div c:name="DeleteAllPendingResourceRsrvs" c:depends="SignOut" c:target="id('Controller')"/>				
+<div c:name="_SignOut" c:depends="SignOut" c:target="id('Controller')"/>
+</s:render>
+<s:if b:test="$tEventQ/div[@c:depends = 'SignOut']">
+<s:for-each b:target="$tEventQ/div[@c:depends = 'SignOut']">
+<s:task b:action="trigger" b:event="{$_target/@c:name}" b:target="xpath($_target/@c:target)"/>
+<s:task b:action="remove" b:target="$_target"/>
+</s:for-each>
+</s:if>
+</s:event>
+<s:event b:on="_SignOut">
+<s:task b:action="trigger" b:event="Logout" b:target="id('WSSessionMgr')"/>
+</s:event>
+<s:event b:on="OverdueTasksAlert">
+<s:task b:action="assign" b:target="id('LayoutMgr')/$tCheckingOverdueTasks" b:select="'true'" b:scope="tag"/>
+<s:if b:test="id('WSSessionMgr')/@c:logged-in = 'true' and not($bpc_bookmark = 'task_overview')">
+<s:variable b:name="lOverdueCountUrl" b:select="concat(id('Config')/$tWsPrefix, 'tasks.xml?task_state=1&amp;task_type=2+3+4+5&amp;scope=count')"/>
+<s:script><![CDATA[
+
+var url = _vars['lOverdueCountUrl'][0];
+var oToday = new Date();
+var sToday = s25_format_date(oToday, 'yyyyMMdd');
+var oEarlier = oToday.setDate(oToday.getDate() - 30);
+var sEarlier = s25_format_date(oEarlier, 'yyyyMMdd');
+url += "&due_start_dt=" + sEarlier + "&due_end_dt=" + sToday;
+bpc.setVariable('lOverdueCountUrl', [url]);
+
+]]></s:script>
+<s:variable b:name="lOverdueCountXml" select=""/>
+<s:task b:action="load" b:method="GET" b:showloading="false" b:url="{$lOverdueCountUrl}" b:destination="$lOverdueCountXml"/>
+<s:task b:action="string2xml" b:variable="$lOverdueCountXml"/>
+<s:if b:test="number($lOverdueCountXml/r25:results/r25:tasks/text()) gt 0">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('OverdueTasksModal')))" b:action="trigger" b:event="RenderOverdueTasksModal" b:target="id('Modals')"/>
+<s:variable b:name="space" b:scope="local" b:select="' '"/>
+<s:choose>
+<s:when b:test="number($lOverdueCountXml/r25:results/r25:tasks/text()) = 1">
+<s:render b:destination="id('OverdueTasksModalText')" b:mode="replacechildren">
+<span>
+<span>You have an<s:textnode b:label="{$space}"/></span> 
+<b>Outstanding Task<s:textnode b:label="{$space}"/></b> 
+<span>that is<s:textnode b:label="{$space}"/></span> 
+<b style="color:red">Overdue<s:textnode b:label="{$space}"/></b> 
+<span>and requires your attention.</span> 
+</span>
+</s:render>
+</s:when>
+<s:otherwise>
+<s:render b:destination="id('OverdueTasksModalText')" b:mode="replacechildren">
+<span>
+<span>You have<s:textnode b:label="{$space}"/></span> 
+<b><span><s:textnode b:label="{$lOverdueCountXml/r25:results/r25:tasks/text()}"/></span><span><s:textnode b:label="{$space}"/>Outstanding Tasks</span><s:textnode b:label="{$space}"/></b> 
+<span>that are<s:textnode b:label="{$space}"/></span> 
+<b style="color:red">Overdue<s:textnode b:label="{$space}"/></b> 
+<span>and require your attention.</span>
+</span>
+</s:render>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="open" b:target="id('OverdueTasksModal')"/>
+</s:if>
+</s:if>
+<s:task b:action="assign" b:target="id('LayoutMgr')/$tCheckingOverdueTasks" b:select="'false'" b:scope="tag"/>
+</s:event>
+<s:variable b:scope="tag" b:name="tBookmarkViaClosedDetail" b:select="'F'"/>
+<s:event b:on="BookmarkCheck">
+<s:task b:action="deselect" b:target="//b:infobox"/>
+<s:variable b:scope="local" b:name="lRetriggerBackward" b:select="'F'"/>
+<s:variable b:name="lTabbar" b:scope="local" b:select="id('LayoutMgr')/$tTabbar"/>
+<s:variable b:name="lHome" b:select="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'home_my25live']"/>
+<s:choose>
+<s:when b:test="string(id('Pref_config_show_25live_home')) = 'No'">
+<s:task b:action="assign" b:target="$lHome" b:select="id('layout-tabbox-groups')/div[@c:purpose = 'event']"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="tPrefHomeXml" b:scope="tag" b:select="string(id('Pref_25L_home_mode'))"/>  
+<s:task b:action="string2xml" b:variable="$tPrefHomeXml"/>
+<s:if b:test="string($tPrefHomeXml/mode) = 'calendar'">
+<s:task b:action="assign" b:target="$lHome" b:select="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'home_calendar']"/>
+</s:if>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lBookmark" b:scope="local" b:select="''"/>
+<s:script><![CDATA[
+ 
+bpc.setVariable('lBookmark', [location.hash], 'local'); 
+
+]]></s:script>
+<s:choose>
+<s:when b:test="contains($lBookmark,'#event_search')">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'event_search']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#event_browse')">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'event_browse']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#event_reports')">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'event_reports']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#space_search')">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'space_search']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#space_browse')">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'space_browse']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#space_reports')">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'space_reports']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#resource_search')">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'resource_search']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#resource_browse')">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'resource_browse']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#resource_reports')">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'resource_reports']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#task_overview') and id('WSSessionMgr')/@c:logged-in = 'true'">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'task_overview']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#task_agenda') and id('WSSessionMgr')/@c:logged-in = 'true'">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'task_agenda']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#other_reports')">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'other_reports']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#publisher_overview') and id('WSSessionMgr')/@c:logged-in = 'true'">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'publisher_overview']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#details')">
+<s:variable b:name="lType" b:scope="local" b:select="''"/>
+<s:variable b:name="lId" b:scope="local" b:select="''"/>
+<s:variable b:name="lTaskType" b:scope="local" b:select="''"/>
+<s:script><![CDATA[
+
+var s = String(_vars['lBookmark'][0]);
+s = s.replace(/\[\d*\]$/,'');
+var m = decodeURI((s.match(/#details&(.*)$/))[1]);
+m = m.replace(/{percent}/g,'%');
+var a = m.split('&');
+for ( var i=0; i < a.length; i++ ) 
+{
+var _m = a[i].match(/^(.*?)=(.*?)$/);
+if ( _m[1] == 'obj_type' )	bpc.setVariable('lType',	[_m[2]], 'local');
+if ( _m[1] == 'obj_id' )		bpc.setVariable('lId',		[_m[2]], 'local');
+if ( _m[1] == 'task_type' )	bpc.setVariable('lTaskType',[_m[2]], 'local');
+}
+
+]]></s:script>
+<s:choose>
+<s:when b:test="not(string-length($lType)=0) and not(string-length($lId)=0)">
+<s:variable b:name="pPurpose" b:select="concat($lType, '_details_', $lId)"/>
+<s:task b:test="not($lTaskType = '')" b:action="assign" b:target="$pPurpose" b:select="concat($lType, '_details_', $lTaskType, '_', $lId)"/>
+<s:with b:target="$tInbox/selected_obj">
+<s:setatt obj_type="{$lType}" obj_id="{$lId}" obj_name="" date="" obj_formal_name="" space_id="" resource_id=""/>
+</s:with>
+<s:choose>
+<s:when b:test="exists( id('LayoutMgr')/$tTabbox/div[@c:purpose = $pPurpose] )">
+<s:with b:target="$lTabbar/s25:tabitem[@c:group = $lType]">
+<s:task b:action="set" b:target="@c:purpose" b:value="{$pPurpose}"/>
+<s:task b:action="trigger" b:event="select" b:target="."/>
+</s:with>
+</s:when>
+<s:when b:test="$tBookmarkViaClosedDetail = 'T'">
+<s:task b:action="assign" b:scope="local" b:target="$lRetriggerBackward" b:select="'T'"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="ViewObjectDetail" b:target="id('LayoutMgr')"/>
+</s:otherwise>
+</s:choose>
+<s:with b:target="$tInbox/selected_obj">
+<s:setatt obj_type="" obj_id=""/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="Select" b:target="$lHome"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:when b:test="contains($lBookmark,'#rsrvwiz')">
+<s:variable b:name="lBookmarkStripped" b:select="substring-before(substring-after($lBookmark, '#'), '[')"/>
+<s:choose>
+<s:when b:test="id('layout-tabbox-groups')/div[@c:purpose='rsrvwiz']//div[@b:behavior='LayoutTabboxBuffer'][@c:purpose = $lBookmarkStripped]">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')/div[@c:purpose='rsrvwiz']//div[@b:behavior='LayoutTabboxBuffer'][@c:purpose = $lBookmarkStripped]"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="Select" b:target="$lHome"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:when b:test="contains($lBookmark,'#home_my25live') and string(id('Pref_config_show_25live_home')) = 'Yes'">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'home_my25live']"/>
+</s:when>
+<s:when b:test="contains($lBookmark,'#home_calendar') and string(id('Pref_config_show_25live_home')) = 'Yes'">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'home_calendar']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="Select" b:target="$lHome"/>
+</s:otherwise>
+</s:choose>
+<s:choose>
+<s:when b:test="$lRetriggerBackward = 'T' and not(contains($lBookmark,'[0]'))">
+<s:task b:action="trigger" b:event="GoBackward"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:scope="tag" b:target="$tBookmarkViaClosedDetail" b:select="'F'"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="GoBackward">
+<s:variable b:name="lFirstBookmark" b:scope="local" b:select="'F'"/>
+<s:script><![CDATA[ 
+if (location.hash.indexOf('[0]') != -1) bpc.setVariable('lFirstBookmark', ['T'], 'local');
+]]></s:script>
+<s:task b:test="not(exists(id('LayoutMgr')/$tTabbox/div/*))" b:action="assign" b:target="$lFirstBookmark" b:select="'T'"/>
+<s:choose>
+<s:when b:test="$lFirstBookmark = 'T'">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')/div[@c:purpose = 'home']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="backward" b:history="browser"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ConfirmActiveSession">
+<s:if b:test="id('WSSessionMgr')/@c:logged-in='true'">
+<s:variable b:name="lLoginResult" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'login.xml')}" b:destination="$lLoginResult"/>
+<s:task b:action="string2xml" b:variable="$lLoginResult"/>
+<s:if b:test="$lLoginResult/r25:login_challenge">
+<s:task b:action="trigger" b:event="SignOut" b:target="."/>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="SetHeaderDate">
+<s:variable b:name="today_is" b:select="'Today is'"/>
+<s:script><![CDATA[
+
+var formattedDate = s25_format_date((new Date()), bpc.getVariable('tDatePattern', 'tag', document.getElementById('Prefs')));
+var todayIs = _vars['today_is'][0];
+document.getElementById('headerDate').innerHTML =  todayIs + ' <b>' + formattedDate + '</b>';
+document.getElementById('headerDate').style.display = "inline";
+
+]]></s:script>
+</s:event>
+<s:event b:on="25Live_SignIn">
+<s:choose>
+<s:when b:test="string-length(id('WSSessionMgr')/$tLoginUrl) gt 0">
+<s:variable b:name="lRedirect" b:scope="local" b:select="string(id('WSSessionMgr')/$tLoginUrl)"/>
+<s:script><![CDATA[
+
+var s = String(_vars['lRedirect'][0]);
+s = s + "?redirect=" + window.location;
+window.location = s;
+
+]]></s:script>
+</s:when>
+<s:otherwise>
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('LoginModal')))" b:action="trigger" b:event="RenderLoginModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('LoginModal')"/>
+</s:otherwise>
+</s:choose>					
+</s:event>
+<s:event b:on="25Live_ChangePassword">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('ChangePasswordModal')))" b:action="trigger" b:event="RenderChangePasswordModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('ChangePasswordModal')"/>
+<s:with b:target="id('ChangePasswordModal')//input[@name='UserName']">
+<s:setatt value="{string(id('WSSessionMgr')/@c:user-name)}"/>
+</s:with>
+</s:event>
+<s:event b:on="25Live_DatePreferences">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('DatePrefsModal')))" b:action="trigger" b:event="RenderDatePrefsModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('DatePrefsModal')"/>
+</s:event>
+<s:event b:on="25Live_CalendarPreferences">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('CalendarPrefsModal')))" b:action="trigger" b:event="RenderCalendarPrefsModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('CalendarPrefsModal')"/>
+</s:event>
+<s:event b:on="25Live_ContactInfo">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('ContactInfoModal')))" b:action="trigger" b:event="RenderContactInfoModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('ContactInfoModal')"/>
+</s:event>
+<s:event b:on="25Live_ContactNew">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('ContactNewModal')))" b:action="trigger" b:event="RenderContactNewModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('ContactNewModal')"/>
+</s:event>
+<s:event b:on="25Live_OrgNew">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('OrgNewModal')))" b:action="trigger" b:event="RenderOrgNewModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('OrgNewModal')"/>
+</s:event>
+<s:event b:on="25Live_EmailOptions">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('EmailOptionsInfoModal')))" b:action="trigger" b:event="RenderEmailOptionsModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('EmailOptionsModal')"/>
+</s:event>
+<s:event b:on="25Live_ImageNew">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('ImageNewModal')))" b:action="trigger" b:event="RenderImageNewModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('ImageNewModal')"/>
+</s:event>
+<s:event b:on="25Live_ImageNew_Refresh">
+<s:with b:target="//s25:rsrv_wiz_custom_attr//div[@c:id='container' and @c:obj_type='I']">
+<s:task b:action="trigger" b:event="AttrIndexChange"/>
+</s:with>
+</s:event>
+<s:event b:on="25Live_CreateUser">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('CreateUserModal')))" b:action="trigger" b:event="RenderCreateUserModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('CreateUserModal')"/>
+</s:event>
+<s:event b:on="GetHotEvCatName">
+<s:variable b:name="gHotEvCatName" b:scope="tag" b:select=""/>
+<s:variable b:name="lEvCategories" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:showloading="false" b:url="{concat(id('Config')/$tWsPrefix,'evcat.xml?category_id=-2&amp;cache')}" b:destination="$lEvCategories">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lEvCategories"/>
+<s:task b:action="assign" b:target="$gHotEvCatName" b:scope="tag" b:select="string($lEvCategories/r25:event_categories/r25:category[r25:category_id = '-2']/r25:category_name)"/>
+</s:event>
+<s:event b:on="LockEvent">
+<s:if b:test="declared($lEventID)">
+<s:sequential><s:lock>
+<s:if b:test="not(id('LockedEvents')/lock[@event_id = $lEventID])">
+<s:variable b:name="lLockXml" b:scope="local">
+<r25:locks>
+<r25:lock>
+<r25:lock_item_id/>
+<r25:lock_item_type>1</r25:lock_item_type>
+</r25:lock>
+</r25:locks>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lLockXml"/>
+<s:task b:action="settext" b:target="$lLockXml/r25:locks/r25:lock/r25:lock_item_id" b:value="{$lEventID}"/>
+<s:variable b:name="lData" b:scope="local" b:select="$lLockXml"/>
+<s:task b:action="xml2string" b:variable="$lData"/>
+<s:task b:test="not(starts-with($lData,'&lt;?'))" b:action="assign" b:target="$lData" b:scope="local" b:select="concat('&lt;?xml version=&#34;1.0&#34;?&gt;',$lData)"/>
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="POST" b:url="{concat(id('Config')/$tWsPrefix,'locks.xml')}" b:data="{$lData}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="assign" b:target="$tHttpStatus" b:scope="tag" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:task b:action="assign" b:target="$tRespStr" b:scope="tag" b:select="id('HttpMgr')/$tResponseText"/>
+<s:if b:test="starts-with($tRespStr,'&lt;?')">
+<s:variable b:name="lRespStr" b:scope="local" b:select="string($tRespStr)"/>
+<s:script><![CDATA[
+
+var s = String(_vars['lRespStr'][0]);
+s = s.replace(/\s*<\?.*?\?>/,'');
+s = s.replace(/\s+&\s+/g,' &amp; ');
+s = s.replace(/\s+%\s+/g,' &#37; ');
+bpc.setVariable('lRespStr',[s],'local');
+
+]]></s:script>
+<s:task b:action="assign" b:target="$tRespStr" b:scope="tag" b:select="$lRespStr"/>
+<s:task b:action="string2xml" b:source="$tRespStr" b:variable="$tRespXml"/>
+</s:if>
+<s:task b:action="assign" b:target="$lLockResult" b:select="'LockConflict'"/>
+<s:if b:test="number($tHttpStatus) = 201">
+<s:variable b:name="lMsg" b:scope="local" b:select=""/>
+<s:task b:test="$tRespXml/r25:results/r25:msg_id" b:action="assign" b:target="$lMsg" b:scope="local" b:select="$tRespXml/r25:results/r25:msg_id"/>
+<s:task b:test="$tRespXml/r25:results/r25:info/r25:msg_id" b:action="assign" b:target="$lMsg" b:scope="local" b:select="$tRespXml/r25:results/r25:info/r25:msg_id"/>
+<s:task b:test="$lMsg='SY_I_SUCCESS'" b:action="assign" b:target="$lLockResult" b:scope="tag" b:select="'LockSuccess'"/>
+</s:if>
+<s:if b:test="$lLockResult = 'LockConflict' and (string(id('FLS_LOCK')) = 'F' or string(id('FLS_LOCK')) = 'C')">
+<s:variable b:name="lLockInquiry" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'locks.xml')}" b:destination="$lLockInquiry"/>
+<s:task b:action="string2xml" b:source="$lLockInquiry" b:variable="$lLockInquiry"/>
+<s:variable b:name="lUsername" b:select="string(id('WSSessionMgr')/@c:user-name)"/>
+<s:if b:test="$lLockInquiry//r25:lock[r25:lock_item_type = '1' and r25:lock_item_id = $lEventID and r25:last_mod_user = $lUsername]">
+<s:task b:action="assign" b:target="$lLockResult" b:scope="tag" b:select="'LockExists'"/>
+</s:if>
+</s:if>
+<s:choose>
+<s:when b:test="$lLockResult = 'LockConflict'">
+<s:task b:action="alert" b:value="This event is currently locked. Please try again later."/>
+</s:when>
+<s:otherwise>
+<s:render b:destination="id('LockedEvents')" b:mode="aslastchild">
+<lock event_id="{$lEventID}"/>
+</s:render>
+</s:otherwise>
+</s:choose>
+</s:if>
+</s:lock></s:sequential>
+</s:if>
+</s:event>
+<s:event b:on="RefreshAllLocks">
+<s:if b:test="not(count(id('LockedEvents')/lock) = 0)">
+<s:for-each b:target="id('LockedEvents')/lock">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lEventID" b:select="string($_target/@event_id)"/>
+<s:task b:action="trigger" b:event="UpdateEventLock"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:if>
+</s:event>
+<s:event b:on="UpdateEventLock">
+<s:if b:test="declared($lEventID)">
+<s:variable b:name="lResp" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="PUT" b:url="{concat(id('Config')/$tWsPrefix,'lock.xml?lock_item_type=1&amp;lock_item_id=',$lEventID)}" b:destination="$lResp">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+</s:if>
+</s:event>
+<s:event b:on="KillAllLocks">
+<s:if b:test="not(count(id('LockedEvents')/lock) = 0)">
+<s:for-each b:target="id('LockedEvents')/lock">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lEventID" b:select="string($_target/@event_id)"/>
+<s:task b:action="trigger" b:event="UnlockEvent"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:if>
+</s:event>
+<s:event b:on="UnlockEvent">
+<s:if b:test="declared($lEventID)">
+<s:variable b:name="lResp" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="DELETE" b:url="{concat(id('Config')/$tWsPrefix,'lock.xml?lock_item_type=1&amp;lock_item_id=',$lEventID)}" b:destination="$lResp">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="remove" b:target="id('LockedEvents')/lock[@event_id = $lEventID]"/>
+</s:if>
+</s:event>
+<s:event b:on="DeleteReportRuns">
+<s:if b:test="not(string-length($gReportRunIDs) = 0)">
+<s:variable b:name="lReportRuns" b:select="string($gReportRunIDs)"/>
+<s:task b:test="starts-with($lReportRuns, ';')" b:action="assign" b:target="$lReportRuns" b:select="substring($lReportRuns,2)"/>
+<s:variable b:name="lTokenizedIDs" b:select="tokenize($lReportRuns, ';')"/>
+<s:variable b:name="lReportDeleteID" b:scope="local" b:select=""/>
+<s:for-each b:target="$lTokenizedIDs">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lReportDeleteID" b:scope="local" b:select="$_target"/>
+<s:task b:action="trigger" b:event="DeleteReportRun"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:if>
+</s:event>
+<s:event b:on="DeleteReportRun">
+<s:if b:test="declared($lReportDeleteID)">
+<s:variable b:name="lReportXml" b:scope="local">
+<r25:reports>
+<r25:report status="mod">
+<r25:report_id/>
+<r25:report_run status="del">
+<r25:report_run_id/>
+</r25:report_run>
+</r25:report>
+</r25:reports>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lReportXml"/>
+<s:variable b:name="lReportID" b:scope="local" b:select="substring-before($lReportDeleteID,'X')"/>
+<s:task b:action="settext" b:target="$lReportXml/r25:reports/r25:report/r25:report_id" b:value="{$lReportID}"/>
+<s:task b:action="settext" b:target="$lReportXml/r25:reports/r25:report/r25:report_run/ r25:report_run_id" b:value="{substring-after($lReportDeleteID,'X')}"/>
+<s:task b:action="xml2string" b:variable="$lReportXml"/>
+<s:variable b:name="lResp" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="PUT" b:url="{concat(id('Config')/$tWsPrefix,'report.xml?report_id=',$lReportID)}" b:data="{$lReportXml}" b:destination="$lResp">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="assign" b:target="$gReportRunIDs" b:scope="global" b:select="replace($gReportRunIDs,concat(';',$lReportDeleteID),'')"/>
+</s:if>
+</s:event>
+<s:event b:on="DeleteAllPendingSpaceRsrvs">
+<s:variable b:name="lEventID" b:scope="local" b:select=""/>
+<s:for-each b:target="id('PendingSpaceReservations')/space">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lEventID" b:select="string($_target/@event_id)"/>
+<s:task b:action="trigger" b:event="DeletePendingSpaceRsrv"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:event>
+<s:event b:on="DeletePendingSpaceRsrv">
+<s:if b:test="declared($lEventID) and id('PendingSpaceReservations')/space[@event_id = $lEventID]">
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="DELETE" b:url="{concat(id('Config')/$tWsPrefix,'sp_pend_rsrvs.xml?event_id=',$lEventID)}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="remove" b:target="id('PendingSpaceReservations')/space[@event_id = $lEventID]"/>
+</s:if>
+</s:event>
+<s:event b:on="DeleteAllPendingResourceRsrvs">
+<s:variable b:name="lEventID" b:scope="local" b:select=""/>
+<s:for-each b:target="id('PendingResourceReservations')/resource">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lEventID" b:select="$_target"/>
+<s:task b:action="trigger" b:event="DeletePendingResourceRsrv"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:event>
+<s:event b:on="DeletePendingResourceRsrv">
+<s:if b:test="declared($lEventID) and id('PendingResourceReservations')/resource[@event_id = $lEventID]">
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="DELETE" b:url="{concat(id('Config')/$tWsPrefix,'rs_pend_rsrvs.xml?event_id=',$lEventID)}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="remove" b:target="id('PendingResourceReservations')/resource[@event_id = $lEventID]"/>
+</s:if>
+</s:event>
+<s:event b:on="ObserveSessionMgr">
+<s:variable b:name="lEvent" b:scope="local" b:select="id('WSSessionMgr')/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="not(@c:init)">
+<s:if b:test="$lEvent = 'LoginSuccess'">
+<s:event b:action="msg" b:value="@@@ Controller: ObserveSessionMgr: LoginSuccess: trigger ShowWelcome"/>
+<s:task b:action="trigger" b:event="ShowWelcome" b:target="id('LayoutMgr')"/>
+<s:choose>
+<s:when b:test="string(id('FLS_SPEEDBOOK')) = 'N'">
+<s:with b:target="/body">
+<s:task b:action="addclass" b:target="." b:value="NoScheduling"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="/body">
+<s:task b:action="removeclass" b:target="." b:value="NoScheduling"/>
+</s:with>
+</s:otherwise>
+</s:choose>
+<s:with b:target="/body">
+<s:task b:action="removeclass" b:target="." b:value="notLoggedIn"/>
+</s:with>
+</s:if>
+<s:if b:test="$lEvent = 'LoginFailure'">
+<s:task b:action="trigger" b:event="HideWelcome" b:target="id('LayoutMgr')"/>
+</s:if>
+<s:if b:test="$lEvent = 'RemoteLoginFailure'">
+<s:task b:action="trigger" b:event="RemoteLoginFailure" b:target="id('LayoutMgr')"/>
+</s:if>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="$lEvent = 'LoginSuccess'">
+<s:event b:action="msg" b:value="@@@ Controller: ObserveSessionMgr: LoginSuccess: trigger Prefs:Load"/>
+<s:task b:action="trigger" b:event="Load" b:target="id('Prefs')"/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'fls.xml', '?otransform=',id('Config')/$tXslPrefix,'fls.foal', '&amp;cache')}" b:destination="id('FlsDataIsland')" b:mode="replace">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+<s:with b:target="id('LayoutMgr')">
+<s:task b:action="trigger" b:event="CloseModal" b:target="."/>
+<s:task b:action="trigger" b:event="LoginSuccess" b:target="."/>
+</s:with>
+<s:choose>
+<s:when b:test="string(id('FLS_SPEEDBOOK')) = 'N'">
+<s:with b:target="/body">
+<s:task b:action="addclass" b:target="." b:value="NoScheduling"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="/body">
+<s:task b:action="removeclass" b:target="." b:value="NoScheduling"/>
+</s:with>
+</s:otherwise>
+</s:choose>
+<s:with b:target="/body">
+<s:task b:action="removeclass" b:target="." b:value="notLoggedIn"/>
+</s:with>
+</s:when>
+<s:when b:test="$lEvent = 'LoginFailure'">
+<s:task b:action="trigger" b:event="LoginFailure" b:target="id('LayoutMgr')"/>
+</s:when>
+<s:when b:test="$lEvent = 'LogoutSuccess'">
+<s:script><![CDATA[
+
+location.href = location.protocol + "//" + location.host + location.pathname;
+
+]]></s:script>
+</s:when>
+<s:when b:test="$lEvent = 'LogoutFailure'">
+<s:task b:action="alert" b:value="{concat('Logout failed! Verify Config R25WS url prefix: ', id('Config')/$tWsPrefix)}"/>
+</s:when>
+</s:choose>
+</s:otherwise>
+</s:choose>
+<s:if b:test="$tEventQ/div[@c:depends = $lEvent]">
+<s:for-each b:target="$tEventQ/div[@c:depends = $lEvent]">
+<s:task b:action="trigger" b:event="{$_target/@c:name}" b:target="xpath($_target/@c:target)"/>
+<s:task b:action="remove" b:target="$_target"/>
+</s:for-each>
+</s:if>
+<s:task b:action="remove" b:target="$tEventQ/div[@c:depends = 'LoginSuccess' or @c:depends = 'LoginFailure']"/>
+</s:event>
+<s:event b:on="ObservePrefs">
+<s:variable b:name="lEvent" b:scope="local" b:select="id('Prefs')/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent = 'LoadSuccess'">
+<s:choose>
+<s:when b:test="string(id('FLS_SPEEDBOOK')) = 'N'">
+<s:task b:action="addclass" b:target="/body" b:value="NoScheduling"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="removeclass" b:target="/body" b:value="NoScheduling"/>
+</s:otherwise>
+</s:choose>
+<s:script><![CDATA[
+
+var prefStartDay = parseInt( document.getElementById('Pref_CalendarView').innerHTML.charAt(0) );
+if (isNaN(prefStartDay)) prefStartDay = 0;
+_aLocaleDate.StartDay = prefStartDay;
+
+]]></s:script>
+<s:task b:action="trigger" b:event="SetHeaderDate"/>
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveLayoutMgr">
+<s:variable b:name="lEvent" b:scope="local" b:select="id('LayoutMgr')/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent = 'Paint'">
+<s:task b:action="trigger" b:event="BookmarkCheck" b:target="."/>
+</s:when>
+<s:when b:test="$lEvent = 'OnPaintEventDirectory'">
+<s:variable b:name="pElm" b:scope="local" b:select="."/>
+<s:variable b:name="pHandler" b:scope="local" b:select="'ObserveEventDirectory'"/>
+<s:task b:action="trigger" b:event="RegisterObserver" b:target="id('LayoutMgr')/$tEvDir"/>
+</s:when>
+<s:when b:test="$lEvent = 'OnPaintSpaceDirectory'">
+<s:variable b:name="pElm" b:scope="local" b:select="."/>
+<s:variable b:name="pHandler" b:scope="local" b:select="'ObserveSpaceDirectory'"/>
+<s:task b:action="trigger" b:event="RegisterObserver" b:target="id('LayoutMgr')/$tSpDir"/>
+</s:when>
+<s:when b:test="$lEvent = 'OnPaintResourceDirectory'">
+<s:variable b:name="pElm" b:scope="local" b:select="."/>
+<s:variable b:name="pHandler" b:scope="local" b:select="'ObserveResourceDirectory'"/>
+<s:task b:action="trigger" b:event="RegisterObserver" b:target="id('LayoutMgr')/$tRsDir"/>
+</s:when>
+<s:when b:test="$lEvent = 'OnPaintEventDetails'">
+<s:variable b:name="pElm" b:scope="local" b:select="."/>
+<s:variable b:name="pHandler" b:scope="local" b:select="''"/>
+<s:variable b:name="pHandler" b:scope="local" b:select="'ObserveEventDetails'"/>
+<s:task b:action="trigger" b:event="RegisterObserver" b:target="id('LayoutMgr')/$tEvDetails"/>
+</s:when>
+<s:when b:test="$lEvent = 'OnPaintSpaceDetails'">
+<s:variable b:name="pElm" b:scope="local" b:select="."/>
+<s:variable b:name="pHandler" b:scope="local" b:select="''"/>
+<s:task b:action="assign" b:target="$pHandler" b:scope="local" b:select="'ObserveSpaceDetails'"/>
+<s:task b:action="trigger" b:event="RegisterObserver" b:target="id('LayoutMgr')/$tSpDetails"/>
+</s:when>
+<s:when b:test="$lEvent = 'OnPaintResourceDetails'">
+<s:variable b:name="pElm" b:scope="local" b:select="."/>
+<s:variable b:name="pHandler" b:scope="local" b:select="''"/>
+<s:task b:action="assign" b:target="$pHandler" b:scope="local" b:select="'ObserveResourceDetails'"/>
+<s:task b:action="trigger" b:event="RegisterObserver" b:target="id('LayoutMgr')/$tRsDetails"/>
+</s:when>
+<s:when b:test="$lEvent = 'OnPaintTaskDetails'">
+<s:variable b:name="pElm" b:scope="local" b:select="."/>
+<s:variable b:name="pHandler" b:scope="local" b:select="''"/>
+<s:task b:action="assign" b:target="$pHandler" b:scope="local" b:select="'ObserveTaskDetails'"/>
+<s:task b:action="trigger" b:event="RegisterObserver" b:target="id('LayoutMgr')/$tTaskDetails"/>
+</s:when>
+<s:when b:test="$lEvent = 'PaintRsrvWizard'">
+<s:variable b:name="pElm" b:scope="local" b:select="."/>
+<s:variable b:name="pHandler" b:scope="local" b:select="'ObserveRsrvWizard'"/>
+<s:task b:action="trigger" b:event="RegisterObserver" b:target="id('LayoutMgr')/$tRsrvWiz"/>
+<s:task b:action="trigger" b:event="InitRsrvWiz" b:target="."/>
+</s:when>
+</s:choose>
+<s:if b:test="not(string(id('Pref_config_show_25live_home')) = 'No')">
+<s:task b:action="trigger" b:event="OverdueTasksAlert" b:target="."/>
+</s:if>
+<s:variable b:name="lSignedIn" b:select="string(id('WSSessionMgr')/@c:logged-in)"/>
+
+</s:event>
+<s:event b:on="ObserveEventDirectory">
+<s:variable b:name="lEvent" b:scope="local" b:select="id('LayoutMgr')/$tEvDir/$tRaisedEvent"/>
+</s:event>
+<s:event b:on="ObserveSpaceDirectory">
+<s:variable b:name="lEvent" b:scope="local" b:select="id('LayoutMgr')/$tSpDir/$tRaisedEvent"/>
+</s:event>
+<s:event b:on="ObserveResourceDirectory">
+<s:variable b:name="lEvent" b:scope="local" b:select="id('LayoutMgr')/$tRsDir/$tRaisedEvent"/>
+</s:event>
+<s:event b:on="ObserveEventDetails">
+<s:variable b:name="lEvDetails" b:scope="local" b:select="id('LayoutMgr')/$tEvDetails"/>
+<s:variable b:name="lEvent" b:scope="local" b:select="id('LayoutMgr')/$tEvDetails/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent='Cancel'">
+<s:task b:action="trigger" b:event="Delete" b:target="id('LayoutMgr')/$tProxyTab"/>
+</s:when>
+<s:when b:test="$lEvent='Close'">
+<s:task b:action="assign" b:scope="tag" b:target="$tBookmarkViaClosedDetail" b:select="'T'"/>
+<s:task b:action="trigger" b:event="GoBackward"/>
+<s:with b:target="id('subtabbar-history')/span[@c:obj_type = 'event' and @c:obj_id = $lEvDetails/@c:obj_id]">
+<s:setatt c:deleted="true"/>
+</s:with>
+<s:task b:action="remove" b:target="id('Controller')/$tInbox/recent/obj[@obj_type = 'event' and @obj_id = $lEvDetails/@c:obj_id]"/>
+<s:task b:action="remove" b:target="$lEvDetails/ancestor::div[@class='layout-tabbox-buffer'][1]"/>
+<s:with b:target="id('LayoutMgr')/$tTabbar/s25:tabitem[@c:group = 'event']">
+<s:choose>
+<s:when b:test="not(//s25:event_details[@c:init])">
+<s:task b:action="set" b:target="@c:purpose" b:value="event_search"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="set" b:target="@c:purpose" b:value="{concat('event_details_', id('subtabbar-history')/span[@c:obj_type='event' and not(@c:deleted='true')][1]/@c:obj_id )}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:test="not(//s25:event_search) and not(//s25:event_details[@c:init])" b:action="set" b:target="@c:dirty" b:value="true"/>
+</s:with>
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveSpaceDetails">
+<s:variable b:name="lSpDetails" b:scope="local" b:select="id('LayoutMgr')/$tSpDetails"/>
+<s:variable b:name="lEvent" b:scope="local" b:select="$lSpDetails/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent = 'FavoriteOn' or $lEvent = 'FavoriteOff'">
+<s:with b:target="id('LayoutMgr')/$tTabbar/s25:tabitem[@c:purpose='space_search']">
+<s:setatt c:dirty="true"/>
+</s:with>
+</s:when>
+<s:when b:test="$lEvent='Cancel'">
+<s:task b:action="trigger" b:event="Delete" b:target="id('LayoutMgr')/$tProxyTab"/>
+</s:when>
+<s:when b:test="$lEvent='Close'">
+<s:task b:action="assign" b:scope="tag" b:target="$tBookmarkViaClosedDetail" b:select="'T'"/>
+<s:task b:action="trigger" b:event="GoBackward"/>
+<s:with b:target="id('subtabbar-history')/span[@c:obj_type = 'space' and @c:obj_id = $lSpDetails/@c:obj_id]">
+<s:setatt c:deleted="true"/>
+</s:with>
+<s:task b:action="remove" b:target="id('Controller')/$tInbox/recent/obj[@obj_type = 'space' and @obj_id = $lSpDetails/@c:obj_id]"/>
+<s:task b:action="remove" b:target="$lSpDetails/ancestor::div[@class='layout-tabbox-buffer'][1]"/>
+<s:with b:target="id('LayoutMgr')/$tTabbar/s25:tabitem[@c:group = 'space']">
+<s:choose>
+<s:when b:test="not(//s25:space_details[@c:init])">
+<s:task b:action="set" b:target="@c:purpose" b:value="space_search"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="set" b:target="@c:purpose" b:value="{concat('space_details_', id('subtabbar-history')/span[@c:obj_type='space' and not(@c:deleted='true')][1]/@c:obj_id )}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:test="not(//s25:space_search) and not(//s25:space_details[@c:init])" b:action="set" b:target="@c:dirty" b:value="true"/>
+</s:with>
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveResourceDetails">
+<s:variable b:name="lEvent" b:scope="local" b:select="id('LayoutMgr')/$tRsDetails/$tRaisedEvent"/>
+<s:variable b:name="lRsDetails" b:scope="local" b:select="id('LayoutMgr')/$tRsDetails"/>
+<s:choose>
+<s:when b:test="$lEvent = 'FavoriteOn' or $lEvent = 'FavoriteOff'">
+<s:with b:target="id('LayoutMgr')/$tTabbar/s25:tabitem[@c:purpose='resource_search']">
+<s:setatt c:dirty="true"/>
+</s:with>
+</s:when>
+<s:when b:test="$lEvent='Cancel'">
+<s:task b:action="trigger" b:event="Delete" b:target="id('LayoutMgr')/$tProxyTab"/>
+</s:when>
+<s:when b:test="$lEvent='Close'">
+<s:task b:action="assign" b:scope="tag" b:target="$tBookmarkViaClosedDetail" b:select="'T'"/>
+<s:task b:action="trigger" b:event="GoBackward"/>
+<s:with b:target="id('subtabbar-history')/span[@c:obj_type = 'resource' and @c:obj_id = $lRsDetails/@c:obj_id]">
+<s:setatt c:deleted="true"/>
+</s:with>
+<s:task b:action="remove" b:target="id('Controller')/$tInbox/recent/obj[@obj_type = 'resource' and @obj_id = $lRsDetails/@c:obj_id]"/>
+<s:task b:action="remove" b:target="$lRsDetails/ancestor::div[@class='layout-tabbox-buffer'][1]"/>
+<s:with b:target="id('LayoutMgr')/$tTabbar/s25:tabitem[@c:group = 'resource']">
+<s:choose>
+<s:when b:test="not(//s25:rsrc_details[@c:init])">
+<s:task b:action="set" b:target="@c:purpose" b:value="resource_search"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="set" b:target="@c:purpose" b:value="{concat('resource_details_', id('subtabbar-history')/span[@c:obj_type='resource' and not(@c:deleted='true')][1]/@c:obj_id )}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:test="not(//s25:rsrc_search) and not(//s25:rsrc_details[@c:init])" b:action="set" b:target="@c:dirty" b:value="true"/>
+</s:with>
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveTaskDetails">
+<s:variable b:name="lEvent" b:scope="local" b:select="id('LayoutMgr')/$tTaskDetails/$tRaisedEvent"/>
+<s:variable b:name="lTaskDetails" b:scope="local" b:select="id('LayoutMgr')/$tTaskDetails"/>
+<s:choose>
+<s:when b:test="$lEvent='Close'">
+<s:task b:action="assign" b:scope="tag" b:target="$tBookmarkViaClosedDetail" b:select="'T'"/>
+<s:task b:action="trigger" b:event="GoBackward"/>
+<s:with b:target="id('subtabbar-history')/span[@c:obj_type = 'task' and @c:obj_id = $lTaskDetails/@c:obj_id]">
+<s:setatt c:deleted="true"/>
+</s:with>
+<s:task b:action="remove" b:target="id('Controller')/$tInbox/recent/obj[@obj_type = 'task' and @obj_id = $lTaskDetails/@c:obj_id]"/>
+<s:task b:action="remove" b:target="$lTaskDetails/ancestor::div[@class='layout-tabbox-buffer'][1]"/>
+<s:with b:target="id('LayoutMgr')/$tTabbar/s25:tabitem[@c:group = 'task']">
+<s:choose>
+<s:when b:test="not(//s25:task_details[@c:init])">
+<s:task b:action="set" b:target="@c:purpose" b:value="workflow"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="set" b:target="@c:purpose" b:value="{concat('task_details_', id('subtabbar-history')/span[@c:obj_type='task' and not(@c:deleted='true')][1]/@c:obj_id )}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:test="not(//s25:workflow) and not(//s25:task_details[@c:init])" b:action="set" b:target="@c:dirty" b:value="true"/>
+</s:with>
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveRsrvWizard">
+<s:variable b:name="lEvent" b:scope="local" b:select="id('LayoutMgr')/$tRsrvWiz/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent = '__SaveSuccess'">
+<s:variable b:scope="local" b:name="lSavedEventID" b:select="string(id('LayoutMgr')/$tRsrvWiz/@c:event_id)"/>
+<s:variable b:scope="local" b:name="lSavedEventTitle" b:select="substring-after(string(id('LayoutMgr')/$tRsrvWiz/@c:title),': ')"/>
+<s:variable b:scope="local" b:name="lSavedEventSpace" b:select="substring-after(string(id('LayoutMgr')/$tRsrvWiz/ @c:space_id), ': ')"/>
+<s:variable b:scope="local" b:name="lSavedEventResource" b:select="substring-after(string(id('LayoutMgr')/$tRsrvWiz/ @c:resource_id), ': ')"/>
+<s:task b:action="trigger" b:event="Cancel" b:target="id('LayoutMgr')//s25:rsrv_wiz[ @c:event_id = $lSavedEventID and @c:mode ne 'edit']"/>
+<s:if b:test="id('LayoutMgr')/$tRsrvWiz/@c:close='F'">
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="event" obj_id="{$lSavedEventID}" obj_name="{$lSavedEventTitle}" space_id="{$lSavedEventSpace}" resource_id="{$lSavedEventResource}"/>
+</s:with>
+<s:task b:action="trigger" b:event="EditEvent" b:target="id('Controller')"/>
+</s:if>
+</s:when>
+<s:when b:test="$lEvent = 'SaveError'"/>
+<s:when b:test="$lEvent = 'Cancel'">
+<s:task b:action="alert" b:value="Controller::Change has been (erroneously) triggered"/>
+</s:when>
+<s:when b:test="$lEvent = 'Change'">
+</s:when>
+<s:when b:test="$lEvent = 'TemplateLoadFailure'">
+<s:task b:action="alert" b:value="OOOUCH!!! Failed to load event template!"/>
+<s:with b:target="id('LayoutMgr')/$tSelectedTab">
+<s:setatt c:close="true"/>
+</s:with>
+<s:task b:action="trigger" b:event="CloseTab" b:target="id('LayoutMgr')"/>
+</s:when>
+<s:when b:test="$lEvent = 'LoadSuccess'">
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="ViewObject">
+<s:variable b:name="lObj" b:scope="local" b:select="$tInbox/selected_obj"/>
+<s:if b:test="not(string-length($lObj/@obj_type)=0) and not(string-length($lObj/@obj_id)=0)">
+<s:render b:destination="$tInbox/recent" b:mode="asfirstchild">
+<obj obj_type="{$lObj/@obj_type}" obj_id="{$lObj/@obj_id}"/>
+</s:render>
+<s:variable b:name="lXpath" b:scope="local" b:select="concat('$tInbox/selected_',$lObj/@obj_type)"/>
+<s:with b:target="xpath($lXpath)">
+<s:setatt obj_id="{$lObj/@obj_id}" obj_name="{$lObj/@obj_name}" date="{$lObj/@date}"/>
+</s:with>
+<s:variable b:name="pPurpose" b:scope="local" b:select="concat($lObj/@obj_type,'_details_',$lObj/@obj_id)"/>
+<s:if b:test="$lObj/@obj_type ='task'">
+<s:task b:action="assign" b:target="$pPurpose" b:select="concat($lObj/@obj_type,'_details_',$lObj/@task_type,'_',$lObj/@obj_id)"/>
+</s:if>
+<s:task b:action="trigger" b:event="OpenTab" b:target="id('LayoutMgr')"/>
+</s:if>
+</s:event>
+<s:event b:on="SubscribeObject">
+<s:variable b:name="lObj" b:scope="local" b:select="$tInbox/selected_obj"/>
+<s:with b:target="id('SubscribeModal')">
+<s:setatt c:obj_type="{$lObj/@obj_type}" c:obj_id="{$lObj/@obj_id}" c:obj_name="{$lObj/@obj_name}" c:obj_formal_name="{$lObj/@obj_formal_name}" c:start_dt="{$lObj/@start_dt}" c:end_dt="{$lObj/@end_dt}"/>
+</s:with>
+<s:task b:action="trigger" b:event="open" b:target="id('SubscribeModal')"/>
+</s:event>
+<s:event b:on="ReserveObject">
+<s:variable b:name="lObj" b:scope="local" b:select="$tInbox/selected_obj"/>
+<s:variable b:name="lStartDt" b:scope="local" b:select="string($lObj/@start_dt)"/>
+<s:variable b:name="lEndDt" b:scope="local" b:select="$lObj/@end_dt"/>
+<s:variable b:name="lStartHr" b:scope="local" b:select="string($lObj/@start_hr)"/>
+<s:variable b:name="lStartTime" b:scope="local" b:select="string($lObj/@start_time)"/>
+<s:variable b:name="lEndTime" b:scope="local" b:select="string($lObj/@end_time)"/>
+<s:variable b:name="lRelated" b:scope="local" b:select="string($lObj/@related_list)"/>
+<s:variable b:name="lSpace" b:scope="local" b:select="''"/>
+<s:variable b:name="lResource" b:scope="local" b:select="''"/>
+<s:variable b:name="lThread" b:scope="local" b:select="'default_wizard'"/>
+<s:with b:target="$tInbox/rsrv_wizard">
+<s:task b:action="remove" b:target="obj"/>
+<s:setatt thread="{$lThread}" mode="reserve" start_dt="{$lStartDt}" end_dt="{$lEndDt}" start_hr="{$lStartHr}" start_time="{$lStartTime}" end_time="{$lEndTime}" related_list="{$lRelated}"/>
+<s:if b:test="not(string-length($lObj/@obj_id)=0) and not(string-length($lObj/@obj_type)=0)">
+<s:render b:destination="." b:mode="replacechildren">
+<obj obj_type="{$lObj/@obj_type}" obj_id="{$lObj/@obj_id}" obj_name="{$lObj/@obj_name}" obj_formal_name="{$lObj/@obj_formal_name}" obj_fav="{$lObj/@obj_fav}" space_id="{$lSpace}" resource_id="{$lResource}"/>
+</s:render>
+</s:if>
+</s:with>
+<s:task b:action="trigger" b:event="Reserve" b:target="."/>
+</s:event>
+<s:event b:on="EditEvent">
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+</s:with>
+<s:choose>
+<s:when b:test="not(id('WSSessionMgr')/@c:logged-in='true')">
+<s:render b:destination="$tEventQ" b:mode="aslastchild">
+<div c:type="event" c:name="EditEvent" c:target="." c:depends="LoginSuccess"/>
+</s:render>
+<s:task b:action="trigger" b:event="25Live_SignIn" b:target="."/>
+</s:when>
+<s:when b:test="number($tInbox/selected_obj/@profile_count) gt 1 and string-length($tInbox/selected_obj/@profile_id) = 0">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('ProfileSelectionModal')))" b:action="trigger" b:event="RenderProfileSelectionModal" b:target="id('Modals')"/>
+<s:with b:target="id('ProfileSelection')">
+<s:task b:action="set" b:target="@c:event_id" b:value="{$tInbox/selected_obj/@obj_id}"/>
+<s:task b:action="trigger" b:event="Paint"/>
+</s:with>
+<s:task b:action="trigger" b:event="open" b:target="id('ProfileSelectionModal')"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lObj" b:scope="local" b:select="$tInbox/selected_obj"/>
+<s:with b:target="$tInbox/rsrv_wizard">
+<s:task b:action="remove" b:target="obj"/>
+<s:setatt thread="default_wizard" mode="edit" start_dt="" end_dt=""/>
+<s:if b:test="not(string-length($lObj/@obj_id)=0) and not(string-length($lObj/@obj_type)=0)">
+<s:render b:destination="." b:mode="replacechildren">
+<obj obj_type="{$lObj/@obj_type}" obj_id="{$lObj/@obj_id}" obj_name="{$lObj/@obj_name}" obj_formal_name="{$lObj/@obj_formal_name}" obj_fav="{$lObj/@obj_fav}"/>
+</s:render>
+</s:if>
+</s:with>
+<s:task b:action="trigger" b:event="Reserve" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="CloneEvent">
+<s:variable b:name="lObj" b:scope="local" b:select="$tInbox/selected_obj"/>
+<s:with b:target="$tInbox/rsrv_wizard">
+<s:task b:action="remove" b:target="obj"/>
+<s:setatt thread="default_wizard" mode="clone" start_dt="" end_dt=""/>
+<s:if b:test="not(string-length($lObj/@obj_id)=0) and not(string-length($lObj/@obj_type)=0)">
+<s:render b:destination="." b:mode="replacechildren">
+<obj obj_type="{$lObj/@obj_type}" obj_id="{$lObj/@obj_id}" obj_name="{$lObj/@obj_name}" obj_formal_name="{$lObj/@obj_formal_name}" obj_fav="{$lObj/@obj_fav}"/>
+</s:render>
+</s:if>
+</s:with>
+<s:task b:action="trigger" b:event="Reserve" b:target="."/>
+</s:event>	
+<s:event b:on="CloneRelated">
+<s:variable b:name="lObj" b:scope="local" b:select="$tInbox/selected_obj"/>
+<s:variable b:name="lRelated" b:scope="local" b:select="$tInbox/selected_obj/@related_list"/>
+<s:with b:target="$tInbox/rsrv_wizard">
+<s:task b:action="remove" b:target="obj"/>
+<s:setatt thread="default_wizard" mode="clone" start_dt="" end_dt=""/>
+<s:if b:test="not(string-length($lObj/@obj_id)=0) and not(string-length($lObj/@obj_type)=0)">
+<s:render b:destination="." b:mode="replacechildren">
+<obj obj_type="{$lObj/@obj_type}" obj_id="{$lObj/@obj_id}" obj_name="{$lObj/@obj_name}" obj_formal_name="{$lObj/@obj_formal_name}" obj_fav="{$lObj/@obj_fav}" obj_related="{$lObj/@related_list}"/>
+</s:render>
+</s:if>
+</s:with>
+<s:task b:action="trigger" b:event="Reserve" b:target="."/>
+<s:variable b:name="lRelatedTokens" b:select="tokenize($lRelated,', ')"/>
+<s:for-each b:target="$lRelatedTokens">
+<s:with b:target="$tInbox/rsrv_wizard">
+<s:task b:action="remove" b:target="obj"/>
+<s:setatt thread="default_wizard" mode="clone" start_dt="" end_dt=""/>
+<s:if b:test="not(string-length($lObj/@obj_id)=0) and not(string-length($lObj/@obj_type)=0)">
+<s:render b:destination="." b:mode="replacechildren">
+<obj obj_type="event" obj_id="{$_target}"/>
+</s:render>
+</s:if>
+<s:task b:action="trigger" b:event="Reserve" b:target="."/>				
+</s:with>
+</s:for-each>
+</s:event>	
+<s:event b:on="OwnEvent">
+<s:variable b:name="lObj" b:scope="local" b:select="$tInbox/selected_obj"/>
+<s:variable b:name="lData">
+<r25:object_ownership>
+<r25:object status="mod">
+<r25:object_id/>
+<r25:object_type>1</r25:object_type>
+<r25:owner_username/>
+</r25:object>
+</r25:object_ownership>			
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lData"/>
+<s:variable b:name="lUser" b:scope="local" b:select="id('WSSessionMgr')/@c:user-name"/>
+<s:task b:action="settext" b:target="$lData/r25:object_ownership/r25:object/r25:owner_username" b:value="{$lUser}"/>
+<s:task b:action="settext" b:target="$lData/r25:object_ownership/r25:object/r25:object_id" b:value="{$lObj/@obj_id}"/>
+<s:task b:action="xml2string" b:variable="$lData"/>
+<s:variable b:name="lResp" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="PUT" b:url="{concat(id('Config')/$tWsPrefix,'event_owner.xml?event_id=',$lObj/@obj_id)}" b:data="{$lData}" b:destination="$lResp">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'event_owner.xml?event_id=',$lObj/@obj_id)}" b:destination="$lResp">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lResp"/>
+<s:choose>
+<s:when b:test="string($lResp//r25:owner_username) = $lUser">
+<s:task b:action="alert" b:value="You are now the owner of this event."/>					
+</s:when>
+<s:otherwise>
+<s:task b:action="alert" b:value="Sorry, you were not set to the owner of this event. Please try again later."/>									
+</s:otherwise>
+</s:choose>
+</s:event>		
+<s:event b:on="Reserve">
+<s:choose>
+<s:when b:test="not(string(id('FLS_EVENT_EVS'))='F') and not(string(id('FLS_EVENT_DRAFT'))='C' or string(id('FLS_EVENT_DRAFT'))='F')">
+<s:task b:action="alert" b:value="Sorry, you are not allowed to schedule events."/>
+</s:when>
+<s:when b:test="not(id('WSSessionMgr')/@c:logged-in='true')">
+<s:render b:destination="$tEventQ" b:mode="aslastchild">
+<div c:type="event" c:name="Reserve" c:target="." c:depends="LoginSuccess"/>
+</s:render>
+<s:task b:action="trigger" b:event="25Live_SignIn" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="pPurpose" b:scope="local" b:select="'rsrvwiz'"/>
+<s:variable b:name="lRsrvGroup" b:scope="local" b:select="'rsrvwiz_new'"/>
+<s:choose>
+<s:when b:test="$tInbox/rsrv_wizard/@mode='reserve'">
+<s:task b:action="assign" b:target="$pPurpose" b:select="concat($pPurpose, '_new_' ,s25_timestamp() )"/>
+</s:when>
+<s:when b:test="$tInbox/rsrv_wizard/@mode='edit'">
+<s:task b:action="assign" b:target="$pPurpose" b:select="concat($pPurpose, '_edit_', $lObj/@obj_type, '_', $lObj/@obj_id )"/>
+<s:task b:action="assign" b:target="$lRsrvGroup" b:select="'rsrvwiz_edit'"/>
+</s:when>
+<s:when b:test="$tInbox/rsrv_wizard/@mode='clone'">
+<s:task b:action="assign" b:target="$pPurpose" b:select="concat($pPurpose, '_new_clone',$lObj/@obj_id, '_', s25_timestamp() )"/>
+</s:when>			
+<s:otherwise>
+<s:task b:action="assign" b:target="$pPurpose" b:scope="local" b:select="concat($pPurpose, '_',$tInbox/rsrv_wizard/@thread, '_',$tInbox/rsrv_wizard/@start_dt)"/>
+</s:otherwise>
+</s:choose>
+<s:choose>
+<s:when b:test="not(id('LayoutMgr')/$tTabbox//div[@b:behavior='LayoutTabboxBuffer' and @c:purpose = $pPurpose])">
+<s:task b:test="$lRsrvGroup = 'rsrvwiz_new'" b:action="assign" b:target="$tNewRsrvCount" b:scope="tag" b:select="$tNewRsrvCount + 1"/>
+<s:render b:destination="id('LayoutMgr')/$tTabbox//div[@b:behavior='LayoutTabboxGroup'][@c:purpose = $lRsrvGroup]/b:deck" b:mode="aslastchild">
+<div b:behavior="LayoutTabboxBuffer" c:purpose="{$pPurpose}">
+<div> </div>
+</div>
+</s:render>
+<s:task b:action="trigger" b:event="Select" b:target="id('LayoutMgr')/$tTabbox//b:deck/div[@c:purpose = $pPurpose]"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="select" b:target="id('LayoutMgr')/$tTabbox//div[@b:behavior='LayoutTabboxBuffer' and @c:purpose = $pPurpose]"/>
+<s:task b:action="select" b:target="id('layout-subtabbar')/div[@c:purpose = 'rsrvwiz']/s25:subtabbar/s25:tabitem[@c:purpose = $lRsrvGroup]"/>
+</s:otherwise>
+</s:choose>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="" obj_id="" date="" task_type="" profile_count="" profile_id=""/>
+</s:with>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="InitRsrvWiz">
+<s:variable b:name="lInbox" b:scope="local" b:select="$tInbox"/>
+<s:variable b:name="lMode" b:scope="local" b:select="$tInbox/rsrv_wizard/@mode"/>
+<s:variable b:name="lEvId" b:scope="local" b:select=""/>
+<s:task b:test="$lMode='edit' or $lMode='clone'" b:action="assign" b:target="$lEvId" b:scope="local" b:select="$tInbox/rsrv_wizard/obj[1]/@obj_id"/>
+<s:with b:target="id('LayoutMgr')/$tRsrvWiz">
+<s:setatt c:thread="{$lInbox/rsrv_wizard/@thread}" c:mode="{$lMode}" c:event_id="{$lEvId}" c:start_dt="{$lInbox/rsrv_wizard/@start_dt}" c:start_hr="{$lInbox/rsrv_wizard/@start_hr}" c:end_dt="{$lInbox/rsrv_wizard/@end_dt}" c:contact_id="{id('WSSessionMgr')/@c:contact-id}"/>
+<s:task b:action="trigger" b:event="Reset" b:target="."/>
+<s:task b:test="not(string-length(id('Controller')/$tInbox/rsrv_wizard/obj/@obj_name) = 0)" b:action="copy" b:source="id('Controller')/$tInbox/rsrv_wizard/obj" b:destination="$tInbox/reserve" b:mode="aslastchild"/>
+<s:task b:test="not($lMode='edit')" b:action="trigger" b:event="PresetPopulate" b:target="."/>
+</s:with>
+</s:event>
+</div>
+<s:behavior b:name="25LivePopup">
+<s:initatt c:id="25LivePopup" c:url="" c:title="" b:tooltiptext=""/>
+<s:event b:on="command">
+<s:script><![CDATA[
+
+var url = bpc.getBXMLAttribute('c:url',_current);
+s25_open_window(url);
+
+]]></s:script>
+</s:event>
+</s:behavior>
+<s:behavior b:name="TodayLink">
+<s:event b:on="construct">
+<s:super/>
+<s:task b:action="addclass" b:value="divTodayLink"/>
+</s:event>
+<s:event b:on="command">
+<s:task b:action="trigger" b:event="SelectToday" b:target="../b:datepicker[1]"/>
+<s:task b:action="trigger" b:event="change" b:target="../b:datepicker[1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ColumnNotSortable">
+<s:event b:on="command"/>
+<s:state b:on="select" b:normal="b-listview-th b-listview-th-nosort"/>
+<s:state b:on="deselect" b:normal="b-listview-th b-listview-th-nosort"/>
+</s:behavior>
+<s:behavior b:name="ToggleFavorite">
+<s:event b:on="click">
+<s:variable b:name="lObjType" b:select="string(@c:obj_type)"/>
+<s:variable b:name="lObjTypeID" b:select="''"/>
+<s:choose>
+<s:when b:test="$lObjType = 'event'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'1'"/>
+</s:when>
+<s:when b:test="$lObjType = 'organization'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'2'"/>
+</s:when>
+<s:when b:test="$lObjType = 'contact'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'3'"/>
+</s:when>
+<s:when b:test="$lObjType = 'space'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'4'"/>
+</s:when>
+<s:when b:test="$lObjType = 'resource'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'6'"/>
+</s:when>
+<s:when b:test="$lObjType = 'event_type'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'7'"/>
+</s:when>
+<s:when b:test="$lObjType = 'report'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'9'"/>
+</s:when>
+<s:when b:test="$lObjType = 'task_search'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'10'"/>
+</s:when>
+<s:when b:test="$lObjType = 'event_search'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'11'"/>
+</s:when>
+<s:when b:test="$lObjType = 'space_search'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'14'"/>
+</s:when>
+<s:when b:test="$lObjType = 'resource_search'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'15'"/>
+</s:when>
+<s:when b:test="$lObjType = 'organization_search'">
+<s:task b:action="assign" b:target="$lObjTypeID" b:select="'16'"/>
+</s:when>
+</s:choose>
+<s:variable b:name="lObjID" b:select="string(@c:obj_id)"/>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'favorites.xml?object_type=', $lObjTypeID ,'&amp;object_id=', $lObjID)"/>
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:variable b:name="lMethod" b:scope="local" b:select=""/>
+<s:choose>
+<s:when b:test="@c:purpose = 'IsFavorite'">
+<s:task b:action="hide" b:target="//img[@c:obj_type = $lObjType and @c:obj_id = $lObjID and @c:purpose='IsFavorite']"/>
+<s:task b:action="show" b:target="//img[@c:obj_type = $lObjType and @c:obj_id = $lObjID and @c:purpose='NotFavorite']"/>
+<s:task b:action="hide" b:target="//b:menurow[@c:obj_type = $lObjType and @c:obj_id = $lObjID and @c:purpose='IsFavorite']"/>
+<s:task b:action="show" b:target="//b:menurow[@c:obj_type = $lObjType and @c:obj_id = $lObjID and @c:purpose='NotFavorite']"/>
+<s:task b:action="assign" b:target="$lMethod" b:scope="local" b:select="'DELETE'"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="hide" b:target="//img[@c:obj_type = $lObjType and @c:obj_id = $lObjID and @c:purpose='NotFavorite']"/>
+<s:task b:action="show" b:target="//img[@c:obj_type = $lObjType and @c:obj_id = $lObjID and @c:purpose='IsFavorite']"/>
+<s:task b:action="hide" b:target="//b:menurow[@c:obj_type = $lObjType and @c:obj_id = $lObjID and @c:purpose='NotFavorite']"/>
+<s:task b:action="show" b:target="//b:menurow[@c:obj_type = $lObjType and @c:obj_id = $lObjID and @c:purpose='IsFavorite']"/>
+<s:task b:action="assign" b:target="$lMethod" b:scope="local" b:select="'PUT'"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="load" b:url="{$lUrl}" b:method="{$lMethod}" b:destination="$lTxt" b:showloading="true">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ToggleInput">
+<s:initatt b:textselect="false"/>
+<s:event b:on="construct">
+<s:super/>
+<s:task b:action="addclass" b:value="toggle-input"/>
+</s:event>
+<s:event b:on="click">
+<s:with b:target="preceding-sibling::input[1]">
+<s:choose>
+<s:when b:test="@b:state = 'selected'">
+<s:task b:action="deselect"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="select"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="command"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="S25Object_ContextMenu">
+<s:event b:on="construct">
+<s:variable b:scope="tag" b:name="tCurrentObjRef" b:select=""/>
+<s:super/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="S25Object_ContextMenuRow">
+<s:event b:on="click">
+<s:super/>
+<s:variable b:name="lCurrentMenuGroup" b:select="string(ancestor::b:contextmenu/@c:group)"/>
+<s:choose>
+<s:when b:test="@c:obj_action = 'edit'">
+<s:task b:action="set" b:target="ancestor::b:contextmenu/$tCurrentObjRef/@c:obj_action" b:value="edit"/>
+<s:task b:action="trigger" b:target="ancestor::b:contextmenu/$tCurrentObjRef" b:event="command"/>
+<s:task b:action="set" b:target="ancestor::b:contextmenu/$tCurrentObjRef/@c:obj_action" b:value="view"/>
+</s:when>
+<s:when b:test="@c:obj_action = 'email'">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('EvDetailsEmailModal')))" b:action="trigger" b:event="RenderEvDetailsEmailModal" b:target="id('Modals')"/>
+<s:task b:action="set" b:target="id('EvDetailsEmail')/@c:event_id" b:value="{ancestor::b:contextmenu/$tCurrentObjRef/@c:obj_id}"/>
+<s:task b:action="set" b:target="id('EvDetailsEmail')/@c:event_name" b:value="{ancestor::b:contextmenu/$tCurrentObjRef/text()}"/>
+<s:task b:action="set" b:target="ancestor::b:contextmenu/$tCurrentObjRef/@c:obj_action" b:value="email"/>
+<s:task b:action="trigger" b:target="ancestor::b:contextmenu/$tCurrentObjRef" b:event="command"/>
+<s:task b:action="set" b:target="ancestor::b:contextmenu/$tCurrentObjRef/@c:obj_action" b:value="view"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="set" b:target="id('LayoutMgr')/$tTabbar/s25:tabitem[@c:group = $lCurrentMenuGroup]/@c:forceview" b:value="{@b:view}"/>
+<s:task b:action="trigger" b:target="ancestor::b:contextmenu/$tCurrentObjRef" b:event="command"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+<b:contextmenu b:behavior="S25Object_ContextMenu" id="S25Object_ContextMenu_Space" c:group="space">
+<b:contextmenurow id="S25Object_ContextMenu_Space_Header">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Choose a View..."/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="Details">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Details"/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="List">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="List"/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="Availability">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Availability"/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="Calendar">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Calendar"/>
+</s:event>
+</b:contextmenurow>
+</b:contextmenu>
+<b:contextmenu b:behavior="S25Object_ContextMenu" id="S25Object_ContextMenu_Resource" c:group="resource">
+<b:contextmenurow id="S25Object_ContextMenu_Resource_Header">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Choose a View..."/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="Details">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Details"/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="List">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="List"/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="Availability">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Availability"/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="Calendar">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Calendar"/>
+</s:event>
+</b:contextmenurow>
+</b:contextmenu>
+<b:contextmenu b:behavior="S25Object_ContextMenu" id="S25Object_ContextMenu_Event" c:group="event">
+<b:contextmenurow id="S25Object_ContextMenu_Event_Header">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Choose a View..."/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="Details">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Details"/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="Calendar">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Calendar"/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="Task List" id="S25Object_ContextMenuRow_EventTaskList">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Task List"/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="Edit Event" c:obj_action="edit" id="S25Object_ContextMenuRow_EventEdit">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Edit Event"/>
+</s:event>
+</b:contextmenurow>
+<b:contextmenurow b:behavior="S25Object_ContextMenuRow" b:view="Email Event Details" c:obj_action="email" id="S25Object_ContextMenuRow_EmailEventDetails">
+<s:event b:on="construct">
+<s:task b:action="set" b:target="@b:label" b:value="Email Event Details"/>
+</s:event>
+</b:contextmenurow>
+</b:contextmenu>
+<s:behavior b:name="S25Object">
+<s:event b:on="construct">
+<s:super/>
+<s:if b:test="@c:obj_action = 'view' or not(@c:obj_action)">
+<s:choose>
+<s:when b:test="@c:obj_type = 'space'">
+<s:if b:test="not(string(id('FLS_SPACE_LIST'))='N')">
+<s:task b:action="addclass" b:value="s25-object"/>
+<s:task b:action="addclass" b:value="s25-object-space"/>
+</s:if>
+</s:when>
+<s:when b:test="@c:obj_type = 'resource'">
+<s:if b:test="not(string(id('FLS_RESOURCE_LIST'))='N')">
+<s:task b:action="addclass" b:value="s25-object"/>
+<s:task b:action="addclass" b:value="s25-object-resource"/>
+</s:if>
+</s:when>
+<s:when b:test="@c:obj_type = 'event'">
+<s:task b:action="addclass" b:value="s25-object"/>
+<s:task b:action="addclass" b:value="s25-object-event"/>
+</s:when>
+<s:when b:test="@c:obj_type = 'task'">
+<s:task b:action="addclass" b:value="s25-object"/>
+</s:when>
+</s:choose>
+</s:if>
+</s:event>
+<s:event b:on="mouseenter">
+<s:choose>
+<s:when b:test="(@c:obj_type = 'space' and string(id('FLS_SPACE_LIST'))='N') or  (@c:obj_type = 'resource' and string(id('FLS_RESOURCE_LIST'))='N')">
+<s:task b:action="hide" b:target=".//b:tooltip/html()"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="show" b:target=".//b:tooltip/html()"/>
+<s:task b:action="hide" b:target="id('S25Object_ContextMenu_Space')"/>
+<s:task b:action="hide" b:target="id('S25Object_ContextMenu_Resource')"/>
+<s:task b:action="hide" b:target="id('S25Object_ContextMenu_Event')"/>
+<s:super/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="rmbclick" b:bubble="false">
+<s:if b:test="not(@c:obj_type = 'space' and string(id('FLS_SPACE_LIST'))='N') and  not(@c:obj_type = 'resource' and string(id('FLS_RESOURCE_LIST')) = 'N') and (not(@c:obj_action) or @c:obj_action = 'view')">
+<s:task b:action="hide" b:target=".//b:tooltip/html()"/>
+<s:task b:action="remove" b:target="//html()//div[@class='eventBox']"/>
+<s:variable b:name="lDetailContextMenu" b:select=""/>
+<s:choose>
+<s:when b:test="@c:obj_type = 'space'">
+<s:task b:action="assign" b:target="$lDetailContextMenu" b:select="id('S25Object_ContextMenu_Space')"/>
+</s:when>
+<s:when b:test="@c:obj_type = 'resource'">
+<s:task b:action="assign" b:target="$lDetailContextMenu" b:select="id('S25Object_ContextMenu_Resource')"/>
+</s:when>
+<s:when b:test="@c:obj_type = 'event'">
+<s:task b:action="assign" b:target="$lDetailContextMenu" b:select="id('S25Object_ContextMenu_Event')"/>
+</s:when>
+</s:choose>
+<s:task b:action="assign" b:scope="tag" b:target="$lDetailContextMenu/$tCurrentObjRef" b:select="."/>
+<s:task b:action="select" b:target="$lDetailContextMenu"/>	
+<s:task b:action="position" b:type="place" b:target="$lDetailContextMenu" b:destination="." b:position="at-pointer"/>
+</s:if>
+</s:event>
+<s:event b:on="rmbdown" b:bubble="false"/>
+<s:event b:on="rmbup" b:bubble="false"/>
+<s:event b:on="command">
+<s:if b:test="not(@c:obj_type = 'space' and string(id('FLS_SPACE_LIST'))='N') and  not(@c:obj_type = 'resource' and string(id('FLS_RESOURCE_LIST'))='N')">
+<s:variable b:name="lObj" b:scope="local" b:select="."/>
+<s:variable b:name="lastObjType" b:select="string(id('Controller')/$tInbox/selected_obj/@obj_type)"/>
+<s:variable b:name="lastObjId" b:select="string(id('Controller')/$tInbox/selected_obj/@obj_id)"/>
+<s:variable b:name="lastTaskType" b:select="string(id('Controller')/$tInbox/selected_obj/@task_type)"/>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="{$lObj/@c:obj_type}" obj_id="{$lObj/@c:obj_id}" task_type="{$lObj/@c:task_type}"/>
+</s:with>
+<s:choose>
+<s:when b:test="$lObj/@c:obj_action='reserve'">
+<s:variable b:name="lDateRestriction" b:select="'false'"/>
+<s:if b:test="not(string-length($lObj/@c:start_dt) = 0)">
+<s:variable b:name="lEarliestEventCreationDate" b:select="s25_format_date(id('Prefs')/$tEarliestEventCreationDate, 'yyyyMMdd')"/>
+<s:variable b:name="lStartDate" b:select="s25_format_date(number($lObj/@c:start_dt), 'yyyyMMdd')"/>
+<s:if b:test="number($lEarliestEventCreationDate) gt number($lStartDate)">
+<s:task b:action="assign" b:target="$lDateRestriction" b:select="'true'"/>
+</s:if>
+</s:if>
+<s:choose>
+<s:when b:test="$lDateRestriction = 'true'">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('DateRestrictionModal')))" b:action="trigger" b:event="RenderDateRestrictionModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('DateRestrictionModal')"/>
+</s:when>
+<s:otherwise>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt mode="reserve" start_dt="{$lObj/@c:start_dt}" end_dt="{$lObj/@c:end_dt}" start_hr="{$lObj/@c:hour}" start_time="{$lObj/@c:start_time}" end_time="{$lObj/@c:end_time}" obj_name="{$lObj/@c:obj_name}" obj_formal_name="{$lObj/@c:obj_formal_name}" headcount="{$lObj/@c:headcount}" space_id="{$lObj/@space_id}" resource_id="{$lObj/@resource_id}"/>
+</s:with>
+<s:task b:target="id('Controller')" b:action="trigger" b:event="ReserveObject"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:when b:test="$lObj/@c:obj_action='edit'">
+<s:choose>
+<s:when b:test="id('layout-tabbox-groups')/div[@c:purpose='rsrvwiz']/b:deck/div[@c:purpose='rsrvwiz_edit']/b:deck/div[@c:purpose = concat('rsrvwiz_edit_event_', $lObj/@c:obj_id)]">
+<s:task b:action="trigger" b:event="Select" b:target="id('layout-tabbox-groups')/div[@c:purpose='rsrvwiz']/b:deck/div[@c:purpose='rsrvwiz_edit']/b:deck/div[@c:purpose = concat('rsrvwiz_edit_event_', $lObj/@c:obj_id)]"/>
+</s:when>
+<s:otherwise>
+<s:variable b:scope="local" b:name="lOLSAccessLevel" b:select="'N'"/>
+<s:variable b:scope="local" b:name="lProfileCount" b:select="'999'"/>
+<s:variable b:scope="local" b:name="lEventState" b:select="'3'"/>
+<s:variable b:scope="local" b:name="lHasAlienUID" b:select="'T'"/>
+<s:variable b:scope="local" b:name="lEventType" b:select="''"/>					
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'event_ols.xml',  '?event_id=',$lObj/@c:obj_id,  '&amp;otransform=',id('Config')/$tXslPrefix,'event_edit_check.xsl')}" b:destination="." b:mode="aslastchild"/>
+<s:variable b:name="lEditAlienOK" b:scope="local" b:select="'T'"/>
+<s:if b:test="$lHasAlienUID = 'T'">
+<s:variable b:name="lResult" b:scope="local" b:select=""/>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'evtype.xml','?type_id=', $lEventType,'&amp;scope=extended&amp;include=rules')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$lResult" b:mode="replace" b:showloading="false"/>							
+<s:task b:action="string2xml" b:variable="$lResult"/>
+<s:if b:test="count($lResult//r25:inheritance_rules[r25:inherit_item = 'Vcal']) = 0 or string($lResult//r25:inheritance_rules[r25:inherit_item = 'Vcal']/r25:vcal) = 'L'">
+<s:variable b:name="lEventResult" b:scope="local" b:select=""/>
+<s:variable b:name="lEventUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'event.xml','?event_id=', id('Controller')/$tInbox/selected_obj/@obj_id, '&amp;scope=extended&amp;include=workflow')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lEventUrl}" b:destination="$lEventResult" b:mode="replace" b:showloading="false"/>
+<s:task b:action="string2xml" b:variable="$lEventResult"/>
+<s:if b:test="$lEventResult//r25:todo[r25:todo_type = '103']/r25:cur_todo_state = '2' or $lEventResult//r25:todo[r25:todo_type = '100']/r25:cur_todo_state = '2'">
+<s:task b:action="assign" b:target="$lEditAlienOK" b:select="'F'"/>
+</s:if>
+</s:if>
+</s:if>
+<s:choose>
+<s:when b:test="not($lOLSAccessLevel = 'F' or $lOLSAccessLevel = 'C')">
+<s:task b:action="alert" b:value="Sorry, you do not have permission to edit this event."/>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="{$lastObjType}" obj_id="{$lastObjId}" task_type="{$lastTaskType}"/>
+</s:with>
+</s:when>
+<s:when b:test="$lEventState = '99' and not(id('FLS_EVENT_STATE')='F')">
+<s:task b:action="alert" b:value="You do not have permission to edit events that have been Cancelled."/>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="{$lastObjType}" obj_id="{$lastObjId}" task_type="{$lastTaskType}"/>
+</s:with>
+</s:when>
+<s:when b:test="$lEventState = '98' and not(id('FLS_EVENT_STATE')='F')">
+<s:task b:action="alert" b:value="You do not have permission to edit events that have been Denied."/>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="{$lastObjType}" obj_id="{$lastObjId}" task_type="{$lastTaskType}"/>
+</s:with>
+</s:when>
+<s:when b:test="$lEventState = '3' and not(id('FLS_EVENT_STATE')='F')">
+<s:task b:action="alert" b:value="You do not have permission to edit events that have been Sealed."/>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="{$lastObjType}" obj_id="{$lastObjId}" task_type="{$lastTaskType}"/>
+</s:with>
+</s:when>
+<s:when b:test="$lEditAlienOK = 'F'">
+<s:task b:action="alert" b:value="This event originated in your SIS and cannot be edited in 25Live."/>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="{$lastObjType}" obj_id="{$lastObjId}" task_type="{$lastTaskType}"/>
+</s:with>							
+</s:when>
+<s:otherwise>
+<s:variable b:name="lEventID" b:scope="local" b:select="string($lObj/@c:obj_id)"/>
+<s:variable b:name="lLockResult" b:scope="local" b:select="''"/>
+<s:choose>
+<s:when b:test="exists(id('LockedEvents')/lock[@event_id = $lEventID])">
+<s:task b:action="assign" b:target="$lLockResult" b:select="'LockExists'"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="LockEvent" b:target="id('Controller')"/>
+</s:otherwise>
+</s:choose>
+<s:choose>
+<s:when b:test="$lLockResult = 'LockConflict'">
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="{$lastObjType}" obj_id="{$lastObjId}" task_type="{$lastTaskType}"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt mode="edit" profile_count="{$lProfileCount}" profile_id=""/>
+</s:with>
+<s:task b:target="id('Controller')" b:action="trigger" b:event="EditEvent"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:when b:test="$lObj/@c:obj_action='clone'">
+<s:task b:target="id('Controller')" b:action="trigger" b:event="CloneEvent"/>
+</s:when>			
+<s:when b:test="$lObj/@c:obj_action='cloneRelated'">
+<s:task b:target="id('Controller')" b:action="trigger" b:event="CloneRelated"/>
+</s:when>			
+<s:when b:test="$lObj/@c:obj_action='own'">
+<s:task b:target="id('Controller')" b:action="trigger" b:event="OwnEvent"/>
+</s:when>						
+<s:when b:test="$lObj/@c:obj_action='subscribe'">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('SubscribeModal')))" b:action="trigger" b:event="RenderSubscribeModal" b:target="id('Modals')"/>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="{$lObj/@c:obj_type}" obj_id="{$lObj/@c:obj_id}" obj_name="{$lObj/@c:obj_name}" obj_formal_name="{$lObj/@c:obj_formal_name}" start_dt="{$lObj/@c:start_dt}" end_dt="{$lObj/@c:end_dt}"/>
+</s:with>
+<s:task b:target="id('Controller')" b:action="trigger" b:event="SubscribeObject"/>
+</s:when>
+<s:when b:test="$lObj/@c:obj_action='publish'">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('PublishModal')))" b:action="trigger" b:event="RenderPublishModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="change" b:target="id('Publisher')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('PublishModal')"/>
+</s:when>
+<s:when b:test="$lObj/@c:obj_action='email'">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('EvDetailsEmailModal')))" b:action="trigger" b:event="RenderEvDetailsEmailModal" b:target="id('Modals')"/>
+<s:task b:action="trigger" b:event="change" b:target="id('EvDetailsEmail')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('EvDetailsEmailModal')"/>
+<s:task b:action="focus" b:target="id('EvDetailsEmail')/$tBody"/>
+</s:when>
+<s:when b:test="$lObj/@c:obj_action='enroll'">
+<s:if b:test="not(exists(id('Enroll')))">
+<s:render b:destination="//body[1]" b:mode="aslastchild">
+<b:window id="EnrollWindow" b:drag="false" b:dragconstraint="." b:resize="false" b:resizeconstraint="." b:windowbuttons="close">
+<s:event b:on="open">
+<s:task b:action="trigger" b:event="ShowShade" b:target="id('LayoutMgr')"/>
+<s:super/>
+</s:event>
+<s:event b:on="close">
+<s:task b:action="trigger" b:event="HideShade" b:target="id('LayoutMgr')"/>
+<s:super/>
+</s:event>
+<s:event b:on="deselect"/>
+<s:event b:on="inactive"/>
+<b:windowhead>Event Attendance</b:windowhead>
+<b:windowbody>
+<s25:enroll id="Enroll" c:event_id="{$lObj/@c:obj_id}" c:event_name="{$lObj/@c:obj_name}"/>
+</b:windowbody>
+</b:window>
+</s:render>
+</s:if>
+<s:variable b:name="lWinWidth" b:select="'700px'"/>
+<s:variable b:name="lWinLeft" b:select="'0px'"/>
+<s:script><![CDATA[
+
+var iBodyWidth = document.body.offsetWidth;
+var iWinWidth = _vars['lWinWidth'][0];
+iBodyWidth = parseInt(iBodyWidth);
+iWinWidth = parseInt(iWinWidth);
+var iWinLeft = Math.round((iBodyWidth - iWinWidth) / 2);
+bpc.setVariable('lWinLeft', [iWinLeft + "px"]);
+
+]]></s:script>
+<s:with b:target="id('EnrollWindow')">
+<s:setstyle b:left="{$lWinLeft}"/>
+</s:with>
+<s:with b:target="id('Enroll')">
+<s:task b:action="set" b:target="@c:event_id" b:value="{$lObj/@c:obj_id}"/>
+<s:task b:action="set" b:target="@c:event_name" b:value="{$lObj/@c:obj_name}"/>
+</s:with>
+<s:task b:action="show" b:target="id('EnrollWindow')"/>
+<s:task b:action="trigger" b:event="select" b:target="id('EnrollWindow')"/>
+<s:task b:action="trigger" b:event="change" b:target="id('Enroll')"/>
+</s:when>
+<s:when b:test="$lObj/@c:obj_action='pricing'">
+<s:task b:test="not(id('custom_modals_control')/*)" b:action="load" b:url="{concat('',s25live_ver(),'/app/modals.xml')}" b:destination="id('custom_modals_control')" b:mode="replacechildren"/>
+<s:task b:test="not(exists(id('PricingModal')))" b:action="trigger" b:event="RenderPricingModal" b:target="id('Modals')"/>
+<s:with b:target="id('Pricing')">
+<s:task b:action="set" b:target="@c:event_id" b:value="{$lObj/@c:obj_id}"/>
+<s:task b:action="set" b:target="@c:event_name" b:value="{$lObj/@c:obj_name}"/>
+<s:task b:action="set" b:target="@c:obj_type_id" b:value="{$lObj/@c:obj_type_id}"/>
+</s:with>				
+<s:task b:action="trigger" b:event="open" b:target="id('PricingModal')"/>
+<s:task b:action="focus" b:target="id('Pricing')/$tBody"/>
+</s:when>
+<s:otherwise>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt date="{$lObj/@c:date}" start_dt="{$lObj/@c:start_dt}" end_dt="{$lObj/@c:end_dt}"/>
+</s:with>
+<s:task b:action="trigger" b:target="id('LayoutMgr')" b:event="ViewObjectDetail"/>
+</s:otherwise>
+</s:choose>
+<s:if b:test="id('WSSessionMgr')/@c:logged-in='true'">
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="" obj_id="" date="" task_type="" profile_count="" profile_id=""/>
+</s:with>
+</s:if>
+</s:if>
+</s:event>
+</s:behavior>
+</div>

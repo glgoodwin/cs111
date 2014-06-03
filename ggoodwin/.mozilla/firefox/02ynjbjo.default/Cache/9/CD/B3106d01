@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" style="display:none;">
+<script type="text/javascript"><![CDATA[
+
+WSSessionMgr.prototype.set_renew = function(ms)
+{
+var timeoutMS = ( ms ) ? ms : 300000;
+this._iRenewId = window.setTimeout(function() {
+gWSSessionMgr.on_renew(); },
+timeoutMS);
+};
+WSSessionMgr.prototype.set_expire = function(ms)
+{
+var timeoutMS = ( ms ) ? ms : 900000;
+this._iExpireId = window.setTimeout(function() {
+gWSSessionMgr.on_expire(); },
+timeoutMS);
+};
+WSSessionMgr.prototype.on_renew = function()
+{
+window.clearTimeout(this._iRenewId);
+var aNodes = bpc.xpath("id('WSSessionMgr')");
+if ( aNodes instanceof Array ) {
+if ( aNodes.length > 0 ) {
+bpc.trigger('Renew',aNodes[0]);
+}
+}
+};
+WSSessionMgr.prototype.on_expire = function()
+{
+window.clearTimeout(this._iExpireId);
+var aNodes = bpc.xpath("id('WSSessionMgr')");
+if ( aNodes instanceof Array ) {
+if ( aNodes.length > 0 ) {
+bpc.trigger('Expire',aNodes[0]);
+}
+}
+};
+function WSSessionMgr() {
+this._iRenewId = -1;
+this._iExpireId = -1;
+};
+var gWSSessionMgr = new WSSessionMgr();
+
+]]></script>
+<div id="WSSessionMgr" c:purpose="WSSessionMgr" b:behavior="S25Data" c:logged-in="false" c:disable-signout="false" c:contact-id="" c:contact-name="" c:user-name="" c:security-group="" c:user-type="" c:auto-renew="false" c:auto-renew-ms="300000" c:auto-expire="false" c:auto-expire-ms="300000">
+<s:event b:on="construct">
+<s:super/>
+<s:setatt c:r25ws_prefix="{id('Config')/$tWsPrefix}"/>
+<s:variable b:name="tUsername" b:scope="tag" b:select=""/>
+<s:variable b:name="tPassword" b:scope="tag" b:select=""/>
+<s:variable b:name="tLoginUrl" b:scope="tag" b:select=""/>
+<s:variable b:name="tLogoutUrl" b:scope="tag" b:select=""/>
+</s:event>
+<s:event b:on="Logout">
+<s:if b:test="@c:logged-in eq 'true'">
+<s:task b:action="trigger" b:event="Reset" b:target="."/>
+<s:task b:action="assign" b:target="$tUsername" b:scope="tag" b:select="''"/>
+<s:task b:action="assign" b:target="$tPassword" b:scope="tag" b:select="''"/>
+<s:setatt c:logged-in="false" c:contact-id="" c:contact-name="" c:user-name="" c:user-type=""/>
+<s:choose>
+<s:when b:test="contains($tLogoutUrl,'redirect=')">
+<s:task b:action="trigger" b:event="_RemoteLogout" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="_R25WSLogout" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:if>
+</s:event>
+<s:event b:on="_R25WSLogout">
+<s:variable b:name="lResp" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'logout.xml')}" b:data="" b:destination="$lResp"/>
+<s:task b:action="assign" b:target="$tHttpStatus" b:scope="tag" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:task b:action="assign" b:target="$tDataStr" b:scope="tag" b:select="string(id('HttpMgr')/$tResponseText)"/>
+<s:if b:test="starts-with($tDataStr,'&lt;?')">
+<s:task b:action="trigger" b:event="DataToXml" b:target="."/>
+</s:if>
+<s:variable b:name="pEvent" b:scope="local" b:select=""/>
+<s:choose>
+<s:when b:test="$tHttpStatus eq 200">
+<s:task b:action="assign" b:target="$pEvent" b:scope="local" b:select="'LogoutSuccess'"/>
+<s:if b:test="not($tRaisedEvent = 'AutoExpire')">
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:if>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$pEvent" b:scope="local" b:select="'LogoutFailure'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="_RemoteLogout">
+<s:variable b:name="lRedirect" b:scope="local" b:select="string($tLogoutUrl)"/>
+<s:if b:test="string-length($lRedirect) ne 0">
+<s:script><![CDATA[
+var s = String(_vars['lRedirect'][0]);
+window.location=s;
+]]></s:script>
+</s:if>
+</s:event>
+<s:event b:on="Renew">
+<s:if b:test="@c:auto-renew eq 'true' and @c:logged-in eq 'true'">
+<s:variable b:name="pUsername" b:scope="local" b:select="$tUsername"/>
+<s:variable b:name="pPassword" b:scope="local" b:select="$tPassword"/>
+<s:task b:action="trigger" b:event="Login" b:target="."/>
+<s:variable b:name="pEvent" b:scope="local" b:select="'AutoRenew'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:if>
+</s:event>
+<s:event b:on="Expire">
+<s:if b:test="@c:auto-expire eq 'true' and @c:logged-in eq 'true'">
+<s:task b:action="trigger" b:event="Logout" b:target="."/>
+<s:variable b:name="pEvent" b:scope="local" b:select="'AutoExpire'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:if>
+</s:event>
+<s:event b:on="Login">
+<s:variable b:name="lUsername" b:scope="local" b:select="''"/>
+<s:if b:test="declared($pUsername)">
+<s:task b:action="assign" b:target="$lUsername" b:scope="local" b:select="$pUsername"/>
+</s:if>
+<s:task b:action="assign" b:target="$tUsername" b:scope="tag" b:select="$lUsername"/>
+<s:variable b:name="lPassword" b:scope="local" b:select="''"/>
+<s:if b:test="declared($pPassword)">
+<s:task b:action="assign" b:target="$lPassword" b:scope="local" b:select="$pPassword"/>
+</s:if>
+<s:task b:action="assign" b:target="$tPassword" b:scope="tag" b:select="$lPassword"/>
+<s:variable b:name="lResp" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'login.xml')}" b:data="" b:destination="$lResp"/>
+<s:task b:action="assign" b:target="$lResp" b:scope="local" b:select="id('HttpMgr')/$tResponseText"/>
+<s:script><![CDATA[
+var s = String(_vars['lResp'][0]);
+s = s.replace(/\s*<\?.*?\?>/,'');
+s = s.replace(/\s+&\s+/g,' &amp; ');
+bpc.setVariable('lResp',[s],'local');
+]]></s:script>
+<s:task b:action="string2xml" b:variable="$lResp"/>
+<s:task b:action="assign" b:target="$tHttpStatus" b:scope="tag" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:choose>
+<s:when b:test="$tHttpStatus eq 200 or $tHttpStatus eq 201">
+<s:task b:action="assign" b:target="$tLoginUrl" b:scope="tag" b:select="$lResp//r25:login/r25:login_url/text()"/>
+<s:choose>
+<s:when b:test="$lResp/r25:login_response/r25:login/r25:success/text() = 'T'">
+<s:variable b:name="lId" b:scope="local" b:select="$lResp//r25:login/r25:user_id/text()"/>
+<s:variable b:name="lType" b:scope="local" b:select="$lResp//r25:login/r25:user_type/text()"/>
+<s:variable b:name="lUName" b:scope="local" b:select="$lResp//r25:login/r25:username/text()"/>
+<s:variable b:name="lDisableSignOut" b:scope="local" b:select="string-length($lResp//r25:login/r25:logout_url/text()) = 0"/>
+<s:variable b:name="lCName" b:scope="local" b:select="$lResp/r25:login_response/r25:login/r25:contact_name/text()"/>
+<s:if b:test="contains($lCName,',')">
+<s:task b:action="assign" b:target="$lCName" b:scope="local" b:select="concat(substring-after($lCName,', '), ' ', substring-before($lCName,','))"/>
+</s:if>
+<s:variable b:name="lSecurityGroup" b:scope="local" b:select="$lResp/r25:login_response/r25:login/r25:security_group_id/text()"/>
+<s:setatt c:logged-in="true" c:contact-id="{$lId}" c:contact-name="{$lCName}" c:user-name="{$lUName}" c:security-group="{$lSecurityGroup}" c:user-type="{$lType}" c:disable-signout="{$lDisableSignOut}"/>
+<s:variable b:name="lConfigXml" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'config.xml')}" b:destination="$lConfigXml" b:mode="aslastchild"/>
+<s:task b:action="string2xml" b:variable="$lConfigXml"/>
+<s:setatt c:viewer-seat="{string($lConfigXml/r25:config/r25:server/r25:default_user_id)}"/>
+<s:task b:action="trigger" b:event="SessionExists" b:target="."/>
+<s:task b:action="assign" b:target="$tLogoutUrl" b:scope="tag" b:select="string($lResp//r25:login/r25:logout_url)"/>
+</s:when>
+<s:when b:test="contains($tLoginUrl, 'login.shibboleth')">
+<s:variable b:name="lShib" b:scope="local" b:select=""/>
+<s:script><![CDATA[
+var c = document.cookie;
+if (/_shibsession_/.test(c)) {
+bpc.setVariable('lShib','Y','local');
+}
+]]></s:script>
+<s:choose>
+<s:when b:test="$lShib = 'Y'">
+<s:task b:action="load" b:method="GET" b:url="{$tLoginUrl}" b:data="" b:destination="$lResp"/>
+<s:task b:action="assign" b:target="$lResp" b:scope="local" b:select="id('HttpMgr')/$tResponseText"/>
+<s:script><![CDATA[
+var s = String(_vars['lResp'][0]);
+s = s.replace(/\s*<\?.*?\?>/,'');
+s = s.replace(/\s+&\s+/g,' &amp; ');
+bpc.setVariable('lResp',[s],'local');
+]]></s:script>
+<s:task b:action="string2xml" b:variable="$lResp"/>
+<s:task b:action="assign" b:target="$tHttpStatus" b:scope="tag" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:choose>
+<s:when b:test="($tHttpStatus eq 200 or $tHttpStatus eq 201) and ($lResp/r25:login_response/ r25:login/r25:success/text() = 'T')">
+<s:variable b:name="lId" b:scope="local" b:select="$lResp/r25:login_response/ r25:login/r25:user_id/text()"/>
+<s:variable b:name="lType" b:scope="local" b:select="$lResp/r25:login_response/r25:login/r25:user_type/text()"/>
+<s:variable b:name="lUName" b:scope="local" b:select="$lResp/r25:login_response/ r25:login/r25:username/text()"/>
+<s:variable b:name="lDisableSignOut" b:scope="local" b:select="string-length($lResp/r25:login_response/r25:login/r25:logout_url/text()) = 0"/>
+<s:variable b:name="lCName" b:scope="local" b:select="$lResp/r25:login_response/ r25:login/r25:contact_name/text()"/>
+<s:if b:test="contains($lCName,',')">
+<s:task b:action="assign" b:target="$lCName" b:scope="local" b:select="concat(substring-after($lCName,', '), ' ',  substring-before($lCName,','))"/>
+</s:if>
+<s:variable b:name="lSecurityGroup" b:scope="local" b:select="$lResp/r25:login_response/r25:login/r25:security_group_id/text()"/>
+<s:task b:action="assign" b:target="$tLogoutUrl" b:scope="tag" b:select="string($lResp//r25:logout_url[1])"/>
+<s:setatt c:logged-in="true" c:contact-id="{$lId}" c:contact-name="{$lCName}" c:user-name="{$lUName}" c:security-group="{$lSecurityGroup}" c:user-type="{$lType}" c:disable-signout="{$lDisableSignOut}"/>
+<s:variable b:name="lConfigXml" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'config.xml')}" b:destination="$lConfigXml" b:mode="aslastchild"/>
+<s:task b:action="string2xml" b:variable="$lConfigXml"/>
+<s:setatt c:viewer-seat="{string($lConfigXml/r25:config/r25:server/r25:default_user_id)}"/>
+<s:task b:action="trigger" b:event="SessionExists" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:setatt c:logged-in="false" c:contact-id="" c:contact-name="" c:user-name=""/>
+<s:variable b:name="lErrorUrl" b:scope="local" b:select="string($lResp//r25:error_url[1])"/>
+<s:choose>
+<s:when b:test="string-length($lErrorUrl) ne 0">
+<s:script><![CDATA[
+var s = String(_vars['lErrorUrl'][0]);
+window.location=s;
+]]></s:script>
+</s:when>
+<s:otherwise>
+<s:variable b:name="pEvent" b:scope="local" b:select="'RemoteLoginFailure'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:setatt c:logged-in="false" c:contact-id="" c:contact-name="" c:user-name="" c:security-group=""/>
+<s:variable b:name="pEvent" b:scope="local" b:select="'LoginFailure'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:when b:test="contains($tLoginUrl, 'login.cas?SSO')">
+<s:variable b:name="lRedirect" b:scope="local" b:select="string($tLoginUrl)"/>
+<s:script><![CDATA[
+var s = String(_vars['lRedirect'][0]);
+s=s+"&redirect="+window.location;
+window.location=s;
+]]></s:script>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="not(string-length($tPassword)=0) and not(string-length($tUsername)=0)">
+<s:task b:action="trigger" b:event="CreateSession" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="pEvent" b:scope="local" b:select="'LoginFailure'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:setatt c:logged-in="false" c:contact-id="" c:contact-name="" c:user-name="" c:security-group=""/>
+<s:variable b:name="pEvent" b:scope="local" b:select="'LoginFailure'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="SessionExists">
+<s:if b:test="@c:auto-renew = 'true'">
+<s:variable b:name="ms" b:scope="local" b:select="number(@c:auto-renew-ms)"/>
+<s:script><![CDATA[
+
+var ms = Number(_vars['ms'][0]);
+gWSSessionMgr.set_renew(ms);
+
+]]></s:script>
+</s:if>
+<s:if b:test="@c:auto-expire = 'true'">
+<s:variable b:name="ms" b:scope="local" b:select="number(@c:auto-expire-ms)"/>
+<s:script><![CDATA[
+
+var ms = Number(_vars['ms'][0]);
+gWSSessionMgr.set_expire(ms);
+
+]]></s:script>
+</s:if>
+<s:if b:test="not($tRaisedEvent = 'AutoRenew')">
+<s:variable b:name="pEvent" b:scope="local" b:select="'LoginSuccess'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:if>
+</s:event>
+<s:event b:on="CreateSession">
+<s:variable b:name="lChallenge" b:scope="local" b:select="string($lResp/r25:login_challenge/r25:login/r25:challenge/text())"/>
+<s:variable b:name="lUser" b:scope="local" b:select="string($tUsername)"/>
+<s:variable b:name="lPass" b:scope="local" b:select="string($tPassword)"/>
+<s:variable b:name="lResponse" b:scope="local" b:select=""/>
+<s:choose>
+<s:when b:test="substring($lChallenge,1,6) = 'Basic '">
+<s:script><![CDATA[
+
+var user = _vars['lUser'][0];
+var pass = _vars['lPass'][0];
+var b64 = binl2b64(str2binl(user+':'+pass));
+b64 = 'Basic ' + b64;
+bpc.setVariable('lResponse',[b64],'local');
+
+]]></s:script>
+</s:when>
+<s:otherwise>
+<s:script><![CDATA[
+
+var pass = _vars['lPass'][0];
+var challenge = _vars['lChallenge'][0];
+var hexMD5 = hex_md5(hex_md5(pass)+':'+challenge);
+bpc.setVariable('lResponse',[hexMD5],'local');
+
+]]></s:script>
+</s:otherwise>
+</s:choose>
+<s:task b:action="settext" b:target="$lResp/r25:login_challenge/r25:login/r25:challenge" b:value=""/>
+<s:task b:action="settext" b:target="$lResp/r25:login_challenge/r25:login/r25:username" b:value="{$lUser}"/>
+<s:task b:action="settext" b:target="$lResp/r25:login_challenge/r25:login/r25:response" b:value="{$lResponse}"/>
+<s:variable b:name="lData" b:scope="local" b:select="$lResp"/>
+<s:task b:action="xml2string" b:variable="$lData"/>
+<s:if b:test="not(starts-with($lData,'&lt;?'))">
+<s:task b:action="assign" b:target="$lData" b:scope="local" b:select="concat('&lt;?xml version=&#34;1.0&#34;?&gt;',$lData)"/>
+</s:if>
+<s:task b:action="load" b:method="POST" b:url="{concat(id('Config')/$tWsPrefix,'login.xml')}" b:data="{$lData}" b:destination="$lResp">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="assign" b:target="$tHttpStatus" b:scope="tag" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:task b:action="assign" b:target="$lResp" b:scope="local" b:select="id('HttpMgr')/$tResponseText"/>
+<s:script><![CDATA[
+
+var s = String(_vars['lResp'][0]);
+s = s.replace(/\s*<\?.*?\?>/,'');
+s = s.replace(/\s+&\s+/g,' &amp; ');
+bpc.setVariable('lResp',[s],'local');
+
+]]></s:script>
+<s:task b:action="string2xml" b:variable="$lResp"/>
+<s:choose>
+<s:when b:test="$tHttpStatus eq 200 or $tHttpStatus eq 201">
+<s:if b:test="$lResp/r25:login_response/r25:login/r25:success = 'T'">
+<s:variable b:name="lId" b:scope="local" b:select="$lResp/r25:login_response/r25:login/r25:user_id/text()"/>
+<s:variable b:name="lType" b:scope="local" b:select="$lResp/r25:login_response/r25:login/r25:user_type/text()"/>
+<s:variable b:name="lUName" b:scope="local" b:select="$lResp/r25:login_response/r25:login/r25:username/text()"/>
+<s:variable b:name="lDisableSignOut" b:scope="local" b:select="string-length($lResp/r25:login_response/r25:login/r25:logout_url/text()) = 0"/>
+<s:variable b:name="lCName" b:scope="local" b:select="$lResp//r25:login/r25:contact_name/text()"/>
+<s:if b:test="contains($lCName,',')">
+<s:task b:action="assign" b:target="$lCName" b:scope="local" b:select="concat(substring-after($lCName,', '), ' ', substring-before($lCName,','))"/>
+</s:if>
+<s:variable b:name="lSecurityGroup" b:scope="local" b:select="$lResp/r25:login_response/r25:login/r25:security_group_id/text()"/>
+<s:setatt c:logged-in="true" c:contact-id="{$lId}" c:contact-name="{$lCName}" c:user-name="{$lUName}" c:security-group="{$lSecurityGroup}" c:user-type="{$lType}" c:disable-signout="{$lDisableSignOut}"/>
+<s:variable b:name="lConfigXml" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'config.xml')}" b:destination="$lConfigXml" b:mode="aslastchild"/>
+<s:task b:action="string2xml" b:variable="$lConfigXml"/>
+<s:setatt c:viewer-seat="{string($lConfigXml/r25:config/r25:server/r25:default_user_id)}"/>
+<s:task b:action="assign" b:target="$tLogoutUrl" b:scope="tag" b:select="string($lResp//r25:logout_url[1])"/>
+<s:if b:test="@c:auto-renew = 'true'">
+<s:variable b:name="ms" b:scope="local" b:select="number(@c:auto-renew-ms)"/>
+<s:script><![CDATA[
+
+var ms = Number(_vars['ms'][0]);
+gWSSessionMgr.set_renew(ms);
+
+]]></s:script>
+</s:if>
+<s:if b:test="@c:auto-expire = 'true'">
+<s:variable b:name="ms" b:scope="local" b:select="number(@c:auto-expire-ms)"/>
+<s:script><![CDATA[
+
+var ms = Number(_vars['ms'][0]);
+gWSSessionMgr.set_expire(ms);
+
+]]></s:script>
+</s:if>
+<s:if b:test="not($tRaisedEvent = 'AutoRenew')">
+<s:variable b:name="pEvent" b:scope="local" b:select="'LoginSuccess'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:if>
+</s:if>
+</s:when>
+<s:otherwise>
+<s:setatt c:logged-in="false" c:contact-id="" c:contact-name="" c:user-name="" c:security-group="" c:user-type=""/>
+<s:variable b:name="pEvent" b:scope="local" b:select="'LoginFailure'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="GetContact">
+<s:if b:test="not(string-length(@c:contact-id) = 0)">
+<s:setatt c:query="{concat('contact.xml', '?contact_id=',@c:contact-id)}"/>
+<s:task b:action="trigger" b:event="Load" b:target="."/>
+</s:if>
+</s:event>
+</div>
+</div>

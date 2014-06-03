@@ -1,0 +1,9 @@
+{states}
+s, A, B, C, D, F
+{start state}
+s
+{accepting states}
+F
+{transitions}
+s, % -> A; A, 0 -> B; B, 000 -> A; A, 11 -> A; C, 111 -> A; B, 01 -> C; B, 00 ->
+ B; B, % -> F; D, % -> F; A, % -> F; C, 10 -> D

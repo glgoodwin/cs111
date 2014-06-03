@@ -1,0 +1,16 @@
+; SUM4: renames Z to N in SUM3
+(fobs (n lo hi)
+  (funrec (sum-loop lo 0)
+    (def (multiple? x) (= 0 (rem x)))
+    (def (rem y) (% y n))
+    (def (sum-loop i sum)
+      (funrec (if (> i  hi)
+                  sum
+                  (sum-loop (+ i 1) (new-sum i)))
+        (def (new-sum n) (if (multiple? n) (inc n) sum))
+        (def (inc w) (+ sum w))))))
+
+
+
+
+

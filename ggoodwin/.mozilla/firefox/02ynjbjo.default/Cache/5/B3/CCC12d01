@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" xmlns:s25="http://www.collegenet.com/s25" xmlns:bx="http://www.collegenet.com/bx" style="display:none;">
+<s:htmlstructure b:name="s25:rsrv_wiz_custom_attr" b:behavior="S25RsrvWizEditor::CustomAttr">
+<div><s:innercontent/></div>
+</s:htmlstructure>
+<s:behavior b:name="S25RsrvWizEditor::CustomAttr" b:behavior="S25RsrvWizEditor">
+<s:initatt c:purpose="custom_attr" c:crumb="..."/>
+<s:event b:on="s25-focus">
+</s:event>		
+<s:event b:on="construct">
+<s:super/>
+<s:task b:action="show" b:target=".//div[@c:purpose='attributeContainer'][@c:required='true']//span[@class='required']"/>
+</s:event>
+<s:event b:on="PaintControl">
+
+<s:variable b:name="tHasIndividualRequireds" b:scope="tag" b:select="'false'"/>
+<s:variable b:name="tCurrObjName" b:scope="tag" b:select=""/>
+<s:variable b:name="tCurrObjId" b:scope="tag" b:select=""/>
+<s:variable b:name="tCurrObjType" b:scope="tag" b:select=""/>
+<s:variable b:name="tAtrbXsl" b:scope="tag" b:select=""/>
+<s:variable b:name="tEventMasterListFLS" b:scope="tag" b:select="id('FLS_ML_EVENT')"/>
+<s:variable b:name="tEarliestDate" b:scope="tag" b:select="id('Prefs')/$tEarliestDate"/>
+<s:variable b:name="tLatestDate" b:scope="tag" b:select="id('Prefs')/$tLatestDate"/>
+<s:variable b:name="tEarliestSortValue" b:scope="tag"/>
+<s:variable b:name="tLatestSortValue" b:scope="tag"/>
+<s:script><![CDATA[
+
+bpc.setVariable('tEarliestSortValue', [s25_format_date(_vars['tEarliestDate'][0], 'yyyyMMdd')], 'tag', _current);
+bpc.setVariable('tLatestSortValue', [s25_format_date(_vars['tLatestDate'][0], 'yyyyMMdd')], 'tag', _current);
+
+]]></s:script>
+<s:variable b:name="lPattern" b:scope="local" b:select="id('Prefs')/$tDatePattern"/>
+<s:variable b:name="tStartDpVal" b:scope="" b:select=""/>
+<s:variable b:name="tStartDpSortVal" b:scope="" b:select=""/>
+<s:script><![CDATA[
+
+var sPat = _vars['lPattern'][0];
+var oDt = new Date();
+oDt.setMinutes(0,0,0);
+bpc.setVariable('tStartDpVal',[s25_format_date(oDt,sPat)],'tag');
+bpc.setVariable('tStartDpSortVal',[s25_format_date(oDt,'yyyyMMdd')],'tag');
+
+]]></s:script>
+<s:render b:destination="$tContent" b:mode="replacechildren">
+<div class="contentHeader">
+<span class="tooltipMarker">
+<bx:tooltip class="bxTooltipNoIcon" b:delay="5"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v22.0/gfx/_.gif" class="iconHelp"/>
+</span>
+<div c:id="title"><s:textnode b:label="{@c:title}"/></div>
+</div>
+<div class="contentOptions">
+<div c:purpose="custom_atrb"/>
+</div>
+</s:render>
+<s:render b:destination="$tContent/div[1]/span[1]/bx:tooltip" b:mode="replacechildren"><div xmlns="">Custom attributes are available only after you&apos;ve specified the event type. Some event types may not use custom attributes. Some or all custom attributes may be required before you can save the event.</div><div xmlns="">Check the box next to an attribute name to select it for the event, then provide the appropriate value.</div><div xmlns="">To remove a custom attribute from the event, uncheck the box next to the attribute name.</div><div xmlns="">You may need to scroll down to see all options.</div><div xmlns="">You can expand or collapse any custom attribute by clicking the +/- toggle on the right.</div></s:render>
+</s:event>
+<s:event b:on="Reset">
+<s:variable b:name="lEvID" b:scope="local" b:select="1"/>
+<s:if b:test="$tEvWiz/@c:mode = 'edit'">
+<s:task b:action="assign" b:target="lEvID" b:scope="local" b:select="$tEvWiz/@c:event_id"/>
+</s:if>
+<s:variable b:name="lSavedEvType" b:scope="local" b:select="$tEvWiz/$tEvent//r25:event_type_id"/>
+<s:variable b:name="lSelectedEvType" b:scope="local" b:select="$lSavedEvType"/>
+<s:task b:test="exists($tEvWiz/$tDeck//s25:rsrv_wiz_type)" b:action="assign" b:target="$lSelectedEvType" b:scope="local" b:select="$tEvWiz/$tDeck//s25:rsrv_wiz_type/$tLastSelectedTypeID"/>
+<s:variable b:name="lEvType" b:scope="local" b:select="$lSavedEvType"/>
+<s:task b:test="string-length($lSelectedEvType) gt 0" b:action="assign" b:target="$lEvType" b:scope="local" b:select="$lSelectedEvType"/>
+<s:setatt c:event_type="{$lEvType}"/>
+<s:variable b:name="lTypeAtrbsUrl" b:scope="local" b:select="concat($tEvWiz/@c:r25ws_prefix,'evtype.xml', '?type_id=',$lEvType, '&amp;scope=extended','&amp;include=attributes+rules')"/>
+<s:variable b:name="tTypeAtrbs" b:scope="tag" b:select=""/>
+<s:task b:action="load" b:url="{$lTypeAtrbsUrl}" b:method="GET" b:destination="$tTypeAtrbs" b:mode="replace" b:showloading="true"/>
+<s:task b:action="string2xml" b:variable="$tTypeAtrbs"/>
+<s:variable b:name="tAtrbRule" b:scope="tag" b:select="string($tTypeAtrbs/r25:event_types/r25:event_type/ r25:inheritance_rules[r25:inherit_item='CustAtrb']/r25:local_edit)"/>
+<s:variable b:name="tNamespace" b:scope="tag" b:select="string('xmlns:xl=&#34;http://www.w3.org/1999/xlink&#34; xmlns:xsl=&#34;http://www.w3.org/1999/XSL/Transform&#34;  xmlns:b=&#34;http://www.backbase.com/b&#34; xmlns:s=&#34;http://www.backbase.com/s&#34; xmlns:c=&#34;http://www.collegenet.com/c&#34; xmlns:r25=&#34;http://www.collegenet.com/r25&#34; xmlns:s25=&#34;http://www.collegenet.com/s25&#34; xmlns:xhtml=&#34;http://www.w3.org/1999/xhtml&#34;')"/>
+<s:variable b:name="tRequiredAtrbs" b:scope="tag" b:select="$tEvWiz/$tPrefXml//editor[@name='ev_custom_attr']/ required_attributes"/>
+<s:task b:action="string2xml" b:variable="$tRequiredAtrbs"/>
+<s:variable b:name="lPrefNames">
+<prefs>
+<name>config_ev_cust_atrb_wizard</name>
+</prefs>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lPrefNames"/>
+<s:for-each b:target="$lPrefNames/prefs/name">
+<s:if b:test="exists(id(concat('Pref_',string($_target))))">
+<s:task b:action="remove" b:target="$_target"/>
+</s:if>
+</s:for-each>
+<s:if b:test="count($lPrefNames/prefs/name) gt 0">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=', string-join($lPrefNames/prefs/name, '+'))"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild"/>
+</s:if>						
+<s:setatt c:required="false"/>
+<s:task b:test="not(@c:init = '1')" b:action="trigger" b:event="PaintControl" b:target="."/>
+<s:variable b:name="lFavContactsText" b:select="'Your Starred Contacts'"/>
+<s:if b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavContactsText" b:select="'Suggested Contacts'"/>
+</s:if>
+<s:variable b:name="lFavOrgsText" b:select="'Your Starred Organizations'"/>
+<s:if b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavOrgsText" b:select="'Suggested Organizations'"/>
+</s:if>
+<s:variable b:name="lFavLocationsText" b:select="'Your Starred Locations'"/>
+<s:if b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavLocationsText" b:select="'Suggested Locations'"/>
+</s:if>
+<s:variable b:name="lFavResourcesText" b:select="'Your Starred Resources'"/>
+<s:if b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavResourcesText" b:select="'Suggested Resources'"/>
+</s:if>
+<s:variable b:name="lLoading" b:select="'Loading...'"/>
+<s:variable b:name="lSearch" b:select="'Search'"/>
+<s:variable b:name="lFindBy" b:select="'Find by...'"/>
+<s:variable b:name="lNoneSelected" b:select="'none selected'"/>
+<s:choose>
+<s:when b:test="not($tEvWiz/@c:mode = 'edit')">
+<s:task b:action="trigger" b:event="Load_new" b:target="."/>
+</s:when>
+<s:when b:test="$tEvWiz/@c:mode = 'edit' and not($lSavedEvType = $lSelectedEvType)">
+<s:task b:action="trigger" b:event="Load_new" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="Load_existing" b:target="."/>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lIndividualRequireds" b:scope="local" b:select="'false'"/>
+<s:with b:target=".//div[@c:purpose='attributeContainer'][@c:obj_id = $tRequiredAtrbs//attribute/@id]">
+<s:task b:action="trigger" b:event="Require"/>
+<s:with b:target="$tEvWiz/$tCrumbContainer//s25:rsrv_wiz_crumb/div/div[@c:name='ev_custom_attr']/div[@c:id='flag']">
+<s:setatt class="s25rsrvwiz-crumb-flag-required"/>
+</s:with>
+<s:task b:action="assign" b:target="$lIndividualRequireds" b:select="'true'"/>
+</s:with>
+<s:if b:test="$lIndividualRequireds = 'true'">
+<s:setatt c:required="false"/>
+<s:task b:action="assign" b:target="$tHasIndividualRequireds" b:select="'true'"/>
+</s:if>
+<s:variable b:name="lMessage" b:scope="local" b:select="string($tEvWiz/$tEvent//r25:custom_attribute[string-length(@message &gt; 0)]/@message)"/>
+<s:if b:test="string-length($lMessage) = 0">
+<s:task b:action="assign" b:target="$lMessage" b:select="string(@c:message)"/>
+</s:if>			
+<s:render b:test="not(string-length($lMessage) = 0)" b:destination="$tContent//div[@class='contentOptions']" b:mode="before">
+<div class="contentMessage"><s:textnode b:label="{$lMessage}"/></div>
+</s:render>
+<s:variable b:name="lEditorSupplementaryText" b:select="ancestor::div[@b:behavior='S25RsrvWizCard']/$tEditor[@name='ev_custom_attr']/info"/>
+<s:task b:action="xml2string" b:variable="$lEditorSupplementaryText"/>
+<s:if b:test="not(string-length($lEditorSupplementaryText) = 0) and not(div[@c:id='container']//div[@class='contentMessage'])">
+<s:script><![CDATA[
+
+var lText = _vars['lEditorSupplementaryText'][0];
+lText = lText.replace(/&lt;/g, '<');
+lText = lText.replace(/&gt;/g, '>');
+var destination = "div[@c:id='container']/div[@c:id='content']//div[@class='contentOptions']";
+bpc.render('<div class="contentMessage">' + lText + '</div>', 'before', destination, _current);
+
+]]></s:script>
+</s:if>
+</s:event>
+<s:event b:on="select">
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode='edit' and not($tEvWiz/$tEvent)">
+</s:when>
+<s:otherwise>
+<s:super/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveRsrvWizard">
+<s:variable b:name="lEvent" b:scope="local" b:select="$tEvWiz/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent='LoadSuccess'">
+<s:task b:test="not(@c:init = '1')" b:action="trigger" b:event="select"/>
+</s:when>
+<s:when b:test="$lEvent='TypeChange'">
+<s:task b:action="trigger" b:event="_Init"/>
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="Load_new">
+<s:choose>
+<s:when b:test="string-length($lEvType) = 0">
+<s:with b:target="$tContent/div/div[@c:purpose='custom_atrb']">
+<s:render b:destination="." b:mode="replacechildren">
+<div align="center">You must first select an Event Type.</div>
+</s:render>
+</s:with>
+</s:when>
+<s:when b:test="string($tAtrbRule) = 'T'">
+<s:variable b:name="lAtrbs" b:scope="local" b:select=""/>
+<s:variable b:name="lAtrbs" b:scope="local" b:select=""/>
+<s:variable b:name="lResults" b:scope="local" b:select=""/>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat($tEvWiz/@c:r25ws_prefix,'evatrb.xml')"/>
+<s:if b:test="not($tEventMasterListFLS = 'F' or $tEventMasterListFLS = 'C')">
+<s:variable b:name="lPrefAttributeList" b:scope="local" b:select="id('Pref_config_ev_cust_atrb_wizard')"/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'?filter_list=',$lPrefAttributeList, '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/custom_attr_filter.xsl')"/>
+</s:if>
+<s:task b:action="load" b:url="{$lUrl}" b:method="GET" b:destination="$lResults" b:mode="replace" b:showloading="true"/>
+<s:task b:action="string2xml" b:variable="$lResults"/>
+<s:task b:action="assign" b:target="$lAtrbs" b:select="$lResults/r25:event_custom_attributes"/>
+<s:task b:action="xml2string" b:variable="$lAtrbs"/>
+<s:task b:test="contains($lAtrbs, '?xml')" b:action="assign" b:target="$lAtrbs" b:select="substring-after($lAtrbs,'?&gt;')"/>
+<s:task b:action="assign" b:target="$lAtrbs" b:select="concat('&lt;r25:requests&gt;',$lAtrbs, '&lt;/r25:requests&gt;')"/>
+<s:task b:action="xml2string" b:variable="$tTypeAtrbs"/>
+<s:task b:test="contains($tTypeAtrbs, '?xml')" b:action="assign" b:target="$tTypeAtrbs" b:select="substring-after($tTypeAtrbs,'?&gt;')"/>
+<s:variable b:name="lMonths" b:scope="local" b:select="'&#xA;      &#xA;      &#xA;      &#xA;      &#xA;      &#xA;      &#xA;      &#xA;      &#xA;      &#xA;      &#xA;      &#xA;      &#xA;    '"/>
+<s:task b:action="bxml2string" b:variable="$lMonths"/>
+<s:task b:action="assign" b:target="$lAllAtrbs" b:select="concat('&lt;?xml version=&#34;1.0&#34;?&gt;', '&lt;custom_atrbs ',$tNamespace,' date_pattern=&#34;', id('Prefs')/$tDatePattern, '&#34; date_params=&#34;', escape(string(id('Prefs')/$tDateTimeParam)), '&#34; time_format=&#34;', id('Prefs')/$tTimeDisplay, '&#34;&gt;', '&lt;type_atrbs&gt;', $tTypeAtrbs, '&lt;/type_atrbs&gt;', '&lt;all_atrbs&gt;', $lAtrbs, '&lt;/all_atrbs&gt;', '&lt;month_data&gt;',$lMonths,'&lt;/month_data&gt;', '&lt;/custom_atrbs&gt;')"/>
+<s:task b:action="assign" b:target="$lAllAtrbs" b:select="replace($lAllAtrbs, 'xl:href', 'href')" />
+<s:task b:action="assign" b:target="$lAllAtrbs" b:select="replace($lAllAtrbs, 'xlink:href', 'href')" />
+<s:task b:action="string2xml" b:variable="$lAllAtrbs"/>
+<s:task b:action="load" b:url="{concat($s25_controlpath, 's25-rsrv_wiz/xslt/cust_atrb.xsl')}" b:destination="$tAtrbXsl" b:showloading="true"/>
+<s:task b:action="string2xml" b:variable="$tAtrbXsl"/>
+<s:task b:action="xsl-transform" b:datasource="$lAllAtrbs" b:stylesheet="$tAtrbXsl" b:destination="$tContent/div/div[@c:purpose='custom_atrb']" b:mode="replacechildren"/>
+<s:task b:action="trigger" b:event="change" b:target=".//input[@b:behavior='datepickerInputFormat']"/>
+<s:with b:target=".//s25:time_spinner">
+<s:task b:action="trigger" b:event="input-change"/>
+<s:setatt c:est="1"/>
+</s:with>
+<s:variable b:name="lAtrbsTable" b:scope="local" b:select="$tContent/div/div[@c:purpose='custom_atrb']//table[@c:purpose='SubEditors']"/>
+</s:when>
+<s:otherwise>
+<s:with b:target="$tContent/div/div[@c:purpose='custom_atrb']">
+<s:render b:destination="." b:mode="replacechildren">
+The selected Event Type does not allow changes to Custom Attributes.
+</s:render>
+</s:with>
+</s:otherwise>
+</s:choose>      
+</s:event>
+<s:event b:on="Load_existing">
+<s:variable b:name="tEventAtrbs" b:scope="tag" b:select=""/>
+<s:task b:action="assign" b:target="$tEventAtrbs" b:select="$tEvWiz/$tDataXml/r25:events/r25:event"/>
+<s:variable b:name="lNoEdit" b:scope="local" b:select="string($tEvWiz/$tEvent//r25:custom_attribute/@no_edit)"/>
+<s:if b:test="contains($tEvWiz/$tEvent//r25:custom_attribute/@no_edit,'EvXML')">
+<s:variable b:name="lNoEditXpath" b:scope="local" b:select=""/>
+<s:variable b:name="lNoEditContent" b:scope="local" b:select="string($tEvWiz/$tEvent//r25:custom_attribute/@no_edit)"/>
+<s:task b:action="assign" b:target="$lNoEditXpath" b:select="replace($lNoEditContent,'EvXML','$tEvWiz/$tDataXml/r25:events/r25:event')"/>
+<s:task b:test="xpath($lNoEditXpath)" b:action="assign" b:target="$lNoEdit" b:select="'T'"/>
+</s:if>
+<s:task b:test="string(@c:no_edit) = 'true'" b:action="assign" b:target="$lNoEdit" b:select="'T'"/>
+<s:variable b:name="tAtrbListXsl" b:scope="tag" b:select=""/>
+<s:choose>
+<s:when b:test="string($tAtrbRule) = 'T'">
+<s:variable b:name="lAtrbs" b:scope="local" b:select=""/>
+<s:variable b:name="lResults" b:scope="local" b:select=""/>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat($tEvWiz/@c:r25ws_prefix,'evatrb.xml')"/>
+<s:if b:test="not($tEventMasterListFLS = 'F' or $tEventMasterListFLS = 'C')">
+<s:variable b:name="lPrefAttributeList" b:scope="local" b:select="id('Pref_config_ev_cust_atrb_wizard')"/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'?filter_list=',$lPrefAttributeList, '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/custom_attr_filter.xsl')"/>
+</s:if>
+<s:task b:action="load" b:url="{$lUrl}" b:method="GET" b:destination="$lResults" b:mode="replace" b:showloading="true"/>
+<s:task b:action="string2xml" b:variable="$lResults"/>
+<s:task b:action="assign" b:target="$lAtrbs" b:select="$lResults/r25:event_custom_attributes"/>
+<s:task b:action="xml2string" b:variable="$lAtrbs"/>
+<s:task b:test="contains($lAtrbs, '?xml')" b:action="assign" b:target="$lAtrbs" b:select="substring-after($lAtrbs,'?&gt;')"/>
+<s:task b:action="assign" b:target="$lAtrbs" b:select="concat('&lt;r25:requests&gt;',$lAtrbs, '&lt;/r25:requests&gt;')"/>
+<s:task b:action="xml2string" b:variable="$lAtrbs"/>
+<s:task b:action="xml2string" b:variable="$tEventAtrbs"/>
+<s:task b:test="contains($tEventAtrbs, '?xml')" b:action="assign" b:target="$tEventAtrbs" b:select="substring-after($tEventAtrbs,'?&gt;')"/>
+<s:task b:action="assign" b:target="$lAllAtrbs" b:select="concat('&lt;?xml version=&#34;1.0&#34;?&gt;', '&lt;custom_atrbs ',$tNamespace,' date_pattern=&#34;', id('Prefs')/$tDatePattern,'&#34; date_params=&#34;', escape(string(id('Prefs')/$tDateTimeParam)), '&#34; time_format=&#34;', id('Prefs')/$tTimeDisplay, '&#34;&gt;', '&lt;event_atrbs&gt;', $tEventAtrbs, '&lt;/event_atrbs&gt;', '&lt;all_atrbs&gt;', $lAtrbs, '&lt;/all_atrbs&gt;', '&lt;/custom_atrbs&gt;')"/>
+<s:task b:action="assign" b:target="$lAllAtrbs" b:select="replace($lAllAtrbs, 'xl:href', 'href')" />
+<s:task b:action="assign" b:target="$lAllAtrbs" b:select="replace($lAllAtrbs, 'xlink:href', 'href')" />
+<s:task b:action="string2xml" b:variable="$lAllAtrbs"/>
+<s:choose>
+<s:when b:test="$lNoEdit = 'T'">
+<s:task b:action="load" b:url="{concat($s25_controlpath,'s25-rsrv_wiz/xslt/cust_atrb_list.xsl')}" b:destination="$tAtrbListXsl" b:showloading="true"/>
+<s:task b:action="string2xml" b:variable="$tAtrbListXsl"/>
+<s:task b:action="xsl-transform" b:datasource="$lAllAtrbs" b:stylesheet="$tAtrbListXsl" b:destination="$tContent/div/div[@c:purpose='custom_atrb']" b:mode="replacechildren"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="load" b:url="{concat($s25_controlpath,'s25-rsrv_wiz/xslt/cust_atrb.xsl')}" b:destination="$tAtrbXsl" b:showloading="true"/>
+<s:task b:action="string2xml" b:variable="$tAtrbXsl"/>
+<s:variable b:name="lWsPrefix" b:scope="local" b:select="string(id('Config')/$tWsPrefix)"/>
+<s:task b:action="xsl-transform" b:datasource="$lAllAtrbs" b:stylesheet="$tAtrbXsl" b:destination="$tContent/div/div[@c:purpose='custom_atrb']" b:mode="replacechildren"/>
+<s:task b:action="trigger" b:event="change" b:target=".//input[@b:behavior='datepickerInputFormat']"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:with b:target="$tContent/div/div[@c:purpose='custom_atrb']">
+<s:render b:destination="." b:mode="replacechildren">
+The selected Event Type does not allow changes to Custom Attributes.
+</s:render>
+</s:with>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ValidateAndSave">
+<s:sequential>
+<s:task b:action="trigger" b:event="Validate" b:target="."/>
+<s:task b:action="trigger" b:event="Save" b:target="."/>
+</s:sequential>
+</s:event>
+<s:event b:on="Validate">
+<s:setatt c:valid="true" c:error=""/>
+<s:if b:test="@c:required='true' and count($tContent//table[@c:purpose='SubEditors']/tbody/tr/td/div[@c:purpose='CurrentlySelected'])=0">
+<s:setatt c:valid="false" c:error="Custom attributes are required."/>
+</s:if>
+<s:variable b:name="lIndividualInvalids" b:scope="local" b:select="'false'"/>
+<s:with b:target=".//div[@c:purpose='attributeContainer'][@c:required='true']">
+<s:if b:test="not(div[@c:purpose='CurrentlySelected']/@c:value)">
+<s:task b:action="assign" b:target="$lIndividualInvalids" b:select="'true'"/>
+</s:if>
+</s:with>
+<s:if b:test="$lIndividualInvalids = 'true'">
+<s:setatt c:valid="false" c:required="true" c:error="One or more custom attributes are required. Please add values for the required custom attributes."/>
+</s:if>
+<s:setatt c:valid="true" b:test="$lIndividualInvalids = 'false'"/>
+</s:event>
+<s:event b:on="Save">
+<s:variable b:name="lEvent" b:scope="local" b:select="$tEvWiz/$tDataXml/r25:events/r25:event"/>
+<s:variable b:name="lProfId" b:scope="local" b:select="$tEvWiz/@c:profile_id"/>
+<s:variable b:name="lProfile" b:scope="local" b:select="$tEvWiz/$tProfile"/>
+<s:variable b:name="lRsrv" b:scope="local" b:select="$tEvWiz/$tRsrv"/>
+<s:if b:test="not(string-length($lProfile/@status)=0)">
+</s:if>
+<s:task b:action="remove" b:target="$tEvent/r25:custom_attribute[@status='new']"/>
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/r25:custom_attribute[not(r25:attribute_id = '-16' or r25:attribute_id = '-17')]/@status" b:value="del"/>
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/r25:custom_attribute[not(r25:attribute_id = '-16' or r25:attribute_id = '-17')]/*[not(string-length(@status) = 0)]/@status" b:value="del"/>
+<s:variable b:name="lAtrbXml" b:scope="local">
+<r25:custom_attribute status="new">
+<r25:attribute_id/>
+<r25:attribute_value/>
+</r25:custom_attribute>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lAtrbXml"/>
+<s:for-each b:target="$tContent//div[@c:purpose='attributeContainer' and @c:active='true']/div[@c:purpose='CurrentlySelected'][not(string-length(@c:obj_id)=0)]">
+<s:sequential>
+<s:lock>
+<s:variable b:name="lObjId" b:scope="local" b:select="$_target/@c:obj_id"/>
+<s:choose>
+<s:when b:test="$lObjId = $lEvent//r25:custom_attribute/r25:attribute_id">
+<s:task b:action="settext" b:target="$tEvWiz/$tEvent/r25:custom_attribute[r25:attribute_id = $lObjId]/r25:attribute_value" b:value="{string($_target/@c:value)}"/>  
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/r25:custom_attribute[r25:attribute_id = $lObjId]/@status" b:value="mod"/>
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/r25:custom_attribute[r25:attribute_id = $lObjId]/*[not(string-length(@status) = 0)]/@status" b:value="mod"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lAtrbXml/r25:custom_attribute/r25:attribute_id" b:value="{$_target/@c:obj_id}"/>
+<s:task b:action="settext" b:target="$lAtrbXml/r25:custom_attribute/r25:attribute_value" b:value="{$_target/@c:value}"/>
+<s:task b:action="copy" b:source="$lAtrbXml/r25:custom_attribute" b:destination="$lEvent" b:mode="aslastchild"/>
+</s:otherwise>
+</s:choose>
+</s:lock>
+</s:sequential>
+</s:for-each>
+<s:if b:test="not($tEvWiz/$tEvent/@status='new')">
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/@status" b:value="mod"/>
+</s:if>
+<s:variable b:name="lCrumbValue" b:select="string-join($tContent//div[@c:purpose='attributeContainer' and @c:active='true']//span[@class='SubEditor_Label']/text(), ';; ')"/>
+<s:setatt c:crumb="{$lCrumbValue}"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="SubEditorContainer">
+<s:event b:on="construct">
+<s:setatt c:purpose="attributeContainer"/> 
+<s:super/>
+<s:task b:test="@c:active='true'" b:action="trigger" b:event="Activate"/>
+</s:event>
+<s:event b:on="Select">
+<s:if b:test="not(string(.//input[@type='text']/@b:valid) = 'false')">
+<s:variable b:name="lId" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:variable b:name="lValue" b:scope="local" b:select="string(.//input[@type='text']/@value)"/>
+<s:with b:target="div[@c:purpose='CurrentlySelected']">
+<s:setatt c:obj_id="{$lId}" c:value="{$lValue}"/>
+</s:with>
+</s:if>
+</s:event>
+<s:event b:on="OptionSelect">
+<s:with b:target="div[@c:purpose='CurrentlySelected']">
+<s:if b:test="not(ancestor::tr[1]/td[2]//select/@value = -1)">
+<s:setatt c:obj_id="{(ancestor::tr[1]/td[2]//select/@c:obj_id}" c:value="{(ancestor::tr[1]/td[2]//select/@value}"/>
+</s:if>
+</s:with>      
+</s:event>
+<s:event b:on="BoolSelect">
+<s:variable b:name="lId" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:variable b:name="lValue" b:scope="local" b:select="string(.//input[@type='radio' and @b:state='selected']/@value)"/>
+<s:with b:target="div[@c:purpose='CurrentlySelected']">
+<s:setatt c:obj_id="{$lId}" c:value="{$lValue}"/>
+</s:with>      
+</s:event>
+<s:event b:on="ValidateDate">
+<s:variable b:name="lId" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:variable b:name="lDate" b:select="concat(.//b:datepicker/@b:sortvalue, 'T00:00:00')"/>
+<s:with b:target="div[@c:purpose='CurrentlySelected']">
+<s:setatt c:obj_id="{$lId}" c:value="{$lDate}"/>
+</s:with>
+</s:event>
+<s:event b:on="ValidateTime">
+<s:variable b:name="lId" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:if b:test=".//s25:time_spinner/@c:est = 1">
+<s:variable b:name="lTime" b:select=".//s25:time_spinner/@b:stored-value"/>
+<s:if b:test="string-length($lTime) = 3">
+<s:task b:action="assign" b:target="$lTime" b:select="concat('0',$lTime)"/>
+</s:if>
+<s:variable b:name="lFullTime" b:select="concat(substring($lTime,1,2),':',substring($lTime,3,2))"/>
+<s:with b:target="div[@c:purpose='CurrentlySelected']">
+<s:setatt c:obj_id="{$lId}" c:value="{$lFullTime}"/>
+</s:with>
+</s:if>
+</s:event>
+<s:event b:on="ValidateDateTime">
+<s:variable b:name="lId" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:if b:test=".//s25:time_spinner/@x:init = 1">
+<s:variable b:name="lTime" b:select=".//s25:time_spinner/@b:stored-value"/>
+<s:if b:test="string-length($lTime) = 3">
+<s:task b:action="assign" b:target="$lTime" b:select="concat('0',$lTime)"/>
+</s:if>
+<s:variable b:name="lFullTime" b:select="concat(substring($lTime,1,2),':',substring($lTime,3,2))"/>
+<s:variable b:name="lDate" b:select=".//b:datepicker/@b:sortvalue"/>
+<s:variable b:name="lDateTime" b:scope="local" b:select="concat($lDate,'T',$lFullTime,':00')"/>
+<s:with b:target="div[@c:purpose='CurrentlySelected']">
+<s:setatt c:obj_id="{$lId}" c:value="{$lDateTime}"/>
+</s:with>
+</s:if>
+</s:event>
+<s:event b:on="SelectTextarea">
+<s:variable b:name="lId" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:variable b:name="lValue" b:scope="local" b:select="string(.//textarea/@value)"/>
+<s:with b:target="div[@c:purpose='CurrentlySelected']">
+<s:setatt c:obj_id="{$lId}" c:value="{$lValue}"/>
+</s:with>
+</s:event>
+<s:event b:on="Open">
+<s:setatt c:open="true"/>
+<s:task b:action="addclass" b:value="SubEditor_Container_open"/>
+<s:task b:test="not(@c:active='true')" b:action="trigger" b:event="Activate"/>
+</s:event>
+<s:event b:on="Close">
+<s:setatt c:open="false"/>
+<s:task b:action="removeclass" b:value="SubEditor_Container_open"/>
+</s:event>
+<s:event b:on="Activate">
+<s:setatt c:active="true"/>
+<s:task b:action="addclass" b:value="SubEditor_Container_active"/>
+<s:with b:target=".//input[@c:purpose='atrb_active']">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:task b:test="not(@c:open='true')" b:action="trigger" b:event="Open"/>
+</s:event>
+<s:event b:on="Deactivate">
+<s:setatt c:active="false"/>
+<s:task b:action="removeclass" b:value="SubEditor_Container_active"/>
+<s:task b:action="deselect" b:target=".//input[@c:purpose='atrb_active']"/>
+<s:task b:test="not(@c:open='false')" b:action="trigger" b:event="Close"/>
+</s:event>
+<s:event b:on="Require">
+<s:setatt c:required="true"/>
+<s:task b:action="addclass" b:value="SubEditor_Container_required"/>
+<s:task b:action="trigger" b:event="Activate"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="SubEditorToggleDisplay">
+<s:event b:on="click">
+<s:with b:target="ancestor::div[@c:purpose='attributeContainer']">
+<s:choose>
+<s:when b:test="@c:open='true'">
+<s:task b:action="trigger" b:event="Close"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="Open"/>
+</s:otherwise>
+</s:choose>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="SubEditorToggleState" b:behavior="RsrvWizInput">
+<s:event b:on="construct"/>
+<s:event b:on="validate"/>
+<s:event b:on="valid"/>
+<s:event b:on="change"/>
+<s:event b:on="select">
+<s:task b:action="trigger" b:target="ancestor::div[@c:purpose='attributeContainer']" b:event="Activate"/>
+</s:event>
+<s:event b:on="deselect">
+<s:task b:action="trigger" b:target="ancestor::div[@c:purpose='attributeContainer']" b:event="Deactivate"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ObjectSelectors" b:behavior="SubEditorContainer">
+<s:event b:on="construct">
+<s:setatt c:purpose="optionsContainer"/>
+<s:super/>
+<s:variable b:name="tSelectors" b:scope="tag" b:select="table[@c:id='container_body']/tr/td[@c:id='selectors']"/>
+<s:variable b:name="tSelected" b:scope="tag" b:select="table[@c:id='container_body']/tr/td[@c:id='selected']"/>
+<s:variable b:name="tIndices" b:scope="tag" b:select="$tSelectors/div[@c:id='indices']"/>
+<s:variable b:name="tLastIndex" b:scope="tag" b:select="'-1'"/>
+<s:variable b:name="tDivisions" b:scope="tag" b:select="$tSelectors/div[@c:id='divisions']"/>
+<s:variable b:name="tLastDivision" b:scope="tag" b:select="'-1'"/>
+<s:variable b:name="tObjects" b:scope="tag" b:select="$tSelectors/div[@c:id='objects']"/>
+<s:variable b:name="tNeedle" b:scope="tag" b:select="$tDivisions/div[@c:id='search']//input[@type='text' and @name='needle']"/>
+<s:task b:test="@c:obj_type = '4'" b:action="trigger" b:event="LoadLocationIndices"/>
+<s:task b:test="@c:obj_type = '6'" b:action="trigger" b:event="LoadResourceIndices"/>
+</s:event>
+<s:event b:on="AttrIndexChange">
+<s:variable b:name="lSelOpt" b:select="$tIndices/div[@c:id='options']/div[@b:state='selected']"/>
+<s:if b:test="$lSelOpt/@c:index_id ne '-1'">
+<s:choose>
+<s:when b:test="$lSelOpt/@c:index_id = 'fav'">
+<s:with b:target="$tDivisions">
+<s:task b:action="hide" b:target="div[@c:id='search']"/>
+<s:task b:action="show" b:target="div[@c:id='options']"/>
+<s:task b:action="hide"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="AttrDivisionOption" b:state="selected" c:param="&amp;favorite=T" c:division_id="fav">
+<s:textnode b:label="{concat(string($lSelOpt/text()),string($lSelOpt/div/text()))}"/>
+</div>
+</s:render>
+</s:with>
+<s:task b:action="trigger" b:event="AttrDivisionChange"/>
+</s:when>
+<s:when b:test="starts-with($lSelOpt/@c:index_id, 'images')">
+<s:with b:target="$tDivisions">
+<s:task b:action="hide" b:target="div[@c:id='search']"/>
+<s:task b:action="show" b:target="div[@c:id='options']"/>
+<s:task b:action="hide"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="AttrDivisionOption" b:state="selected" c:param="{string($lSelOpt/@c:index_id)}" c:division_id="image">
+<s:textnode b:label="{string($lSelOpt/text())}"/>
+</div>
+</s:render>
+</s:with>
+<s:task b:action="trigger" b:event="AttrDivisionChange"/>
+</s:when>
+<s:when b:test="$lSelOpt/@c:index_id = 'search'">
+<s:with b:target="$tObjects">
+<s:task b:action="hide"/>
+</s:with>
+<s:with b:target="$tNeedle">
+<s:setatt value=""/>
+</s:with>
+<s:with b:target="$tDivisions">
+<s:task b:action="hide"/>
+<s:task b:action="hide" b:target="div[@c:id='options']"/>
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+<s:textnode b:label="{$lSelOpt/div/text()}"/>
+</s:render>
+<s:task b:action="show" b:target="div[@c:id='search']"/>
+<s:task b:action="show"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="$tObjects">
+<s:task b:action="hide"/>
+</s:with>
+<s:with b:target="$tDivisions">
+<s:task b:action="hide" b:target="div[@c:id='search']"/>
+<s:task b:action="show" b:target="div[@c:id='options']"/>
+<s:task b:action="show"/>
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+<s:fxstyle b:time="10"/>
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+<s:textnode b:label="{$lSelOpt/text()}"/>
+</s:render>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="AttrDivisionOption" c:division_id="-1" b:disabled="true">
+Loading...
+</div>
+</s:render>
+</s:with>
+<s:variable b:name="lXsl" b:select="'s25-event-wiz/'"/>
+<s:choose>
+<s:when b:test="@c:obj_type = '4'">
+<s:task b:action="assign" b:target="$lXsl" b:select="concat($lXsl, 'browse_space_')"/>
+</s:when>
+<s:when b:test="@c:obj_type = '6'">
+<s:task b:action="assign" b:target="$lXsl" b:select="concat($lXsl, 'browse_resource_')"/>
+</s:when>
+</s:choose>
+<s:task b:action="assign" b:target="$lXsl" b:select="concat($lXsl, $lSelOpt/@c:xsl)"/>
+<s:variable b:name="lUrl" b:select="concat(id('Config')/$tWsPrefix,$lSelOpt/@c:query, '?otransform=',id('Config')/$tXslPrefix,$lXsl)"/>
+<s:if b:test="$lSelOpt/@c:index_id = 'keyword'">
+<s:variable b:name="lBreakpoints" b:scope="local" b:select=""/>
+<s:choose>
+<s:when b:test="@c:obj_type = '4'">
+<s:if b:test="not(exists(id('Pref_SpaceDirBreakPoint')))">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=SpaceDirBreakPoint')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild"/>
+</s:if>
+<s:task b:action="assign" b:target="$lBreakpoints" b:select="string(id('Pref_SpaceDirBreakPoint'))"/>
+</s:when>
+<s:when b:test="@c:obj_type = '6'">
+<s:if b:test="not(exists(id('Pref_ResourceDirBreakPoint')))">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=ResourceDirBreakPoint')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild"/>
+</s:if>
+<s:task b:action="assign" b:target="$lBreakpoints" b:select="string(id('Pref_ResourceDirBreakPoint'))"/>
+</s:when>
+</s:choose>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;breakpoints=',$lBreakpoints)"/>
+</s:if>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;behavior=AttrDivisionOption')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tDivisions/div[@c:id='options']" b:mode="replacechildren" b:showloading="true"/>
+</s:otherwise>
+</s:choose>
+<s:fxstyle b:time="10"/>
+<s:with b:target="$tObjects/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+<s:task b:action="assign" b:target="$tLastIndex" b:scope="tag" b:select="string($lSelOpt/@c:index_id)"/>
+</s:if>
+</s:event>
+<s:event b:on="AttrDivisionChange">
+<s:variable b:name="lSelOpt" b:select="$tDivisions/div[@c:id='options']/div[@b:state='selected']"/>
+<s:if b:test="$lSelOpt/@c:division_id ne '-1' and $lSelOpt/@c:division_id ne $tLastDivision">
+<s:with b:target="$tObjects">
+<s:task b:action="show"/>
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+<s:textnode b:label="{concat(string($lSelOpt/text()),string($lSelOpt/div/text()))}"/>
+</s:render>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="AttrOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+</s:with>
+<s:variable b:name="lXml" b:scope="local" b:select=""/>
+<s:variable b:name="lXsl" b:scope="local" b:select=""/>
+<s:choose>
+<s:when b:test="$lSelOpt/@c:division_id = 'fav'">
+<s:task b:action="assign" b:target="$lXml" b:select="'favorites.xml'"/>
+<s:task b:action="assign" b:target="$lXsl" b:select="'custom_attr_favs.xsl'"/>
+<s:task b:action="assign" b:target="$lXsl" b:select="concat($lXsl, '&amp;object_type=',@c:obj_type)"/>
+<s:variable b:name="lFavLabel" b:scope="local" b:select="'Starred'"/>
+<s:if b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavLabel" b:select="'Suggested'"/>
+</s:if>
+<s:task b:action="assign" b:target="$lXsl" b:select="concat($lXsl, '&amp;favLabel=',$lFavLabel)"/>
+</s:when>
+<s:when b:test="$lSelOpt/@c:division_id = 'image'">
+<s:with b:target="$tObjects">
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+<s:textnode b:label="{string($lSelOpt/text())}"/>
+</s:render>
+</s:with>
+<s:choose>
+<s:when b:test="string($lSelOpt/@c:param) = 'images_photographs'">
+<s:with b:target="$tObjects/div[1]/div"><s:setatt class="icon-photograph"/></s:with>
+<s:task b:action="assign" b:target="$lXml" b:select="'images.xml'"/>
+<s:task b:action="assign" b:target="$lXsl" b:select="concat('custom_attr_images.xsl','&amp;image_type=1')"/>
+</s:when>
+<s:when b:test="string($lSelOpt/@c:param) = 'images_diagrams'">
+<s:with b:target="$tObjects/div[1]/div"><s:setatt class="icon-diagram"/></s:with>
+<s:task b:action="assign" b:target="$lXml" b:select="'images.xml'"/>
+<s:task b:action="assign" b:target="$lXsl" b:select="concat('custom_attr_images.xsl','&amp;image_type=2')"/>
+</s:when>
+<s:otherwise>
+<s:with b:target="$tObjects/div[1]/div"><s:setatt class="icon-photograph"/></s:with>
+<s:task b:action="assign" b:target="$lXml" b:select="'images.xml'"/>
+<s:task b:action="assign" b:target="$lXsl" b:select="'custom_attr_images.xsl'"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="@c:obj_type = '4'">
+<s:task b:action="assign" b:target="$lXml" b:select="'spaces.xml'"/>
+<s:task b:action="assign" b:target="$lXsl" b:select="'custom_attr_browse_space_divisions.xsl'"/>
+</s:when>
+<s:when b:test="@c:obj_type = '6'">
+<s:task b:action="assign" b:target="$lXml" b:select="'resources.xml'"/>
+<s:task b:action="assign" b:target="$lXsl" b:select="'custom_attr_browse_resource_divisions.xsl'"/>
+</s:when>
+</s:choose>
+<s:task b:action="assign" b:target="$lXsl" b:select="concat($lXsl, $lSelOpt/@c:param)"/>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,$lXml, '?otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/',$lXsl)"/>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tObjects/div[@c:id='options']" b:mode="replacechildren" b:showloading="true"/>
+<s:if b:test="starts-with($bpc_browser, 'ie')">
+<s:with b:target="$tObjects/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+</s:if>
+<s:task b:action="assign" b:target="$tLastDivision" b:scope="tag" b:select="string($lSelOpt/@division_id)"/>
+</s:if>
+</s:event>
+<s:event b:on="LoadSearch">
+<s:task b:action="focus" b:target="$tNeedle"/>
+<s:if b:test="not(string-length($tNeedle/@value)=0)">
+<s:with b:target="$tObjects">
+<s:task b:action="show"/>
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+Search Results for  <span>"<s:textnode b:label="{$tNeedle/@value}"/>"</span>
+</s:render>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="AttrOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+</s:with>
+<s:variable b:name="lUrl" b:scope="local" b:select="''"/>
+<s:choose>
+<s:when b:test="@c:obj_type = '3'">
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'contacts.xml', '?contains=',normalize-space($tNeedle/@value), '&amp;scope=extended&amp;include=user', '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/custom_attr_search_contacts.xsl')"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'search.xml', '?q=',normalize-space($tNeedle/@value), '&amp;object_type=', @c:obj_type,  '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/custom_attr_search.xsl')"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tObjects/div[@c:id='options']" b:mode="replacechildren" b:showloading="true"/>
+<s:with b:target="$tObjects/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+<s:with b:target="$tNeedle">
+<s:setatt b:valid="true" b:required="false"/>
+<s:task b:action="focus"/>
+</s:with>
+<s:task b:action="assign" b:target="$tLastDivision" b:scope="tag" b:select="'search'"/>
+</s:if>
+</s:event>
+<s:event b:on="ObjectSelect">
+<s:if b:test="not($lObjectID = '')">
+<s:with b:target="div[@c:purpose='CurrentlySelected']">
+<s:setatt c:value="{$lObjectID}" c:obj_name="{$lObjectName}"/>
+</s:with>
+<s:variable b:name="lObjectClass" b:select="''"/>
+<s:choose>
+<s:when b:test="@c:obj_type = '2'">
+<s:task b:action="assign" b:target="$lObjectClass" b:select="'icon-org'"/>
+</s:when>
+<s:when b:test="@c:obj_type = '3'">
+<s:task b:action="assign" b:target="$lObjectClass" b:select="'icon-contact'"/>
+</s:when>
+<s:when b:test="@c:obj_type = '4'">
+<s:task b:action="assign" b:target="$lObjectClass" b:select="'icon-space'"/>
+</s:when>
+<s:when b:test="@c:obj_type = '6'">
+<s:task b:action="assign" b:target="$lObjectClass" b:select="'icon-resource'"/>
+</s:when>
+<s:when b:test="@c:obj_type = 'I' and $lImageType = '2'">
+<s:task b:action="assign" b:target="$lObjectClass" b:select="'icon-diagram'"/>
+</s:when>
+<s:when b:test="@c:obj_type = 'I'">
+<s:task b:action="assign" b:target="$lObjectClass" b:select="'icon-photograph'"/>
+</s:when>
+</s:choose>
+<s:with b:target="$tSelected//div[@c:id='txt']">
+<s:setatt class="{concat('currentSelection ', $lObjectClass)}"/>
+<s:render b:destination="./div" b:mode="replace">
+<div class="currentSelectionValue"><s:textnode b:label="{$lObjectName}"/></div>
+</s:render>
+</s:with>
+<s:if b:test="@c:obj_type = 'I'">
+<s:with b:target="$tSelected//div[@c:id='txt']">
+<s:render b:destination="." b:mode="replacechildren">
+<div class="currentSelectionValue"><s:textnode b:label="{$lObjectName}"/></div>
+<div class="currentSelectionImage"><a href="{concat(id('Config')/$tWsPrefix,'image?image_id=',$lObjectID)}" target="_blank"><img src="{concat(id('Config')/$tWsPrefix,'image?image_id=',$lObjectID)}"/></a></div>
+</s:render>
+</s:with>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="LoadLocationIndices">
+<s:if b:test="not(exists(id('Pref_25L_space_system_options')))">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=25L_space_system_options')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild"/>
+</s:if>
+<s:variable b:name="lPrefs" b:select="string(id('Pref_25L_space_system_options'))"/>
+<s:task b:action="string2xml" b:variable="$lPrefs"/>
+<s:variable b:name="lDefaultUser" b:select="string(id('Pref_config_search_user'))"/>
+<s:variable b:name="lIndices" b:select="$lPrefs/location_options"/>
+<s:task b:action="transform" b:datasource="$lIndices" b:stylesheet="$CustAtrbLocationIndexSelect" b:destination="$tIndices/div[@c:id='options']" b:mode="aslastchild"/>
+</s:event>
+<s:event b:on="LoadResourceIndices">
+<s:if b:test="not(exists(id('Pref_25L_resource_system_options')))">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=25L_resource_system_options')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild"/>
+</s:if>
+<s:variable b:name="lPrefs" b:select="string(id('Pref_25L_resource_system_options'))"/>
+<s:task b:action="string2xml" b:variable="$lPrefs"/>
+<s:variable b:name="lDefaultUser" b:select="string(id('Pref_config_search_user'))"/>
+<s:variable b:name="lIndices" b:select="$lPrefs/resource_options"/>
+<s:task b:action="transform" b:datasource="$lIndices" b:stylesheet="$CustAtrbResourceIndexSelect" b:destination="$tIndices/div[@c:id='options']" b:mode="aslastchild"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="AttrIndexOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:task b:action="trigger" b:event="AttrIndexChange" b:target="ancestor::div[@c:id='container'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="AttrDivisionOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:task b:action="trigger" b:event="AttrDivisionChange" b:target="ancestor::div[@c:id='container'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="AttrOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:super/>
+<s:variable b:name="lObjectID" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:variable b:name="lObjectName" b:scope="local" b:select="string(@c:obj_name)"/>
+<s:variable b:name="lImageType" b:scope="local" b:select="string(@c:image_type)"/>
+<s:task b:action="trigger" b:event="ObjectSelect" b:target="ancestor::div[@c:id='container'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="PreviewImage">
+<s:event b:on="construct">
+<s:super/>
+<s:variable b:name="lImageID" b:select="string(@c:image)"/>
+<s:setatt src="{concat(id('Config')/$tWsPrefix, 'image?image_id=',$lImageID)}"/>
+<s:with b:target="..">
+<s:setatt href="{concat(id('Config')/$tWsPrefix, 'image?image_id=',$lImageID)}"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:stylesheet b:name="CustAtrbLocationIndexSelect">
+<s:template b:match="/">
+<s:execute><s:render b:mode="aslastchild"><s:apply-templates b:select="index[not(@visible='false')][@section_id='collection']"/><s:apply-templates b:select="index[not(@visible='false')][not(@section_id='collection')]"/></s:render></s:execute>
+</s:template>
+<s:template b:match="index">
+<div b:behavior="AttrIndexOption">
+<s:attribute b:name="c:index_id">
+<s:value-of b:select="@section_id"/>
+</s:attribute>
+<s:attribute b:name="c:query">
+<s:choose>
+<s:when b:test="@section_id = 'keyword'">
+<s:value-of b:select="'null.xml'"/>
+</s:when>
+<s:when b:test="@section_id = 'category'">
+<s:value-of b:select="'rmcat.xml'"/>
+</s:when>
+<s:when b:test="@section_id = 'feature'">
+<s:value-of b:select="'rmfeat.xml'"/>
+</s:when>
+<s:when b:test="@section_id = 'layout'">
+<s:value-of b:select="'rmconf.xml'"/>
+</s:when>
+<s:when b:test="@section_id = 'capacity'">
+<s:value-of b:select="'null.xml'"/>
+</s:when>
+<s:when b:test="contains(@section_id,'collection')">
+<s:value-of b:select="'space_searches.xml'"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<s:attribute b:name="c:xsl">
+<s:choose>
+<s:when b:test="@section_id = 'keyword'">
+<s:value-of b:select="'names.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'category'">
+<s:value-of b:select="'categories.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'feature'">
+<s:value-of b:select="'features.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'layout'">
+<s:value-of b:select="'layouts.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'capacity'">
+<s:value-of b:select="'capacities.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'collection'">
+<s:value-of b:select="concat('searches.xsl', '&amp;favorites=T')"/>
+</s:when>
+<s:when b:test="@section_id = 'all_collection'">
+<s:value-of b:select="'searches.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'default_collection'">
+<s:value-of b:select="concat('searches.xsl', '&amp;user=',$lDefaultUser)"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<s:value-of b:select="@name"/>
+</div>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="CustAtrbResourceIndexSelect">
+<s:template b:match="/">
+<s:execute><s:render b:mode="aslastchild"><s:apply-templates b:select="index[not(@visible='false')][@section_id='collection']"/><s:apply-templates b:select="index[not(@visible='false')][not(@section_id='collection')]"/></s:render></s:execute>
+</s:template>
+<s:template b:match="index">
+<div b:behavior="AttrIndexOption">
+<s:attribute b:name="c:index_id">
+<s:value-of b:select="@section_id"/>
+</s:attribute>
+<s:attribute b:name="c:query">
+<s:choose>
+<s:when b:test="@section_id = 'keyword'">
+<s:value-of b:select="'null.xml'"/>
+</s:when>
+<s:when b:test="@section_id = 'category'">
+<s:value-of b:select="'rscat.xml'"/>
+</s:when>
+<s:when b:test="contains(@section_id, 'collection')">
+<s:value-of b:select="'res_searches.xml'"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<s:attribute b:name="c:xsl">
+<s:choose>
+<s:when b:test="@section_id = 'keyword'">
+<s:value-of b:select="'names.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'category'">
+<s:value-of b:select="'categories.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'collection'">
+<s:value-of b:select="concat('searches.xsl', '&amp;favorites=T')"/>
+</s:when>
+<s:when b:test="@section_id = 'all_collection'">
+<s:value-of b:select="'searches.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'default_collection'">
+<s:value-of b:select="concat('searches.xsl', '&amp;favorites=T', '&amp;user=',$lDefaultUser)"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<s:value-of b:select="@name"/>
+</div>
+</s:template>
+</s:stylesheet>
+</div>

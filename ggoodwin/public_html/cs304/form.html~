@@ -1,0 +1,28 @@
+<!-- Gabrielle Goodwin
+        cs304 Fall 2012
+        -->
+
+<HEAD>
+<TITLE>Gabrielle Goodwin Form</TITLE>
+</HEAD>
+<BODY BGCOLOR="WHITE">
+<CENTER>
+<H1>CS304 HW3 form</H1>
+
+<form name="Favorite Kinds of Food">
+  <input type="text" name="name">
+  <input type="radio" name="Potato Chip Flavor" value="Plain">
+  <input type="radio" name="Potato Chip Flavor" value="Barbeque">
+  <input type="radio" name="Potato Chip Flavor" value="Salt & Vinegar">
+  <input type="radio" name="Potato Chip Flavor" value="Sour Cream & Onion">
+  <p>Vegetable: <select name="veggies">
+      <option>Broccoli</option>
+      <option>Spinach</option>
+      <option>Beets</option>
+      <option>Corn</option>
+  </select>
+</p></form>
+      
+	 
+
+</body>

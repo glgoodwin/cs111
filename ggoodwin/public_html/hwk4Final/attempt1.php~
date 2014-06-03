@@ -1,0 +1,151 @@
+<html>
+<head>
+<title> hwk 4 attempt 1 </title>
+<link rel = "stylesheet" type="text/css" href="attempt1.css">
+<!-- ALL PHP -->
+
+<?php
+
+ // CONNECT TO DATABASE
+
+require_once("MDB2.php");
+require_once("ahdb-dsn.inc");
+$dbh = &MDB2::factory($ahdb_dsn);
+
+// error message if connection fails
+if(PEAR::isError($dbh)) {
+    die("Error while connecting : " . $dbh->getMessage());
+ }
+
+ 
+?>
+
+</head>
+<body>
+<div class = wrapper> <!-- keeps form and resulting info side by side -->
+<div class = forms>
+<!-- Sets up forms to submit information -->
+<form method="POST" action="<?php echo $_SERVER['PHP_SELF']?>">
+<input type = "textbox" name="text" >
+<input type = "submit" name = "submit1" value = "submit it"> 
+
+<!-- Sets up select menu, and sets up selection process  -->
+<select name ="options" value = 'none'>
+
+<?php 
+
+  //creates array for the menu options
+$searchfor = array( 'choose one', 'Actor','Title','Both');
+ 
+//determines if and what has been selected
+if (isset($_POST['search_choice'])) {
+  $selected_option = $_POST['search_choice'];
+ } else {
+  $selected_option = 'none';
+ }
+
+// fills options into menu. not totally sure how this works.
+for ($i = 1; $i <=3; $i++) {
+  $selection = $searchfor[$i];
+  if ($i == $selected_option) {
+    echo "<option value= '$i' selected> $selection </option>\n";
+  } else {
+    echo "<option value ='$i'> $selection </option>\n";
+  }
+
+ }
+  
+
+?>
+</select>
+
+</form>
+</div>
+
+<div class = infos>
+  some infos here:
+
+
+<?php
+
+if (isset($_POST['options'])) {
+
+
+// use $dbh
+// select and print out list of actor names
+
+$sql = "SELECT nm, name FROM person";
+$resultset = $dbh->query($sql);
+if(PEAR::isError($resultset)) {
+    die('Failed to issue query, error message : ' . $resultset->getMessage());
+ }
+
+
+$textvalue = $_POST['text'];
+$myoption = $_POST['options'];
+
+
+if ($myoption == 1) { 
+  echo "hey, actor";   
+ } else if ($myoption == 2) {
+  echo "hey, look, title!";
+} else {
+  echo "oh yeah, why not both";
+}
+
+
+
+
+
+
+// DETERMINE IF SUBMIT HAS BEEN CLICKED, then act accordingly
+
+if(isset($_POST['submit1'])) {
+
+
+
+// taking a crack at some queries. 
+$names = "SELECT nm, name FROM person WHERE name = ?"; //works if given an actual name
+$resulting_names = $dbh->query($names);
+if(PEAR::isError($resulting_names)) {
+    die('Failed to issue query, error message : ' . $resulting_names->getMessage());
+ }
+
+
+// PRINT OUT all names
+while($row = $resulting_names->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+    echo "<li> nm " . $row['nm'] . ": " . $row['name'] . "\n";
+ }
+  
+// line below not needed, but have q's so don't want to lose syntax  
+//$textvalue = $_POST['text']; //? $_POST['text'] : null);
+  echo $textvalue; //testing purposes
+echo "</br>";
+
+
+if($textvalue == "yo dudes") {
+  echo ("we got your back bro");
+ }
+ else {
+   echo ("hey new dude, not cool man");
+ }
+ }
+
+
+
+
+
+// PRINT OUT THE WHOLE DARN THING
+while($row = $resultset->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+    echo "<li> nm " . $row['nm'] . ": " . $row['name'] . "\n";
+ }
+}
+
+
+?>
+
+</div>
+</div>
+
+</body>
+</html>

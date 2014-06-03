@@ -1,0 +1,10 @@
+; SUM 1: sums multiples of N between LO and HI
+(fobs (n lo hi)
+  (funrec (sum-loop lo 0)
+    (def (multiple? x) (= 0 (rem x)))
+    (def (rem y) (% y n))
+    (def (sum-loop i sum)
+           (if (> i hi)
+               sum
+               (sum-loop (+ i 1)
+                         (if (multiple? i) (+ i sum) sum))))))

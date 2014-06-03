@@ -1,0 +1,957 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" xmlns:s25="http://www.collegenet.com/s25" xmlns:bx="http://www.collegenet.com/bx" style="display:none;">
+<s:htmlstructure b:name="s25:rsrv_wiz_contacts" b:behavior="S25RsrvWizEditor::Contacts">
+<div><s:innercontent/></div>
+</s:htmlstructure>
+<s:behavior b:name="S25RsrvWizEditor::Contacts" b:behavior="S25RsrvWizEditor">
+<s:initatt c:purpose="contacts" c:obj_type_id="3"/>
+<s:event b:on="s25-focus">
+</s:event>		
+<s:event b:on="PaintControl">
+
+<s:variable b:name="tContactMasterListFLS" b:scope="tag" b:select="id('FLS_ML_CONTACT')"/>
+<s:with b:target="$tEvWiz">
+<s:task b:action="assign" b:target="$tContactEditor" b:select="'T'"/>
+</s:with>
+<s:variable b:name="lPrefNames">
+<prefs>
+<name>config_ev_contact_roles</name>
+</prefs>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lPrefNames"/>
+<s:for-each b:target="$lPrefNames/prefs/name">
+<s:if b:test="exists(id(concat('Pref_',string($_target))))">
+<s:task b:action="remove" b:target="$_target"/>
+</s:if>
+</s:for-each>
+<s:if b:test="count($lPrefNames/prefs/name) gt 0">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=', string-join($lPrefNames/prefs/name, '+'))"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild"/>
+</s:if>			
+<s:variable b:name="lThis" b:scope="local">ancestor::*[@c:editor='true'][1]</s:variable>
+<s:render b:destination="$tContent" b:mode="replacechildren">
+<div class="contentHeader">
+<span class="tooltipMarker">
+<bx:tooltip class="bxTooltipNoIcon" b:delay="5"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v22.0/gfx/_.gif" class="iconHelp"/>
+</span>
+<div c:id="title"><s:textnode b:label="{@c:title}"/></div>
+</div>
+<div class="contentOptions" c:purpose="contacts"/>
+</s:render>
+<s:render b:destination="$tContent/div[1]/span[1]/bx:tooltip" b:mode="replacechildren"><div xmlns="">Contact roles are available only after you&apos;ve specified the event type.</div><div xmlns="">To assign an individual to a selected contact role, check the role name, then choose from a list of Your Starred Contacts or Search by contact name.</div><div xmlns="">To search for a contact, click &apos;Search&apos; in the &apos;Find by&apos; list, then enter any part of the contact&apos;s first or last name. Click the &apos;Search&apos; button. Choose a contact from the Choose from... list.</div><div xmlns="">Click Create New Contact to add a contact to the database.</div><div xmlns="">The Selected Contact can be added to (or removed from) Your Starred Contacts by toggling its star icon.</div></s:render>
+</s:event>
+<s:event b:on="Reset">
+<s:if b:test="$tEvWiz/$tEvent//r25:role/@required = 'T'">
+<s:setatt c:required="'true'"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tEvent//r25:role/@required,'EvXML')">
+<s:variable b:name="lRequiredXpath" b:scope="local" b:select=""/>
+<s:variable b:name="lRequiredContent" b:scope="local" b:select="string($tEvWiz/$tEvent//r25:role/@required)"/>
+<s:task b:action="assign" b:target="$lRequiredXpath" b:select="replace($lRequiredContent,'EvXML', '$tEvWiz/$tDataXml/r25:events/r25:event')"/>
+<s:if b:test="xpath($lRequiredXpath)">
+<s:setatt c:required="true"/>
+</s:if>
+</s:if>
+<s:variable b:name="lPrefNames">
+<prefs>
+<name>config_ev_contact_roles</name>
+</prefs>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lPrefNames"/>
+<s:for-each b:target="$lPrefNames/prefs/name">
+<s:if b:test="exists(id(concat('Pref_',string($_target))))">
+<s:task b:action="remove" b:target="$_target"/>
+</s:if>
+</s:for-each>
+<s:if b:test="count($lPrefNames/prefs/name) gt 0">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=', string-join($lPrefNames/prefs/name, '+'))"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild"/>
+</s:if>			
+<s:task b:test="not(@c:init = '1')" b:action="trigger" b:event="PaintControl" b:target="."/>
+<s:variable b:name="lSavedEvType" b:scope="local" b:select="$tEvWiz/$tEvent//r25:event_type_id"/>
+<s:variable b:name="lSelectedEvType" b:scope="local" b:select="''"/>
+<s:task b:test="exists($tEvWiz/$tDeck//s25:rsrv_wiz_type)" b:action="assign" b:target="$lSelectedEvType" b:scope="local" b:select="$tEvWiz/$tDeck//s25:rsrv_wiz_type/$tLastSelectedTypeID"/>
+<s:variable b:name="lEvType" b:scope="local" b:select="$lSavedEvType"/>
+<s:task b:test="string-length($lSelectedEvType) gt 0" b:action="assign" b:target="$lEvType" b:scope="local" b:select="$lSelectedEvType"/>
+<s:setatt c:event_type="{$lEvType}"/>
+<s:choose>
+<s:when b:test="string($tEvWiz/$tEvent//r25:role/@no_edit) = 'T'">
+<s:task b:action="trigger" b:event="LoadText" b:target="."/>
+</s:when>
+<s:when b:test="string(@c:no_edit) = 'true'">
+<s:task b:action="trigger" b:event="LoadText" b:target="."/>
+</s:when>
+<s:when b:test="contains($tEvWiz/$tEvent//r25:role/@no_edit,'EvXML')">
+<s:variable b:name="lNoEditXpath" b:select=""/>
+<s:variable b:name="lNoEditContent" b:select="string($tEvWiz/$tEvent//r25:role/@no_edit)"/>
+<s:task b:action="assign" b:target="$lNoEditXpath" b:select="replace($lNoEditContent,'EvXML','$tEvWiz/$tDataXml/r25:events/r25:event')"/>
+<s:task b:test="xpath($lNoEditXpath)" b:action="trigger" b:event="LoadText" b:target="."/>
+</s:when>
+<s:when b:test="id('FLS_CU_CONTACT') = 'N'">
+<s:task b:action="trigger" b:event="LoadText" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:sequential>
+<s:task b:action="trigger" b:event="Load" b:target="."/>
+</s:sequential>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lInstanceMessage" b:scope="local" b:select="string($tEvWiz/$tEvent//r25:role[string-length(@message &gt; 0)]/@message)"/>
+<s:if b:test="string-length($lInstanceMessage) = 0">
+<s:task b:action="assign" b:target="$lInstanceMessage" b:select="string(@c:message)"/>
+</s:if>			
+<s:render b:test="not(string-length($lInstanceMessage) = 0)" b:destination="$tContent//*[@class='contentOptions']" b:mode="asfirstchild">
+<tr><td colspan="3" class="contentMessage"><s:textnode b:label="{$lInstanceMessage}"/></td></tr>
+</s:render>
+<s:variable b:name="lEditorSupplementaryText" b:select="ancestor::div[@b:behavior='S25RsrvWizCard']/$tEditor[@name='contact']/info"/>
+<s:task b:action="xml2string" b:variable="$lEditorSupplementaryText"/>
+<s:if b:test="not(string-length($lEditorSupplementaryText) = 0) and not(div[@c:id='container']//div[@class='contentMessage'])">
+<s:script><![CDATA[
+
+var lText = _vars['lEditorSupplementaryText'][0];
+lText = lText.replace(/&lt;/g, '<');
+lText = lText.replace(/&gt;/g, '>');
+var destination = "div[@c:id='container']/div[@c:id='content']//*[@class='contentOptions']";
+bpc.render('<div class="contentMessage">' + lText + '</div>', 'before', destination, _current);
+
+]]></s:script>
+</s:if>
+</s:event>
+<s:event b:on="select">
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode='edit' and not($tEvWiz/$tEvent)">
+</s:when>
+<s:otherwise>
+<s:super/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveRsrvWizard">
+<s:variable b:name="lEvent" b:scope="local" b:select="$tEvWiz/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent='LoadSuccess'">
+<s:task b:test="not(@c:init = '1')" b:action="trigger" b:event="select"/>
+</s:when>
+<s:when b:test="$lEvent='TypeChange'">
+<s:task b:action="trigger" b:event="Reset"/>
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="LoadText">
+<s:variable b:name="lEvID" b:scope="local" b:select="1"/>
+<s:if b:test="substring($tEvWiz/@c:purpose,9,4) = 'edit'">
+<s:task b:action="assign" b:target="lEvID" b:scope="local" b:select="$tEvWiz/@c:event_id"/>
+</s:if>
+<s:variable b:name="tTypeRoles" b:scope="tag" b:select=""/>
+<s:choose>
+<s:when b:test="string-length($tEvWiz/$tEvent/r25:event_type_id) = 0">
+<s:with b:target="$tContent/div[@c:purpose='contacts']">
+<s:render b:destination="." b:mode="replacechildren">
+You must first select an Event Type.
+</s:render>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:variable b:name="tEventRoles" b:scope="tag" b:select="$tEvWiz/$tDataXml/r25:events/r25:event"/>
+<s:task b:action="xml2string" b:variable="$tEventRoles"/>
+<s:task b:test="contains($tEventRoles, '?xml')" b:action="assign" b:target="$lRoles" b:select="substring-after($lRoles,'?&gt;')"/>
+<s:variable b:name="lRoles" b:scope="local" b:select=""/>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'evcnrl.xml')"/>
+<s:if b:test="not(string($tContactMasterListFLS) = 'F' or string($tContactMasterListFLS) = 'C')">
+<s:variable b:name="lPrefRoles" b:select="id('Pref_config_ev_contact_roles')"/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'?otransform=',id('Config')/$tXslPrefix, 's25-event-wiz/contact_role_filter.xsl','&amp;role_list=',$lPrefRoles)"/>
+</s:if>
+<s:task b:action="load" b:url="{$lUrl}" b:method="GET" b:destination="$lRoles" b:mode="replace" b:showloading="false"/>
+<s:task b:action="string2xml" b:variable="$lRoles"/>
+<s:task b:action="xml2string" b:variable="$lRoles"/>
+<s:task b:test="contains($lRoles, '?xml')" b:action="assign" b:target="$lRoles" b:select="substring-after($lRoles,'?&gt;')"/>
+<s:task b:action="assign" b:target="$lAllRoles" b:select="concat('&lt;?xml version=&#34;1.0&#34;?&gt;', '&lt;contact_roles&gt; &lt;event_roles&gt;',$tEventRoles, '&lt;/event_roles&gt; &lt;all_roles&gt;',  $lRoles, '&lt;/all_roles&gt;','&lt;/contact_roles&gt;')"/>
+<s:task b:action="assign" b:target="$lAllRoles" b:select="replace($lAllRoles, 'xl:href', 'href')" />
+<s:task b:action="assign" b:target="$lAllRoles" b:select="replace($lAllRoles, 'xlink:href', 'href')" />
+<s:task b:action="string2xml" b:variable="$lAllRoles"/>
+<s:task b:action="transform" b:datasource="$lAllRoles" b:stylesheet="$ContactRolesText" b:destination="$tContent/div[@c:purpose='contacts']" b:mode="replacechildren"/>
+</s:otherwise>
+</s:choose>
+<s:fxstyle b:time="1"/>
+<s:variable b:name="lRolesContainer" b:scope="local" b:select="$tContent/div[@c:purpose='contacts']/div[@c:purpose='ContactRoles']"/>
+<s:task b:action="sort" b:source="$lRolesContainer/div" b:target="$lRolesContainer" b:attribute="c:role_name" b:type="string"/>
+</s:event>
+<s:event b:on="Load">
+<s:variable b:name="lFavText" b:select="'Your Starred Contacts'"/>
+<s:variable b:name="lChooseFrom" b:select="'Choose from...'"/>
+<s:if b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavText" b:select="'Suggested Contacts'"/>
+</s:if>
+<s:variable b:name="lSelectYourContact" b:select="'Select Your Contact'"/>
+<s:variable b:name="lSelectedContact" b:select="'Selected Contact'"/>
+<s:variable b:name="lSearchByContactName" b:select="'Search by Contact Name...'"/>
+<s:variable b:name="lLoading" b:select="'Loading...'"/>
+<s:variable b:name="lSearch" b:select="'Search'"/>
+<s:variable b:name="lContactNew" b:select="'Create New Contact'"/>
+<s:variable b:name="lFindBy" b:select="'Find by...'"/>
+<s:variable b:name="lNoneSelected" b:select="'none selected'"/>
+<s:variable b:name="lAddFavTip" b:select="'Add this Contact to Your Starred Contacts'"/>
+<s:variable b:name="lRemoveFavTip" b:select="'Remove this Contact from Your Starred Contacts'"/>
+<s:variable b:name="tTypeRoles" b:scope="tag" b:select=""/>
+<s:variable b:name="lDefaultScheduler" b:select="''"/>
+<s:if b:test="string(id('Pref_config_BPE_event_get')) = 'configurations'">
+<s:variable b:name="lSecGroupsConfig" b:select=""/>
+<s:task b:action="string2xml" b:variable="$lSecGroupsConfig" b:source="id('Pref_25L_rsrvwiz_secgroups')"/>
+<s:variable b:name="lSecurityGroup" b:select="tokenize(string(id('WSSessionMgr')/@c:security-group), ',')[1]"/>
+<s:task b:action="assign" b:target="$lDefaultScheduler" b:select="string($lSecGroupsConfig//security_group[@group_id = $lSecurityGroup]/@default_scheduler_id)"/>
+<s:setatt default_scheduler="{$lDefaultScheduler}"/>
+</s:if>
+<s:choose>
+<s:when b:test="string-length($lEvType) = 0">
+<s:with b:target="$tContent/div[@c:purpose='contacts']">
+<s:render b:destination="." b:mode="replacechildren">
+<div align="center">You must first select an Event Type.</div>
+</s:render>
+</s:with>
+</s:when>
+<s:when b:test="$tEvWiz/$tEvent/@status='new'"> 
+<s:variable b:name="lRoles" b:scope="local" b:select=""/>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'evcnrl.xml')"/>
+<s:if b:test="not(string($tContactMasterListFLS) = 'F' or string($tContactMasterListFLS) = 'C')">
+<s:variable b:name="lPrefRoles" b:select="id('Pref_config_ev_contact_roles')"/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'?otransform=',id('Config')/$tXslPrefix, 's25-event-wiz/contact_role_filter.xsl','&amp;role_list=',$lPrefRoles)"/>
+</s:if>
+<s:task b:action="load" b:url="{$lUrl}" b:method="GET" b:destination="$lRoles" b:mode="replace" b:showloading="true"/>
+<s:task b:action="string2xml" b:variable="$lRoles"/>
+<s:if b:test="not(@default_scheduler) and not(string-length(@default_scheduler) = 0)">
+<s:task b:action="remove" b:target="$lRoles//r25:role[r25:role_id = '-2']"/>
+</s:if>
+<s:task b:action="xml2string" b:variable="$lRoles"/>
+<s:task b:test="contains($lRoles, '?xml')" b:action="assign" b:target="$lRoles" b:select="substring-after($lRoles,'?&gt;')"/>
+<s:variable b:name="lTypeRolesURL" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'evtype.xml', '?type_id=',$lEvType, '&amp;scope=extended', '&amp;include=roles')"/>
+<s:task b:action="load" b:url="{$lTypeRolesURL}" b:method="GET" b:destination="$tTypeRoles" b:mode="replace" b:showloading="true"/>
+<s:task b:action="string2xml" b:variable="$tTypeRoles"/>
+<s:if b:test="string-length($tTypeRoles/r25:list/r25:item[1]/r25:name) &gt; 0">
+<s:variable b:name="lRoleTemp" b:scope="local">
+<r25:event_types>
+<r25:event_type>
+<r25:contact_role>
+<r25:role_id>-2</r25:role_id>
+<r25:role_name>Scheduler</r25:role_name>
+</r25:contact_role>
+<r25:contact_role>
+<r25:role_id>-1</r25:role_id>
+<r25:role_name>Requestor</r25:role_name>
+</r25:contact_role>
+</r25:event_type>
+</r25:event_types>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lRoleTemp"/>
+<s:task b:action="assign" b:target="$tTypeRoles" b:select="$lRoleTemp"/>
+</s:if>
+<s:task b:action="xml2string" b:variable="$tTypeRoles"/>
+<s:task b:test="contains($tTypeRoles, '?xml')" b:action="assign" b:target="$tTypeRoles" b:select="substring-after($tTypeRoles,'?&gt;')"/>
+<s:variable b:name="lCurrentUserID" b:scope="local" b:select="string(id('WSSessionMgr')/@c:contact-id)"/>
+<s:variable b:name="lCurrentUserName" b:scope="local" b:select="string(id('WSSessionMgr')/@c:contact-name)"/>
+<s:task b:action="assign" b:target="$lAllRoles" b:select="concat('&lt;?xml version=&#34;1.0&#34;?&gt;', '&lt;contact_roles user_id=&#34;',$lCurrentUserID, '&#34; user_name=&#34;',$lCurrentUserName,'&#34;&gt;', '&lt;ev_type_roles&gt;',$tTypeRoles,  '&lt;/ev_type_roles&gt;','&lt;all_roles&gt;', $lRoles,  '&lt;/all_roles&gt;','&lt;/contact_roles&gt;')"/>
+<s:task b:action="assign" b:target="$lAllRoles" b:select="replace($lAllRoles, 'xl:href', 'href')" />
+<s:task b:action="assign" b:target="$lAllRoles" b:select="replace($lAllRoles, 'xlink:href', 'href')" />
+<s:task b:action="string2xml" b:variable="$lAllRoles"/>
+<s:task b:action="transform" b:datasource="$lAllRoles" b:stylesheet="$ContactRoles" b:destination="$tContent/div[@c:purpose='contacts']" b:mode="replacechildren"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="tEventRoles" b:scope="tag" b:select="$tEvWiz/$tDataXml/r25:events/r25:event"/>
+<s:task b:action="xml2string" b:variable="$tEventRoles"/>
+<s:task b:test="contains($tEventRoles, '?xml')" b:action="assign" b:target="$lRoles" b:select="substring-after($lRoles,'?&gt;')"/>
+<s:variable b:name="lRoles" b:scope="local" b:select=""/>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'evcnrl.xml')"/>
+<s:if b:test="not(string($tContactMasterListFLS) = 'F' or string($tContactMasterListFLS) = 'C')">
+<s:variable b:name="lPrefRoles" b:select="id('Pref_config_ev_contact_roles')"/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'?otransform=',id('Config')/$tXslPrefix, 's25-event-wiz/contact_role_filter.xsl','&amp;role_list=',$lPrefRoles)"/>
+</s:if>
+<s:task b:action="load" b:url="{$lUrl}" b:method="GET" b:destination="$lRoles" b:mode="replace" b:showloading="false"/>
+<s:task b:action="string2xml" b:variable="$lRoles"/>
+<s:if b:test="not(@default_scheduler) and not(string-length(@default_scheduler) = 0)">
+<s:task b:action="remove" b:target="$lRoles//r25:role[r25:role_id = '-2']"/>
+</s:if>
+<s:task b:action="xml2string" b:variable="$lRoles"/>
+<s:task b:test="contains($lRoles, '?xml')" b:action="assign" b:target="$lRoles" b:select="substring-after($lRoles,'?&gt;')"/>
+<s:task b:action="assign" b:target="$lAllRoles" b:select="concat('&lt;?xml version=&#34;1.0&#34;?&gt;', '&lt;contact_roles mode=&#34;edit&#34;&gt; ', '&lt;event_roles&gt;', $tEventRoles, '&lt;/event_roles&gt; ', '&lt;all_roles&gt;', $lRoles, '&lt;/all_roles&gt;', '&lt;/contact_roles&gt;')"/>
+<s:task b:action="assign" b:target="$lAllRoles" b:select="replace($lAllRoles, 'xl:href', 'href')" />
+<s:task b:action="assign" b:target="$lAllRoles" b:select="replace($lAllRoles, 'xlink:href', 'href')" />
+<s:task b:action="string2xml" b:variable="$lAllRoles"/>
+<s:task b:action="transform" b:datasource="$lAllRoles" b:stylesheet="$ContactRoles" b:destination="$tContent/div[@c:purpose='contacts']" b:mode="replacechildren"/>
+</s:otherwise>
+</s:choose>
+<s:if b:test="string(id('FLS_CU_CONTACT')) = 'F'">
+<s:task b:action="show" b:target="$tContent//div[@c:index_id='NewContact']"/>
+</s:if>
+<s:fxstyle b:time="1"/>
+<s:if b:test="not(string-length($lEvType) = 0)">
+<s:if b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="remove" b:target="$lRolesContainer/div[@c:role_id = -2]"/>
+</s:if>
+<s:variable b:name="lRolesContainer" b:scope="local" b:select="$tContent/div[@c:purpose='contacts']/div[@c:purpose='ContactRoles']"/>
+<s:task b:action="sort" b:source="$lRolesContainer/div" b:target="$lRolesContainer" b:attribute="c:role_name" b:type="string"/>
+<s:sequential>
+<s:variable b:name="lFavCountUrl" b:select="concat(id('Config')/$tWsPrefix,'contacts.xml?favorite=T','&amp;scope=list')"/>
+<s:variable b:name="lFavCount" b:select=""/>
+<s:task b:action="load" b:url="{$lFavCountUrl}" b:method="GET" b:destination="$lFavCount" b:mode="replacechildren">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lFavCount"/>
+<s:choose>
+<s:when b:test="$lFavCount//r25:item">
+<s:task b:action="trigger" b:event="PreLoadFavorites"/>
+</s:when>
+<s:otherwise>
+<s:for-each b:target="$tContent/div[@c:purpose='contacts']/div[@c:purpose='ContactRoles']//div[@c:id='container']">
+<s:sequential><s:lock>
+<s:task b:action="deselect" b:target="$_target/$tIndices/div[@c:id='options']/div[@c:index_id='fav']"/>
+<s:task b:action="select" b:target="$_target/$tIndices/div[@c:id='options']/div[@c:index_id='search']"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:otherwise>
+</s:choose>
+</s:sequential>
+</s:if>
+</s:event>
+<s:event b:on="PreLoadFavorites">
+<s:variable b:name="lRolesContainer" b:select="$tContent/div[@c:purpose='contacts']/div[@c:purpose='ContactRoles']"/>
+<s:variable b:name="lFirstContainerFavs" b:select="$lRolesContainer//div[@c:id='container'][1]/$tContacts/div[@c:id='options']"/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'contacts.xml', '?favorite=T','&amp;scope=extended','&amp;include=user+address', '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/contact_favs.xsl')}" b:destination="$lFirstContainerFavs" b:mode="replacechildren" b:showloading="false"/>
+<s:for-each b:target="$lRolesContainer//div[@c:id='container']">
+<s:sequential><s:lock>
+<s:task b:action="copy" b:source="$lFirstContainerFavs/span" b:destination="$_target/$tContacts/div[@c:id='options']" b:mode="replacechildren"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:event>
+<s:event b:on="Validate">
+<s:variable b:name="lSavedEvType" b:scope="local" b:select="$tEvWiz/$tEvent//r25:event_type_id"/>
+<s:variable b:name="lSelectedEvType" b:scope="local" b:select="''"/>
+<s:task b:test="exists($tEvWiz/$tDeck//s25:rsrv_wiz_type)" b:action="assign" b:target="$lSelectedEvType" b:scope="local" b:select="$tEvWiz/$tDeck//s25:rsrv_wiz_type/$tLastSelectedTypeID"/>
+<s:variable b:name="lEvType" b:scope="local" b:select="$lSavedEvType"/>
+<s:task b:test="string-length($lSelectedEvType) gt 0" b:action="assign" b:target="$lEvType" b:scope="local" b:select="$lSelectedEvType"/>
+<s:if b:test="not(string($lEvType) = string(@c:event_type))">
+<s:task b:action="trigger" b:event="Reset"/>
+</s:if>
+<s:setatt c:valid="true" c:error=""/>
+<s:if b:test="@c:required = 'true' and count($tContent/div[@c:purpose='contacts']/div[@c:purpose='ContactRoles']//div[@c:purpose='CurrentlySelected']) = 0">
+<s:setatt c:valid="false" c:error="Contact roles are required."/>
+</s:if>
+</s:event>
+<s:event b:on="Save">
+<s:variable b:name="lEv" b:scope="local" b:select="$tEvWiz/$tDataXml/r25:events/r25:event"/>
+<s:variable b:name="lProfId" b:scope="local" b:select="$tEvWiz/@c:profile_id"/>
+<s:variable b:name="lProf" b:scope="local" b:select="$tEvWiz/$tProfile"/>
+<s:variable b:name="lRsrv" b:scope="local" b:select="$tEvWiz/$tRsrv"/>
+<s:if b:test="not(string-length($lProf/@status)=0)">
+</s:if>
+<s:task b:action="remove" b:target="$tEvent/r25:role[@status='new']"/>
+<s:choose>
+<s:when b:test="not(@default_scheduler) = 0 and not(string-length(@default_scheduler) = 0)">
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/r25:role[not(r25:role_id = '-2')]/@status" b:value="del"/>
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/r25:role[not(r25:role_id = '-2')]/r25:contact/@status" b:value="del"/>			
+</s:when>
+<s:otherwise>
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/r25:role/@status" b:value="del"/>
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/r25:role/r25:contact/@status" b:value="del"/>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lRoleXml" b:scope="local">
+<r25:role status="new">
+<r25:role_id/>
+<r25:contact status="new">
+<r25:contact_id/>
+</r25:contact>
+</r25:role>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lRoleXml"/>
+<s:for-each b:target="$tContent//div[@c:purpose='roleContainer' and @c:active='true']/div[@c:purpose='CurrentlySelected'][not(string-length(@c:obj_id)=0)]">
+<s:sequential>
+<s:lock>
+<s:variable b:name="lRoleId" b:scope="local" b:select="$_target/@c:role_id"/>
+<s:choose>
+<s:when b:test="$lRoleId = $lEv//r25:role/r25:role_id">
+<s:task b:action="settext" b:target="$tEvWiz/$tEvent/r25:role[r25:role_id = $lRoleId]/r25:contact/r25:contact_id" b:value="{string($_target/@c:obj_id)}"/>  
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/r25:role[r25:role_id = $lRoleId]/@status" b:value="mod"/>
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/r25:role[r25:role_id = $lRoleId]/r25:contact/@status" b:value="mod"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lRoleXml/r25:role/r25:role_id" b:value="{$_target/@c:role_id}"/>
+<s:task b:action="settext" b:target="$lRoleXml/r25:role/r25:contact/r25:contact_id" b:value="{$_target/@c:obj_id}"/>
+<s:task b:action="copy" b:source="$lRoleXml/r25:role" b:destination="$lEv" b:mode="aslastchild"/>
+</s:otherwise>
+</s:choose>
+</s:lock>
+</s:sequential>
+</s:for-each>
+<s:if b:test="not($tEvWiz/$tEvent/@status='new')">
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/@status" b:value="mod"/>
+</s:if>
+<s:variable b:name="lCrumbValue" b:select="string-join($tContent//div[@c:purpose='roleContainer' and @c:active='true']//span[@class='SubEditor_Label']/text(), ';; ')"/>
+<s:setatt c:crumb="{$lCrumbValue}"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RoleContainer">
+<s:event b:on="construct">
+<s:setatt c:purpose="roleContainer"/> 
+<s:super/>
+<s:task b:test="@c:active='true'" b:action="trigger" b:event="Activate"/>
+</s:event>
+<s:event b:on="Open">
+<s:setatt c:open="true"/>
+<s:task b:action="addclass" b:value="SubEditor_Container_open"/>
+<s:task b:test="not(@c:active='true')" b:action="trigger" b:event="Activate"/>
+</s:event>
+<s:event b:on="Close">
+<s:setatt c:open="false"/>
+<s:task b:action="removeclass" b:value="SubEditor_Container_open"/>
+</s:event>
+<s:event b:on="Activate">
+<s:setatt c:active="true"/>
+<s:task b:action="addclass" b:value="SubEditor_Container_active"/>
+<s:with b:target=".//input[@c:purpose='role_active']">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:task b:test="not(@c:open='true')" b:action="trigger" b:event="Open"/>
+</s:event>
+<s:event b:on="Deactivate">
+<s:setatt c:active="false"/>
+<s:task b:action="removeclass" b:value="SubEditor_Container_active"/>
+<s:task b:action="deselect" b:target=".//input[@c:purpose='role_active']"/>
+<s:task b:test="not(@c:open='false')" b:action="trigger" b:event="Close"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RoleToggleDisplay">
+<s:event b:on="click">
+<s:with b:target="ancestor::div[@c:purpose='roleContainer']">
+<s:choose>
+<s:when b:test="@c:open='true'">
+<s:task b:action="trigger" b:event="Close"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="Open"/>
+</s:otherwise>
+</s:choose>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RoleToggleState" b:behavior="RsrvWizInput">
+<s:event b:on="construct"/>
+<s:event b:on="validate"/>
+<s:event b:on="valid"/>
+<s:event b:on="change"/>
+<s:event b:on="select">
+<s:task b:action="trigger" b:target="ancestor::div[@c:purpose='roleContainer']" b:event="Activate"/>
+</s:event>
+<s:event b:on="deselect">
+<s:task b:action="trigger" b:target="ancestor::div[@c:purpose='roleContainer']" b:event="Deactivate"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ContactObjectSelectors" b:behavior="RoleContainer">
+<s:event b:on="construct">
+<s:super/>
+<s:variable b:name="tSelectors" b:scope="tag" b:select="table[@c:id='container_body']/tr/td[@c:id='selectors']"/>
+<s:variable b:name="tSelected" b:scope="tag" b:select="table[@c:id='container_body']/tr/td[@c:id='selected']"/>
+<s:variable b:name="tIndices" b:scope="tag" b:select="$tSelectors/div[@c:id='indices']"/>
+<s:variable b:name="tLastIndex" b:scope="tag" b:select="'-1'"/>
+<s:variable b:name="tDivisions" b:scope="tag" b:select="$tSelectors/div[@c:id='divisions']"/>
+<s:variable b:name="tLastDivision" b:scope="tag" b:select="'-1'"/>
+<s:variable b:name="tContacts" b:scope="tag" b:select="$tSelectors/div[@c:id='contacts']"/>
+<s:variable b:name="tNeedle" b:scope="tag" b:select="$tDivisions/div[@c:id='search']//input[@type='text' and @name='needle']"/>
+<s:variable b:name="tFavIconContainer" b:scope="tag" b:select="$tSelected/div[@c:id='txt']//span[@c:purpose='FavToggle']"/>
+<s:variable b:name="lContactID" b:select="string(div[@c:purpose='CurrentlySelected']/@c:obj_id)"/>
+<s:variable b:name="lContactName" b:select="string(div[@c:purpose='CurrentlySelected']/@c:obj_name)"/>
+<s:variable b:name="lContactEmail" b:select="string(div[@c:purpose='CurrentlySelected']/@c:email)"/>
+<s:if b:test="not(string-length($lContactID) = 0) and not(string-length($lContactName) = 0)">
+<s:task b:action="trigger" b:event="ContactSelect"/>
+</s:if>
+</s:event>
+<s:event b:on="ContactIndexChange">
+<s:variable b:name="lSelOpt" b:select="$tIndices/div[@c:id='options']/div[@b:state='selected']"/>
+<s:if b:test="$lSelOpt/@c:index_id ne '-1' and $lSelOpt/@c:index_id ne $tLastIndex">
+<s:choose>
+<s:when b:test="$lSelOpt/@c:index_id = 'fav'">
+<s:with b:target="$tDivisions">
+<s:task b:action="hide"/>
+</s:with>
+<s:with b:target="$tContacts">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+<s:fxstyle b:time="10"/>
+<s:task b:action="hide"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="ContactOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+<s:task b:action="show"/>
+</s:with>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'contacts.xml', '?favorite=T&amp;scope=extended&amp;include=user+address', '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/contact_favs.xsl')"/>
+<s:task b:action="load" b:url="{$lUrl}" b:method="GET" b:destination="$tContacts/div[@c:id='options']" b:mode="replacechildren" b:showloading="true"/>
+</s:when>
+<s:when b:test="$lSelOpt/@c:index_id = 'selected_orgs'">
+<s:with b:target="$tDivisions">
+<s:task b:action="hide"/>
+</s:with>
+<s:with b:target="$tContacts">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+<s:fxstyle b:time="10"/>
+<s:task b:action="hide"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="ContactOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+<s:task b:action="show"/>
+</s:with>
+<s:variable b:name="lContactXml">
+<Contacts>
+</Contacts>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lContactXml"/>
+<s:choose>
+<s:when b:test="exists(ancestor::s25:rsrv_wiz_contacts/$tEvWiz//*[@c:purpose='sponsor']) or exists(ancestor::s25:rsrv_wiz_contacts/$tEvWiz//*[@c:purpose='addl_sponsor'])">
+<s:variable b:name="lOrgContacts" b:scope="local" b:select=""/>
+<s:variable b:name="lPrimaryOrgID" b:scope="local" b:select="string(ancestor::s25:rsrv_wiz_contacts/$tEvWiz//*[@c:purpose='sponsor']/$tLastSelectedOrg)"/>
+<s:if b:test="string-length($lPrimaryOrgID) &gt; 0">
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'contacts.xml', '?organization_id=',$lPrimaryOrgID, '&amp;scope=extended&amp;include=user+address')"/>
+<s:task b:action="load" b:url="{$lUrl}" b:method="GET" b:destination="$lOrgContacts" b:mode="replace"/>
+<s:if b:test="contains($lOrgContacts, '?xml')">
+<s:task b:action="string2xml" b:variable="$lOrgContacts"/>
+<s:task b:action="copy" b:source="$lOrgContacts//r25:contact" b:destination="$lContactXml/Contacts" b:mode="aslastchild"/>
+</s:if>
+</s:if>
+<s:variable b:name="lSecondaryOrgCount" b:scope="local" b:select="count(ancestor::s25:rsrv_wiz_contacts/$tEvWiz//*[@c:purpose='addl_sponsor']/$tContentOptions//div[@c:org_id ne '-1'])"/>
+<s:if b:test="$lSecondaryOrgCount &gt; 0">
+<s:variable b:name="lOrg" b:scope="local" b:select=""/>
+<s:variable b:name="lUrl" b:scope="local" b:select=""/>
+<s:for-each b:target="ancestor::s25:rsrv_wiz_contacts/$tEvWiz//*[@c:purpose='addl_sponsor']/$tContentOptions//div[@c:org_id ne '-1']">
+<s:sequential>
+<s:lock>									
+<s:task b:action="assign" b:target="$lOrg" b:select="string($_target/@c:org_id)"/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat(id('Config')/$tWsPrefix,'contacts.xml', '?organization_id=',$lOrg,'&amp;scope=extended&amp;include=user+address')"/>
+<s:task b:action="load" b:url="{$lUrl}" b:method="GET" b:destination="$lOrgContacts" b:mode="replace"/>					
+<s:if b:test="contains($lOrgContacts, '?xml')">
+<s:task b:action="string2xml" b:variable="$lOrgContacts"/>
+<s:task b:action="copy" b:source="$lOrgContacts//r25:contact" b:destination="$lContactXml/Contacts" b:mode="aslastchild"/>
+</s:if>
+</s:lock>
+</s:sequential>
+</s:for-each>
+</s:if>							
+</s:when>
+<s:when b:test="count(ancestor::s25:rsrv_wiz_contacts/$tEvWiz/$tEvent//r25:organization_id) &gt; 0">
+<s:variable b:name="lOrg" b:scope="local" b:select=""/>
+<s:variable b:name="lUrl" b:scope="local" b:select=""/>
+<s:variable b:name="lEventOrgContacts" b:scope="local" b:select=""/>
+<s:for-each b:target="ancestor::s25:rsrv_wiz_contacts/$tEvWiz/$tEvent//r25:organization">
+<s:sequential>
+<s:lock>
+<s:task b:action="assign" b:target="$lOrg" b:select="string($_target/r25:organization_id)"/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat(id('Config')/$tWsPrefix,'contacts.xml', '?organization_id=',$lOrg,'&amp;scope=extended&amp;include=user+address')"/>
+<s:task b:action="load" b:url="{$lUrl}" b:method="GET" b:destination="$lEventOrgContacts" b:mode="aslastchild"/>		
+<s:if b:test="contains($lEventOrgContacts, '?xml')">
+<s:task b:action="string2xml" b:variable="$lEventOrgContacts"/>
+<s:task b:action="copy" b:source="$lEventOrgContacts/r25:contacts//r25:contact" b:destination="$lContactXml/Contacts" b:mode="aslastchild"/>
+</s:if>
+</s:lock>
+</s:sequential>
+</s:for-each>
+</s:when>
+<s:otherwise>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="ContactOption" c:obj_id="-1" b:disabled="true">No Contacts available for this event&apos;s organizations.</div>
+</s:render>						
+</s:otherwise>
+</s:choose>
+<s:choose>
+<s:when b:test="string-length($lPrimaryOrgID) = 0 and $lSecondaryOrgCount = 0 and count(ancestor::s25:rsrv_wiz_contacts/$tEvWiz/$tEvent//r25:organization_id) = 0">
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="ContactOption" c:obj_id="-1" b:disabled="true">No Contacts available for this event&apos;s organizations.</div>
+</s:render>													
+</s:when>
+<s:otherwise>
+<s:task b:action="transform" b:datasource="$lContactXml" b:stylesheet="$OrgContacts" b:destination="$tContacts/div[@c:id='options']" b:mode="replacechildren"/>						
+</s:otherwise>
+</s:choose>
+</s:when>				
+<s:when b:test="$lSelOpt/@c:index_id = 'search'">
+<s:with b:target="$tNeedle">
+<s:setatt value=""/>
+</s:with>
+<s:with b:target="$tDivisions">
+<s:task b:action="show"/>
+</s:with>
+<s:with b:target="$tContacts">
+<s:task b:action="hide"/>
+</s:with>
+</s:when>
+</s:choose>
+<s:fxstyle b:time="10"/>
+
+<s:with b:target="$tContacts/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+<s:task b:action="assign" b:target="$tLastIndex" b:scope="tag" b:select="string($lSelOpt/@c:index_id)"/>
+</s:if>
+</s:event>
+<s:event b:on="ContactSelect">
+<s:if b:test="not(string-length($lContactID)=0) and not(string-length($lContactName)=0)">
+<s:task b:action="hide" b:target="$tFavIconContainer"/>
+<s:with b:target="div[@c:purpose='CurrentlySelected']">
+<s:setatt c:obj_id="{$lContactID}" c:obj_name="{$lContactName}" c:email="{$lContactEmail}"/>
+</s:with>
+<s:with b:target="$tSelected/div[@c:id='txt']">
+<s:setatt class="currentSelection icon-contact"/>
+<s:render b:destination="span[@c:id='selectedContact']" b:mode="replacechildren">
+<div class="currentSelectionValue"><s:textnode b:label="{$lContactName}"/></div>
+<div class="currentSelection_Attribute"><s:textnode b:label="{$lContactEmail}"/></div>
+</s:render>
+</s:with>
+<s:if b:test="not(id('WSSessionMgr')/@c:user-type = 'web')">
+<s:variable b:name="lContactAtrbsUrl" b:select="concat(id('Config')/$tWsPrefix,'contact.xml', '?contact_id=',$lContactID, '&amp;scope=minimal')"/>
+<s:variable b:name="lContactAtrbs" b:select=""/>
+<s:task b:action="load" b:url="{$lContactAtrbsUrl}" b:method="GET" b:destination="$lContactAtrbs" b:mode="replace" b:showloading="false"/>
+<s:task b:action="string2xml" b:variable="$lContactAtrbs"/>
+<s:variable b:name="lContactFavStatus" b:select="'NotFavorite'"/>
+<s:if b:test="string($lContactAtrbs/r25:contacts/r25:contact/r25:favorite) = 'T'">
+<s:task b:action="assign" b:target="$lContactFavStatus" b:select="'Favorite'"/>
+</s:if>
+<s:with b:target="$tFavIconContainer">
+<s:task b:action="hide" b:target="./img"/>
+<s:task b:action="show" b:target="./img[@c:purpose = $lContactFavStatus]"/>
+<s:task b:action="show"/>
+</s:with>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="LoadSearch">
+<s:task b:action="focus" b:target="$tNeedle"/>
+<s:if b:test="not(string-length($tNeedle/@value)=0)">
+<s:with b:target="$tContacts">
+<s:task b:action="show"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="ContactOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+</s:with>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'contacts.xml', '?contains=',normalize-space($tNeedle/@value), '&amp;scope=extended&amp;include=user+address', '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/contact_search.xsl')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tContacts/div[@c:id='options']" b:mode="replacechildren"/>
+
+<s:with b:target="$tContacts/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+<s:with b:target="$tNeedle">
+<s:setatt b:valid="true" b:required="false"/>
+</s:with>
+<s:task b:action="assign" b:target="$tLastDivision" b:scope="tag" b:select="'search'"/>
+</s:if>
+</s:event>
+</s:behavior>
+<s:stylesheet b:name="OrgContacts">
+<s:template b:match="/">
+<span>
+<s:apply-templates b:select="Contacts//r25:contact"/>
+</span>
+</s:template>
+<s:template b:match="r25:contact">
+<div b:behavior="ContactOption">
+<s:attribute b:name="c:obj_type">contact</s:attribute>
+<s:attribute b:name="c:obj_id">
+<s:value-of b:select="r25:contact_id"/>
+</s:attribute>
+<s:attribute b:name="c:obj_name">
+<s:value-of b:select="r25:contact_name"/>
+</s:attribute>
+<s:attribute b:name="c:email">
+<s:choose>
+<s:when b:test="not(string-length(r25:address[r25:address_type = '3']/r25:email) = 0)">
+<s:value-of b:select="r25:address[r25:address_type = '3']/r25:email"/>
+</s:when>
+<s:when b:test="not(string-length(r25:address[r25:address_type = '4']/r25:email) = 0)">
+<s:value-of b:select="r25:address[r25:address_type = '4']/r25:email"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<div><s:value-of b:select="r25:contact_name"/></div>
+<s:choose>
+<s:when b:test="not(string-length(r25:address[r25:address_type = '3']/r25:email) = 0)">
+<div class="ObjectAttributes"><s:value-of b:select="r25:address[r25:address_type = '3']/r25:email"/></div>
+</s:when>
+<s:when b:test="not(string-length(r25:address[r25:address_type = '4']/r25:email) = 0)">
+<div class="ObjectAttributes"><s:value-of b:select="r25:address[r25:address_type = '4']/r25:email"/></div>
+</s:when>
+</s:choose>
+</div>
+</s:template>	
+</s:stylesheet>
+<s:stylesheet b:name="ContactRoles">
+<s:template b:match="/">
+<s:variable b:name="CurrentUserID" b:select="contact_roles/@user_id"/>
+<s:variable b:name="CurrentUserName" b:select="contact_roles/@user_name"/>
+<s:variable b:name="CreationRolesPath" b:select="'contact_roles/all_roles/r25:event_roles/r25:role[r25:role_id = //contact_roles/ev_type_roles/r25:event_types/r25:event_type/r25:contact_role/r25:role_id]'"/>
+<s:variable b:name="EditingRolesPath" b:select="'contact_roles/event_roles/r25:event/r25:role[r25:role_id = //contact_roles/all_roles/r25:event_roles/r25:role/r25:role_id]'"/>
+<s:variable b:name="Mode" b:select="string(contact_roles/@mode)"/>
+<div c:purpose="ContactRoles">
+<s:attribute b:name="current_user">
+<s:value-of b:select="$CurrentUserID"/>
+</s:attribute>
+<s:attribute b:name="mode">
+<s:value-of b:select="$Mode"/>
+</s:attribute>
+<s:apply-templates b:select="xpath($CreationRolesPath)"/>
+<s:apply-templates b:select="xpath($EditingRolesPath)"/>
+</div>
+</s:template>
+<s:template b:match="*[name()='r25:role']">
+<div>
+<s:attribute b:name="c:role_name">
+<s:value-of b:select="r25:role_name"/>
+</s:attribute>
+<s:attribute b:name="c:role_id">
+<s:value-of b:select="r25:role_id"/>
+</s:attribute>
+<div class="SubEditor_Container" b:behavior="ContactObjectSelectors" c:id="container">
+<s:attribute b:name="c:obj_id">
+<s:value-of b:select="r25:role_id"/>
+</s:attribute>
+<s:choose>
+<s:when b:test="string-length(r25:contact/r25:contact_id) gt 0">
+<s:attribute b:name="c:active">true</s:attribute>
+</s:when>
+<s:when b:test="not($Mode = 'edit') and (string-length(r25:contact/r25:contact_id) = 0) and (r25:role_id = '-1')">
+<s:attribute b:name="c:active">true</s:attribute>
+</s:when>
+<s:otherwise>
+<s:attribute b:name="c:active">false</s:attribute>
+</s:otherwise>
+</s:choose>
+<div class="SubEditor_Head" b:textselect="false" c:id="container_head">
+<img src="https://25live-c.collegenet.com/hybridssl/v22.0/gfx/_.gif" class="SubEditor_Toggle" b:behavior="RoleToggleDisplay"/>
+<input type="checkbox" c:purpose="role_active" b:behavior="RoleToggleState"/>
+<span class="SubEditor_Label">
+<s:value-of b:select="r25:role_name"/>
+</span>
+</div>
+<table class="SubEditor_Table contentOptions" cellspacing="0" c:id="container_body">
+<tr valign="top">
+<td class="contentOptionSelect" c:obj_type="3" c:id="selectors">
+<div align="center"><div class="currentSelectionHeader"><s:value-of b:select="$lSelectYourContact"/></div></div>
+<div c:id="indices" class="RsrvWiz_CriteriaSelectTierOne">
+<div class="RsrvWiz_CriteriaSelectHeader">
+<div class="icon-contact"><s:value-of b:select="$lFindBy"/></div>
+</div>
+<div c:id="options" class="RsrvWiz_CriteriaSelectBody">
+<div b:behavior="ContactIndexOption" c:index_id="fav" b:state="selected">
+<div class="icon-favorite"><s:value-of b:select="$lFavText"/></div>
+</div>
+<div b:behavior="ContactIndexOption" c:index_id="search">
+<div class="icon-search"><s:value-of b:select="$lSearch"/></div>
+</div>
+<div b:behavior="ContactIndexOption" c:index_id="selected_orgs">
+<div><s:value-of b:select="'Selected Organization Contacts'"/></div>
+</div>
+<div b:behavior="ObjectOption" c:index_id="NewContact" style="display:none">
+<s:event b:on="click">
+<s:task b:action="remove" b:target="//div[@c:purpose='roleContainer']/@c:new_contact_target"/>
+<s:with b:target="ancestor::div[@c:purpose='roleContainer'][1]">
+<s:setatt c:new_contact_target="true"/>
+</s:with>
+<s:task b:action="trigger" b:event="25Live_ContactNew" b:target="id('Controller')"/>
+</s:event>
+<div><s:value-of b:select="$lContactNew"/></div>
+</div>
+</div>
+</div>
+<div c:id="divisions" class="RsrvWiz_CriteriaSelectTierTwo">
+<div class="RsrvWiz_CriteriaSelectHeader">
+<div class="icon-contact"><s:value-of b:select="$lSearch"/></div>
+</div>
+<div c:id="search" class="RsrvWiz_CriteriaSelectBody RsrvWiz_CriteriaSearch">
+<div><s:value-of b:select="$lSearchByContactName"/></div><br/>
+<input type="text" name="needle" value="" b:required="false" b:valid="true" style="width:150px" b:behavior="RsrvWizInput">
+<s:whenactive>
+<s:keys b:keys="enter" b:action="trigger" b:event="LoadSearch" b:target="ancestor::div[@c:id='container']"/>
+</s:whenactive>
+</input>
+<b:button b:action="trigger" b:event="LoadSearch" b:target="ancestor::div[@c:id='container']"><s:value-of b:select="$lSearch"/></b:button>
+</div>
+</div>
+<div c:id="contacts" class="RsrvWiz_CriteriaSelectTierThree" style="display:block">
+<div class="RsrvWiz_ObjectSelectHeader">
+<div class="icon-contact"><s:value-of b:select="$lChooseFrom"/></div>
+</div>
+<div c:id="options" class="RsrvWiz_ObjectSelectBody">
+<div b:behavior="ContactOption" c:obj_id="-1" b:disabled="true"><s:value-of b:select="$lLoading"/></div>							
+</div>
+</div>
+</td>
+<td class="contentSelections" c:id="selected">
+<div align="center"><div class="currentSelectionHeader"><s:value-of b:select="$lSelectedContact"/></div></div>
+<div c:id="txt" class="currentSelection">
+<div class="currentSelection_Icons" style="width:30px">
+<span c:purpose="FavToggle">
+<img src="https://25live-c.collegenet.com/hybridssl/v22.0/gfx/_.gif" class="actionIcon_NotFavorite" style="display:none;" c:purpose="NotFavorite" b:behavior="AddFavContact">
+<s:attribute b:name="b:tooltiptext"><s:value-of b:select="$lAddFavTip"/></s:attribute>
+</img>
+<img src="https://25live-c.collegenet.com/hybridssl/v22.0/gfx/_.gif" class="actionIcon_IsFavorite" style="display:none;" c:purpose="Favorite" b:behavior="RemoveFavContact">
+<s:attribute b:name="b:tooltiptext"><s:value-of b:select="$lRemoveFavTip"/></s:attribute>
+</img>
+</span>
+</div>
+<span c:id="selectedContact">
+<div class="currentSelectionBlank"><s:value-of b:select="$lNoneSelected"/></div>
+</span>
+</div>
+</td>
+</tr>
+</table>
+<div c:purpose="CurrentlySelected">
+<s:attribute b:name="c:role_id">
+<s:value-of b:select="r25:role_id"/>
+</s:attribute>
+<s:attribute b:name="c:obj_type">contact</s:attribute>
+<s:attribute b:name="c:obj_id">
+<s:choose>
+<s:when b:test="string-length(r25:contact/r25:contact_id) gt 0">
+<s:value-of b:select="r25:contact/r25:contact_id"/>
+</s:when>
+<s:when b:test="not($Mode = 'edit') and (string-length(r25:contact/r25:contact_id) = 0) and (r25:role_id = '-1')">
+<s:value-of b:select="$CurrentUserID"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<s:attribute b:name="c:value">
+<s:choose>
+<s:when b:test="string-length(r25:contact/r25:contact_id) gt 0">
+<s:value-of b:select="r25:contact/r25:contact_name"/>
+</s:when>
+<s:when b:test="not($Mode = 'edit') and (string-length(r25:contact/r25:contact_id) = 0) and (r25:role_id = '-1')">
+<s:value-of b:select="$CurrentUserID"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<s:attribute b:name="c:obj_name">
+<s:choose>
+<s:when b:test="string-length(r25:contact/r25:contact_id) gt 0">
+<s:value-of b:select="r25:contact/r25:contact_name"/>
+</s:when>
+<s:when b:test="not($Mode = 'edit') and (string-length(r25:contact/r25:contact_id) = 0) and (r25:role_id = '-1')">
+<s:value-of b:select="$CurrentUserName"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<s:attribute b:name="c:email">
+<s:value-of b:select="r25:contact/r25:email"/>
+</s:attribute>
+</div>
+</div>
+</div>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="ContactRolesText">
+<s:template b:match="/">
+<s:variable b:name="CurrentUserID" b:select="contact_roles/@user_id"/>
+<s:variable b:name="CurrentUserName" b:select="contact_roles/@user_name"/>
+<s:variable b:name="EditingRolesPath" b:select="'contact_roles/event_roles/r25:event/r25:role[number(r25:contact/r25:contact_id) &gt; 0][r25:role_id = //contact_roles/all_roles/r25:event_roles/r25:role/r25:role_id]'"/>
+<div c:purpose="ContactRoles">
+<s:attribute b:name="current_user">
+<s:value-of b:select="$CurrentUserID"/>
+</s:attribute>
+<table c:purpose="ContactRoles" class="tblSubEditor" cellspacing="10" border="0" align="center">
+<tbody>
+<s:choose>
+<s:when b:test="count(xpath($EditingRolesPath)) &gt; 0">
+<s:apply-templates b:select="xpath($EditingRolesPath)"/>
+</s:when>
+<s:otherwise>
+<tr>
+<td colspan="2">
+There are no Contacts assigned to this Event.
+</td>
+</tr>
+</s:otherwise>
+</s:choose>
+<tr>
+<td colspan="2">
+<br/>
+<div class="input-note">
+Event Contact Roles are not currently editable.
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</s:template>
+<s:template b:match="*[name()='r25:role']">
+<tr>
+<s:attribute b:name="c:role_name">
+<s:value-of b:select="r25:role_name"/>
+</s:attribute>
+<td class="SubEditor_Label"><b><s:value-of b:select="r25:role_name"/>:</b></td>
+<td>
+<div b:behavior="RoleContainer">
+<s:attribute b:name="c:obj_id">
+<s:value-of b:select="r25:role_id"/>
+</s:attribute>
+<div c:id="currentOrganization" c:obj_type="organization">
+<s:attribute b:name="c:obj_id">
+<s:value-of b:select="r25:contact/r25:contact_id"/>
+</s:attribute>
+<s:attribute b:name="c:obj_name">
+<s:value-of b:select="r25:contact/r25:contact_name"/>
+</s:attribute>
+<s:value-of b:select="r25:contact/r25:contact_name"/>
+</div>
+</div>
+</td>
+</tr>
+</s:template>
+</s:stylesheet>
+<s:behavior b:name="ContactIndexOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:task b:action="trigger" b:event="ContactIndexChange" b:target="ancestor::div[@c:id='container'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ContactOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:super/>
+<s:variable b:name="lContactID" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:variable b:name="lContactName" b:scope="local" b:select="string(@c:obj_name)"/>
+<s:variable b:name="lContactEmail" b:scope="local" b:select="string(@c:email)"/>
+<s:task b:action="trigger" b:event="ContactSelect" b:target="ancestor::div[@c:id='container'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="AddFavContact">
+<s:event b:on="click">
+<s:variable b:name="lContainer" b:scope="local" b:select="ancestor::div[@c:id='container'][1]"/>
+<s:variable b:name="lFavContactId" b:scope="local" b:select="string($lContainer/div[@c:purpose='CurrentlySelected']/@c:obj_id)"/>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'favorites.xml', '?object_id=', $lFavContactId,  '&amp;object_type=3')"/>
+<s:variable b:name="lMethod" b:scope="local" b:select="'PUT'"/>
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:task b:action="load" b:url="{$lUrl}" b:method="{$lMethod}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="hide" b:target="."/>
+<s:task b:action="show" b:target="../img[@c:purpose='Favorite']"/>
+<s:with b:target="$lContainer">
+<s:if b:test="$tIndices/div[@c:id='options']/div[@b:state='selected']/@c:index_id='fav'">
+<s:task b:action="assign" b:target="$tLastIndex" b:scope="tag" b:select="''"/>
+<s:task b:action="trigger" b:event="select" b:target="$tIndices/div[@c:id='options']/div[@b:state='selected' and @c:index_id='fav']"/>
+</s:if>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RemoveFavContact">
+<s:event b:on="click">
+<s:variable b:name="lContainer" b:scope="local" b:select="ancestor::div[@c:id='container'][1]"/>
+<s:variable b:name="lFavContactId" b:scope="local" b:select="string($lContainer/div[@c:purpose='CurrentlySelected']/@c:obj_id)"/>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'favorites.xml', '?object_id=', $lFavContactId,  '&amp;object_type=3')"/>
+<s:variable b:name="lMethod" b:scope="local" b:select="'DELETE'"/>
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:task b:action="load" b:url="{$lUrl}" b:method="{$lMethod}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="hide" b:target="."/>
+<s:task b:action="show" b:target="../img[@c:purpose='NotFavorite']"/>
+<s:with b:target="$lContainer">
+<s:if b:test="$tIndices/div[@c:id='options']/div[@b:state='selected']/@c:index_id='fav'">
+<s:task b:action="assign" b:target="$tLastIndex" b:scope="tag" b:select="''"/>
+<s:task b:action="trigger" b:event="select" b:target="$tIndices/div[@c:id='options']/div[@b:state='selected' and @c:index_id='fav']"/>
+</s:if>
+</s:with>
+</s:event>
+</s:behavior>
+</div>

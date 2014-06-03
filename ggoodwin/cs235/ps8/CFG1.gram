@@ -1,0 +1,9 @@
+{variables} 
+X, Y, Z
+{start variable}
+X
+{productions}
+X -> a | Y | XYZ; 
+Y -> % | bZ | Yc; 
+Z -> d | Ye
+

@@ -1,0 +1,5957 @@
+%!Adobe-FontList 1.11
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationSans-Bold
+FamilyName:Liberation Sans
+StyleName:Bold
+FullName:Liberation Sans Bold
+MenuName:Liberation Sans
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationSans-Bold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/liberation/fonts.scale
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationSans-Italic
+FamilyName:Liberation Sans
+StyleName:Italic
+FullName:Liberation Sans Italic
+MenuName:Liberation Sans
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationSans-Italic.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationSans-BoldItalic
+FamilyName:Liberation Sans
+StyleName:Bold Italic
+FullName:Liberation Sans Bold Italic
+MenuName:Liberation Sans
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationSans-BoldItalic.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationMono
+FamilyName:Liberation Mono
+StyleName:Regular
+FullName:Liberation Mono
+MenuName:Liberation Mono
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationMono-Regular.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/liberation/fonts.dir
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationMono-Italic
+FamilyName:Liberation Mono
+StyleName:Italic
+FullName:Liberation Mono Italic
+MenuName:Liberation Mono
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationMono-Italic.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationMono-Bold
+FamilyName:Liberation Mono
+StyleName:Bold
+FullName:Liberation Mono Bold
+MenuName:Liberation Mono
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationMono-Bold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationSerif-Italic
+FamilyName:Liberation Serif
+StyleName:Italic
+FullName:Liberation Serif Italic
+MenuName:Liberation Serif
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationSerif-Italic.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationSerif
+FamilyName:Liberation Serif
+StyleName:Regular
+FullName:Liberation Serif
+MenuName:Liberation Serif
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationSerif-Regular.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationSans
+FamilyName:Liberation Sans
+StyleName:Regular
+FullName:Liberation Sans
+MenuName:Liberation Sans
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationSans-Regular.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationSerif-BoldItalic
+FamilyName:Liberation Serif
+StyleName:Bold Italic
+FullName:Liberation Serif Bold Italic
+MenuName:Liberation Serif
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationSerif-BoldItalic.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationMono-BoldItalic
+FamilyName:Liberation Mono
+StyleName:Bold Italic
+FullName:Liberation Mono Bold Italic
+MenuName:Liberation Mono
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationMono-BoldItalic.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LiberationSerif-Bold
+FamilyName:Liberation Serif
+StyleName:Bold
+FullName:Liberation Serif Bold
+MenuName:Liberation Serif
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/liberation/LiberationSerif-Bold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Lohit-Gujarati
+FamilyName:Lohit Gujarati
+StyleName:Regular
+FullName:Lohit Gujarati
+MenuName:Lohit Gujarati
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/lohit-gujarati/Lohit-Gujarati.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Lohit-Oriya
+FamilyName:Lohit Oriya
+StyleName:Regular
+FullName:Lohit Oriya
+MenuName:Lohit Oriya
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/lohit-oriya/Lohit-Oriya.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Madan2
+FamilyName:Madan2
+StyleName:Regular
+FullName:Madan2
+MenuName:Madan2
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/madan/madan.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:OpenSymbol
+FamilyName:OpenSymbol
+StyleName:Regular
+FullName:OpenSymbol
+MenuName:OpenSymbol
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/opensymbol/opens___.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Lohit-Kannada
+FamilyName:Lohit Kannada
+StyleName:Regular
+FullName:Lohit Kannada
+MenuName:Lohit Kannada
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/lohit-kannada/Lohit-Kannada.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:AbyssinicaSIL
+FamilyName:Abyssinica SIL
+StyleName:Regular
+FullName:Abyssinica SIL
+MenuName:Abyssinica SIL
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/abyssinica/Abyssinica_SIL.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:PadaukRegular
+FamilyName:Padauk
+StyleName:Regular
+FullName:Padauk
+MenuName:Padauk
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/sil-padauk/Padauk.ttf
+DataFormat:sfntData
+WeightClass:500
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:PadaukBold
+FamilyName:Padauk
+StyleName:Bold
+FullName:Padauk Bold
+MenuName:Padauk
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/sil-padauk/Padauk-Bold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:UnDotum
+FamilyName:UnDotum
+StyleName:Regular
+FullName:Un Dotum
+MenuName:UnDotum
+StyleBits:0
+FamilyNameNative:은 돋움
+StyleNameNative:Regular
+FullNameNative:은 돋움
+WritingScript:Korean
+OutlineFileName:/usr/share/fonts/un-core/UnDotum.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:UnDotum-Bold
+FamilyName:UnDotum
+StyleName:Bold
+FullName:Un Dotum Bold
+MenuName:UnDotum
+StyleBits:2
+FamilyNameNative:은 돋움
+StyleNameNative:Bold
+FullNameNative:굵은 은 돋움
+WritingScript:Korean
+OutlineFileName:/usr/share/fonts/un-core/UnDotumBold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:WenQuanYiZenHei
+FamilyName:WenQuanYi Zen Hei
+StyleName:Regular
+FullName:WenQuanYi Zen Hei
+MenuName:WenQuanYi Zen Hei
+StyleBits:0
+FamilyNameNative:文泉驿正黑
+StyleNameNative:Regular
+FullNameNative:文泉驿正黑
+WritingScript:SimplifiedChinese
+OutlineFileName:/usr/share/fonts/wqy-zenhei/wqy-zenhei.ttc
+TTCOffset:24
+DataFormat:sfntData
+WeightClass:500
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:WenQuanYiZenHeiMono
+FamilyName:WenQuanYi Zen Hei Mono
+StyleName:Regular
+FullName:WenQuanYi Zen Hei Mono
+MenuName:WenQuanYi Zen Hei Mono
+StyleBits:0
+FamilyNameNative:文泉驿等宽正黑
+StyleNameNative:Regular
+FullNameNative:文泉驿等宽正黑
+WritingScript:SimplifiedChinese
+OutlineFileName:/usr/share/fonts/wqy-zenhei/wqy-zenhei.ttc
+TTCOffset:340
+DataFormat:sfntData
+WeightClass:500
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:WenQuanYiZenHeiSharp
+FamilyName:WenQuanYi Zen Hei Sharp
+StyleName:Regular
+FullName:WenQuanYi Zen Hei Sharp
+MenuName:WenQuanYi Zen Hei Sharp
+StyleBits:0
+FamilyNameNative:文泉驿点阵正黑
+StyleNameNative:Regular
+FullNameNative:文泉驿点阵正黑
+WritingScript:SimplifiedChinese
+OutlineFileName:/usr/share/fonts/wqy-zenhei/wqy-zenhei.ttc
+TTCOffset:608
+DataFormat:sfntData
+WeightClass:500
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/cjkuni-uming/fonts.scale
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/cjkuni-uming/fonts.dir
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:UMingCN
+FamilyName:AR PL UMing CN
+StyleName:Light
+FullName:AR PL UMing CN
+MenuName:AR PL UMing CN
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Light
+FullNameNative:
+WritingScript:Japanese
+OutlineFileName:/usr/share/fonts/cjkuni-uming/uming.ttc
+TTCOffset:28
+DataFormat:sfntData
+WeightClass:300
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:UMingHK
+FamilyName:AR PL UMing HK
+StyleName:Light
+FullName:AR PL UMing HK
+MenuName:AR PL UMing HK
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Light
+FullNameNative:
+WritingScript:Japanese
+OutlineFileName:/usr/share/fonts/cjkuni-uming/uming.ttc
+TTCOffset:376
+DataFormat:sfntData
+WeightClass:300
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:UMingTW
+FamilyName:AR PL UMing TW
+StyleName:Light
+FullName:AR PL UMing TW
+MenuName:AR PL UMing TW
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Light
+FullNameNative:
+WritingScript:Japanese
+OutlineFileName:/usr/share/fonts/cjkuni-uming/uming.ttc
+TTCOffset:724
+DataFormat:sfntData
+WeightClass:300
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:UMingTWMBE
+FamilyName:AR PL UMing TW MBE
+StyleName:Light
+FullName:AR PL UMing TW MBE
+MenuName:AR PL UMing TW MBE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Light
+FullNameNative:
+WritingScript:Japanese
+OutlineFileName:/usr/share/fonts/cjkuni-uming/uming.ttc
+TTCOffset:1072
+DataFormat:sfntData
+WeightClass:300
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:KhmerOSsys
+FamilyName:Khmer OS System
+StyleName:Regular
+FullName:Khmer OS System
+MenuName:Khmer OS System
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/khmeros/KhmerOS_sys.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:KhmerOScontent
+FamilyName:Khmer OS Content
+StyleName:Regular
+FullName:Khmer OS Content
+MenuName:Khmer OS Content
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/khmeros/KhmerOS_content.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:KhmerOS
+FamilyName:Khmer OS
+StyleName:Regular
+FullName:Khmer OS
+MenuName:Khmer OS
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/khmeros/KhmerOS.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Lohit-Telugu
+FamilyName:Lohit Telugu
+StyleName:Regular
+FullName:Lohit Telugu
+MenuName:Lohit Telugu
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/lohit-telugu/Lohit-Telugu.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanGreek-BoldSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbcpg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterAsian-Italic
+FamilyName:CM Typewriter Asian
+StyleName:Computer Modern Typewriter Asian Cyrillic Italic
+FullName:Computer Modern Typewriter Asian Cyrillic Italic
+MenuName:CM Typewriter Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Asian Cyrillic Italic
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctri6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterCE-RegularSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrcce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRoman-Bold
+FamilyName:CM Roman
+StyleName:Bold
+FullName:Computer Modern Roman Bold
+MenuName:CM Roman
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmb8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansCE-BoldSlanted
+FamilyName:CM Sans CE
+StyleName:Computer Modern Sans Central European Bold Slanted
+FullName:Computer Modern Sans Central European Bold Slanted
+MenuName:CM Sans CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Central European Bold Slanted
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsboce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansCE-Bold
+FamilyName:CM Sans CE
+StyleName:Computer Modern Sans Central European Bold
+FullName:Computer Modern Sans Central European Bold
+MenuName:CM Sans CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Central European Bold
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanGreek-ItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrijpg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanGreek-Italic
+FamilyName:CM Roman Greek
+StyleName:Italic
+FullName:Computer Modern Roman Greek Italic
+MenuName:CM Roman Greek
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmripg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterCyrillic-RegularSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrc6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSans-BoldSlanted
+FamilyName:CM Sans
+StyleName:Bold Slanted
+FullName:Computer Modern Sans Bold Slanted
+MenuName:CM Sans
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbo8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansGreek-BoldSlanted
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbopg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriter-RegularSC
+FamilyName:CM Typewriter
+StyleName:SC
+FullName:Computer Modern Typewriter Regular Small Caps
+MenuName:CM Typewriter
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrc8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRoman-Italic
+FamilyName:CM Roman
+StyleName:Italic
+FullName:Computer Modern Roman Italic
+MenuName:CM Roman
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmri8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansCyrillic-Regular
+FamilyName:CM Sans Cyrillic
+StyleName:Computer Modern Sans Cyrillic Regular
+FullName:Computer Modern Sans Cyrillic Regular
+MenuName:CM Sans Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Cyrillic Regular
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsr6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCE-ItalicOsF
+FamilyName:CM Roman CE
+StyleName:Computer Modern Roman Central European Italic Old Style Figures
+FullName:Computer Modern Roman Central European Italic Old Style Figures
+MenuName:CM Roman CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Central European Italic Old Style Figures
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrijce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanGreek-Regular
+FamilyName:CM Roman Greek
+StyleName:Regular
+FullName:Computer Modern Roman Greek Regular
+MenuName:CM Roman Greek
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrpg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterCE-ItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrijce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanAsian-BoldSC
+FamilyName:CM Roman Asian
+StyleName:Computer Modern Roman Asian Cyrillic Bold Small Caps
+FullName:Computer Modern Roman Asian Cyrillic Bold Small Caps
+MenuName:CM Roman Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Asian Cyrillic Bold Small Caps
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbc6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterCyrillic-ItalicOsF
+FamilyName:CM Typewriter Cyrillic
+StyleName:Computer Modern Typewriter Cyrillic Italic Old Style Figures
+FullName:Computer Modern Typewriter Cyrillic Italic Old Style Figures
+MenuName:CM Typewriter Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Cyrillic Italic Old Style Figures
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrij6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansGreek-Slanted
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsropg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanGreek-RegularSC
+FamilyName:CM Roman Greek
+StyleName:SC
+FullName:Computer Modern Roman Greek Regular Small Caps
+MenuName:CM Roman Greek
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrcpg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanAsian-Regular
+FamilyName:CM Roman Asian
+StyleName:Computer Modern Roman Asian Cyrillic Regular
+FullName:Computer Modern Roman Asian Cyrillic Regular
+MenuName:CM Roman Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Asian Cyrillic Regular
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmr6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRoman-BoldItalic
+FamilyName:CM Roman
+StyleName:Bold Italic
+FullName:Computer Modern Roman Bold Italic
+MenuName:CM Roman
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbi8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterCyrillic-Regular
+FamilyName:CM Typewriter Cyrillic
+StyleName:Computer Modern Typewriter Cyrillic Regular
+FullName:Computer Modern Typewriter Cyrillic Regular
+MenuName:CM Typewriter Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Cyrillic Regular
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctr6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanAsian-BoldItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbij6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriter-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctri8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterCE-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRoman-BoldSC
+FamilyName:CM Roman
+StyleName:Bold SC
+FullName:Computer Modern Roman Bold Small Caps
+MenuName:CM Roman
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbc8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRoman-RegularSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrc8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanAsian-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmr6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriter-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctr8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansAsian-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsb6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanAsian-BoldItalic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbi6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanAsian-RegularSC
+FamilyName:CM Roman Asian
+StyleName:Computer Modern Roman Asian Cyrillic Regular Small Caps
+FullName:Computer Modern Roman Asian Cyrillic Regular Small Caps
+MenuName:CM Roman Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Asian Cyrillic Regular Small Caps
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrc6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanAsian-BoldItalic
+FamilyName:CM Roman Asian
+StyleName:Computer Modern Roman Asian Cyrillic Bold Italic
+FullName:Computer Modern Roman Asian Cyrillic Bold Italic
+MenuName:CM Roman Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Asian Cyrillic Bold Italic
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbi6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCyrillic-BoldItalic
+FamilyName:CM Roman Cyrillic
+StyleName:Computer Modern Roman Cyrillic Bold Italic
+FullName:Computer Modern Roman Cyrillic Bold Italic
+MenuName:CM Roman Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Cyrillic Bold Italic
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbi6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansCyrillic-BoldSlanted
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbo6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansCyrillic-BoldSlanted
+FamilyName:CM Sans Cyrillic
+StyleName:Computer Modern Sans Cyrillic Bold Slanted
+FullName:Computer Modern Sans Cyrillic Bold Slanted
+MenuName:CM Sans Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Cyrillic Bold Slanted
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbo6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterAsian-ItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrij6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansCE-BoldSlanted
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsboce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansCyrillic-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsr6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansAsian-Bold
+FamilyName:CM Sans Asian
+StyleName:Computer Modern Sans Asian Cyrillic Bold
+FullName:Computer Modern Sans Asian Cyrillic Bold
+MenuName:CM Sans Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Asian Cyrillic Bold
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsb6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansCE-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansAsian-BoldSlanted
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbo6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterGreek-ItalicOsF
+FamilyName:CM Typewriter Greek
+StyleName:Italic OsF
+FullName:Computer Modern Typewriter Greek Italic Old Style Figures
+MenuName:CM Typewriter Greek
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrijpg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCyrillic-RegularSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrc6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanAsian-BoldItalicOsF
+FamilyName:CM Roman Asian
+StyleName:Computer Modern Roman Asian Cyrillic Bold Italic Old Style Figures
+FullName:Computer Modern Roman Asian Cyrillic Bold Italic Old Style Figures
+MenuName:CM Roman Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Asian Cyrillic Bold Italic Old Style Figures
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbij6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterGreek-Italic
+FamilyName:CM Typewriter Greek
+StyleName:Italic
+FullName:Computer Modern Typewriter Greek Italic
+MenuName:CM Typewriter Greek
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctripg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansCyrillic-Slanted
+FamilyName:CM Sans Cyrillic
+StyleName:Computer Modern Sans Cyrillic Slanted
+FullName:Computer Modern Sans Cyrillic Slanted
+MenuName:CM Sans Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Cyrillic Slanted
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsro6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCyrillic-Bold
+FamilyName:CM Roman Cyrillic
+StyleName:Computer Modern Roman Cyrillic Bold
+FullName:Computer Modern Roman Cyrillic Bold
+MenuName:CM Roman Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Cyrillic Bold
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmb6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCE-Regular
+FamilyName:CM Roman CE
+StyleName:Computer Modern Roman Central European Regular
+FullName:Computer Modern Roman Central European Regular
+MenuName:CM Roman CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Central European Regular
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansAsian-Regular
+FamilyName:CM Sans Asian
+StyleName:Computer Modern Sans Asian Cyrillic Regular
+FullName:Computer Modern Sans Asian Cyrillic Regular
+MenuName:CM Sans Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Asian Cyrillic Regular
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsr6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterCyrillic-RegularSC
+FamilyName:CM Typewriter Cyrillic
+StyleName:Computer Modern Typewriter Cyrillic Regular Small Caps
+FullName:Computer Modern Typewriter Cyrillic Regular Small Caps
+MenuName:CM Typewriter Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Cyrillic Regular Small Caps
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrc6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanAsian-ItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrij6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterCyrillic-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctri6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansGreek-BoldSlanted
+FamilyName:CM Sans Greek
+StyleName:Bold Slanted
+FullName:Computer Modern Sans Greek Bold Slanted
+MenuName:CM Sans Greek
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbopg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCE-RegularSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrcce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCyrillic-Italic
+FamilyName:CM Roman Cyrillic
+StyleName:Computer Modern Roman Cyrillic Italic
+FullName:Computer Modern Roman Cyrillic Italic
+MenuName:CM Roman Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Cyrillic Italic
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmri6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansGreek-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbpg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanAsian-RegularSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrc6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCyrillic-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmb6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterCyrillic-ItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrij6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansCE-Slanted
+FamilyName:CM Sans CE
+StyleName:Computer Modern Sans Central European Slanted
+FullName:Computer Modern Sans Central European Slanted
+MenuName:CM Sans CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Central European Slanted
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsroce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterAsian-Regular
+FamilyName:CM Typewriter Asian
+StyleName:Computer Modern Typewriter Asian Cyrillic Regular
+FullName:Computer Modern Typewriter Asian Cyrillic Regular
+MenuName:CM Typewriter Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Asian Cyrillic Regular
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctr6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansGreek-Regular
+FamilyName:CM Sans Greek
+StyleName:Regular
+FullName:Computer Modern Sans Greek Regular
+MenuName:CM Sans Greek
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsrpg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterCyrillic-Italic
+FamilyName:CM Typewriter Cyrillic
+StyleName:Computer Modern Typewriter Cyrillic Italic
+FullName:Computer Modern Typewriter Cyrillic Italic
+MenuName:CM Typewriter Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Cyrillic Italic
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctri6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansAsian-BoldSlanted
+FamilyName:CM Sans Asian
+StyleName:Computer Modern Sans Asian Cyrillic Bold Slanted
+FullName:Computer Modern Sans Asian Cyrillic Bold Slanted
+MenuName:CM Sans Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Asian Cyrillic Bold Slanted
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbo6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansGreek-Bold
+FamilyName:CM Sans Greek
+StyleName:Bold
+FullName:Computer Modern Sans Greek Bold
+MenuName:CM Sans Greek
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbpg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanGreek-BoldItalicOsF
+FamilyName:CM Roman Greek
+StyleName:Bold Italic OsF
+FullName:Computer Modern Roman Greek Bold Italic Old Style Figures
+MenuName:CM Roman Greek
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbijpg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanGreek-BoldItalic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbipg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRoman-BoldItalic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbi8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriter-RegularSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrc8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansGreek-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsrpg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCyrillic-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmr6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCyrillic-BoldItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbij6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCE-BoldItalic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbice.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansAsian-Slanted
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsro6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterAsian-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctri6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRoman-ItalicOsF
+FamilyName:CM Roman
+StyleName:Italic OsF
+FullName:Computer Modern Roman Italic Old Style Figures
+MenuName:CM Roman
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrij8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSans-BoldSlanted
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsbo8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCyrillic-BoldItalic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbi6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCE-BoldSC
+FamilyName:CM Roman CE
+StyleName:Computer Modern Roman Central European Bold Small Caps
+FullName:Computer Modern Roman Central European Bold Small Caps
+MenuName:CM Roman CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Central European Bold Small Caps
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbcce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCyrillic-RegularSC
+FamilyName:CM Roman Cyrillic
+StyleName:Computer Modern Roman Cyrillic Regular Small Caps
+FullName:Computer Modern Roman Cyrillic Regular Small Caps
+MenuName:CM Roman Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Cyrillic Regular Small Caps
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrc6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterGreek-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctripg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansCE-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsrce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCE-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanGreek-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrpg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriter-Italic
+FamilyName:CM Typewriter
+StyleName:Italic
+FullName:Computer Modern Typewriter Italic
+MenuName:CM Typewriter
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctri8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCyrillic-ItalicOsF
+FamilyName:CM Roman Cyrillic
+StyleName:Computer Modern Roman Cyrillic Italic Old Style Figures
+FullName:Computer Modern Roman Cyrillic Italic Old Style Figures
+MenuName:CM Roman Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Cyrillic Italic Old Style Figures
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrij6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterCyrillic-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctr6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansCyrillic-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsb6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanGreek-BoldSC
+FamilyName:CM Roman Greek
+StyleName:Bold SC
+FullName:Computer Modern Roman Greek Bold Small Caps
+MenuName:CM Roman Greek
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbcpg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanAsian-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmri6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterGreek-RegularSC
+FamilyName:CM Typewriter Greek
+StyleName:SC
+FullName:Computer Modern Typewriter Greek Regular Small Caps
+MenuName:CM Typewriter Greek
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrcpg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriter-ItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrij8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterAsian-ItalicOsF
+FamilyName:CM Typewriter Asian
+StyleName:Computer Modern Typewriter Asian Cyrillic Italic Old Style Figures
+FullName:Computer Modern Typewriter Asian Cyrillic Italic Old Style Figures
+MenuName:CM Typewriter Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Asian Cyrillic Italic Old Style Figures
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrij6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCE-BoldItalicOsF
+FamilyName:CM Roman CE
+StyleName:Computer Modern Roman Central European Bold Italic Old Style Figures
+FullName:Computer Modern Roman Central European Bold Italic Old Style Figures
+MenuName:CM Roman CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Central European Bold Italic Old Style Figures
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbijce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSans-Bold
+FamilyName:CM Sans
+StyleName:Bold
+FullName:Computer Modern Sans Bold
+MenuName:CM Sans
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsb8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCE-RegularSC
+FamilyName:CM Roman CE
+StyleName:Computer Modern Roman Central European Regular Small Caps
+FullName:Computer Modern Roman Central European Regular Small Caps
+MenuName:CM Roman CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Central European Regular Small Caps
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrcce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanGreek-ItalicOsF
+FamilyName:CM Roman Greek
+StyleName:Italic OsF
+FullName:Computer Modern Roman Greek Italic Old Style Figures
+MenuName:CM Roman Greek
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrijpg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterGreek-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrpg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanGreek-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmripg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCE-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCyrillic-Regular
+FamilyName:CM Roman Cyrillic
+StyleName:Computer Modern Roman Cyrillic Regular
+FullName:Computer Modern Roman Cyrillic Regular
+MenuName:CM Roman Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Cyrillic Regular
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmr6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterCE-Italic
+FamilyName:CM Typewriter CE
+StyleName:Computer Modern Typewriter Central European Italic
+FullName:Computer Modern Typewriter Central European Italic
+MenuName:CM Typewriter CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Central European Italic
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrice.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCyrillic-BoldItalicOsF
+FamilyName:CM Roman Cyrillic
+StyleName:Computer Modern Roman Cyrillic Bold Italic Old Style Figures
+FullName:Computer Modern Roman Cyrillic Bold Italic Old Style Figures
+MenuName:CM Roman Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Cyrillic Bold Italic Old Style Figures
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbij6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCE-BoldSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbcce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanAsian-ItalicOsF
+FamilyName:CM Roman Asian
+StyleName:Computer Modern Roman Asian Cyrillic Italic Old Style Figures
+FullName:Computer Modern Roman Asian Cyrillic Italic Old Style Figures
+MenuName:CM Roman Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Asian Cyrillic Italic Old Style Figures
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrij6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterCE-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrice.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCE-Italic
+FamilyName:CM Roman CE
+StyleName:Computer Modern Roman Central European Italic
+FullName:Computer Modern Roman Central European Italic
+MenuName:CM Roman CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Central European Italic
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrice.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRoman-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmri8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRoman-BoldItalicOsF
+FamilyName:CM Roman
+StyleName:Bold Italic OsF
+FullName:Computer Modern Roman Bold Italic Old Style Figures
+MenuName:CM Roman
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbij8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansCE-Slanted
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsroce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRoman-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmr8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanGreek-BoldItalic
+FamilyName:CM Roman Greek
+StyleName:Bold Italic
+FullName:Computer Modern Roman Greek Bold Italic
+MenuName:CM Roman Greek
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbipg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRoman-ItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrij8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansCE-Regular
+FamilyName:CM Sans CE
+StyleName:Computer Modern Sans Central European Regular
+FullName:Computer Modern Sans Central European Regular
+MenuName:CM Sans CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Central European Regular
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsrce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansGreek-Slanted
+FamilyName:CM Sans Greek
+StyleName:Slanted
+FullName:Computer Modern Sans Greek Slanted
+MenuName:CM Sans Greek
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsropg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterGreek-ItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrijpg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCE-BoldItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbijce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCyrillic-BoldSC
+FamilyName:CM Roman Cyrillic
+StyleName:Computer Modern Roman Cyrillic Bold Small Caps
+FullName:Computer Modern Roman Cyrillic Bold Small Caps
+MenuName:CM Roman Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Cyrillic Bold Small Caps
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbc6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRoman-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmb8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSans-Slanted
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsro8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCE-Bold
+FamilyName:CM Roman CE
+StyleName:Computer Modern Roman Central European Bold
+FullName:Computer Modern Roman Central European Bold
+MenuName:CM Roman CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Central European Bold
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCyrillic-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmri6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterGreek-Regular
+FamilyName:CM Typewriter Greek
+StyleName:Regular
+FullName:Computer Modern Typewriter Greek Regular
+MenuName:CM Typewriter Greek
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrpg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansAsian-Slanted
+FamilyName:CM Sans Asian
+StyleName:Computer Modern Sans Asian Cyrillic Slanted
+FullName:Computer Modern Sans Asian Cyrillic Slanted
+MenuName:CM Sans Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Asian Cyrillic Slanted
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsro6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriter-Regular
+FamilyName:CM Typewriter
+StyleName:Regular
+FullName:Computer Modern Typewriter Regular
+MenuName:CM Typewriter
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctr8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterAsian-RegularSC
+FamilyName:CM Typewriter Asian
+StyleName:Computer Modern Typewriter Asian Cyrillic Regular Small Caps
+FullName:Computer Modern Typewriter Asian Cyrillic Regular Small Caps
+MenuName:CM Typewriter Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Asian Cyrillic Regular Small Caps
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrc6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanAsian-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmb6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRoman-RegularSC
+FamilyName:CM Roman
+StyleName:SC
+FullName:Computer Modern Roman Regular Small Caps
+MenuName:CM Roman
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrc8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCE-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrice.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansAsian-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsr6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanCE-BoldItalic
+FamilyName:CM Roman CE
+StyleName:Computer Modern Roman Central European Bold Italic
+FullName:Computer Modern Roman Central European Bold Italic
+MenuName:CM Roman CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Central European Bold Italic
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbice.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSans-Slanted
+FamilyName:CM Sans
+StyleName:Slanted
+FullName:Computer Modern Sans Slanted
+MenuName:CM Sans
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsro8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCyrillic-BoldSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbc6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSans-Regular
+FamilyName:CM Sans
+StyleName:Regular
+FullName:Computer Modern Sans Regular
+MenuName:CM Sans
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsr8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCE-ItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrijce.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSansCyrillic-Slanted
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsro6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanAsian-Italic
+FamilyName:CM Roman Asian
+StyleName:Computer Modern Roman Asian Cyrillic Italic
+FullName:Computer Modern Roman Asian Cyrillic Italic
+MenuName:CM Roman Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Asian Cyrillic Italic
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmri6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanGreek-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbpg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSans-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsb8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterAsian-RegularSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrc6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterAsian-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctr6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanAsian-Bold
+FamilyName:CM Roman Asian
+StyleName:Computer Modern Roman Asian Cyrillic Bold
+FullName:Computer Modern Roman Asian Cyrillic Bold
+MenuName:CM Roman Asian
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Roman Asian Cyrillic Bold
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmb6y.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRomanGreek-Bold
+FamilyName:CM Roman Greek
+StyleName:Bold
+FullName:Computer Modern Roman Greek Bold
+MenuName:CM Roman Greek
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbpg.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMSans-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsr8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterCE-ItalicOsF
+FamilyName:CM Typewriter CE
+StyleName:Computer Modern Typewriter Central European Italic Old Style Figures
+FullName:Computer Modern Typewriter Central European Italic Old Style Figures
+MenuName:CM Typewriter CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Central European Italic Old Style Figures
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrijce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanGreek-BoldItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbijpg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMTypewriterGreek-RegularSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrcpg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanAsian-BoldSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbc6y.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriter-ItalicOsF
+FamilyName:CM Typewriter
+StyleName:Italic OsF
+FullName:Computer Modern Typewriter Italic Old Style Figures
+MenuName:CM Typewriter
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrij8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRoman-BoldItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbij8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterCE-RegularSC
+FamilyName:CM Typewriter CE
+StyleName:Computer Modern Typewriter Central European Regular Small Caps
+FullName:Computer Modern Typewriter Central European Regular Small Caps
+MenuName:CM Typewriter CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Central European Regular Small Caps
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrcce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMTypewriterCE-Regular
+FamilyName:CM Typewriter CE
+StyleName:Computer Modern Typewriter Central European Regular
+FullName:Computer Modern Typewriter Central European Regular
+MenuName:CM Typewriter CE
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Typewriter Central European Regular
+FullNameNative:
+WritingScript:EastEuropeanRoman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fctrce.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRoman-BoldSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmbc8a.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanCyrillic-ItalicOsF
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrij6z.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CMRomanGreek-RegularSC
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmrcpg.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMSansCyrillic-Bold
+FamilyName:CM Sans Cyrillic
+StyleName:Computer Modern Sans Cyrillic Bold
+FullName:Computer Modern Sans Cyrillic Bold
+MenuName:CM Sans Cyrillic
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Computer Modern Sans Cyrillic Bold
+FullNameNative:
+WritingScript:Cyrillic
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcsb6z.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CMRoman-Regular
+FamilyName:CM Roman
+StyleName:Regular
+FullName:Computer Modern Roman Regular
+MenuName:CM Roman
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/ctan-cm-lgc/fcmr8a.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:STIXGeneral-Bold
+FamilyName:STIXGeneral
+StyleName:Bold
+FullName:STIXGeneral-Bold
+MenuName:STIXGeneral
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/stix/STIXGeneralBol.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:STIXGeneral
+FamilyName:STIXGeneral
+StyleName:Regular
+FullName:STIXGeneral
+MenuName:STIXGeneral
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/stix/STIXGeneral.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:STIXGeneral-BoldItalic
+FamilyName:STIXGeneral
+StyleName:Bold Italic
+FullName:STIXGeneral-BoldItalic
+MenuName:STIXGeneral
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/stix/STIXGeneralBolIta.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:STIXGeneral-Italic
+FamilyName:STIXGeneral
+StyleName:Italic
+FullName:STIXGeneral-Italic
+MenuName:STIXGeneral
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/stix/STIXGeneralItalic.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Unikurdw
+FamilyName:Unikurd Web
+StyleName:Regular
+FullName:Unikurd Web
+MenuName:Unikurd Web
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Regular
+FullNameNative:
+WritingScript:Arabic
+OutlineFileName:/usr/share/fonts/kurdit-unikurd-web/Unikuweb.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Lohit-Bengali
+FamilyName:Lohit Bengali
+StyleName:Regular
+FullName:Lohit Bengali
+MenuName:Lohit Bengali
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/lohit-bengali/Lohit-Bengali.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Lohit-Devanagari
+FamilyName:Lohit Devanagari
+StyleName:Regular
+FullName:Lohit Devanagari
+MenuName:Lohit Devanagari
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/lohit-devanagari/Lohit-Devanagari.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:VL-Gothic-Regular
+FamilyName:VL Gothic
+StyleName:regular
+FullName:VL Gothic Regular
+MenuName:VL Gothic
+StyleBits:0
+FamilyNameNative:VL ゴシック
+StyleNameNative:regular
+FullNameNative:VL ゴシック
+WritingScript:Japanese
+OutlineFileName:/usr/share/fonts/vlgothic/VL-Gothic-Regular.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Tibetan_Machine_Uni
+FamilyName:Tibetan Machine Uni
+StyleName:Regular
+FullName:Tibetan_Machine_Uni
+MenuName:Tibetan Machine Uni
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/tibetan-machine-uni/TibMachUni-1.901b.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWGothicL-DemiObli
+FamilyName:URW Gothic L
+StyleName:Demi Oblique
+FullName:URW Gothic L Demi Oblique
+MenuName:URW Gothic L
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/a010035l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:600
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/Type1/fonts.scale
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusRomNo9L-ReguItal
+FamilyName:Nimbus Roman No9 L
+StyleName:Regular Italic
+FullName:Nimbus Roman No9 L Regular Italic
+MenuName:Nimbus Roman No9 L
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n021023l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusRomNo9L-Medi
+FamilyName:Nimbus Roman No9 L
+StyleName:Medium
+FullName:Nimbus Roman No9 L Medium
+MenuName:Nimbus Roman No9 L
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n021004l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:500
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWChanceryL-MediItal
+FamilyName:URW Chancery L
+StyleName:Medium Italic
+FullName:URW Chancery L Medium Italic
+MenuName:URW Chancery L
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/z003034l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:500
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWGothicL-Demi
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/a010015l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWPalladioL-Roma
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/p052003l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusSanL-ReguItal
+FamilyName:Nimbus Sans L
+StyleName:Regular Italic
+FullName:Nimbus Sans L Regular Italic
+MenuName:Nimbus Sans L
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n019023l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:Dingbats
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/d050000l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/Type1/fonts.dir
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusSanL-BoldItal
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n019024l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWPalladioL-Ital
+FamilyName:URW Palladio L
+StyleName:Italic
+FullName:URW Palladio L Italic
+MenuName:URW Palladio L
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/p052023l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:StandardSymL
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/s050000l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWBookmanL-DemiBoldItal
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/b018035l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Dingbats
+FamilyName:Dingbats 
+StyleName:Regular
+FullName:Dingbats 
+MenuName:Dingbats 
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/d050000l.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusMonL-ReguObli
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n022023l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusRomNo9L-MediItal
+FamilyName:Nimbus Roman No9 L
+StyleName:Medium Italic
+FullName:Nimbus Roman No9 L Medium Italic
+MenuName:Nimbus Roman No9 L
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n021024l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:500
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusRomNo9L-MediItal
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n021024l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CenturySchL-BoldItal
+FamilyName:Century Schoolbook L
+StyleName:Bold Italic
+FullName:Century Schoolbook L Bold Italic
+MenuName:Century Schoolbook L
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/c059036l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWGothicL-DemiObli
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/a010035l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CenturySchL-Bold
+FamilyName:Century Schoolbook L
+StyleName:Bold
+FullName:Century Schoolbook L Bold
+MenuName:Century Schoolbook L
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/c059016l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWBookmanL-Ligh
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/b018012l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusRomNo9L-Regu
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n021003l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusRomNo9L-ReguItal
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n021023l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CenturySchL-Ital
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/c059033l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CenturySchL-Roma
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/c059013l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWBookmanL-LighItal
+FamilyName:URW Bookman L
+StyleName:Light Italic
+FullName:URW Bookman L Light Italic
+MenuName:URW Bookman L
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/b018032l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:300
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusRomNo9L-Medi
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n021004l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusSanL-ReguCond
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n019043l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusSanL-Regu
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n019003l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusMonL-Bold
+FamilyName:Nimbus Mono L
+StyleName:Bold
+FullName:Nimbus Mono L Bold
+MenuName:Nimbus Mono L
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n022004l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusSanL-Regu
+FamilyName:Nimbus Sans L
+StyleName:Regular
+FullName:Nimbus Sans L Regular
+MenuName:Nimbus Sans L
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n019003l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusSanL-ReguCondItal
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n019063l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWBookmanL-Ligh
+FamilyName:URW Bookman L
+StyleName:Light
+FullName:URW Bookman L Light
+MenuName:URW Bookman L
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/b018012l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:300
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CenturySchL-Ital
+FamilyName:Century Schoolbook L
+StyleName:Italic
+FullName:Century Schoolbook L Italic
+MenuName:Century Schoolbook L
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/c059033l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWGothicL-Demi
+FamilyName:URW Gothic L
+StyleName:Demi
+FullName:URW Gothic L Demi
+MenuName:URW Gothic L
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/a010015l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:600
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWBookmanL-DemiBold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/b018015l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWPalladioL-BoldItal
+FamilyName:URW Palladio L
+StyleName:Bold Italic
+FullName:URW Palladio L Bold Italic
+MenuName:URW Palladio L
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/p052024l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusSanL-BoldCondItal
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n019064l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CenturySchL-Roma
+FamilyName:Century Schoolbook L
+StyleName:Roman
+FullName:Century Schoolbook L Roman
+MenuName:Century Schoolbook L
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/c059013l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusSanL-BoldItal
+FamilyName:Nimbus Sans L
+StyleName:Bold Italic
+FullName:Nimbus Sans L Bold Italic
+MenuName:Nimbus Sans L
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n019024l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWPalladioL-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/p052004l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWGothicL-Book
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/a010013l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWBookmanL-DemiBoldItal
+FamilyName:URW Bookman L
+StyleName:Demi Bold Italic
+FullName:URW Bookman L Demi Bold Italic
+MenuName:URW Bookman L
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/b018035l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:600
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CenturySchL-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/c059016l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWPalladioL-Roma
+FamilyName:URW Palladio L
+StyleName:Roman
+FullName:URW Palladio L Roman
+MenuName:URW Palladio L
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/p052003l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusRomNo9L-Regu
+FamilyName:Nimbus Roman No9 L
+StyleName:Regular
+FullName:Nimbus Roman No9 L Regular
+MenuName:Nimbus Roman No9 L
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n021003l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CenturySchL-BoldItal
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/c059036l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWGothicL-BookObli
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/a010033l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusSanL-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n019004l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWPalladioL-Ital
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/p052023l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusSanL-ReguItal
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n019023l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusMonL-Regu
+FamilyName:Nimbus Mono L
+StyleName:Regular
+FullName:Nimbus Mono L Regular
+MenuName:Nimbus Mono L
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n022003l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusMonL-Regu
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n022003l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusSanL-BoldCond
+FamilyName:Nimbus Sans L
+StyleName:Bold Condensed
+FullName:Nimbus Sans L Bold Condensed
+MenuName:Nimbus Sans L
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n019044l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:3
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusMonL-BoldObli
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n022024l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusSanL-ReguCondItal
+FamilyName:Nimbus Sans L
+StyleName:Regular Condensed Italic
+FullName:Nimbus Sans L Regular Condensed Italic
+MenuName:Nimbus Sans L
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n019063l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:3
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusMonL-ReguObli
+FamilyName:Nimbus Mono L
+StyleName:Regular Oblique
+FullName:Nimbus Mono L Regular Oblique
+MenuName:Nimbus Mono L
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n022023l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusSanL-ReguCond
+FamilyName:Nimbus Sans L
+StyleName:Regular Condensed
+FullName:Nimbus Sans L Regular Condensed
+MenuName:Nimbus Sans L
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n019043l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:3
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWChanceryL-MediItal
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/z003034l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:StandardSymL
+FamilyName:Standard Symbols L
+StyleName:Regular
+FullName:Standard Symbols L
+MenuName:Standard Symbols L
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/s050000l.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWGothicL-Book
+FamilyName:URW Gothic L
+StyleName:Book
+FullName:URW Gothic L Book
+MenuName:URW Gothic L
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/a010013l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusSanL-BoldCondItal
+FamilyName:Nimbus Sans L
+StyleName:Bold Condensed Italic
+FullName:Nimbus Sans L Bold Condensed Italic
+MenuName:Nimbus Sans L
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n019064l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:3
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusSanL-BoldCond
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n019044l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWGothicL-BookObli
+FamilyName:URW Gothic L
+StyleName:Book Oblique
+FullName:URW Gothic L Book Oblique
+MenuName:URW Gothic L
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/a010033l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWPalladioL-Bold
+FamilyName:URW Palladio L
+StyleName:Bold
+FullName:URW Palladio L Bold
+MenuName:URW Palladio L
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/p052004l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWBookmanL-LighItal
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/b018032l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWPalladioL-BoldItal
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/p052024l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusSanL-Bold
+FamilyName:Nimbus Sans L
+StyleName:Bold
+FullName:Nimbus Sans L Bold
+MenuName:Nimbus Sans L
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n019004l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:NimbusMonL-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/Type1/n022004l.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:NimbusMonL-BoldObli
+FamilyName:Nimbus Mono L
+StyleName:Bold Oblique
+FullName:Nimbus Mono L Bold Oblique
+MenuName:Nimbus Mono L
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/n022024l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWBookmanL-DemiBold
+FamilyName:URW Bookman L
+StyleName:Demi Bold
+FullName:URW Bookman L Demi Bold
+MenuName:URW Bookman L
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/Type1/b018015l.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:600
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrplsb.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CharterBT-Bold
+FamilyName:Bitstream Charter BT
+StyleName:Bold
+FullName:Bitstream Charter BT Bold
+MenuName:Bitstream Charter BT
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/bchb.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/fonts.scale
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrgerd.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hritro.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CharterBT-Roman
+FamilyName:Charter BT
+StyleName:Roman
+FullName:Bitstream Charter
+MenuName:Charter BT
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/bchr.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Shareware-Cyrillic-Italic
+FamilyName:Shareware
+StyleName:Cyrillic Italic
+FullName:Shareware-Cyrillic-Italic
+MenuName:Shareware
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/fcyri.gsf
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Hershey-Script-Complex
+FamilyName:Hershey
+StyleName:Script Complex
+FullName:Hershey-Script-Complex
+MenuName:Hershey
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrscc.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/fonts.dir
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Utopia-Regular
+FamilyName:Utopia
+StyleName:Regular
+FullName:Utopia Regular
+MenuName:Utopia
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/putr.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrgerb.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CharterBT-BoldItalic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/bchbi.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWGroteskT-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/u004006t.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrgks.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrsyr.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CharterBT-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/bchri.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Hershey-Gothic-German
+FamilyName:Hershey
+StyleName:Gothic German
+FullName:Hershey-Gothic-German
+MenuName:Hershey
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrgrr.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CharterBT-BoldItalic
+FamilyName:Bitstream Charter BT
+StyleName:Bold Italic
+FullName:Bitstream Charter BT Bold Italic
+MenuName:Bitstream Charter BT
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/bchbi.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrplso.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Hershey-Plain-Triplex
+FamilyName:Hershey
+StyleName:Plain Triplex
+FullName:Hershey-Plain-Triplex
+MenuName:Hershey
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrplt.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CharterBT-Italic
+FamilyName:Bitstream Charter BT
+StyleName:Italic
+FullName:Bitstream Charter BT Italic
+MenuName:Bitstream Charter BT
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/bchri.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Utopia-Italic
+FamilyName:Utopia
+StyleName:Italic
+FullName:Utopia Italic
+MenuName:Utopia
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/putri.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrplro.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrsccb.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Calligraphic-Hiragana
+FamilyName:Calligraphic
+StyleName:Hiragana
+FullName:Calligraphic-Hiragana
+MenuName:Calligraphic
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/fhirw.gsf
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWGroteskT-Bold
+FamilyName:URW Grotesk T
+StyleName:Bold
+FullName:URWGroteskT-Bold
+MenuName:URW Grotesk T
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/u004006t.gsf
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrgero.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:Hiragana
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/fhirw.pfm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrplsbo.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrscsb.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrplr.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrscso.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrpls.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Hershey-Plain-Duplex-Italic
+FamilyName:Hershey
+StyleName:Plain Duplex Italic
+FullName:Hershey-Plain-Duplex-Italic
+MenuName:Hershey
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrpldi.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrpltbi.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrgrro.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:URWAntiquaT-RegularCondensed
+FamilyName:URW Antiqua T
+StyleName:Condensed
+FullName:URWAntiquaT-RegularCondensed
+MenuName:URW Antiqua T
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/u003043t.gsf
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:3
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrgrrb.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrplrbo.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrpldbi.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:URWAntiquaT-RegularCondensed
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/u003043t.pfm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CharterBT-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/bchb.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Hershey-Gothic-English
+FamilyName:Hershey
+StyleName:Gothic English
+FullName:Hershey-Gothic-English
+MenuName:Hershey
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrger.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrscco.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:URWAntiquaT-RegularCondensed
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/u003043t.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Calligraphic-Katakana
+FamilyName:Calligraphic
+StyleName:Katakana
+FullName:Calligraphic-Katakana
+MenuName:Calligraphic
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/fkarw.gsf
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:Cyrillic-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/fcyri.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Utopia-BoldItalic
+FamilyName:Utopia
+StyleName:Bold Italic
+FullName:Utopia Bold Italic
+MenuName:Utopia
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/putbi.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hritrb.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Hershey-Gothic-Italian
+FamilyName:Hershey
+StyleName:Gothic Italian
+FullName:Hershey-Gothic-Italian
+MenuName:Hershey
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/hritr.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrplrb.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CharterBT-Roman
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/bchr.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Hershey-Script-Simplex
+FamilyName:Hershey
+StyleName:Script Simplex
+FullName:Hershey-Script-Simplex
+MenuName:Hershey
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrscs.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:Katakana
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/fkarw.pfm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:URWGroteskT-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/u004006t.pfm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Shareware-Cyrillic-Regular
+FamilyName:Shareware
+StyleName:Cyrillic Regular
+FullName:Shareware-Cyrillic-Regular
+MenuName:Shareware
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/fcyr.gsf
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrpltb.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrgkc.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:Cyrillic
+NumMMAxes:0
+OutlineFileName:/usr/share/fonts/default/ghostscript/fcyr.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Utopia-Bold
+FamilyName:Utopia
+StyleName:Bold
+FullName:Utopia Bold
+MenuName:Utopia
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/putb.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Hershey-Plain-Triplex-Italic
+FamilyName:Hershey
+StyleName:Plain Triplex Italic
+FullName:Hershey-Plain-Triplex-Italic
+MenuName:Hershey
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrplti.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Hershey-Plain-Duplex
+FamilyName:Hershey
+StyleName:Plain Duplex
+FullName:Hershey-Plain-Duplex
+MenuName:Hershey
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrpld.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/fonts/default/ghostscript/hrpldb.gsf
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Jomolhari
+FamilyName:Jomolhari
+StyleName:Regular
+FullName:Jomolhari
+MenuName:Jomolhari
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/jomolhari/Jomolhari-alpha3c-0605331.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Lohit-Punjabi
+FamilyName:Lohit Punjabi
+StyleName:Regular
+FullName:Lohit Punjabi
+MenuName:Lohit Punjabi
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/lohit-punjabi/Lohit-Punjabi.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:PakTypeTehreer
+FamilyName:PakTypeTehreer
+StyleName:Regular
+FullName:PakTypeTehreer
+MenuName:PakTypeTehreer
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Regular
+FullNameNative:
+WritingScript:Arabic
+OutlineFileName:/usr/share/fonts/paktype/PakTypeTehreer.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:PakTypeNaqsh
+FamilyName:PakTypeNaqsh
+StyleName:Regular
+FullName:PakTypeNaqsh
+MenuName:PakTypeNaqsh
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/paktype/PakTypeNaqsh.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Meera
+FamilyName:Meera
+StyleName:Regular
+FullName:Meera
+MenuName:Meera
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/smc/Meera.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Lohit-Tamil
+FamilyName:Lohit Tamil
+StyleName:Regular
+FullName:Lohit Tamil
+MenuName:Lohit Tamil
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/lohit-tamil/Lohit-Tamil.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Lohit-Assamese
+FamilyName:Lohit Assamese
+StyleName:Regular
+FullName:Lohit Assamese
+MenuName:Lohit Assamese
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/lohit-assamese/Lohit-Assamese.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:LKLUG
+FamilyName:LKLUG
+StyleName:Regular
+FullName:LKLUG
+MenuName:LKLUG
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/lklug/lklug.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Waree
+FamilyName:Waree
+StyleName:Book
+FullName:Waree
+MenuName:Waree
+StyleBits:0
+FamilyNameNative:
+StyleNameNative:Book
+FullNameNative:
+WritingScript:Thai
+OutlineFileName:/usr/share/fonts/thai-scalable/Waree.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Waree-Bold
+FamilyName:Waree
+StyleName:Bold
+FullName:Waree Bold
+MenuName:Waree
+StyleBits:2
+FamilyNameNative:
+StyleNameNative:Bold
+FullNameNative:
+WritingScript:Thai
+OutlineFileName:/usr/share/fonts/thai-scalable/Waree-Bold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Waree-Oblique
+FamilyName:Waree
+StyleName:Oblique
+FullName:Waree Oblique
+MenuName:Waree
+StyleBits:1
+FamilyNameNative:
+StyleNameNative:Oblique
+FullNameNative:
+WritingScript:Thai
+OutlineFileName:/usr/share/fonts/thai-scalable/Waree-Oblique.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Waree-BoldOblique
+FamilyName:Waree
+StyleName:BoldOblique
+FullName:Waree Bold Oblique
+MenuName:Waree
+StyleBits:3
+FamilyNameNative:
+StyleNameNative:BoldOblique
+FullNameNative:
+WritingScript:Thai
+OutlineFileName:/usr/share/fonts/thai-scalable/Waree-BoldOblique.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuLGCSansMono-Oblique
+FamilyName:DejaVu LGC Sans Mono
+StyleName:Oblique
+FullName:DejaVu LGC Sans Mono Oblique
+MenuName:DejaVu LGC Sans Mono
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuLGCSansMono-Oblique.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSans
+FamilyName:DejaVu Sans
+StyleName:Book
+FullName:DejaVu Sans
+MenuName:DejaVu Sans
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSans.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSerif-Italic
+FamilyName:DejaVu Serif
+StyleName:Italic
+FullName:DejaVu Serif Italic
+MenuName:DejaVu Serif
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSerif-Italic.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSans-ExtraLight
+FamilyName:DejaVu Sans
+StyleName:ExtraLight
+FullName:DejaVu Sans ExtraLight
+MenuName:DejaVu Sans Light
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSans-ExtraLight.ttf
+DataFormat:sfntData
+WeightClass:200
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSansCondensed
+FamilyName:DejaVu Sans
+StyleName:Condensed
+FullName:DejaVu Sans Condensed
+MenuName:DejaVu Sans Condensed
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSansCondensed.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:4
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSansCondensed-BoldOblique
+FamilyName:DejaVu Sans
+StyleName:Condensed Bold Oblique
+FullName:DejaVu Sans Condensed Bold Oblique
+MenuName:DejaVu Sans Condensed
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSansCondensed-BoldOblique.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:4
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSansMono-Bold
+FamilyName:DejaVu Sans Mono
+StyleName:Bold
+FullName:DejaVu Sans Mono Bold
+MenuName:DejaVu Sans Mono
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSansMono-Bold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSans-BoldOblique
+FamilyName:DejaVu Sans
+StyleName:Bold Oblique
+FullName:DejaVu Sans Bold Oblique
+MenuName:DejaVu Sans
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSans-BoldOblique.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSerifCondensed-Italic
+FamilyName:DejaVu Serif
+StyleName:Condensed Italic
+FullName:DejaVu Serif Condensed Italic
+MenuName:DejaVu Serif Condensed
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSerifCondensed-Italic.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:4
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSansMono-BoldOblique
+FamilyName:DejaVu Sans Mono
+StyleName:Bold Oblique
+FullName:DejaVu Sans Mono Bold Oblique
+MenuName:DejaVu Sans Mono
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSansMono-BoldOblique.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSansMono
+FamilyName:DejaVu Sans Mono
+StyleName:Book
+FullName:DejaVu Sans Mono
+MenuName:DejaVu Sans Mono
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSansMono.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSansCondensed-Bold
+FamilyName:DejaVu Sans
+StyleName:Condensed Bold
+FullName:DejaVu Sans Condensed Bold
+MenuName:DejaVu Sans Condensed
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSansCondensed-Bold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:4
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuLGCSansMono
+FamilyName:DejaVu LGC Sans Mono
+StyleName:Book
+FullName:DejaVu LGC Sans Mono
+MenuName:DejaVu LGC Sans Mono
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuLGCSansMono.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSerifCondensed
+FamilyName:DejaVu Serif
+StyleName:Condensed
+FullName:DejaVu Serif Condensed
+MenuName:DejaVu Serif Condensed
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSerifCondensed.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:4
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSansCondensed-Oblique
+FamilyName:DejaVu Sans
+StyleName:Condensed Oblique
+FullName:DejaVu Sans Condensed Oblique
+MenuName:DejaVu Sans Condensed
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSansCondensed-Oblique.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:4
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSerif-Bold
+FamilyName:DejaVu Serif
+StyleName:Bold
+FullName:DejaVu Serif Bold
+MenuName:DejaVu Serif
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSerif-Bold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuLGCSansMono-BoldOblique
+FamilyName:DejaVu LGC Sans Mono
+StyleName:Bold Oblique
+FullName:DejaVu LGC Sans Mono Bold Oblique
+MenuName:DejaVu LGC Sans Mono
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuLGCSansMono-BoldOblique.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSerifCondensed-Bold
+FamilyName:DejaVu Serif
+StyleName:Condensed Bold
+FullName:DejaVu Serif Condensed Bold
+MenuName:DejaVu Serif Condensed
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSerifCondensed-Bold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:4
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuLGCSansMono-Bold
+FamilyName:DejaVu LGC Sans Mono
+StyleName:Bold
+FullName:DejaVu LGC Sans Mono Bold
+MenuName:DejaVu LGC Sans Mono
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuLGCSansMono-Bold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSansMono-Oblique
+FamilyName:DejaVu Sans Mono
+StyleName:Oblique
+FullName:DejaVu Sans Mono Oblique
+MenuName:DejaVu Sans Mono
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSansMono-Oblique.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSans-Oblique
+FamilyName:DejaVu Sans
+StyleName:Oblique
+FullName:DejaVu Sans Oblique
+MenuName:DejaVu Sans
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSans-Oblique.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSerifCondensed-BoldItalic
+FamilyName:DejaVu Serif
+StyleName:Condensed Bold Italic
+FullName:DejaVu Serif Condensed Bold Italic
+MenuName:DejaVu Serif Condensed
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSerifCondensed-BoldItalic.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:4
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSans-Bold
+FamilyName:DejaVu Sans
+StyleName:Bold
+FullName:DejaVu Sans Bold
+MenuName:DejaVu Sans
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSerif-BoldItalic
+FamilyName:DejaVu Serif
+StyleName:Bold Italic
+FullName:DejaVu Serif Bold Italic
+MenuName:DejaVu Serif
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSerif-BoldItalic.ttf
+DataFormat:sfntData
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:DejaVuSerif
+FamilyName:DejaVu Serif
+StyleName:Book
+FullName:DejaVu Serif
+MenuName:DejaVu Serif
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/fonts/dejavu/DejaVuSerif.ttf
+DataFormat:sfntData
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:Utopia-Regular
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/UTRG____.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/X11/fonts/Type1/fonts.scale
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:Utopia-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/UTI_____.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CharterBT-BoldItalic
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/c0633bt_.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Utopia-Bold
+FamilyName:Utopia
+StyleName:Bold
+FullName:Utopia Bold
+MenuName:Utopia
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/UTB_____.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/usr/share/X11/fonts/Type1/fonts.dir
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CharterBT-BoldItalic
+FamilyName:Bitstream Charter BT
+StyleName:Bold Italic
+FullName:Bitstream Charter BT Bold Italic
+MenuName:Bitstream Charter BT
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/c0633bt_.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:Courier10PitchBT-Roman
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/c0419bt_.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Utopia-Regular
+FamilyName:Utopia
+StyleName:Regular
+FullName:Utopia Regular
+MenuName:Utopia
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/UTRG____.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:Utopia-BoldItalic
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/UTBI____.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:Courier10PitchBT-BoldItalic
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/c0611bt_.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CharterBT-Italic
+FamilyName:Bitstream Charter BT
+StyleName:Italic
+FullName:Bitstream Charter BT Italic
+MenuName:Bitstream Charter BT
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/c0649bt_.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CharterBT-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/c0649bt_.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CharterBT-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/c0632bt_.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Courier10PitchBT-Roman
+FamilyName:Courier 10 Pitch BT
+StyleName:Roman
+FullName:Courier 10 Pitch
+MenuName:Courier 10 Pitch BT
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/c0419bt_.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Courier10PitchBT-BoldItalic
+FamilyName:Courier 10 Pitch BT
+StyleName:Bold Italic
+FullName:Courier 10 Pitch BT Bold Italic
+MenuName:Courier 10 Pitch BT
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/c0611bt_.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Cursor
+FamilyName:Cursor
+StyleName:Regular
+FullName:Cursor
+MenuName:Cursor
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/cursor.pfa
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Courier10PitchBT-Italic
+FamilyName:Courier 10 Pitch BT
+StyleName:Italic
+FullName:Courier 10 Pitch BT Italic
+MenuName:Courier 10 Pitch BT
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/c0582bt_.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:CharterBT-Roman
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/c0648bt_.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:Courier10PitchBT-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/c0583bt_.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Courier10PitchBT-Bold
+FamilyName:Courier 10 Pitch BT
+StyleName:Bold
+FullName:Courier 10 Pitch BT Bold
+MenuName:Courier 10 Pitch BT
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/c0583bt_.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CharterBT-Roman
+FamilyName:Charter BT
+StyleName:Roman
+FullName:Bitstream Charter
+MenuName:Charter BT
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/c0648bt_.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:Utopia-Bold
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/UTB_____.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:AFM
+FontName:Courier10PitchBT-Italic
+NumMMAxes:0
+OutlineFileName:/usr/share/X11/fonts/Type1/c0582bt_.afm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Utopia-BoldItalic
+FamilyName:Utopia
+StyleName:Bold Italic
+FullName:Utopia Bold Italic
+MenuName:Utopia
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/UTBI____.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CharterBT-Bold
+FamilyName:Bitstream Charter BT
+StyleName:Bold
+FullName:Bitstream Charter BT Bold
+MenuName:Bitstream Charter BT
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/c0632bt_.pfb
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Utopia-Italic
+FamilyName:Utopia
+StyleName:Italic
+FullName:Utopia Italic
+MenuName:Utopia
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/usr/share/X11/fonts/Type1/UTI_____.pfa
+DataFormat:Plain
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:CMap
+CMapName:Identity-H
+Registry:Adobe
+Ordering:Identity
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/CMap/Identity-H
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:CMap
+CMapName:Identity-V
+Registry:Adobe
+Ordering:Identity
+UseCMap:Identity-H
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/CMap/Identity-V
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CourierStd
+FamilyName:Courier Std
+StyleName:Medium
+FullName:Courier Std Medium
+MenuName:Courier Std
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/CourierStd.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:500
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MyriadPro-It
+FamilyName:Myriad Pro
+StyleName:Italic
+FullName:Myriad Pro Italic
+MenuName:Myriad Pro
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/MyriadPro-It.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobePiStd
+FamilyName:Adobe Pi Std
+StyleName:Regular
+FullName:Adobe Pi Std
+MenuName:Adobe Pi Std
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/AdobePiStd.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CourierStd-BoldOblique
+FamilyName:Courier Std
+StyleName:Bold Oblique
+FullName:Courier Std Bold Oblique
+MenuName:Courier Std
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/CourierStd-BoldOblique.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MyriadPro-BoldIt
+FamilyName:Myriad Pro
+StyleName:Bold Italic
+FullName:Myriad Pro Bold Italic
+MenuName:Myriad Pro
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/MyriadPro-BoldIt.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobeSansMM
+FamilyName:Adobe Sans MM
+StyleName:Regular
+FullName:Adobe Sans MM
+MenuName:Adobe Sans MM
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/ZX______.PFB
+DataFormat:Plain
+MMAxisName:Weight
+MMAxisName:Width
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MyriadPro-Bold
+FamilyName:Myriad Pro
+StyleName:Bold
+FullName:Myriad Pro Bold
+MenuName:Myriad Pro
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/MyriadPro-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CourierStd-Oblique
+FamilyName:Courier Std
+StyleName:Medium Oblique
+FullName:Courier Std Medium Oblique
+MenuName:Courier Std
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/CourierStd-Oblique.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:500
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MyriadPro-Regular
+FamilyName:Myriad Pro
+StyleName:Regular
+FullName:Myriad Pro
+MenuName:Myriad Pro
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/MyriadPro-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Symbol
+FamilyName:Symbol
+StyleName:Regular
+FullName:Symbol
+MenuName:Symbol
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/SY______.PFB
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-It
+FamilyName:Minion Pro
+StyleName:Italic
+FullName:Minion Pro Italic
+MenuName:Minion Pro
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/MinionPro-It.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:400
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-Regular
+FamilyName:Minion Pro
+StyleName:Regular
+FullName:Minion Pro
+MenuName:Minion Pro
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/MinionPro-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobeSerifMM
+FamilyName:Adobe Serif MM
+StyleName:Regular
+FullName:Adobe Serif MM
+MenuName:Adobe Serif MM
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/ZY______.PFB
+DataFormat:Plain
+MMAxisName:Weight
+MMAxisName:Width
+UsesStandardEncoding:yes
+isCFF:no
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CourierStd-Bold
+FamilyName:Courier Std
+StyleName:Bold
+FullName:Courier Std Bold
+MenuName:Courier Std
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/CourierStd-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-Bold
+FamilyName:Minion Pro
+StyleName:Bold
+FullName:Minion Pro Bold
+MenuName:Minion Pro
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/MinionPro-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-BoldIt
+FamilyName:Minion Pro
+StyleName:Bold Italic
+FullName:Minion Pro Bold Italic
+MenuName:Minion Pro
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/MinionPro-BoldIt.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:AdobeSansMM
+NumMMAxes:0
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/PFM/zx______.pfm
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:Symbol
+NumMMAxes:0
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/PFM/SY______.PFM
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:AdobeSerifMM
+NumMMAxes:0
+OutlineFileName:/opt/Adobe/Reader9/Reader/../Resource/Font/PFM/zy______.pfm
+%EndFont
+

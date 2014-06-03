@@ -1,0 +1,118 @@
+(**********************************************************************
+ This is the SML code skeleton file for ps6.sml
+ **********************************************************************)
+
+(* load FA testing utilities: testOnString, testOnStrings, mismatches, genStrings *)
+use "../utils/FATest.sml";  
+open FATest; (* open the module, so don't need 'FATest.' qualifier *)
+
+(* load regular expression testing utilities: 
+   testOnString, testOnStrings, testOnAlphabet, mismatches *)
+use "../utils/RegTest.sml"; 
+
+(********** Froblem 1 **********)
+
+(* Useful helper function in this problem *)
+fun revString s = String.implode (List.rev (String.explode s))
+
+(*** Redefine this stub ***)
+fun testL1R n = false
+
+
+(********** Froblem 2 **********)
+fun test2 () =
+  let val L2_fa = FA.input "L2.fa"
+      val L2_dfa = DFA.input "L2.dfa"
+      val faToDFA = nfaToDFA o efaToNFA o faToEFA
+   in DFA.relationship(faToDFA L2_fa, L2_dfa)
+  end
+
+(********** Froblem 3 **********)
+
+(* Regular expression strings *)
+(* Replace these stubs *)
+val ab_or_bc_reg = "a*"
+
+val ab_and_bc_reg = "a*"
+
+val cs_at_odd_positions_reg = "a*"
+
+val even_as_or_odd_bs_reg = "a*"
+
+val geq_2_bs_and_leq_1_c_reg = "a*"
+
+(* Predicates *)
+(* Replace these stubs *)
+fun ab_or_bc_pred s = false
+
+fun ab_and_bc_pred s = false
+
+fun cs_at_odd_positions_pred s = false
+
+fun even_as_or_odd_bs_pred s = false
+
+fun geq_2_bs_and_leq_1_c_pred s = false
+
+(* Testing functions *)
+
+fun makeABCTester regString pred n = RegTest.testOnAlphabet regString pred [#"a", #"b", #"c"] n
+
+val test_ab_or_bc = makeABCTester ab_or_bc_reg ab_or_bc_pred
+
+val test_ab_and_bc = makeABCTester ab_and_bc_reg ab_and_bc_pred
+
+val test_cs_at_odd_positions = makeABCTester cs_at_odd_positions_reg cs_at_odd_positions_pred
+
+val test_even_as_or_odd_bs = makeABCTester even_as_or_odd_bs_reg even_as_or_odd_bs_pred
+
+val test_geq_2_bs_and_leq_1_c = makeABCTester geq_2_bs_and_leq_1_c_reg geq_2_bs_and_leq_1_c_pred
+
+fun test3_all n = 
+  let fun testit (str,fcn) = 
+        (print "--------------------------------------------------\n";
+         print ("Testing " ^ str ^ "\n"); 
+         fcn n (* Now actually test the function *))
+      (* A non-short-circuit version of List.all *)
+      fun forall pred xs = List.foldl (fn (x,bool) => (pred x) andalso bool) true xs
+   in forall testit
+             [("ab_or_bc", test_ab_or_bc),
+	      ("ab_and_bc", test_ab_and_bc),
+	      ("cs_at_odd_positions", test_cs_at_odd_positions),
+	      ("even_as_or_odd_bs", test_even_as_or_odd_bs),
+	      ("geq_2_bs_and_leq_1_c", test_geq_2_bs_and_leq_1_c)]
+  end
+
+(********** Froblem 4 **********)
+
+fun test4a () = 
+  let val L4a_fa = FA.input "L4a.fa"
+      val L4a_reg = Reg.fromString "1(01* + ($0)*)*1"
+      val faToDFA = nfaToDFA o efaToNFA o faToEFA
+      val regToDFA = faToDFA o regToFA
+  in DFA.relationship(faToDFA L4a_fa, regToDFA L4a_reg)
+  end
+
+fun test4c () = 
+  let val L4c_fa = FA.input "L4c.fa"
+      val L4c_reg = Reg.fromString "1(01* + ($0)*)*1"
+      val faToDFA = nfaToDFA o efaToNFA o faToEFA
+      val regToDFA = faToDFA o regToFA
+  in DFA.relationship(faToDFA L4c_fa, regToDFA L4c_reg)
+  end
+
+(********** Froblem 5 **********)
+
+(* Replace this stub *)
+val R5_string = "1*"
+
+fun test5() = 
+  let val L5_fa = FA.input "L5.fa"
+      val L5_reg = Reg.fromString R5_string
+      val faToDFA = nfaToDFA o efaToNFA o faToEFA
+      val regToDFA = faToDFA o regToFA
+   in DFA.relationship(faToDFA L5_fa, regToDFA L5_reg)
+  end
+
+
+
+

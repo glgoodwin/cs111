@@ -1,0 +1,6 @@
+;; Write your FOFL *program* from PS7 Problem 3c here
+(fofl (a) (test (* 100 a) (* 10 a))
+  (def (linear x) (+ (* a x) b))
+  (def (test a b) (linear 2))
+)
+

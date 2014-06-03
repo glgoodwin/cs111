@@ -1,0 +1,7 @@
+(def fresh 
+  (bind count (cell 0)
+    (fun (s)
+      (bind n (^ count)
+        (seq (:= count (+ n 1))
+             (str+ (str+ s ".")
+                   (toString n)))))))

@@ -1,0 +1,1 @@
+select names.firstname, names.lastname, address.street, address.city, address.state from names inner join address using (id) group by (address.state) where count(address.state)=1;

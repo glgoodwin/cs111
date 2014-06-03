@@ -1,0 +1,7 @@
+(fofl-plus (n) (list (app5 (fref inc))
+                     (app5 (fref dbl))
+                     (app5 (fref mul-n)))
+  (def (inc x) (+ x 1))
+  (def (dbl y) (* y 2))
+  (def (mul-n z) (* z n))
+  (def (app5 f) (fapp f 5)))

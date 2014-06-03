@@ -1,0 +1,23 @@
+(def decorate
+  (fun (ornaments) ;; Assume ornaments non-empty
+    (bind orns (cell ornaments) ;; orns is a cell holding a non-empty
+                                ;; list of ornaments
+      (bindrec ((walk (fun (tree)
+			(cond ((not (list? tree))
+			       (bind orn (head (^ orns))
+				 (seq (:= orns (if (empty? (tail (^ orns)))
+						   ornaments
+						   (tail (^ orns))))
+				      orn)))
+			      ((empty? tree) #e)
+			      (else (prep (walk (head tree))
+					  (walk (tail tree))))))))
+	walk))))
+		  
+
+
+	 
+     
+		       
+    
+  

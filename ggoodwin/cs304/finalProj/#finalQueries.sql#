@@ -1,0 +1,6 @@
+/* Gabe and Alex
+	cs304 Final Project*/
+/* This document contains the queries that we will be using for our database.
+Putting them into this dicument will make it much easier to implement functionality into our forms later. */
+
+def search(conn,table,  

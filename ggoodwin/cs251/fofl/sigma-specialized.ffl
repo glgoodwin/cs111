@@ -1,0 +1,17 @@
+(fofl (n) (list (test 2 3 4 n) (test 5 6 7 n))
+  (def (sigma-sq lo hi)
+    (if (> lo hi)
+        0
+        (+ (* lo lo) (sigma-sq (+ lo 1) hi))))
+  (def (sigma-scale c lo hi)
+    (if (> lo hi)
+        0
+        (+ (* c lo) (sigma-scale c (+ lo 1) hi))))
+  (def (sigma-linear a b lo hi)
+    (if (> lo hi)
+        0
+        (+ (+ (* a lo) b) (sigma-linear a b (+ lo 1) hi))))
+  (def (test p q r h)
+    (list (sigma-sq 1 h)
+          (sigma-scale p 1 h)
+          (sigma-linear q r 1 h))))

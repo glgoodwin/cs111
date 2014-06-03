@@ -1,0 +1,11 @@
+{variables}
+S, B, C, A
+
+{start variable}
+S
+
+{productions}
+S -> A;
+B -> B110 | A001 | %;
+C -> % | C0 | B10 | A100;
+A -> B01 | C011

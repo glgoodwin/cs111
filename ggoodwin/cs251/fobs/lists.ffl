@@ -1,0 +1,25 @@
+(def (sum ns)
+  (if (empty? ns)
+      0
+      (+ (head ns)
+         (sum (tail ns)))))
+
+(def (map-square ns) 
+  (if (empty? ns)
+      #e
+      (prep (* (head ns) (head ns))
+            (map-square (tail ns)))))
+
+(def (filter-even ns) 
+  (if (empty? ns)
+      #e
+      (if (even? (head ns))
+          (prep (head ns) (filter-even (tail ns)))
+          (filter-even (tail ns)))))
+
+(def (range lo hi)
+  (if (> lo hi)
+      #e
+      (prep lo (range (+ lo 1) hi))))
+
+(def (even? n) (= 0 (% n 2)))

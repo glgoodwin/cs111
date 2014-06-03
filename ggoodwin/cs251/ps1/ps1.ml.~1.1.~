@@ -1,0 +1,7 @@
+(* CS251 Spring'11 Problem Set 1 *)
+
+(* Replace the following stub for the function f. *)
+let rec f n = 0
+
+(* Replace the following stub for the function g. *)
+let rec g n = (0,0)

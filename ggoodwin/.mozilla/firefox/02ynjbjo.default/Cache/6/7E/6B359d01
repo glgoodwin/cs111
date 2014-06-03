@@ -1,0 +1,505 @@
+<!-- -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:b="http://www.backbase.com/b"
+  xmlns:s="http://www.backbase.com/s"
+  xmlns:c="http://www.collegenet.com/c"
+  xmlns:bx="http://www.collegenet.com/bx"
+  xmlns:s25="http://www.collegenet.com/s25">
+<head>
+	<title>25Live</title>
+	
+	<meta http-equiv="X-UA-Compatible" value="IE=8" />
+	<!-- <meta http-equiv="X-UA-Compatible" content="chrome=1" />  -->
+	<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge" /> -->
+	
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="-1" />
+	
+	<!-- <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />  -->
+	<!-- <meta charset="ISO-8859-1" />  -->
+	
+	
+	<!-- Gomez logging -->
+	<!-- discontinued Gomez use -->
+	<!--<script language="JavaScript" type="text/javascript">
+		var gomez={
+			gs: new Date().getTime(),
+			acctId:'771E8F',
+			pgId:'',
+			grpId:'25Live'
+		};
+	</script>
+	<script type="text/javascript" src="https://25live.collegenet.com/UGomezTag5.1.js"></script>-->
+	
+	<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="v21.0/gfx/25live.ico"/>
+	<link rel="stylesheet" type="text/css" href="v21.0/app/layout.css"/>
+	<link rel="stylesheet" type="text/css" href="v21.0/app/print.css" media="print"/>
+	<link rel="stylesheet" type="text/css" href="local/inst.css" />
+	<!-- need to have info in version.js available very early in the game -->
+	<script src="version.js"></script>
+	
+	<!-- Google Analytics -->
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-31710329-1']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	  </script>
+	<script type="text/javascript">
+	  // determine if this is the dev machine devenv.
+	  var devenv = "zpivkegsociumzy";  
+	  function isDev() {
+	  	  try {
+	  	  	  var r = 0;
+	  	  	  var h = window.location.host.replace(/[.-_]/g,'').replace(/[a-zA-Z]/g,function(c){r++;m = (r % 8) + 5;return String.fromCharCode((c<="Z"?90:122)>=(c=c.charCodeAt(0)+m)?c:c-26);});
+	  	  	  return h == devenv;
+	  	  } catch(e) {
+	  	  	return false;  
+	  	  }
+	  }
+	  var devMode = isDev();
+	   /* Use this function instead of console.log to prevent errors with 
+	  IE or FF when developer tools or firebug are not present */ 
+	  function log(message) {
+	  	  if (devMode && typeof console != "undefined" && typeof console.log != "undefined") {
+	  	  	  // comment out the statement below to turn off console messages.
+	  	  	  console.log(message);
+	  	  }  
+	  }
+	</script>
+	
+</head>
+<body id="s25" class="notLoggedIn" onbeforeunload="killLocks()" b:controlpath="/backbase/3_3_1g/controls/basic" b:version="20100212">
+	
+	<div id="Splash">
+		<div>
+			<img src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/25Live_logo.jpg" class="SplashLogo" />
+			<br /><br /><br /><br />
+			<img src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/25Live_loading.gif" class="SplashLoading" />
+			<br /><br />
+			<b>Loading Application...</b>
+		</div>
+	</div>
+	
+	
+	<div id="UnsupportedBrowser">
+		<div>
+			<img src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/25Live_logo.jpg" class="SplashLogo" />
+			<br /><br /><br />
+			We're sorry, the browser you are using is outdated<br/>and/or not supported by 25Live.
+			<br /><br />
+			Please use the most recent version of <a href="http://www.google.com/chrome" target="chrome">Chrome</a>, 
+			<a href="http://www.mozilla.com/firefox/" target="firefox">Firefox</a>,<br/>
+			<a href="http://www.apple.com/safari/" target="safari">Safari</a>, 
+			or <a href="http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx" target="ie">Internet Explorer</a>.
+		</div>
+	</div>
+	
+	<div id="LoadFailure">
+		<div>
+			<img src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/25Live_logo.jpg" class="SplashLogo" />
+			<br /><br /><br />
+			<b>Ouch!</b> 25Live failed to load. A necessary component is absent.
+			<br /><br />
+			Please refresh your browser and try again.
+		</div>
+	</div>
+
+
+	<script xmlns="" type="text/javascript" language="JavaScript">
+		
+		// needed for HTML-enabled Description editor
+		// var rteEditor;
+		// var CKEDITOR_BASEPATH = 'utils/ckeditor/';
+		
+		/* 
+		* After checking to make sure a script of the same name isn't loaded yet,
+		* loadScript loads the script into the head.
+		*
+		* @param scriptPath - The path to the script.
+		* returns true if the script is not found in the list and loaded
+		*         false if script is found in the list (and, thus, not loaded)
+		*/
+		var loadedScripts = [];
+
+		function loadScript(rawScriptPath) {
+			var scriptPath = mergeUrl(getJsBase(),rawScriptPath);
+			
+			// just the name of the script, without the path
+			var scriptName = scriptPath.replace(/^\s+|\s+$/g,'').substr(scriptPath.lastIndexOf('/') + 1);
+			
+			for (var i in loadedScripts) {
+				if (loadedScripts[i] == scriptName) {
+					// Script already loaded, let's get out of here!
+					log('Not loading "' + scriptName + '"; already found!');
+					return false;
+				}
+			}
+			// Script was not found in the list, so let's put it in.
+			loadedScripts.push(scriptName.replace(/^\s+|\s+$/g,''));
+			log('Loading "' + scriptName + '".');
+			var script = document.createElement('script');
+			script.src = scriptPath;
+			script.type = "text/javascript";
+			document.getElementsByTagName('head')[0].appendChild(script);
+			
+			return true;
+		}
+		// Will try every 2 seconds for maxAttempts time, to loadScript (per function above), 
+		// waiting for jQuery UI to be loaded.
+		var attempts = 0;
+		var maxAttempts = 10;
+		function loadUIDependentScript(scriptPath) {
+			attempts++;
+			if (jQuery.ui) {
+				log('Found jQuery.ui, loading ' + scriptPath);
+				loadScript(scriptPath);
+			} else {
+				if (attempts < maxAttempts) {
+					log('Didn\'t find jQuery.ui Sortable on attempt ' + attempts + ' of ' + maxAttempts + '. Will try again...');
+					setTimeout('loadUIDependentScript("' + scriptPath + '")',2000);
+				} else {
+					log('Didn\'t find jQuery.ui Sortable on attempt ' + attempts + ' of ' + maxAttempts + '. I give up.');
+				}
+			}
+			
+		} 
+		
+		/* testing new load script stuff */
+		function isLoaded(scriptName) {
+			for (var i in loadedScripts) {
+				if (loadedScripts[i] == scriptName) {
+					return true;
+				}
+			}
+			return false;
+		}
+		function getJsBase() {
+			protocol = window.location.protocol.replace(/:/,'');
+			pathname = window.location.pathname.replace(/^\//,'');
+			host = window.location.host;
+			var dirs = pathname.substr(0,pathname.lastIndexOf('/'));
+			if (instance_type != 'pure') {
+				dirs += '/' + s25live_ver();
+			}
+			return protocol + '://' + host + '/' + dirs;
+		}
+		function mergeUrl(basePath,resourcePath) {
+			/* Finds the intersection of two paths. 
+			1. If resourcePath is absolute (a.k.a. starts with a http/https protocol), resourcePath is immediately returned.
+			Otherwise:
+			2. Splits the two into arrays (split on '/').
+			3. Start at the end of basePath and the beginning of resourcePath and find a common directory.
+			4. Add the parts after the matching part found in 2 above to basePath.
+			for example:
+			basePath = 'http://25live.collegenet.com/college/v21.0/utils/'
+			resourcePath = '/utils/jQuery-1.8.15/js/jQuery-1.8.15.min.js'
+			would result in:
+			'http://25live.collegenet.com/college/v21.0/utils/jQuery-1.8.15/js/jQuery-1.8.15.min.js'
+			Note: If there isn't a common dir, the two are simply appended. 
+			Also Note: If, when there isn't a common dir, there are parent references ('..') in the beginning of the resourcePath, 
+				they are honored (i.e. you can tunnel to dirs above util). 
+			*/
+			basePath = new String(basePath);
+			
+			var protocolPattern = /^https?/i;
+			var outerSlashPattern = /(^\/|\/$)/;
+			/* if resourcePath starts with a protocol, no need to do anything else, just return the resource path. */
+			if (resourcePath.match(protocolPattern) != null) {
+				return resourcePath;
+			}
+			
+			
+			var protocol = basePath.match(protocolPattern);
+			
+			
+			/* remove protocol from basePath */
+			basePath = basePath.replace(protocolPattern,'').replace(/:\/\//,'');
+			/* remove trailing slash from basePath and resourcePath */
+			basePath = basePath.replace(outerSlashPattern,'');
+			
+			if (resourcePath.match(/^\//) != null) {
+				return protocol + '://' + host + resourcePath;
+			}
+			
+			resourcePath = resourcePath.replace(outerSlashPattern,'');
+			var basePathParts = basePath.split(/\//);
+			/* append ':/' to protocol so it can be used in url. Yes, only one slash as another will be added later. */ 
+			basePathParts.unshift(protocol + ':/');
+			
+			
+			var resourcePathParts = resourcePath.split(/\//);
+			
+			
+			var startResourceIndex = -1;
+			for (var baseIndex = basePathParts.length; baseIndex > -1; baseIndex--) {
+				for (var resourceIndex = 0;resourceIndex < resourcePathParts.length; resourceIndex++) {
+					if (basePathParts[baseIndex] == resourcePathParts[resourceIndex]) {
+						startResourceIndex = resourceIndex + 1;
+						if (startResourceIndex > resourcePathParts.length) {
+							startResourceIndex = resourcePathParts.length;
+						}
+						break;
+					}
+				}
+				if (startResourceIndex > -1) {
+					break;
+				}
+			}
+			
+			var finalPathParts;
+			if (startResourceIndex > -1) {
+				resourcePathParts.splice(0,startResourceIndex);
+			} else {
+				/* no matches, now let's take care of parent dir stuff to allow something besides util dir */
+				var firstNonBackIndex = 0;
+				for (var resourceIndex = 0;resourceIndex < resourcePathParts.length; resourceIndex++) {
+					if (resourcePathParts[resourceIndex] == '..') {
+						// break off the last part of the basePath (i.e. go up on dir leve)
+						basePathParts.pop();
+					} else {
+						firstNonBackIndex = resourceIndex;
+						break;
+					}
+				}
+				// take out the '..'s that we applied
+				resourcePathParts.splice(0,firstNonBackIndex);
+				
+			}
+			finalPathParts = basePathParts.concat(resourcePathParts);
+			return finalPathParts.join('/');
+		}
+		
+		function newLoadScript(scriptPath) {
+			var pathToLoad = mergeUrl(getJsBase(),scriptPath);
+			// for now we'll just talk about it:
+			log('I would load: ' + pathToLoad);
+		}		
+		/* end testing new load script stuff */
+		
+		function bootBB() {
+			if (typeof(window['bpc']) != 'undefined') {
+				bpc.boot();
+			} else {
+				setTimeout("bootBB()",50);
+			}
+		}
+		function s25live_inst() {
+			// determine inst name from href
+			var s = (String(location.href)).replace(/^htt.*?\/\//,'');
+			s = s.replace(/[\?#].*$/,'');
+			s = s.replace(/index.*$/,'');
+			s = s.replace(/\/$/,'');
+			var a = s.split(/\//);
+			return a[a.length-1];
+		}
+		function s25live_ver() { return s25live_version; }
+	
+
+		window.onload = function() 
+		{
+			var n = navigator.userAgent;
+			
+			if (n.indexOf('MSIE') == -1 && n.indexOf('Mozilla') == -1 && n.indexOf('WebKit') == -1 && n.indexOf('Opera') == -1)
+			{
+				document.getElementById('Splash').style.display = 'none';
+				document.getElementById('UnsupportedBrowser').style.display = 'block';
+			}
+			else if (n.indexOf('MSIE 6') != -1 || n.indexOf('MSIE 5') != -1 || n.indexOf('MSIE 4') != -1 || n.indexOf('MSIE 3') != -1 || n.indexOf('MSIE 2') != -1 || 
+					 n.indexOf('Firefox 2.') != -1 || n.indexOf('Firefox/2.') != -1 || n.indexOf('Firefox/1.') != -1 || n.indexOf('Firefox/0') != -1)
+			{
+				document.getElementById('Splash').style.display = 'none';
+				document.getElementById('UnsupportedBrowser').style.display = 'block';
+			}
+			else if (n.indexOf('Android') != -1 && n.indexOf('WebKit') != -1 && n.indexOf('Mozilla') != -1)
+			{
+				// before loading Backbase, create a style rule to hide the error bar
+				var sheet = document.createElement('style')
+				sheet.innerHTML = ".tool-Root {display:none;}";
+				document.body.appendChild(sheet);				
+				
+				// Android default browser, use dev version of Backbase code
+				loadScript("utils/jquery-1.7.1.min.js");
+				loadScript("utils/s25-utils.js");
+				loadScript("/backbase/3_3_1g_dev/bpc/boot.js");
+				setTimeout("bootBB()",50);
+			}
+			else
+			{
+				/* version.js is now loaded in the head
+				loadScript("version.js");
+				*/
+				/* loadScript now handles paths better
+				loadScript("v21.0/utils/jquery-1.7.1.min.js");
+				loadScript("v21.0/utils/s25-utils.js");
+				*/
+				loadScript("utils/jquery-1.7.1.min.js");
+				loadScript("utils/s25-utils.js");
+				loadScript("/backbase/3_3_1g/bpc/boot.js");
+				setTimeout("bootBB()",50);
+			}
+		}
+		function inArray(item,array) {
+			for (var i in array) {
+				if (array[i] === item) {
+					return true;
+				}
+			}
+			return false;
+		}
+	</script>
+
+    <xmp b:backbase="true" style="height:100%; display:none;" id="xmp">
+	  <!-- former contents of controls.xml: -->
+	  <s:controlpath b:match="b:button" b:value="/backbase/3_3_1g/controls/system/" />
+	  <s:controlpath b:match="s25:rsrv_wiz_" b:value="v21.0/controls/s25-rsrv_wiz/editors/" />
+	  <s:controlpath b:match="s25:awform_wiz_" b:value="v21.0/controls/s25-awform_wiz/editors/" />
+	  <s:controlpath b:match="s25:event_details_" b:value="v21.0/controls/s25-event_details/controls/" />
+	  <s:controlpath b:match="s25:sales_admin_" b:value="v21.0/controls/s25-sales_admin/controls/" />
+	  <s:controlpath b:match="s25:invoice_" b:value="v21.0/controls/s25-invoice/controls/" />
+	  <s:controlpath b:match="s25:*" b:value="v21.0/controls/" />
+	  <s:controlpath b:match="bx:*" b:value="v21.0/controls/" />
+	  <s:variable b:name="s25_controlpath" b:scope="global" b:select="'v21.0/controls/'" />
+      
+	  <span id="bxLoadingContainer" style="position:relative;z-index:1000"></span>
+	  
+	  <!-- load the application config XML -->
+	  <s:include b:url="config.xml" />
+  
+	  <s:event b:on="construct">
+		<s:choose>
+			<s:when b:test="cookie('FontSize')">
+				<s:task b:action="addclass" b:target="/body" b:value="{concat('font', cookie('FontSize'))}" />
+			</s:when>
+			<s:otherwise>
+				<s:task b:action="addclass" b:target="/body" b:value="font11" />
+			</s:otherwise>
+		</s:choose>
+        
+		<!-- <s:task b:action="alert" b:value="{concat('declared($bpc_browser) = ', declared($bpc_browser))}" /> -->
+		<!-- <s:task b:action="alert" b:value="{concat('$bpc_browser = ', $bpc_browser)}" /> -->
+		
+		<s:if b:test="not(declared($bpc_browser))">
+			
+			<s:variable b:scope="local" b:name="user_agent" b:select="''" />
+			<s:script>
+				bpc.setVariable('user_agent', [navigator.userAgent], 'local')
+			</s:script>
+			<!-- <s:task b:action="alert" b:value="{concat('$user_agent = ', $user_agent)}" /> -->
+			<s:choose>
+				<s:when b:test="contains($user_agent, 'Firefox')">
+					<s:variable b:scope="global" b:name="bpc_browser" b:select="'moz'" />
+				</s:when>
+				<s:when b:test="contains($user_agent, 'Safari')">
+					<s:variable b:scope="global" b:name="bpc_browser" b:select="'safari'" />
+				</s:when>
+				<s:when b:test="contains($user_agent, 'MSIE 9')">
+					<s:variable b:scope="global" b:name="bpc_browser" b:select="'ie9'" />
+				</s:when>
+				<s:otherwise>
+					<s:variable b:scope="global" b:name="bpc_browser" b:select="'ie8'" />
+				</s:otherwise>
+			</s:choose>
+			<!-- <s:variable b:scope="global" b:name="bpc_browser" b:select="'ie8'" /> -->
+		</s:if>
+		<!-- <s:task b:action="alert" b:value="{concat('$bpc_browser (final) = ', $bpc_browser)}" /> -->
+		<s:task b:test="starts-with($bpc_browser,'ie')" b:action="addclass" b:target="/body[1]" b:value="isIE" />
+		
+		<s:choose>
+			<s:when b:test="exists(id('AppConfig'))">
+				<s:task b:action="load" b:method="GET" 
+					b:url="v21.0/app/application.xml" 
+					b:destination="." b:mode="aslastchild" 
+					b:showloading="false">
+				</s:task>
+				
+				<!-- <s:task b:action="hide" b:target="/body/html()/div[@id = 'Splash']" /> -->
+				<s:script>
+					document.getElementById('Splash').style.display = 'none';
+				</s:script>
+				
+				<s:task b:action="show" />
+				
+				
+				<!-- Adam playing around with tab resizings. Ignore for now. -->
+				<!-- <s:variable b:name="lBrowser" b:select="string($bpc_browser)" />
+				<s:script>
+				<![CDATA[
+					var browser = _vars['lBrowser'][0];
+					//alert("browser = " + browser);
+					
+					if (browser == 'moz' || browser == 'safari') {
+					
+						var tabBox = document.getElementById('layout-tabbar');
+						//alert("getStyle(tabBox, 'width') = " + getStyle(tabBox, 'width') );
+						
+						var tabs = tabBox.getElementsByTagName('li');
+						//alert('tabs.length = ' + tabs.length);
+						
+						var totalTabWidth = 0;
+						//var alertText = '';
+						
+						for (t=0; t < tabs.length; t++) {
+							var tabText = tabs[t].title;
+							var tabWidth = getStyle(tabs[t], 'width');
+							var tabPaddingLeft = getStyle(tabs[t], 'padding-left');
+							
+							//alert("tabText = " + tabText + "\n" + "tabWidth = " + tabWidth + "\n" + "tabPaddingLeft = " + tabPaddingLeft);
+							
+							//alertText += tabText + " = " + tabWidth + " [" + tabPaddingLeft + "]" + "\n";
+							totalTabWidth += parseInt(tabWidth);
+						}
+						
+						//alertText += "\n" + "Total = " + totalTabWidth;
+						
+						//alert(alertText);
+						
+						
+						for (t=0; t < tabs.length; t++) {
+							var tabText = tabs[t].title;
+							var tabWidth = parseInt(getStyle(tabs[t], 'width'));
+							
+							var pctWidth = Math.round((tabWidth / totalTabWidth) * 100);
+							
+							//alert("tabText = " + tabText + "\n" + "tabWidth = " + tabWidth + "\n" + "pctWidth = " + pctWidth + "%");
+							
+							//if (browser == 'safari') 
+							//	pctWidth = pctWidth - 2;
+							//if (browser == 'moz') 
+								pctWidth = pctWidth - 1;
+							
+							tabs[t].style.maxWidth = pctWidth + "%";
+							
+						}
+					
+					}
+					
+					
+				]]>
+				</s:script> -->
+				
+			</s:when>
+			<s:otherwise>
+				<s:script>
+					document.getElementById('Splash').style.display = 'none';
+					document.getElementById('LoadFailure').style.display = 'block';
+				</s:script>
+				
+			</s:otherwise>
+		</s:choose>
+		
+      </s:event>
+      
+	  <!-- <s:include b:url="v21.0/app/application.xml" /> -->
+	  
+    </xmp>
+</body>
+</html>

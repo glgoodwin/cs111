@@ -1,0 +1,56 @@
+(* This is the file ps3.sml.
+   It begins with some given definitions. 
+   At the bottom of the file, you should add your definitions for PS3.  *)
+
+fun extend (pre, strings) = 
+  List.map (fn str => str ^ "s")
+           (List.filter (String.isPrefix pre) strings)
+
+fun caesar (n,str) = 
+  String.implode
+    (List.map (fn c => Char.chr (((Char.ord c) + n) mod 256))
+              (String.explode str))
+
+fun twist (c,s) = 
+  let val (a,b) = List.partition (fn x => x <= c) (String.explode s)
+  in String.implode (a @ b)
+  end
+
+fun transform s = 
+  let val len = String.size s
+      fun process i = 
+	    if i = len then 
+              ""
+            else let val rest = process (i+1)
+                     val c = String.sub (s,i)
+		 in if Char.isAlpha c then 
+                       (String.str (Char.toLower c)) ^ rest
+		    else
+		      rest
+		 end
+  in process 0
+  end
+
+fun first s = String.str (String.sub (s,0))
+
+fun butFirst s = String.substring (s, 1, (String.size s) - 1)
+
+val LTests = ["", 
+              "a", "b", 
+              "aa", "ab", "ba", "bb", 
+              "aaa", "aab", "aba", "abb", "baa", "bab", "bba", "bbb"]
+
+
+(*********************** Put your definitions below **************************)
+
+
+
+
+
+
+  
+  
+
+
+
+

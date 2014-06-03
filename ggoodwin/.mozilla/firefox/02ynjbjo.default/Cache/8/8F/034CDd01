@@ -1,0 +1,1734 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" xmlns:s25="http://www.collegenet.com/s25" xmlns:bx="http://www.collegenet.com/bx" style="display:none;">
+<s:htmlstructure b:name="s25:rsrv_wiz_resource" b:behavior="S25RsrvWizEditor::Resource">
+<div><s:innercontent/></div>
+</s:htmlstructure>
+<s:behavior b:name="S25RsrvWizEditor::Resource" b:behavior="S25RsrvWizEditor">
+<s:initatt c:purpose="rsrc" c:obj_type_id="6"/>
+<s:event b:on="s25-focus">
+</s:event>    
+<s:event b:on="Paint">
+
+<s:variable b:name="tResourceMasterListFLS" b:scope="tag" b:select="id('FLS_ML_RESOURCE')"/>
+<s:variable b:name="tRespXml" b:scope="tag" b:select=""/>
+<s:variable b:name="tRespStr" b:scope="tag" b:select=""/>
+<s:variable b:name="tHttpStatus" b:scope="tag" b:select=""/>
+<s:variable b:name="tObjType" b:scope="tag">resource</s:variable>
+<s:variable b:name="lThis" b:scope="local">ancestor::*[@c:editor='true'][1]</s:variable>
+<s:variable b:name="lPrefNames">
+<prefs>
+<name>config_rs_categories</name>
+<name>25L_rsrvwiz_hide_unavail_rs</name>
+<name>25L_resource_system_options</name>
+<name>ResourceDirBreakPoint</name>
+</prefs>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lPrefNames"/>
+<s:for-each b:target="$lPrefNames/prefs/name">
+<s:if b:test="exists(id(concat('Pref_',string($_target))))">
+<s:task b:action="remove" b:target="$_target"/>
+</s:if>
+</s:for-each>
+<s:if b:test="count($lPrefNames/prefs/name) gt 0">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=', string-join($lPrefNames/prefs/name, '+'))"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild"/>
+</s:if>			
+<s:render b:destination="$tContent" b:mode="replacechildren">
+<div class="contentHeader">
+<span class="tooltipMarker">
+<bx:tooltip class="bxTooltipNoIcon" b:delay="5"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="iconHelp"/> 
+</span>
+<div c:id="title"><s:textnode b:label="{@c:title}"/></div>
+</div>
+<table align="center" class="contentOptions" cellspacing="0">
+<tr c:id="preferenceMessage" style="display:none">
+<td colspan="3" class="preferenceMessage"/>
+</tr>
+<tr valign="top" c:id="workarea">
+<td class="contentOptionSelect">
+<div align="center"><div class="currentSelectionHeader">Select Your Resources</div></div>
+<div c:id="indices" class="RsrvWiz_CriteriaSelectTierOne">
+<div class="RsrvWiz_CriteriaSelectHeader">
+<div class="icon-resource">Find by...</div>
+</div>
+<div c:id="options" class="RsrvWiz_CriteriaSelectBody">
+<div b:behavior="ResourceIndexOption" c:index_id="-1" b:disabled="true">Loading...</div>
+</div>
+</div>
+<div c:id="divisions" class="RsrvWiz_CriteriaSelectTierTwo">
+<div class="RsrvWiz_CriteriaSelectHeader">
+<div class="icon-resource">Loading...</div>
+</div>
+<div c:id="options" class="RsrvWiz_CriteriaSelectBody">
+<div b:behavior="ResourceDivisionOption" c:division_id="-1" b:disabled="true">Loading...</div>
+</div>
+<div c:id="search" class="RsrvWiz_CriteriaSelectBody RsrvWiz_CriteriaSearch" style="display:none">
+<div>Search by Resource Name:</div><br/>
+<input type="text" name="needle" value="" b:required="false" b:valid="true" b:behavior="RsrvWizInput">
+<s:whenactive>
+<s:keys b:keys="enter" b:action="trigger" b:event="LoadSearch" b:target="{$lThis}"/>
+</s:whenactive>
+</input>
+<b:button b:action="trigger" b:event="LoadSearch" b:target="{$lThis}">Search</b:button>
+</div>
+</div>
+<div c:id="resources" class="RsrvWiz_CriteriaSelectTierThree">
+<div class="RsrvWiz_ObjectSelectHeader">
+<div class="icon-resource">Choose from...</div>
+</div>
+<div c:id="options" class="RsrvWiz_ObjectSelectBody RsrvWiz_ObjectSelectBody_HideUnavailable"> 
+<div b:behavior="ResourceOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</div>
+<div c:id="rsrvwiz_icon_tip" class="RsrvWiz_ResultTip" style="display:none">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close_small.gif" class="RsrvWiz_ResultTip_Close" b:behavior="HideIconTips"/>
+<span>Hover over <img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/checkmark.png" class="RsrWiz_ResultTip_Image"/> or <img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/warning.png" class="RsrWiz_ResultTip_Image"/> icons for availability details.</span>
+</div>
+<div class="RsrvWiz_ResultOptions">
+<span class="RsrvWiz_ResultRefresh" b:behavior="RefreshAvailableResources">
+<img class="RsrvWiz_RecheckAvailability" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/icon_refresh.png" b:tooltiptext="Re-Check Availability"/>Refresh
+</span>
+</div>
+</div>
+</td>
+<td class="contentSelections">
+<div align="center"><div class="currentSelectionHeader">Selected Resources</div></div>
+<div c:id="txt" class="currentSelection">
+<div class="currentSelectionBlank" c:id="noresource" c:obj_type="{$tObjType}" style="display:none">none selected</div>
+</div>
+</td>
+</tr>
+</table>
+
+</s:render>
+<s:if b:test="$tEvWiz/$tProfile/r25:resource_pref">
+<s:variable b:name="lResourceQueryID" b:select="string($tEvWiz/$tProfile/r25:resource_pref/r25:rs_query_id)"/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'resource_search.xml?query_id=',$lResourceQueryID,  '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/resource_preferences.xsl')}" b:destination="$tContent//table/tr[@c:id='preferenceMessage']/td" b:mode="asfirstchild"/>
+<s:task b:action="show" b:target="$tContent//table/tr[@c:id='preferenceMessage']"/>
+</s:if>
+<s:variable b:name="tContentOptions" b:scope="tag" b:select="$tContent/table/tr/td"/>
+<s:variable b:name="tCurrentObject" b:scope="tag" b:select="$tContentOptions/div[@c:id='txt']/span[@c:id='currentResource']"/>
+<s:variable b:name="tPreCheckLastDates" b:scope="tag" b:select="''"/>
+<s:if b:test="$tEvWiz/$tInbox/reserve/obj[@obj_type='resource' and not(@obj_id='')] or string-length($tEvWiz/$tProfile//r25:resource_id) gt 0">
+<s:task b:action="assign" b:target="$tEvWiz/$tHasResources" b:select="'T'"/>
+</s:if>
+<s:variable b:name="lNoEditXpath" b:scope="local" b:select=""/>
+<s:variable b:name="lNoEditContent" b:scope="local" b:select=""/>
+<s:if b:test="contains($tEvWiz/$tEvent//r25:resource/@no_edit,'EvXML')">
+<s:task b:action="assign" b:target="$lNoEditContent" b:select="string($tEvWiz/$tEvent//r25:resource/@no_edit)"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tProfile/@no_edit,'EvXML')">
+<s:task b:action="assign" b:target="$lNoEditContent" b:select="string($tEvWiz/$tProfile/@no_edit)"/>
+</s:if>
+<s:task b:action="assign" b:target="$lNoEditXpath" b:select="replace($lNoEditContent,'EvXML','$tEvWiz/$tDataXml/r25:events/r25:event')"/>
+<s:if b:test="xpath($lNoEditXpath)">
+<s:setatt c:no_edit="true"/>
+</s:if>
+<s:if b:test="$tEvWiz/$tEvent//r25:resource/@no_edit = 'T'">
+<s:setatt c:no_edit="true"/>
+</s:if>
+<s:if b:test="id('FLS_EVENT_RESOURCE') = 'N'">
+<s:setatt c:no_edit="true"/>
+</s:if>
+<s:if b:test="not(string(@c:no_edit) = 'true')">
+<s:with b:target="$tEvWiz">
+<s:task b:action="assign" b:target="$tResourceEditor" b:select="'T'"/>
+</s:with>
+<s:variable b:name="tIndices" b:scope="tag" b:select="$tContentOptions/div[@c:id='indices']"/>
+<s:variable b:name="tLastIndex" b:scope="tag" b:select="'-1'"/>
+<s:variable b:name="tDivisions" b:scope="tag" b:select="$tContentOptions/div[@c:id='divisions']"/>
+<s:variable b:name="tLastDivision" b:scope="tag" b:select="'-1'"/>
+<s:variable b:name="tResources" b:scope="tag" b:select="$tContentOptions/div[@c:id='resources']"/>
+<s:variable b:name="tHideUnavailable" b:scope="tag" b:select="$tResources/div[@c:id='hide_unavailable']/input[@name='hide_unavailable']"/>
+<s:if b:test="id('Pref_25L_rsrvwiz_hide_unavail_rs') = 'true'">
+<s:with b:target="$tHideUnavailable">
+<s:setatt b:state="selected" checked="checked"/>
+</s:with>
+</s:if>
+<s:variable b:name="tNeedle" b:scope="tag" b:select="$tDivisions/div[@c:id='search']//input[@type='text' and @name='needle']"/>
+<s:task b:action="trigger" b:event="LoadIndices"/>
+<s:choose>
+<s:when b:test="$tEvWiz/$tProfile/r25:resource_pref">
+<s:task b:action="select" b:target="$tIndices//div[@c:index_id = 'prefs']"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lFavCountUrl" b:select="concat(id('Config')/$tWsPrefix,'resources.xml?favorite=T','&amp;scope=list')"/>
+<s:variable b:name="lFavCount" b:select=""/>
+<s:task b:action="load" b:url="{$lFavCountUrl}" b:method="GET" b:destination="$lFavCount" b:mode="replacechildren">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lFavCount"/>
+<s:choose>
+<s:when b:test="count($lFavCount//r25:item) = 0">
+<s:task b:action="select" b:target="$tIndices//div[@c:index_id = 'search']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="select" b:target="$tIndices//div[@c:index_id = 'fav']"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:if>
+<s:render b:destination="$tContent/div[1]/span[1]/bx:tooltip" b:mode="replacechildren"><div xmlns="">Choose from a list of Your Starred Resources or Search by resource name. Alternatively, you can browse resources by selecting among Resource Searches, Index of names, or Categories.</div><div xmlns="">To search for a resource, click &apos;Search&apos; in the &apos;Find by&apos; list, then enter all or the first part of the resource name. Click the &apos;Search&apos; button. A checkbox under the Choose from... list lets you hide or show unavailable resources.</div><div xmlns="">You can hover over a resource name to learn more about it.</div><div xmlns="">You may assign multiple resources by event occurrence. Click Modify Selected Occurrences to complete details for each occurrence of a resource assignment.</div><div xmlns="">
+              <b>Note: </b>You can edit selected resource instructions or quantities, and they will be retained even if the resource is saved as an event preference only.</div><div xmlns="">If you don&apos;t have permission to save your selected resource(s), your preferences are saved with the event so they&apos;re available to the 25Live user with the required scheduler permissions.</div><div xmlns="">A Selected Resource can be added to (or removed from) Your Starred Resources by toggling its star icon.</div></s:render>
+</s:event>
+<s:event b:on="Reset">
+<s:sequential><s:lock>
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode = 'edit' or $tEvWiz/@c:mode = 'clone'">
+<s:task b:action="trigger" b:event="Reset_existing" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="Reset_new" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:lock></s:sequential>
+
+<s:variable b:name="lMessage" b:scope="local" b:select="string($tEvWiz/$tEvent//r25:resource[string-length(@message &gt; 0)]/@message)"/>
+<s:if b:test="string-length($lMessage) = 0">
+<s:task b:action="assign" b:target="$lMessage" b:select="string(@c:message)"/>
+</s:if>			
+<s:render b:test="not(string-length($lMessage) = 0)" b:destination="$tContent//table" b:mode="asfirstchild">
+<tr c:id="message"><td colspan="3"><s:textnode b:label="{$lMessage}"/></td></tr>
+</s:render>
+<s:variable b:name="lEditorSupplementaryText" b:select="ancestor::div[@b:behavior='S25RsrvWizCard']/$tEditor[@name='resource']/info"/>
+<s:task b:action="xml2string" b:variable="$lEditorSupplementaryText"/>
+<s:if b:test="not(string-length($lEditorSupplementaryText) = 0)">
+<s:script><![CDATA[
+
+var lText = _vars['lEditorSupplementaryText'][0];
+lText = lText.replace(/&lt;/g, '<');
+lText = lText.replace(/&gt;/g, '>');
+var destination = "div[@c:id='container']/div[@c:id='content']//table";
+bpc.render('<tr><td colspan="3" class="contentMessage">' + lText + '</td></tr>', 'asfirstchild', destination, _current);
+
+]]></s:script>
+</s:if>
+</s:event>
+<s:event b:on="Reset_new">
+<s:choose>
+<s:when b:test="string(@c:no_edit) = 'true'">
+<s:task b:action="trigger" b:event="LoadText" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="$tEvWiz/$tInbox/reserve/obj[@obj_type='resource' and not(@obj_id='')]">
+<s:variable b:name="lObj" b:scope="local" b:select="$tEvWiz/$tInbox/reserve/obj[@obj_type='resource' and not(@obj_id='')][1]"/>
+<s:variable b:name="lResourceID" b:select="$lObj/@obj_id"/>
+<s:variable b:name="lResourceName" b:select="$lObj/@obj_name"/>
+<s:task b:action="trigger" b:event="ResourceSelect" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="show" b:target="$tContentOptions/div[@c:id='txt']/div[@c:id='noresource']"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="Reset_existing">
+<s:choose>
+<s:when b:test="string(@c:no_edit) = 'true'">
+<s:task b:action="trigger" b:event="LoadText" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="$tEvWiz/$tProfile//r25:resource_reservation">
+<s:with b:target="$tEvWiz/$tAvailabilityControl">
+<s:task b:action="assign" b:target="$tCreatePendingRsrvs" b:scope="tag" b:select="'T'"/>
+</s:with>
+<s:task b:action="transform" b:datasource="$tEvWiz/$tProfile" b:stylesheet="$Resources" b:destination="$tContentOptions/div[@c:id='txt']" b:mode="replacechildren"/>
+<s:task b:action="trigger" b:event="CheckAssignmentPolicy" b:target="."/>
+</s:when>
+<s:when b:test="$tEvWiz/$tInbox/reserve/obj[@obj_type='resource']">
+<s:with b:target="$tEvWiz/$tAvailabilityControl">
+<s:task b:action="assign" b:target="$tCreatePendingRsrvs" b:scope="tag" b:select="'T'"/>
+</s:with>
+<s:task b:action="transform" b:datasource="$tEvWiz/$tInbox/reserve" b:stylesheet="$Resources" b:destination="$tContentOptions/div[@c:id='txt']" b:mode="replacechildren"/>
+<s:task b:action="trigger" b:event="CheckAssignmentPolicy" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="show" b:target="$tContentOptions/div[@c:id='txt']/div[@c:id='noresource']"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="CheckAssignmentPolicy">
+<s:for-each b:target="$tContentOptions/div[@c:id='txt']//div[@c:purpose='Resource']">
+<s:sequential>
+<s:lock>
+<s:variable b:name="lResourceID" b:scope="local" b:select="$_target/@c:resource_id"/>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'resource_assign.xml?resource_id=',$lResourceID,'&amp;cache')"/>
+<s:variable b:name="lDest" b:scope="local" b:select=""/>
+<s:task b:action="load" b:url="{$lUrl}" b:destination="$lDest" b:showloading="false"/>
+<s:task b:action="string2xml" b:variable="$lDest"/>
+<s:variable b:name="lSecurityGroupID" b:select="id('FlsDataIsland')/@SecurityGroup"/>
+<s:variable b:name="lResourceAccess" b:select="$lDest//r25:security_group[r25:security_group_id = $lSecurityGroupID]/r25:access_level"/>
+<s:variable b:name="lResourceAssignOver" b:scope="local" b:select="id('FLS_RESOURCE_ASSIGN_OVER')"/>
+<s:if b:test="not($lResourceAccess = 'N') or $lResourceAssignOver = 'F'">
+<s:with b:target="$tContentOptions/div[@c:id='txt']//div[@c:purpose='Resource'][@c:resource_id = $lResourceID]/div[@class='currentSelection_Icons']">
+<s:task b:action="show" b:target="input[@b:behavior='RemoveResource']"/>
+</s:with>
+</s:if>
+</s:lock>
+</s:sequential>
+</s:for-each>
+</s:event>
+<s:event b:on="select">
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode='edit' and not($tEvWiz/$tEvent)">
+</s:when>
+<s:otherwise>
+<s:variable b:name="lFirstLoad" b:select="not(@c:init = '1')"/>
+<s:super/>
+<s:if b:test="not($lFirstLoad)">
+<s:task b:action="trigger" b:event="UpdateAvailabilityVars" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:if b:test="$tEvWiz/$tHasDates = 'T' and not(@c:no_edit = 'true')">
+<s:task b:action="trigger" b:event="BuildAvailabilityDates" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:if b:test="not($tEvWiz/$tAvailabilityControl/$tAvailabilityDates = $tPreCheckLastDates)">
+<s:task b:action="trigger" b:event="ResourceDivisionChange"/>
+</s:if>
+</s:if>
+</s:if>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveRsrvWizard">
+<s:variable b:name="lEvent" b:scope="local" b:select="$tEvWiz/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent='LoadSuccess'">
+<s:task b:test="not(@c:init = '1')" b:action="trigger" b:event="select"/>
+</s:when>
+<s:when b:test="$lEvent='DateChangePending'">
+<s:with b:target="$tContentOptions/div[@c:id='txt']/div[@c:purpose='Resource']">
+<s:setatt c:valid="U"/>
+<s:task b:action="trigger" b:event="ValidityUpdate"/>
+</s:with>
+<s:task b:action="trigger" b:event="PreCheckResources" b:async="true"/>
+</s:when>
+<s:when b:test="$lEvent='DateChange'">
+<s:for-each b:target="$tContentOptions/div[@c:id='txt']/div[@c:purpose='Resource']">
+<s:sequential><s:lock>
+<s:with b:target="$_target"> 
+<s:task b:action="trigger" b:event="PaintCustomizationInfobox"/>
+</s:with>
+<s:variable b:name="lResourceID" b:select="string($_target/@c:resource_id)"/>
+<s:variable b:name="lResourceName" b:select="string($_target/@c:resource_name)"/>
+<!-- <s:task b:action="trigger" b:event="DeletePendingResourceRsrv" b:target="$tEvWiz/$tAvailabilityControl"/> -->
+<s:task b:action="trigger" b:event="CreatePendingResourceRsrv" b:target="$tEvWiz/$tAvailabilityControl"/> 
+</s:lock></s:sequential>
+</s:for-each>
+<s:task b:action="trigger" b:event="Validate"/>
+<s:task b:action="trigger" b:event="PreCheckResources" b:async="true"/>
+</s:when>
+<s:when b:test="$lEvent='FinalCheck'">
+<s:for-each b:target="$tContentOptions/div[@c:id='txt']/div[@c:purpose='Resource']">
+<s:sequential><s:lock>
+<s:with b:target="$_target"> 
+<s:task b:action="trigger" b:event="PaintCustomizationInfobox" />
+</s:with>
+<s:variable b:name="lResourceID" b:select="string($_target/@c:resource_id)" />
+<s:variable b:name="lResourceName" b:select="string($_target/@c:resource_name)" />
+<!-- <s:task b:action="trigger" b:event="DeletePendingResourceRsrv" b:target="$tEvWiz/$tAvailabilityControl" /> -->
+<s:task b:action="trigger" b:event="CreatePendingResourceRsrv" b:target="$tEvWiz/$tAvailabilityControl" />
+</s:lock></s:sequential>
+</s:for-each>
+<s:task b:action="trigger" b:event="Validate" />
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="LoadText">
+<s:variable b:name="lEvID" b:scope="local" b:select="1"/>
+<s:with b:target="$tContent/table/tr[@c:id='workarea']/td[1]">
+<s:task b:action="remove" b:target="div[@c:id='indices']"/>
+<s:task b:action="remove" b:target="div[@c:id='divisions']"/>
+<s:task b:action="remove" b:target="div[@c:id='resources']"/>
+<s:render b:destination="." b:mode="aslastchild">
+<div align="center" style="margin:25px 0 15px">
+<i>Event Resources are not currently editable.</i>
+</div>
+</s:render>
+</s:with>
+<s:choose>
+<s:when b:test="$tEvWiz/$tProfile//r25:resource_reservation">
+<s:variable b:name="lDatePattern" b:select="string(id('Prefs')/$tDatePattern)"/>
+<s:variable b:name="lLabelOccurrence" b:select="'Occurrence:'"/>
+<s:variable b:name="lLabelQuantity" b:select="'Quantity:'"/>
+<s:variable b:name="lLabelInstructions" b:select="'Setup Instructions:'"/>
+<s:variable b:name="lNone" b:select="'(none)'"/>
+<s:task b:action="transform" b:datasource="$tEvWiz/$tDataXml" b:stylesheet="$Resources_text" b:destination="$tContentOptions/div[@c:id='txt']" b:mode="replacechildren"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="show" b:target="$tContentOptions/div[@c:id='txt']/div[@c:id='noresource']"/>
+</s:otherwise>
+</s:choose>
+<s:fxstyle b:time="1"/>
+<s:task b:action="move" b:source="$tContent//table/tr[@c:id='message']/td/text()" b:destination="$tContent//table/tr[@c:id='workarea']/td[1]" b:mode="replacechildren"/>
+<s:task b:action="remove" b:target="$tContent//table/tr[@c:id='message']"/>
+</s:event>
+<s:event b:on="Validate">
+<s:setatt c:valid="true" c:error=""/>
+<s:choose>
+<s:when b:test="$tEvWiz/$tProfile/r25:resource_pref">
+<s:setatt c:valid="true" c:crumb=""/>
+</s:when>
+<s:when b:test="@c:required = 'true' and count($tContentOptions/div[@c:id='txt']//div[@c:purpose='Resource']/div[@c:id='currentResource']) = 0">
+<s:setatt c:valid="false" c:crumb="" c:error="Event must have a resource assigned."/>
+</s:when>
+<s:when b:test="$tContentOptions/div[@c:id='txt']//div[@c:purpose='Resource']/@c:valid = 'F'">
+<s:setatt c:valid="false" c:crumb="" c:error="One or more of the resources selected is unavailable."/>
+</s:when>
+<s:otherwise>
+<s:setatt c:valid="true" c:crumb=""/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="Save"/>
+<s:if b:test="not(@c:no_edit='true')">
+</s:if>
+</s:event>
+<s:event b:on="Save">
+<s:if b:test="not(string(@c:no_edit) = 'true')">
+<s:variable b:scope="local" b:name="lCrumbText" b:select="''"/>
+<s:variable b:name="lReserve" b:scope="local" b:select="$tEvWiz/$tInbox/reserve"/>
+<s:task b:action="remove" b:target="$lReserve//obj[@obj_type='resource']"/>
+<s:variable b:name="lResourceObjects" b:select="$tContentOptions/div[@c:id='txt']//div[@c:purpose='Resource']"/>
+<s:for-each b:target="$lResourceObjects">
+<s:sequential>
+<s:lock>
+<s:variable b:name="lRsId" b:scope="local" b:select="$_target/@c:resource_id"/>
+<s:variable b:name="lRsName" b:scope="local" b:select="$_target/div[@c:id='currentResource']/span[@b:behavior='S25Object'][1]/@c:obj_name"/>
+<s:variable b:name="lRsQuantity" b:scope="local" b:select="string($_target/span[@c:purpose='customizations']//b:spinner[@c:purpose='quantity']/@b:value)"/>
+<s:variable b:name="lRsInstructions" b:scope="local" b:select="string($_target/span[@c:purpose='customizations']//textarea[@b:behavior='ResourceText']/@value)"/>
+<s:render b:destination="$lReserve" b:mode="aslastchild">
+<obj obj_type="resource" obj_id="{$lRsId}" obj_name="{$lRsName}" obj_quantity="{$lRsQuantity}" obj_instructions="{$lRsInstructions}"/>
+</s:render>
+<s:if b:test="$tEvWiz/$tHasRepeats = 'T'">
+<s:for-each b:target="$_target/div[@c:purpose='resource_customization']//table/tbody/tr[not(@c:sortdate='99999999')]">
+<s:choose>
+<s:when b:test="$_target/td/input[@type='checkbox' and @b:state='selected']">
+<s:render b:destination="$lReserve/obj[@obj_type='resource' and @obj_id=$lRsId]" b:mode="aslastchild">
+<occurrence date="{$_target/td/input[@type='checkbox']/@c:occurrence}" obj_quantity="{$_target/td/b:spinner[@c:purpose='quantity']/@b:value}" obj_instructions="{concat($_target/td/span[@c:id='instructions']/textarea/@value, ' ')}"/>
+</s:render>
+</s:when>
+<s:otherwise>
+<s:render b:destination="$lReserve/obj[@obj_type='resource' and @obj_id=$lRsId]" b:mode="aslastchild">
+<exemption date="{$_target/td/input[@type='checkbox']/@c:occurrence}" obj_quantity="{$_target/td/b:spinner[@c:purpose='quantity']/@b:value}" obj_instructions="{concat($_target/td/span[@c:id='instructions']/textarea/@value, ' ')}"/>
+</s:render>
+</s:otherwise>
+</s:choose>
+</s:for-each>
+</s:if>
+<s:choose>
+<s:when b:test="$lCrumbText = ''">
+<s:task b:action="assign" b:scope="local" b:target="$lCrumbText" b:select="$lRsName"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:scope="local" b:target="$lCrumbText" b:select="concat($lCrumbText, ';; ', $lRsName)"/>
+</s:otherwise>
+</s:choose>
+</s:lock>
+</s:sequential>
+</s:for-each>
+<s:task b:action="trigger" b:event="OutputCurrentInbox" b:target="$tEvWiz"/>
+<s:choose>
+<s:when b:test="$lReserve/obj[@obj_type='resource']">
+<s:task b:action="assign" b:target="$tEvWiz/$tHasResources" b:select="'T'"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$tEvWiz/$tHasResources" b:select="'F'"/>
+</s:otherwise>
+</s:choose>
+<s:setatt c:crumb="{$lCrumbText}"/>
+</s:if>
+</s:event>
+<s:event b:on="LoadIndices">
+<s:variable b:name="lPrefs" b:select="string(id('Pref_25L_resource_system_options'))"/>
+<s:task b:action="string2xml" b:variable="$lPrefs"/>
+<s:variable b:name="lDefaultUser" b:select="string(id('Pref_config_search_user'))"/>
+<s:variable b:name="lFavText" b:select="'Your Starred Resources'"/>
+<s:if b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavText" b:select="'Suggested Resources'"/>
+</s:if>
+<s:variable b:name="lHasPrefs" b:select="'false'"/>
+<s:if b:test="$tEvWiz/$tProfile/r25:resource_pref">
+<s:task b:action="assign" b:target="$lHasPrefs" b:select="'true'"/>
+</s:if>
+<s:variable b:name="lIndices" b:select="$lPrefs/resource_options"/>
+<s:task b:action="transform" b:datasource="$lIndices" b:stylesheet="$ResourceIndexSelect" b:destination="$tIndices/div[@c:id='options']" b:mode="replacechildren"/>
+</s:event>
+<s:event b:on="ResourceIndexChange">
+<s:variable b:name="lSelOpt" b:select="$tIndices/div[@c:id='options']/div[@b:state='selected']"/>
+<s:if b:test="$lSelOpt/@c:index_id ne '-1' and $lSelOpt/@c:index_id ne $tLastIndex">
+<s:choose>
+<s:when b:test="$lSelOpt/@c:index_id = 'fav'">
+<s:with b:target="$tDivisions">
+<s:task b:action="hide" b:target="div[@c:id='search']"/>
+<s:task b:action="show" b:target="div[@c:id='options']"/>
+<s:task b:action="hide"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="ResourceDivisionOption" b:state="selected" c:param="&amp;favorite=T" c:division_id="fav">
+<s:textnode b:label="{$lSelOpt/div/text()}"/>
+</div>
+</s:render>
+</s:with>
+<s:task b:action="trigger" b:event="ResourceDivisionChange"/>
+</s:when>
+<s:when b:test="$lSelOpt/@c:index_id = 'prefs'">
+<s:variable b:name="lResourceQueryID" b:select="string($tEvWiz/$tProfile/r25:resource_pref/r25:rs_query_id)"/>
+<s:with b:target="$tDivisions">
+<s:task b:action="hide" b:target="div[@c:id='search']"/>
+<s:task b:action="show" b:target="div[@c:id='options']"/>
+<s:task b:action="hide"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="ResourceDivisionOption" b:state="selected" c:param="{concat('&amp;query_id=',$lResourceQueryID)}" c:division_id="prefs">
+<s:textnode b:label="{$lSelOpt/div/text()}"/>
+</div>
+</s:render>
+</s:with>
+<s:task b:action="trigger" b:event="ResourceDivisionChange"/>
+</s:when>
+<s:when b:test="$lSelOpt/@c:index_id = 'search'">
+<s:with b:target="$tResources">
+<s:task b:action="hide"/>
+</s:with>
+<s:with b:target="$tNeedle">
+<s:setatt value=""/>
+</s:with>
+<s:with b:target="$tDivisions">
+<s:task b:action="hide"/>
+<s:task b:action="hide" b:target="div[@c:id='options']"/>
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+<s:textnode b:label="{$lSelOpt/div/text()}"/>
+</s:render>
+<s:task b:action="show" b:target="div[@c:id='search']"/>
+<s:task b:action="show"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="$tResources">
+<s:task b:action="hide"/>
+</s:with>
+<s:with b:target="$tDivisions">
+<s:task b:action="hide" b:target="div[@c:id='search']"/>
+<s:task b:action="show" b:target="div[@c:id='options']"/>
+<s:task b:action="show"/>
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+<s:fxstyle b:time="10"/>
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+<s:textnode b:label="{$lSelOpt/text()}"/>
+</s:render>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="ResourceDivisionOption" c:division_id="-1" b:disabled="true">
+Loading...
+</div>
+</s:render>
+</s:with>
+<s:variable b:name="lUrl" b:select="concat(id('Config')/$tWsPrefix,$lSelOpt/@c:query, '?otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/browse_resource_',$lSelOpt/@c:xsl)"/>
+<s:if b:test="$lSelOpt/@c:index_id = 'keyword'">
+<s:variable b:name="lBreakpoints" b:scope="local" b:select="string(id('Pref_ResourceDirBreakPoint'))"/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;breakpoints=',$lBreakpoints)"/>
+</s:if>
+<s:if b:test="$lSelOpt/@c:index_id = 'category'">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat(id('Config')/$tWsPrefix,'rscat.xml', '?otransform=',$tEvWiz/@c:xsl_prefix,'s25-event-wiz/browse_resource_categories.xsl')"/>
+<s:if b:test="not(string($tResourceMasterListFLS) = 'F' or string($tResourceMasterListFLS) = 'C')">
+<s:variable b:name="lCategoryList" b:scope="local" b:select="id('Pref_config_rs_categories')"/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;categories=',$lCategoryList)"/>
+</s:if>
+</s:if>
+<s:if b:test="not(contains($lUrl, 'favorite')) and not(contains($lUrl, 'browse_resource_searches'))">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;cache')"/>
+</s:if>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tDivisions/div[@c:id='options']" b:mode="replacechildren"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="assign" b:target="$tLastIndex" b:scope="tag" b:select="string($lSelOpt/@c:index_id)"/>
+</s:if>
+</s:event>
+<s:event b:on="ResourceDivisionChange">
+<s:variable b:name="lSelOpt" b:select="$tDivisions/div[@c:id='options']/div[@b:state='selected']"/>
+<s:if b:test="$lSelOpt/@c:division_id ne '-1' and $lSelOpt/@c:division_id ne $tLastDivision">
+<s:with b:target="$tResources">
+<s:task b:action="show"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="ResourceOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+</s:with>
+<s:variable b:name="lUrl" b:scope="local" b:select=""/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($tEvWiz/@c:r25ws_prefix,'resources.xml', '?otransform=',$tEvWiz/@c:xsl_prefix,'s25-event-wiz/browse_resource_divisions.xsl', $lSelOpt/@c:param)"/>								
+<s:if b:test="$tHideUnavailable/@b:state = 'selected'">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl, '&amp;hide_unavailable=T')"/>
+</s:if>
+<s:if b:test="not(contains($lUrl, 'favorite'))">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;cache')"/>
+</s:if>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tResources/div[@c:id='options']" b:mode="replacechildren"/>
+<s:if b:test="starts-with($bpc_browser, 'ie')">
+<s:with b:target="$tResources/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+</s:if>
+<s:task b:action="trigger" b:event="PreCheckResources" b:async="true"/>
+<s:task b:action="assign" b:target="$tLastDivision" b:scope="tag" b:select="string($lSelOpt/@division_id)"/>
+</s:if>
+</s:event>
+<s:event b:on="LoadSearch">
+<s:task b:action="focus" b:target="$tNeedle"/>
+<s:if b:test="not(string-length($tNeedle/@value)=0)">
+<s:with b:target="$tResources">
+<s:task b:action="show"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="ResourceOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+</s:with>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat($tEvWiz/@c:r25ws_prefix,'resources.xml', '?name=',normalize-space($tNeedle/@value), '&amp;otransform=',$tEvWiz/@c:xsl_prefix, 's25-event-wiz/rsrc_search.xsl')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tResources/div[@c:id='options']" b:mode="replacechildren"/>
+
+<s:with b:target="$tResources/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+<s:with b:target="$tNeedle">
+<s:setatt b:valid="true" b:required="false"/>
+<s:task b:action="focus"/>
+</s:with>
+<s:task b:action="trigger" b:event="PreCheckResources" b:async="true"/>
+<s:task b:action="assign" b:target="$tLastDivision" b:scope="tag" b:select="'search'"/>
+</s:if>
+</s:event>
+<s:event b:on="PreCheckResources">
+<s:variable b:name="lTargetResources" b:select="$tResources/div[@c:id='options']/div[@c:obj_type='resource' and not(@c:obj_id='-1')]"/>
+<s:task b:action="hide" b:target="$tResources/div[@c:id='rsrvwiz_icon_tip']"/>
+<s:task b:action="trigger" b:event="UpdateAvailabilityVars" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:choose>
+<s:when b:test="$tEvWiz/$tHasDates = 'T' and count($lTargetResources) gt 0">
+<s:task b:action="hide" b:target="$lTargetResources/div[@c:purpose='availability']/*"/>
+<s:with b:target="$lTargetResources/div[@c:purpose='availability']/img[@c:id='checking']">
+<s:setstyle b:display="inline"/>
+</s:with>
+<s:variable b:name="lResourceList" b:scope="local" b:select="''"/>
+<s:variable b:name="lResourceXml" b:scope="local">
+<r25:resource>
+<r25:resource_id/>
+<r25:quantity>1</r25:quantity>
+</r25:resource>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lResourceXml"/>
+<s:for-each b:target="$lTargetResources">
+<s:sequential>
+<s:lock>
+<s:variable b:name="lResource" b:scope="local" b:select=""/>
+<s:task b:action="settext" b:target="$lResourceXml/r25:resource/r25:resource_id" b:value="{string($_target/@c:obj_id)}"/>
+<s:task b:action="xml2string" b:source="$lResourceXml" b:variable="$lResource"/>
+<s:task b:action="assign" b:target="$lResourceList" b:select="concat($lResourceList,$lResource)"/>
+</s:lock>
+</s:sequential>
+</s:for-each>
+<s:variable b:name="lCheckResourcesXml" b:select=""/>
+<s:variable b:name="lEventID" b:select="string($tEvWiz/$tEvent/r25:event_id)"/>
+<s:variable b:name="lProfileID" b:select="string($tEvWiz/$tProfile/r25:profile_id)"/>
+<s:task b:action="trigger" b:event="BuildAvailabilityDates" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:variable b:name="lCurrentDates" b:select="$tEvWiz/$tAvailabilityControl/$tAvailabilityDates"/>
+<s:script><![CDATA[
+
+var sResourceList = _vars['lResourceList'][0];
+var sDateList = _vars['lCurrentDates'][0];
+var sEventID = _vars['lEventID'][0];
+var sProfileID = _vars['lProfileID'][0];
+var sResourceXml =	'<r25:resource_availability xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event_id>' + sEventID + '</r25:event_id> ' + 
+'<r25:profile>' + 
+'<r25:profile_id>' + sProfileID + '</r25:profile_id> ' + 
+'</r25:profile> ' + 
+'</r25:event> ' + 
+'<r25:requirements> ' + sResourceList + '</r25:requirements> ' + 
+sDateList + 
+'</r25:resource_availability>';
+bpc.setVariable('lCheckResourcesXml',[sResourceXml]);
+
+]]></s:script>
+<s:task b:action="assign" b:target="$lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'res_avail.xml', '?otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/resource_precheck.xsl')"/>
+<s:if b:test="$tHideUnavailable/@b:state = 'selected'">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl, '&amp;hide_unavailable=T')"/>
+</s:if>
+<s:task b:action="load" b:method="POST" b:url="{$lUrl}" b:data="{$lCheckResourcesXml}" b:destination="$tResources/div[@c:id='options']" b:mode="replacechildren" b:showloading="false" b:async="true">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="assign" b:target="$tPreCheckLastDates" b:scope="tag" b:select="$tEvWiz/$tAvailabilityControl/$tAvailabilityDates"/>
+<s:task b:action="trigger" b:event="UpdateAvailabilityVars" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:if b:test="$tEvWiz/$tHasDates = 'T' and $tEvWiz/$tHasRepeats = 'T'">
+<s:variable b:name="lPrefHiddenTutorialsXml" b:scope="tag" b:select="string(id('Pref_25L_hidden_tutorials'))"/>
+<s:task b:action="string2xml" b:variable="$lPrefHiddenTutorialsXml"/>
+<s:if b:test="not($lPrefHiddenTutorialsXml/tutorials)">
+<s:task b:action="assign" b:target="$lPrefHiddenTutorialsXml" b:scope="tag" b:select="'&lt;tutorials&gt;&lt;/tutorials&gt;'"/>
+<s:task b:action="string2xml" b:variable="$lPrefHiddenTutorialsXml"/>
+</s:if>
+<s:if b:test="not($lPrefHiddenTutorialsXml//tutorial = 'RsrvWizIconTip')">
+<s:task b:action="show" b:target="$tResources/div[@c:id='rsrvwiz_icon_tip']"/>
+</s:if>
+</s:if>
+</s:when>
+<s:otherwise>
+<s:with b:target="$lTargetResources/div[@c:purpose='availability']">
+<s:task b:action="hide" b:target=".//span"/>
+<s:task b:action="hide" b:target=".//img"/>
+<s:render b:destination="." b:mode="aslastchild">
+<img c:id="unknown" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/caution.png"/>
+</s:render>
+</s:with>
+</s:otherwise>
+</s:choose>
+</s:event>
+
+<s:event b:on="ResourceSelect">
+<s:sequential><s:lock>
+<s:if b:test="not(string-length($lResourceID)=0) and not(string-length($lResourceName)=0) and not($tContentOptions/div[@c:id='txt']//div[@c:purpose='Resource'][@c:resource_id=$lResourceID])">
+<s:with b:target="ancestor::s25:rsrv_wiz_resource[1]/$tEvWiz/$tAvailabilityControl">
+<s:task b:action="assign" b:target="$tCreatePendingRsrvs" b:scope="tag" b:select="'T'"/>
+</s:with>
+<s:task b:action="remove" b:target="$tContentOptions//div[@c:id='noresource']"/>
+<s:render b:test="not($tContentOptions//div[@c:purpose='Resource']//span[@c:obj_id = $lResourceID])" b:destination="$tContentOptions/div[@c:id='txt']" b:mode="aslastchild">
+<div c:purpose="Resource" class="currentSelection_Resource" c:resource_id="{$lResourceID}" c:resource_name="{$lResourceName}" c:valid="U" b:behavior="ResourceContainer">
+<div class="currentSelection_Icons">
+<span c:purpose="availability"><img c:id="checking" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif" b:tooltiptext="Checking for conflicts..."/><img c:id="available" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/checkmark.png" style="display:none" b:tooltiptext="This Resource has no conflicts for all of the currently selected Dates and Times. Click for details."/><img c:id="unavailable" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/warning.png" style="display:none" b:tooltiptext="This Resource has conflicts for some or all of the currently selected Dates and Times."/><img c:id="unknown" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/caution.png" style="cursor:pointer; display:none" b:tooltiptext="Until you select a Date and Time, we cannot determine if this Resource has conflicts." b:behavior="TriggerAvailabilityCheck"/></span>
+<span c:purpose="FavToggle"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_NotFavorite" style="display:none;" c:purpose="NotFavorite" b:behavior="AddFav" b:tooltiptext="Add this to Your Starred Resources">
+<s:event b:on="click">
+<s:task b:action="assign" b:scope="tag" b:target="ancestor::*[@c:editor='true'][1]/$tCurrentObject" b:select="ancestor::div[@c:purpose='Resource']/div[@c:id='currentResource']/span[@b:behavior='S25Object']"/>
+<s:super/>
+</s:event>
+</img><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_IsFavorite" style="display:none;" c:purpose="Favorite" b:behavior="RemoveFav" b:tooltiptext="Remove this from Your Starred Resources">
+<s:event b:on="click">
+<s:task b:action="assign" b:scope="tag" b:target="ancestor::*[@c:editor='true'][1]/$tCurrentObject" b:select="ancestor::div[@c:purpose='Resource']/div[@c:id='currentResource']/span[@b:behavior='S25Object']"/>
+<s:super/>
+</s:event>
+</img></span>
+<input type="image" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close.gif" b:behavior="RemoveResource" c:resource_id="{$lResourceID}"/>
+</div>
+<div c:id="currentResource" class="currentSelectionValue icon-resource">
+<span c:quantity="1" b:behavior="S25Object" c:obj_type="resource" c:obj_id="{$lResourceID}" c:obj_name="{$lResourceName}" b:tooltiptext="Click to view resource details and availability.">
+<s:textnode b:label="{$lResourceName}"/>
+</span>
+</div>
+<span c:purpose="customizations"/>
+<span c:purpose="occurrences"/>
+<span c:purpose="conflicts"/>
+<div c:purpose="resource_customization" class="currentSelection_OccurrenceEditing">
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/bullet.gif"/><a href="javascript:void(0)" onclick="return false" b:action="select" b:target="../b:infobox[@c:purpose='resource_customization']"><s:textnode b:label="{concat('Modify Selected Occurrences','...')}"/></a>
+<b:infobox b:behavior="OccurrenceCustomizationInfobox" c:purpose="resource_customization"/>
+</div>
+<div class="divider"/>
+</div>
+</s:render>
+</s:if>
+</s:lock></s:sequential>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ResourceIndexOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:task b:action="trigger" b:event="ResourceIndexChange" b:target="ancestor::*[@c:editor='true' or @c:purpose='attributeContainer'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ResourceDivisionOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:task b:action="trigger" b:event="ResourceDivisionChange" b:target="ancestor::*[@c:editor='true' or @c:purpose='attributeContainer'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ResourceOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:super/>
+<s:variable b:name="lResourceID" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:variable b:name="lResourceName" b:scope="local" b:select="string(@c:obj_name)"/>
+<s:with b:target="ancestor::*[@c:editor='true' or @c:purpose='attributeContainer'][1]">
+<s:task b:action="trigger" b:event="ResourceSelect"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ResourceContainer">
+<s:event b:on="construct">
+<s:super/>
+<s:setatt id="{concat('ResourceContainer_', ancestor::s25:rsrv_wiz/@c:event_id, '_', @c:resource_id )}"/>
+<s:variable b:name="lResourceID" b:select="string(@c:resource_id)"/>
+<s:variable b:name="lResourceName" b:select="string(@c:resource_name)"/>
+
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'resource.xml?resource_id=',$lResourceID)"/>
+<s:variable b:name="tResourceXml" b:scope="tag" b:select=""/>
+<s:task b:action="load" b:url="{$lUrl}" b:destination="$tResourceXml" b:showloading="false">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$tResourceXml"/>
+<s:if b:test="not(id('WSSessionMgr')/@c:user-type = 'web')">
+<s:choose>
+<s:when b:test="$tResourceXml/r25:resources/r25:resource/r25:favorite = 'T'">
+<s:task b:action="show" b:target=".//span[@c:purpose='FavToggle'][1]/img[@c:purpose = 'Favorite']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="show" b:target=".//span[@c:purpose='FavToggle'][1]/img[@c:purpose = 'NotFavorite']"/>
+</s:otherwise>
+</s:choose>
+</s:if>
+<s:task b:action="trigger" b:event="PaintCustomizationInfobox"/>
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz_resource[1]/$tEvWiz/$tHasDates = 'T'">
+<s:task b:action="trigger" b:event="CreatePendingResourceRsrv" b:target="ancestor::s25:rsrv_wiz[1]/$tAvailabilityControl"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="ValidityUpdate" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="UpdatePendingResourceRsrv">
+<s:variable b:name="lResourceID" b:select="string(@c:resource_id)"/>
+<s:variable b:name="lResourceName" b:select="string(@c:resource_name)"/>
+<s:task b:action="trigger" b:event="CreatePendingResourceRsrv" b:target="ancestor::s25:rsrv_wiz[1]/$tAvailabilityControl"/>
+</s:event>
+<s:event b:on="PaintCustomizationInfobox">
+
+<s:variable b:name="lNoneValue" b:select="'(none)'"/>
+<s:variable b:name="lEditPrompt" b:select="'edit'"/>
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tHasRepeats = 'T'">
+<s:task b:action="trigger" b:event="PaintOptions_MultipleOccurrences"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="PaintOptions_SingleOccurrence"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="PaintOptions_SingleOccurrence">
+<s:task b:action="hide" b:target="div[@c:purpose='resource_customization']"/>
+<s:render b:destination="span[@c:purpose='customizations']" b:mode="replacechildren">
+<div class="currentSelection_Attribute" c:id="quantity_select">
+<b>Quantity: </b> 
+</div>
+</s:render>
+<s:variable b:name="lOccurrenceStartDate" b:select="string($tEvWiz/$tAvailabilityControl/$tEventStartDate)"/>
+<s:variable b:name="lOccurrenceEndDate" b:select="string($tEvWiz/$tAvailabilityControl/$tEventEndDate)"/>
+<s:variable b:name="lQtyRequested" b:select="1"/>
+<s:task b:test="exists(b:spinner)" b:action="assign" b:target="$lQtyRequested" b:select="number(b:spinner/@b:value)"/>
+<s:task b:action="transform" b:datasource="$tResourceXml" b:stylesheet="$ResourceQuantity" b:destination="span[@c:purpose='customizations']/div[@c:id='quantity_select']" b:mode="aslastchild"/>
+<s:render b:destination="span[@c:purpose='customizations']" b:mode="aslastchild">
+<div class="currentSelection_Attribute" c:id="instructions">
+<b>Setup Instructions: </b> 
+</div>
+</s:render>
+<s:task b:action="transform" b:datasource="$tResourceXml" b:stylesheet="$ResourceInstructions" b:destination="span[@c:purpose='customizations']/div[@c:id='instructions']" b:mode="aslastchild"/>
+<s:task b:action="show" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/a[@class='EditInline']"/>
+<s:variable b:name="lRsId" b:select="string(@c:resource_id)"/>
+<s:variable b:name="lRelatedRsRsrv" b:select="ancestor::s25:rsrv_wiz_resource/$tEvWiz/$tProfile//r25:resource_reservation[r25:resource_id = $lRsId]"/>
+<s:if b:test="$lRelatedRsRsrv">
+<s:task b:action="set" b:target="span[@c:purpose='customizations']/div[@c:id='quantity_select']/b:spinner/@b:value" b:value="{$lRelatedRsRsrv/r25:quantity}"/>
+<s:with b:target="span[@c:purpose='customizations']/div[@c:id='quantity_select']/select/option[@value = $lRelatedRsRsrv/r25:quantity]">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:choose>
+<s:when b:test="string-length($lRelatedRsRsrv/r25:resource_instructions) = 0 or $lRelatedRsRsrv/r25:resource_instructions = ' '">
+<s:task b:action="settext" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="{$lRelatedRsRsrv/r25:resource_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/textarea/@value" b:value="{$lRelatedRsRsrv/r25:resource_instructions}"/>
+</s:if>
+<s:variable b:name="lRelatedRsObj" b:select="ancestor::s25:rsrv_wiz/$tInbox/reserve/obj[@obj_type='resource' and @obj_id=$lRsId]"/>
+<s:if b:test="$lRelatedRsObj">
+<s:task b:test="not(string-length($lRelatedRsObj/@obj_quantity) = 0)" b:action="set" b:target="span[@c:purpose='customizations']/div[@c:id='quantity_select']/b:spinner/@b:value" b:value="{$lRelatedRsObj/@obj_quantity}"/>
+<s:choose>
+<s:when b:test="string-length($lRelatedRsObj/@obj_instructions) = 0 or $lRelatedRsObj/@obj_instructions = ' '">
+<s:task b:action="settext" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="{$lRelatedRsObj/@obj_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/textarea/@value" b:value="{$lRelatedRsObj/@obj_instructions}"/>
+</s:if>	
+<s:render b:destination="span[@c:purpose='conflicts']" b:mode="replacechildren">
+<div class="currentSelection_Attribute" c:id="conflicts">
+</div>
+</s:render>
+<s:task b:action="show" b:target="span[@c:purpose='customizations']"/>
+</s:event>
+<s:event b:on="PaintOptions_MultipleOccurrences">
+<s:task b:action="hide" b:target="span[@c:purpose='customizations']"/>
+<s:variable b:name="lInfobox" b:select="div[@c:purpose='resource_customization']/b:infobox"/>
+<s:render b:destination="$lInfobox" b:mode="replacechildren">
+<div class="head">
+<s:textnode b:label="{concat($tResourceXml//r25:resource_name, ': ', 'Modify Selected Occurrences')}"/>
+</div>
+<div class="body">
+<table border="0" cellspacing="0">
+<thead>
+<tr>
+<th width="90">
+<input type="checkbox" style="margin:3px 0">
+<s:event b:on="change">
+<s:choose>
+<s:when b:test="@b:state = 'selected'">
+<s:with b:target="ancestor::table[1]/tbody/tr/td[1]/input[@type='checkbox']">
+<s:task b:action="select"/>
+<s:task b:action="trigger" b:event="command"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="ancestor::table[1]/tbody/tr/td[1]/input[@type='checkbox']">
+<s:task b:action="deselect"/>
+<s:task b:action="trigger" b:event="command"/>
+</s:with>
+</s:otherwise>
+</s:choose>
+</s:event>
+</input>
+Assign?
+</th>
+<th width="100">Date</th>
+<th width="100">Quantity</th>
+<th width="100">Qty Available</th>
+<th width="310">Setup Instructions</th>
+
+</tr>
+</thead>
+<tbody>
+<tr c:sortdate="99999999">
+<td colspan="4" style="height:100%;border:none;padding:0"/>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="foot">
+<b:button b:action="deselect" b:target="ancestor::b:infobox[1]"><s:textnode b:label="Done"/></b:button>
+
+</div>
+</s:render>
+<s:variable b:name="lTableBody" b:select="$lInfobox/div/table/tbody"/>
+<s:variable b:name="lInboxReserve" b:select="ancestor::s25:rsrv_wiz/$tInbox/reserve"/>
+<s:variable b:name="lRsId" b:select="string(@c:resource_id)"/>
+<s:variable b:name="lInitStartDt" b:select="substring(ancestor::s25:rsrv_wiz/$tProfile/r25:init_start_dt, 1, 10)"/>
+<s:variable b:name="lInitEndDt" b:select="substring(ancestor::s25:rsrv_wiz/$tProfile/r25:init_end_dt, 1, 10)"/>
+
+<s:variable b:name="lOccurrenceDt" b:select=""/>
+<s:for-each b:target="ancestor::s25:rsrv_wiz/$tInbox/occurrences/occurrence[@state = '1']">
+<s:task b:action="assign" b:target="$lOccurrenceDt" b:select="substring($_target/@event_start_dt, 1, 10)"/>
+<s:render b:destination="$lTableBody" b:mode="aslastchild">
+<tr align="center" valign="top" c:valid="T" c:occurrence="{$lOccurrenceDt}" c:sortdate="{replace($lOccurrenceDt,'-','')}" c:init_qty="{string($_target/@obj_quantity)}" c:available="">
+<td width="90">
+<input type="checkbox" c:purpose="assign" b:behavior="ResourceOccurrenceCustomizationCheckbox" c:resource_id="{$lRsId}" c:occurrence="{$lOccurrenceDt}"/>
+</td>
+<td width="100" style="white-space:nowrap" c:id="formatted_date"><s:textnode b:label="{s25_format_date($lOccurrenceDt, id('Prefs')/$tDatePattern)}"/></td>
+<td c:id="quantity" width="100" style="white-space:nowrap">
+<s:event b:on="UpdateQuantity">
+<s:variable b:name="lOccurrenceStartDate" b:select="{replace($lOccurrenceDt,'-','')}"/>
+<s:variable b:name="lOccurrenceEndDate" b:select="{replace($lOccurrenceDt,'-','')}"/>
+<s:variable b:name="lQtyRequested" b:select="string(ancestor::tr[1]/@c:init_qty)"/>
+<s:task b:test="exists(b:spinner)" b:action="assign" b:target="$lQtyRequested" b:select="number(b:spinner/@b:value)"/>
+<s:task b:action="transform" b:datasource="ancestor::div[@c:purpose='Resource']/$tResourceXml" b:stylesheet="$ResourceQuantity" b:destination="."/>
+</s:event>
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>
+</td>
+<td c:id="available" width="100" style="white-space:nowrap">
+<s:event b:on="UpdateQuantityAvailable">
+<s:variable b:name="lOccurrenceStartDate" b:select="{replace($lOccurrenceDt,'-','')}"/>
+<s:variable b:name="lOccurrenceEndDate" b:select="{replace($lOccurrenceDt,'-','')}"/>
+<s:variable b:name="lQtyAvailable" b:select="string(../@c:available)"/>
+<s:task b:action="transform" b:datasource="ancestor::div[@c:purpose='Resource']/$tResourceXml" b:stylesheet="$ResourceQuantityAvailable" b:destination="."/>
+</s:event>
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>
+</td>
+<td width="284" align="left" style="padding-right:16px">
+<s:execute>
+<s:task b:action="transform" b:datasource="$tResourceXml" b:stylesheet="$ResourceInstructions" b:destination="."/>
+</s:execute>
+</td>
+</tr>
+</s:render>
+</s:for-each>
+<s:if b:test="1 = 2">
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tProfile/r25:rec_type_id = '1'">
+<s:task b:action="trigger" b:event="BuildPendingRsrvDates" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:variable b:name="lOccurrences" b:select=""/>
+<s:task b:action="string2xml" b:variable="$lOccurrences" b:source="$tEvWiz/$tAvailabilityControl/$tPendingRsrvDates"/>
+<s:task b:action="remove" b:target="$lOccurrences/r25:date_collection/r25:date_list[1]"/>
+<s:variable b:name="lStartDate" b:select=""/>
+<s:for-each b:target="$lOccurrences//r25:date_list">
+<s:task b:action="assign" b:target="$lStartDate" b:select="concat(substring($_target/r25:start_date,1,4), '-', substring($_target/r25:start_date,5,2), '-', substring($_target/r25:start_date,7,2))"/>
+<s:render b:destination="$lTableBody" b:mode="aslastchild">
+<tr align="center" valign="top" c:valid="T" c:occurrence="{$lStartDate}" c:sortdate="{replace($lStartDate,'-','')}" c:available="666">
+<td width="90">
+<input type="checkbox" c:purpose="assign" b:behavior="ResourceOccurrenceCustomizationCheckbox" c:resource_id="{$lRsId}" c:occurrence="{$lStartDate}"/>
+</td>
+<td width="100" style="white-space:nowrap" c:id="formatted_date"><s:textnode b:label="{s25_format_date($lStartDate, id('Prefs')/$tDatePattern)}"/></td>
+<td c:id="quantity" width="100" style="white-space:nowrap">
+<s:event b:on="UpdateQuantity">
+<s:variable b:name="lOccurrenceStartDate" b:select="{replace($lStartDate,'-','')}"/>
+<s:variable b:name="lOccurrenceEndDate" b:select="{replace($lStartDate,'-','')}"/>
+<s:variable b:name="lQtyRequested" b:select="1"/>
+<s:task b:test="exists(b:spinner)" b:action="assign" b:target="$lQtyRequested" b:select="number(b:spinner/@b:value)"/>
+<s:task b:action="transform" b:datasource="ancestor::div[@c:purpose='Resource']/$tResourceXml" b:stylesheet="$ResourceQuantity" b:destination="."/>
+</s:event>
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>
+</td>
+<td c:id="available" width="100" style="white-space:nowrap">
+<s:event b:on="UpdateQuantityAvailable">
+<s:variable b:name="lOccurrenceStartDate" b:select="{replace($lStartDate,'-','')}"/>
+<s:variable b:name="lOccurrenceEndDate" b:select="{replace($lStartDate,'-','')}"/>
+<s:variable b:name="lQtyAvailable" b:select="string(../@c:available)"/>
+<s:task b:action="transform" b:datasource="ancestor::div[@c:purpose='Resource']/$tResourceXml" b:stylesheet="$ResourceQuantityAvailable" b:destination="."/>
+</s:event>
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>
+</td>
+<td width="284" align="left" style="padding-right:16px">
+<s:execute>
+<s:task b:action="transform" b:datasource="$tResourceXml" b:stylesheet="$ResourceInstructions" b:destination="."/>
+</s:execute>
+</td>
+</tr>
+</s:render>
+</s:for-each>
+</s:when>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tProfile/r25:rec_type_id = '2'">
+<s:variable b:name="lOccurrenceDt" b:select=""/>
+<s:for-each b:target="ancestor::s25:rsrv_wiz/$tProfile/r25:ad_hoc_datelist[not(@status='del')]">
+<s:task b:action="assign" b:target="$lOccurrenceDt" b:select="substring($_target/r25:ad_hoc_start_dt, 1, 10)"/>
+<s:render b:test="not($lOccurrenceDt = $lInitStartDt)" b:destination="$lTableBody" b:mode="aslastchild">
+<tr align="center" valign="top" c:valid="T" c:occurrence="{$lOccurrenceDt}" c:sortdate="{replace($lOccurrenceDt,'-','')}" c:available="">
+<td width="90">
+<input type="checkbox" c:purpose="assign" b:behavior="ResourceOccurrenceCustomizationCheckbox" c:resource_id="{$lRsId}" c:occurrence="{$lOccurrenceDt}"/>
+</td>
+<td width="100" style="white-space:nowrap" c:id="formatted_date"><s:textnode b:label="{s25_format_date($lOccurrenceDt, id('Prefs')/$tDatePattern)}"/></td>
+<td c:id="quantity" width="100" style="white-space:nowrap">
+<s:event b:on="UpdateQuantity">
+<s:variable b:name="lOccurrenceStartDate" b:select="{replace($lOccurrenceDt,'-','')}"/>
+<s:variable b:name="lOccurrenceEndDate" b:select="{replace($lOccurrenceDt,'-','')}"/>
+<s:variable b:name="lQtyRequested" b:select="1"/>
+<s:task b:test="exists(b:spinner)" b:action="assign" b:target="$lQtyRequested" b:select="number(b:spinner/@b:value)"/>
+<s:task b:action="transform" b:datasource="ancestor::div[@c:purpose='Resource']/$tResourceXml" b:stylesheet="$ResourceQuantity" b:destination="."/>
+</s:event>
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>
+</td>
+<td c:id="available" width="100" style="white-space:nowrap">
+<s:event b:on="UpdateQuantityAvailable">
+<s:variable b:name="lOccurrenceStartDate" b:select="{replace($lOccurrenceDt,'-','')}"/>
+<s:variable b:name="lOccurrenceEndDate" b:select="{replace($lOccurrenceDt,'-','')}"/>
+<s:variable b:name="lQtyAvailable" b:select="string(../@c:available)"/>
+<s:task b:action="transform" b:datasource="ancestor::div[@c:purpose='Resource']/$tResourceXml" b:stylesheet="$ResourceQuantityAvailable" b:destination="."/>
+</s:event>
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>
+</td>
+<td width="284" align="left" style="padding-right:16px">
+<s:execute>
+<s:task b:action="transform" b:datasource="$tResourceXml" b:stylesheet="$ResourceInstructions" b:destination="."/>
+</s:execute>
+</td>
+</tr>
+</s:render>
+</s:for-each>
+</s:when>
+</s:choose>
+</s:if>
+<s:task b:action="sort" b:source="$lTableBody/tr" b:target="$lTableBody" b:attribute="c:sortdate" b:type="number"/>
+<s:if b:test="count($lInboxReserve/obj[@obj_type='resource' and @obj_id=$lRsId]/*) gt 0">
+<s:task b:action="deselect" b:target="$lTableBody//input[@type='checkbox']"/>
+<s:for-each b:target="$lInboxReserve/obj[@obj_type='resource' and @obj_id=$lRsId]/occurrence">
+<s:with b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/input[@type = 'checkbox']">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:with b:target="$lTableBody/tr[@c:occurrence = $_target/@date]">
+<s:setatt c:init_qty="{$_target/@obj_quantity}"/>
+</s:with>
+
+<s:choose>
+<s:when b:test="string-length(replace($_target/@obj_instructions,' ','')) = 0">
+<s:task b:action="settext" b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="{$_target/@obj_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/span/textarea/@value" b:value="{$_target/@obj_instructions}"/>
+<s:task b:action="show" b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/span[@c:id='instructions']/a"/>
+
+</s:for-each>
+</s:if>
+<s:if b:test="count(ancestor::s25:rsrv_wiz/$tProfile//r25:resource_reservation[r25:resource_id = $lRsId]) gt 0">
+<s:variable b:name="lRelevantTableRows" b:select="$lTableBody/tr"/>
+<s:if b:test="count($lInboxReserve/obj[@obj_type='resource']/child::*) gt 0">
+<s:task b:action="assign" b:target="$lRelevantTableRows" b:select="$lTableBody/tr[not(@c:occurrence = $lInboxReserve/obj/*/@date)]"/>
+</s:if>
+<s:task b:action="deselect" b:target="$lRelevantTableRows//input[@type='checkbox']"/>
+<s:for-each b:target="ancestor::s25:rsrv_wiz/$tProfile//r25:resource_reservation[r25:resource_id = $lRsId]">
+<s:with b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/td/input[@type = 'checkbox']">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:with b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]">
+<s:setatt c:init_qty="{$_target/r25:quantity}"/>
+</s:with>
+
+<s:choose>
+<s:when b:test="string-length(replace($_target/r25:resource_instructions,' ','')) = 0">
+<s:task b:action="settext" b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/td/ span[@c:id='instructions' and @c:resource_id = $_target/r25:resource_id]/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/td/ span[@c:id='instructions' and @c:resource_id = $_target/r25:resource_id]/span[@c:id='instructions-text']" b:value="{$_target/r25:resource_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/td/ span[@c:id='instructions' and @c:resource_id = $_target/r25:resource_id]/textarea/@value" b:value="{$_target/r25:resource_instructions}"/>
+<s:task b:action="show" b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/td/ span[@c:id='instructions' and @c:resource_id = $_target/r25:resource_id]/a"/>
+
+</s:for-each>
+</s:if>
+<s:variable b:name="lCurrentInitDate" b:select="substring-before(ancestor::s25:rsrv_wiz/$tProfile/r25:init_start_dt,'T')"/>
+<s:variable b:name="lFirstRsrvDate" b:select="substring-before(ancestor::s25:rsrv_wiz/$tProfile/r25:reservation[1]/r25:reservation_start_dt, 'T')"/>
+<s:if b:test="not($lCurrentInitDate = $lFirstRsrvDate)">
+<s:if b:test="not($lInboxReserve/obj[@obj_type='resource' and @obj_id=$lRsId]/*[1]/name() = 'exemption')">
+<s:choose>
+<s:when b:test="$lInboxReserve/obj[@obj_type='resource' and @obj_id=$lRsId]/occurrence">
+<s:variable b:name="lCurrentResourceOccurrence" b:select="$lInboxReserve/obj[@obj_type='resource' and @obj_id=$lRsId]/occurrence[1]"/>
+<s:with b:target="$lTableBody/tr[1]/td/input[@type = 'checkbox']">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:task b:action="set" b:target="$lTableBody/tr[1]/td/b:spinner/@b:value" b:value="{string($lCurrentResourceOccurrence/@obj_quantity)}"/>
+<s:if b:test="ancestor::s25:rsrv_wiz/@c:mode = 'edit'">
+<s:choose>
+<s:when b:test="string-length($lCurrentResourceOccurrence/@obj_instructions) = 0">
+<s:task b:action="settext" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="{$lCurrentResourceOccurrence/@obj_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/textarea/@value" b:value="{$lCurrentResourceOccurrence/@obj_instructions}"/>
+<s:task b:action="show" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/a"/>
+</s:if>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lCurrentResourceRsrv" b:select="ancestor::s25:rsrv_wiz/$tProfile/r25:reservation[1]/r25:resource_reservation[r25:resource_id = $lRsId]"/>
+<s:if b:test="exists($lCurrentResourceRsrv)">
+<s:with b:target="$lTableBody/tr[1]/td/input[@type = 'checkbox']">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:task b:action="set" b:target="$lTableBody/tr[1]/td/b:spinner/@b:value" b:value="{string($lCurrentResourceRsrv/r25:quantity)}"/>
+<s:if b:test="ancestor::s25:rsrv_wiz/@c:mode = 'edit'">
+<s:choose>
+<s:when b:test="string-length($lCurrentResourceRsrv/r25:resource_instructions) = 0">
+<s:task b:action="settext" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="{$lCurrentResourceRsrv/r25:resource_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/textarea/@value" b:value="{$lCurrentResourceRsrv/r25:resource_instructions}"/>
+<s:task b:action="show" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/a"/>
+</s:if>
+</s:if>
+</s:otherwise>
+</s:choose>
+</s:if>
+</s:if>
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tProfile/r25:rec_type_id = '1'">
+<s:task b:action="trigger" b:event="BuildPendingRsrvDates" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:variable b:name="lOccurrences" b:select=""/>
+<s:task b:action="string2xml" b:variable="$lOccurrences" b:source="$tEvWiz/$tAvailabilityControl/$tPendingRsrvDates"/>
+<s:task b:action="remove" b:target="$lOccurrences/r25:date_collection/r25:date_list[1]"/>
+<s:variable b:name="lStartDate" b:select=""/>
+<s:for-each b:target="$lOccurrences//r25:date_list">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lOccurrence" b:select="concat(substring($_target/r25:start_date,1,4), '-', substring($_target/r25:start_date,5,2), '-', substring($_target/r25:start_date,7,2))"/>
+<s:if b:test="count(ancestor::s25:rsrv_wiz/$tProfile/r25:reservation[substring(r25:reservation_start_dt, 1, 10) = $lOccurrence]) = 0">
+<s:if b:test="count($lInboxReserve/obj[@obj_type='resource' and @obj_id = $lRsId]/*[@date = $lOccurrence]) = 0">
+<s:with b:target="$lTableBody/tr[@c:occurrence = $lOccurrence]/td/input[@type = 'checkbox' and @c:purpose='assign']">
+<s:setatt b:state="selected"/>
+</s:with>
+</s:if>
+</s:if>
+</s:lock></s:sequential>
+</s:for-each>
+</s:when>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tProfile/r25:rec_type_id = '2'">
+<s:for-each b:target="ancestor::s25:rsrv_wiz/$tProfile//r25:ad_hoc_datelist[@status='new']">
+<s:sequential><s:lock>
+<s:variable b:name="lNewAdHocDate" b:select="substring($_target/r25:ad_hoc_start_dt, 1, 10)"/>
+<s:if b:test="count(ancestor::s25:rsrv_wiz/$tProfile/r25:reservation[substring(r25:reservation_start_dt, 1, 10) = $lNewAdHocDate]) = 0">
+<s:if b:test="count($lInboxReserve/obj[@obj_type='resource' and @obj_id = $lRsId]/*[@date = $lNewAdHocDate]) = 0">
+<s:with b:target="$lTableBody/tr[@c:occurrence = $lNewAdHocDate]/td/input[@type = 'checkbox' and @c:purpose='assign']">
+<s:setatt b:state="selected"/>
+</s:with>
+</s:if>
+</s:if>
+</s:lock></s:sequential>
+</s:for-each>
+</s:when>
+</s:choose>
+<s:task b:action="show" b:target="$lTableBody/tr[not(contains(@class,'disabled'))]/td/span/a"/>
+<s:with b:target="$lTableBody/tr/td/input[@type='checkbox' and not(@b:state='selected')]">
+<s:task b:action="trigger" b:event="Deselect"/>
+</s:with>
+<s:task b:action="trigger" b:event="MultipleOccurrenceStatusUpdate"/>
+<s:task b:action="show" b:target="div[@c:purpose='resource_customization']"/>
+</s:event>
+<s:event b:on="MultipleOccurrenceStatusUpdate">
+<s:variable b:name="lInfobox" b:select="div[@c:purpose='resource_customization']/b:infobox"/>
+<s:variable b:name="lTableBody" b:select="$lInfobox/div/table/tbody"/>
+
+<s:choose>
+<s:when b:test="not(count($lTableBody/tr/td/input[@type = 'checkbox' and @c:purpose='assign' and not(@b:state = 'selected')]) = 0)">
+<s:variable b:name="lDateList" b:select="string-join($lTableBody/tr[td/input[@type='checkbox' and @c:purpose='assign' and @b:state='selected']]/td[@c:id='formatted_date']/text(), ', ')"/>
+<s:render b:destination="span[@c:purpose='occurrences']" b:mode="replacechildren">
+<div class="currentSelection_Attribute"><b>Selected Occurrences: </b> <s:textnode b:label="{$lDateList}"/></div>
+</s:render>
+</s:when>
+<s:otherwise>
+<s:render b:destination="span[@c:purpose='occurrences']" b:mode="replacechildren">
+<div class="currentSelection_Attribute"><b>Selected Occurrences: </b> All Occurrences</div>
+</s:render>
+</s:otherwise>
+</s:choose>
+</s:event>
+
+
+<s:event b:on="ValidityUpdate">
+<s:choose>
+<s:when b:test="@c:valid = 'C'">
+<s:with b:target=".//span[@c:purpose='availability']">
+<s:task b:action="hide" b:target="img"/>
+<s:task b:action="show" b:target="img[@c:id='checking']"/>
+</s:with>
+</s:when>
+<s:when b:test="@c:valid = 'T'">
+<s:with b:target=".//span[@c:purpose='availability']">
+<s:task b:action="hide" b:target="img"/>
+<s:task b:action="show" b:target="img[@c:id='available']"/>
+</s:with>
+<s:with b:target=".//*[@b:behavior = 'S25Object']">
+<s:task b:action="remove" b:target="@style"/>
+</s:with>
+</s:when>
+<s:when b:test="@c:valid = 'F'">
+<s:with b:target=".//span[@c:purpose='availability']">
+<s:task b:action="hide" b:target="img"/>
+<s:task b:action="show" b:target="img[@c:id='unavailable']"/>
+</s:with>
+<s:with b:target=".//*[@b:behavior = 'S25Object']">
+<s:setstyle b:color="RED"/>
+</s:with>
+</s:when>
+<s:when b:test="@c:valid = 'U'">
+<s:with b:target=".//span[@c:purpose='availability']">
+<s:task b:action="hide" b:target="img"/>
+<s:task b:action="show" b:target="img[@c:id='unknown']"/>
+</s:with>
+<s:with b:target=".//*[@b:behavior = 'S25Object']">
+<s:task b:action="remove" b:target="@style"/>
+</s:with>
+</s:when>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RemoveResource" b:behavior="RsrvWizInput">
+<s:initatt class="RsrvWiz_resource_remove" b:tooltiptext="Click to remove this resource from the event."/>
+<s:event b:on="command">
+<s:task b:action="focus" b:target="ancestor::s25:rsrv_wiz_resource[1]/$tContentOptions/div[@b:state='selected']//*[name() = 'select' or name() = 'input']"/>
+<s:fxstyle b:time="5"/>
+<s:variable b:name="lResourceID" b:select="string(@c:resource_id)"/>
+<s:variable b:name="lResourceName" b:select="string(@c:resource_name)"/>
+<s:task b:action="remove" b:target="ancestor::s25:rsrv_wiz/$tInbox/reserve//obj[@obj_id = $lResourceID and @obj_type = 'resource']"/>
+<s:task b:action="trigger" b:event="DeletePendingResourceRsrv" b:target="ancestor::s25:rsrv_wiz_resource/$tEvWiz/$tAvailabilityControl"/>
+<s:sequential>
+<s:render b:test="count(ancestor::s25:rsrv_wiz_resource[1]/$tContentOptions/div[@c:id='txt']//div[@c:id='currentResource']) = 1" b:destination="ancestor::s25:rsrv_wiz_resource[1]/$tContentOptions/div[@c:id='txt']" b:mode="aslastchild">
+<div class="currentSelectionBlank" c:id="noresource">none selected</div>
+</s:render>
+<s:task b:action="set" b:target="ancestor::s25:rsrv_wiz/$tRsrv/r25:resource_reservation[r25:resource_id = $lResourceID]/@status" b:value="del"/>
+<s:task b:action="remove" b:target="ancestor::div[@c:purpose='Resource'][1]"/>
+</s:sequential>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ResourceText" b:behavior="RsrvWizInput">
+<s:initatt style="height:50px;display:none;"/>
+
+</s:behavior>
+<script type="text/javascript"><![CDATA[
+var gQtyChangeDelay = null;
+]]></script>
+<s:behavior b:name="RsrcQtySpinner" b:behavior="RsrvWizInput">
+<s:event b:on="construct"/>
+<s:event b:on="change">
+<s:super/>
+<s:task b:action="set" b:target="ancestor::div[@c:purpose='Resource']/div[@c:id='currentResource']/span[@b:behavior='S25Object']/@c:quantity" b:value="{@b:value}"/>
+<s:variable b:name="lEventID" b:select="string(ancestor::s25:rsrv_wiz[1]/@c:event_id)"/>
+<s:variable b:name="lResourceID" b:select="string(@c:resource_id)"/>
+<s:script><![CDATA[
+
+window.clearTimeout(gQtyChangeDelay);
+gQtyChangeDelay = window.setTimeout("bpc.trigger('UpdatePendingResourceRsrv', document.getElementById('ResourceContainer_" + _vars['lEventID'][0] + "_" + _vars['lResourceID'][0] + "'))", 500);
+
+]]></s:script>
+</s:event>
+<s:event b:on="observe-select">
+<s:task b:action="enable"/>
+</s:event>
+<s:event b:on="observe-deselect">
+<s:task b:action="disable"/>
+</s:event>
+</s:behavior>
+<s:stylesheet b:name="Resources">
+<s:template b:match="/">
+<s:apply-templates b:select="distinct-values(.//r25:resource_reservation/r25:resource_id)"/>
+<s:apply-templates b:select="obj[@obj_type='resource']"/>
+</s:template>
+<s:template b:match="r25:resource_id">
+<s:apply-templates b:select=".."/>
+</s:template>
+<s:template b:match="r25:resource_reservation">
+<s:variable b:name="xslResourceID" b:select="r25:resource_id"/>
+<s:variable b:name="xslResourceName" b:select="r25:resource/r25:resource_name"/>
+<s:call-template b:name="ResourceContainer"/>
+</s:template>
+<s:template b:match="obj">
+<s:variable b:name="xslResourceID" b:select="@obj_id"/>
+<s:variable b:name="xslResourceName" b:select="@obj_name"/>
+<s:call-template b:name="ResourceContainer"/>
+</s:template>
+<s:template b:name="ResourceContainer">
+<div c:purpose="Resource" class="currentSelection_Resource" c:valid="U" b:behavior="ResourceContainer">
+<s:attribute b:name="c:resource_id">
+<s:value-of b:select="$xslResourceID"/>
+</s:attribute>
+<s:attribute b:name="c:resource_name">
+<s:value-of b:select="$xslResourceName"/>
+</s:attribute>
+<div class="currentSelection_Icons">
+<span c:purpose="availability"><img c:id="checking" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif" b:tooltiptext="Checking for conflicts..."/><img c:id="available" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/checkmark.png" style="display:none" b:tooltiptext="This Resource has no conflicts for all of the currently selected Dates and Times. Click for details."/><img c:id="unavailable" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/warning.png" style="display:none" b:tooltiptext="One or more of the resources selected is unavailable."/><img c:id="unknown" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/caution.png" style="cursor:pointer; display:none" b:tooltiptext="{ancestor::s25:rsrv_wiz_resource/tooltips/resource/no_date_time}" b:behavior="TriggerAvailabilityCheck"/> </span>
+<span c:purpose="FavToggle">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_NotFavorite" style="display:none;" c:purpose="NotFavorite" b:behavior="AddFav" b:tooltiptext="Add this to Your Starred Resources">
+<s:event b:on="click">
+<s:task b:action="assign" b:scope="tag" b:target="ancestor::*[@c:editor='true'][1]/$tCurrentObject" b:select="ancestor::div[@c:purpose='Resource']/div[@c:id='currentResource']/span[@b:behavior='S25Object']"/>
+<s:super/>
+</s:event>
+</img><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_IsFavorite" style="display:none;" c:purpose="Favorite" b:behavior="RemoveFav" b:tooltiptext="Remove this from Your Starred Resources">
+<s:event b:on="click">
+<s:task b:action="assign" b:scope="tag" b:target="ancestor::*[@c:editor='true'][1]/$tCurrentObject" b:select="ancestor::div[@c:purpose='Resource']/div[@c:id='currentResource']/span[@b:behavior='S25Object']"/>
+<s:super/>
+</s:event>
+</img>
+</span>
+<input type="image" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close.gif" b:behavior="RemoveResource" style="display:none">
+<s:attribute b:name="c:resource_id">
+<s:value-of b:select="$xslResourceID"/>
+</s:attribute>
+</input>
+</div>
+<div c:id="currentResource" class="currentSelectionValue icon-resource">
+<span b:behavior="S25Object" c:obj_type="resource" b:tooltiptext="Click to view resource details and availability.">
+<s:attribute b:name="c:obj_id">
+<s:value-of b:select="$xslResourceID"/>
+</s:attribute>
+<s:attribute b:name="c:obj_name">
+<s:value-of b:select="$xslResourceName"/>
+</s:attribute>
+<s:value-of b:select="$xslResourceName"/>
+</span>
+</div>
+<span c:purpose="customizations"/>
+<span c:purpose="occurrences"/>
+<span c:purpose="conflicts"/>
+<div c:purpose="resource_customization" class="currentSelection_OccurrenceEditing">
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/bullet.gif"/><a href="javascript:void(0)" onclick="return false" b:action="select" b:target="../b:infobox[@c:purpose='resource_customization']">
+<s:execute><s:render><s:textnode b:label="{concat('Modify Selected Occurrences','...')}"/></s:render></s:execute>
+</a>
+<b:infobox b:behavior="OccurrenceCustomizationInfobox" c:purpose="resource_customization"/>
+</div>
+<div class="divider"/>
+</div>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="Resources_text">
+<s:template b:match="/">
+<s:apply-templates b:select="distinct-values(.//r25:resource_reservation/r25:resource_id)"/>
+</s:template>
+<s:template b:match="r25:resource_id">
+<s:apply-templates b:select=".."/>
+</s:template>
+<s:template b:match="r25:resource_reservation" b:preserve-whitespace="true">
+<div c:purpose="Resource" class="currentSelection_Resource" c:valid="U"> 
+<s:attribute b:name="c:resource_id">
+<s:value-of b:select="r25:resource_id"/>
+</s:attribute>
+<s:attribute b:name="c:resource_name">
+<s:value-of b:select="r25:resource/r25:resource_name"/>
+</s:attribute>
+<div c:id="currentResource" class="currentSelectionValue icon-resource">
+<span b:behavior="S25Object" c:obj_type="resource" b:tooltiptext="Click to view resource details and availability.">
+<s:attribute b:name="c:obj_id">
+<s:value-of b:select="r25:resource_id"/>
+</s:attribute>
+<s:attribute b:name="c:quantity">
+<s:value-of b:select="r25:quantity"/>
+</s:attribute>
+<s:attribute b:name="c:text">
+<s:value-of b:select="r25:resource_instructions"/>
+</s:attribute>
+<s:attribute b:name="c:obj_name">
+<s:value-of b:select="r25:resource/r25:resource_name"/>
+</s:attribute>
+<s:value-of b:select="r25:resource/r25:resource_name"/>
+</span>
+</div>
+<s:variable b:name="lResourceID" b:select="string(r25:resource_id)"/>
+<s:choose>
+<s:when b:test="not(count(.//r25:reservation) = count(.//r25:resource_reservation[r25:resource_id = $lResourceID])) or  count(distinct-values(.//r25:resource_reservation[r25:resource_id = $lResourceID]/r25:quantity)) gt 1 or  count(distinct-values(.//r25:resource_reservation[r25:resource_id = $lResourceID]/r25:resource_instructions)) gt 1">
+<div class="currentSelection_Attribute">
+<s:for-each b:select=".//r25:resource_reservation[r25:resource_id = $lResourceID]">
+<div style="padding-bottom:15px;">
+<div class="currentSelection_Attribute">
+
+<b style="font-size:110%"><s:value-of b:select="s25_format_date(string(../r25:reservation_start_dt), $lDatePattern)"/></b>
+</div>
+<s:if b:test="not(string-length(r25:quantity) = 0)">
+<div class="currentSelection_Attribute" style="padding-left:10px">
+<b><s:value-of b:select="$lLabelQuantity"/> </b> 
+<s:value-of b:select="r25:quantity"/>
+</div>
+</s:if>
+<div class="currentSelection_Attribute" style="padding-left:10px">
+<b><s:value-of b:select="$lLabelInstructions"/> </b> 
+<s:choose>
+<s:when b:test="string-length(r25:resource_instructions) = 0">
+<s:value-of b:select="$lNone"/>
+</s:when>
+<s:otherwise>
+<s:value-of b:select="r25:resource_instructions"/>
+</s:otherwise>
+</s:choose>
+</div>
+</div>
+</s:for-each>
+</div>
+</s:when>
+<s:otherwise>
+<s:if b:test="not(string-length(r25:quantity) = 0)">
+<div class="currentSelection_Attribute">
+<b><s:value-of b:select="$lLabelQuantity"/> </b> 
+<span> <s:value-of b:select="r25:quantity"/></span>
+</div>
+</s:if>
+<div c:id="instructions" class="currentSelection_Attribute">
+<b><s:value-of b:select="$lLabelInstructions"/> </b> 
+<span c:id="instructions-text"> 
+<s:choose>
+<s:when b:test="string-length(r25:resource_instructions) = 0">
+<s:value-of b:select="$lNone"/>
+</s:when>
+<s:otherwise>
+<s:value-of b:select="r25:resource_instructions"/>
+</s:otherwise>
+</s:choose>
+</span>
+</div>
+</s:otherwise>
+</s:choose>
+<div class="divider"/>
+</div>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="ResourceIndexSelect">
+<s:template b:match="/">
+<s:if b:test="$lHasPrefs = 'true'">
+<div b:behavior="ResourceIndexOption" c:index_id="prefs">
+<div class="icon-resource"><s:value-of b:select="'Preferred Resources'"/></div>
+</div>
+</s:if>
+<div b:behavior="ResourceIndexOption" c:index_id="fav">
+<div class="icon-favorite"><s:value-of b:select="$lFavText"/></div>
+</div>
+<div b:behavior="ResourceIndexOption" c:index_id="search" c:query="null.xml" c:xsl="search.xsl">
+<div class="icon-search">Search</div>
+</div>
+<s:apply-templates b:select="index[@section_id='collection'][not(@visible='false')]"/>
+<s:apply-templates b:select="index[not(@section_id='collection')][not(@visible='false')]"/>
+</s:template>
+<s:template b:match="index">
+<div b:behavior="ResourceIndexOption">
+<s:attribute b:name="c:index_id">
+<s:value-of b:select="@section_id"/>
+</s:attribute>
+<s:attribute b:name="c:query">
+<s:choose>
+<s:when b:test="@section_id = 'keyword'">
+<s:value-of b:select="'null.xml'"/>
+</s:when>
+<s:when b:test="@section_id = 'category'">
+<s:value-of b:select="'rscat.xml'"/>
+</s:when>
+<s:when b:test="contains(@section_id, 'collection')">
+<s:value-of b:select="'res_searches.xml'"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<s:attribute b:name="c:xsl">
+<s:choose>
+<s:when b:test="@section_id = 'keyword'">
+<s:value-of b:select="'names.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'category'">
+<s:value-of b:select="'categories.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'collection'">
+<s:value-of b:select="concat('searches.xsl', '&amp;favorites=T')"/>
+</s:when>
+<s:when b:test="@section_id = 'all_collection'">
+<s:value-of b:select="'searches.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'default_collection'">
+<s:value-of b:select="concat('searches.xsl', '&amp;favorites=T', '&amp;user=',$lDefaultUser)"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<s:value-of b:select="@name"/>
+</div>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="ResourceQuantity">
+<s:template b:match="/">
+<s:apply-templates b:select=".//r25:resource"/>
+</s:template>
+<s:template b:match="r25:resource">
+<s:variable b:name="lStockLevel" b:select="string(r25:stock[number(replace(r25:stock_start_dt,'-','')) le number($lOccurrenceStartDate) and number(replace(r25:stock_end_dt,'-','')) ge number($lOccurrenceStartDate)][1]/r25:stock_level)"/>
+<b:spinner c:purpose="quantity" b:step="1" b:start="1" b:observe="../input[1]" b:value="1" b:focusitem="true" b:focusgroup="true" b:stored-value="1" b:loop="false" b:behavior="RsrcQtySpinner">
+<s:attribute b:name="c:resource_id">
+<s:value-of b:select="r25:resource_id"/>
+</s:attribute>
+<s:attribute b:name="b:value">
+<s:value-of b:select="$lQtyRequested"/>
+</s:attribute>
+<s:attribute b:name="b:end">
+<s:choose>
+<s:when b:test="not(string-length($lStockLevel) = 0)">
+<s:value-of b:select="$lStockLevel"/>
+</s:when>
+<s:otherwise>
+<s:value-of b:select="'10000'"/>
+</s:otherwise>
+</s:choose>
+</s:attribute>
+</b:spinner>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="ResourceQuantityAvailable">
+<s:template b:match="/">
+<s:apply-templates b:select=".//r25:resource"/>
+</s:template>
+<s:template b:match="r25:resource">
+<s:variable b:name="lStockLevel" b:select="string(r25:stock[number(replace(r25:stock_start_dt,'-','')) le number($lOccurrenceStartDate) and number(replace(r25:stock_end_dt,'-','')) ge number($lOccurrenceStartDate)][1]/r25:stock_level)"/>
+<span>
+<s:choose>
+<s:when b:test="not(string-length($lStockLevel) = 0)">
+<s:value-of b:select="$lQtyAvailable"/> <span> / </span> <s:value-of b:select="$lStockLevel"/>
+</s:when>
+<s:otherwise>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_infinity.png" b:tooltiptext="Unlimited"/>
+</s:otherwise>
+</s:choose>
+</span>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="ResourceInstructions">
+<s:template b:match="/">
+<s:apply-templates b:select=".//r25:resource"/>
+</s:template>
+<s:template b:match="r25:resource">
+<span c:id="instructions">
+<s:attribute b:name="c:resource_id">
+<s:value-of b:select="r25:resource_id"/>
+</s:attribute>
+<span c:id="instructions-text">
+<s:choose>
+<s:when b:test="string-length(replace(r25:instructions,' ','')) = 0">
+<s:value-of b:select="$lNoneValue"/>
+</s:when>
+<s:otherwise>
+<s:value-of b:select="r25:instructions"/>
+</s:otherwise>
+</s:choose>
+</span>
+<a href="javascript:void(0)" onclick="return false" class="EditInline" b:behavior="RsrvWizInput" style="display:none">
+<s:event b:on="command">
+<s:task b:action="hide" b:target="../span[@c:id='instructions-text']"/>
+<s:task b:action="hide" b:target="."/>
+<s:task b:action="show" b:target="../textarea"/>
+<s:task b:action="focus" b:target="../textarea"/>
+</s:event>
+<s:value-of b:select="$lEditPrompt"/>
+</a>
+<textarea b:behavior="ResourceText">
+<s:value-of b:select="r25:instructions"/>
+</textarea>
+</span>
+</s:template>
+</s:stylesheet>
+<s:behavior b:name="OccurrenceCustomizationInfobox">
+<s:initatt class="currentSelection_OccurrenceEditingInfobox"/>
+<s:event b:on="select">
+<s:super/>
+<s:script><![CDATA[
+
+document.getElementsByTagName('body')[0].lastChild.style.display = 'none';
+window.setTimeout("document.getElementsByTagName('body')[0].lastChild.style.display = 'block';", 100);
+
+]]></s:script>
+
+</s:event>
+</s:behavior>
+<s:behavior b:name="ResourceOccurrenceCustomizationCheckbox">
+<s:initatt b:state="selected"/>
+<s:event b:on="command">
+<s:choose>
+<s:when b:test="@b:state = 'selected'">
+<s:task b:action="trigger" b:event="Select"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="Deselect"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="MultipleOccurrenceStatusUpdate" b:target="ancestor::div[@c:purpose='Resource'][1]"/>
+</s:event>
+<s:event b:on="Select">
+<s:task b:action="removeclass" b:target="ancestor::tr[1]" b:value="disabled"/>
+<s:if b:test="ancestor::s25:rsrv_wiz/@c:mode = 'edit'">
+<s:task b:action="enable" b:target="ancestor::tr[1]//select"/>
+<s:task b:action="enable" b:target="ancestor::tr[1]//b:spinner"/>
+<s:task b:action="show" b:target="ancestor::tr[1]//a"/>
+<s:task b:action="enable" b:target="ancestor::tr[1]//textarea"/>
+</s:if>
+<s:task b:action="trigger" b:event="UpdatePendingRsrvs"/>
+</s:event>
+<s:event b:on="Deselect">
+<s:task b:action="addclass" b:target="ancestor::tr[1]" b:value="disabled"/>
+<s:task b:action="disable" b:target="ancestor::tr[1]//select"/>
+<s:task b:action="disable" b:target="ancestor::tr[1]//b:spinner"/>
+<s:task b:action="hide" b:target="ancestor::tr[1]//a"/>
+<s:task b:action="hide" b:target="ancestor::tr[1]//textarea"/>
+<s:task b:action="disable" b:target="ancestor::tr[1]//textarea"/>
+<s:task b:action="show" b:target="ancestor::tr[1]//span[@c:id='instructions-text']"/>
+<s:variable b:name="lResourceID" b:select="string(@c:resource_id)"/>
+<s:variable b:name="lSortDate" b:select="replace(@c:occurrence, '-', '')"/>
+<s:with b:target="ancestor::s25:rsrv_wiz[1]/$tAvailabilityControl">
+<s:task b:action="remove" b:target="div[@c:id = 'resource_conflicts']/div[@c:resource_id = $lResourceID]//div[@c:sortdate = $lSortDate]"/>
+<s:if b:test="count(div[@c:id = 'resource_conflicts']/div[@c:resource_id = $lResourceID]//div[@c:sortdate]) = 0">
+<s:task b:action="remove" b:target="div[@c:id = 'resource_conflicts']/div[@c:resource_id = $lResourceID]"/>
+<s:if b:test="count(div[@c:id = 'resource_conflicts']/div[@c:resource_id]) = 0">
+<s:task b:action="hide" b:target="div[@c:id = 'resource_conflicts']"/>
+<s:if b:test="count(div[@c:id = 'space_conflicts']/div[@c:space_id]) = 0">
+<s:task b:action="show" b:target="div[@c:id = 'no_conflicts']"/>
+</s:if>
+</s:if>
+</s:if>
+</s:with>
+<s:if b:test="count(ancestor::tbody[1]/tr[@c:valid='F']//input[@type='checkbox' and @c:purpose='assign' and @b:state='selected']) = 0">
+<s:choose>
+<s:when b:test="count(ancestor::tbody[1]/tr//input[@type='checkbox' and @c:purpose='assign' and @b:state='selected']) = 0">
+<s:with b:target="ancestor::div[@c:purpose='Resource'][1]">
+<s:setatt c:valid="U"/>
+<s:task b:action="trigger" b:event="ValidityUpdate"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="ancestor::div[@c:purpose='Resource'][1]">
+<s:setatt c:valid="T"/>
+<s:task b:action="trigger" b:event="ValidityUpdate"/>
+</s:with>
+</s:otherwise>
+</s:choose>
+</s:if>
+</s:event>
+<s:event b:on="UpdatePendingRsrvs">
+<s:variable b:name="lResourceID" b:select="string(@c:resource_id)"/>
+<s:variable b:name="lResourceName" b:select="string(ancestor::div[@c:purpose='Resource'][1]/@c:resource_name)"/>
+<s:with b:target="ancestor::s25:rsrv_wiz_resource[1]/$tEvWiz/$tAvailabilityControl">
+<s:task b:action="assign" b:target="$tCreatePendingRsrvs" b:scope="tag" b:select="'T'"/>
+<!-- <s:task b:action="trigger" b:event="DeletePendingResourceRsrv"/> -->
+<s:task b:action="trigger" b:event="CreatePendingResourceRsrv"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ResourceAvailTooltip" b:behavior="bxTooltip">
+<s:initatt b:delay="100"/>
+<s:event b:on="LoadSummary">
+<s:variable b:name="lResourceID" b:select="string(@c:resource_id)"/>
+<s:variable b:name="lResourceQty" b:select="string(@c:quantity)"/>
+<s:if b:test="not(@c:loaded)">
+<s:variable b:name="lCheckResourcesXml" b:select=""/>
+<s:variable b:name="lEventID" b:select="string(ancestor::s25:rsrv_wiz[1]/$tEvent/r25:event_id)"/>
+<s:variable b:name="lProfileID" b:select="string(ancestor::s25:rsrv_wiz[1]/$tProfile/r25:profile_id)"/>
+<s:task b:action="trigger" b:event="BuildAvailabilityDates" b:target="ancestor::s25:rsrv_wiz[1]/$tAvailabilityControl"/>
+<s:variable b:name="lCurrentDates" b:select="ancestor::s25:rsrv_wiz[1]/$tAvailabilityControl/$tAvailabilityDates"/>
+<s:script><![CDATA[
+
+var sEventID = _vars['lEventID'][0];
+var sProfileID = _vars['lProfileID'][0];
+var sResourceID = _vars['lResourceID'][0];
+var sResourceQty = _vars['lResourceQty'][0];
+var sDateList = _vars['lCurrentDates'][0];
+var sSpaceXml =	'<r25:resource_availability xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event_id>' + sEventID + '</r25:event_id> ' + 
+'<r25:profile>' + 
+'<r25:profile_id>' + sProfileID + '</r25:profile_id> ' + 
+'</r25:profile> ' + 
+'</r25:event> ' + 
+'<r25:requirements> ' + 
+'<r25:resource>' + 
+'<r25:resource_id>' + sResourceID + '</r25:resource_id>' + 
+'<r25:quantity>' + sResourceQty + '</r25:quantity>' + 
+'</r25:resource>' + 
+'</r25:requirements> ' + 
+sDateList + 
+'</r25:resource_availability>';
+bpc.setVariable('lCheckResourcesXml',[sSpaceXml]);
+
+]]></s:script>
+<s:task b:action="assign" b:target="$lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'res_avail.xml', '?otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/resource_precheck_details.xsl', '&amp;date_params=',escape(string(id('Prefs')/$tDateTimeParam)) )"/>
+<s:task b:action="load" b:method="POST" b:url="{$lUrl}" b:data="{$lCheckResourcesXml}" b:destination="." b:mode="replacechildren" b:showloading="false">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:setatt c:loaded="true" class="bxInfoboxAvailDetails"/>
+<s:super/>
+</s:if>
+</s:event>
+
+</s:behavior>
+<s:stylesheet b:name="ResourceCustomizeOccurrences">
+<s:template b:match="/">
+<s:apply-templates b:select=".//occurrence[@state = '1']"/>
+</s:template>
+<s:template b:match="occurrence">
+<s:variable b:name="lOccurrenceDt" b:select="substring(./@event_start_dt, 1, 10)" b:scope="local"/>
+<tr align="center" valign="top" c:valid="T" c:occurrence="{$lOccurrenceDt}" c:sortdate="{replace($lOccurrenceDt,'-','')}" c:init_qty="{string(./@obj_quantity)}" c:available="">
+<td width="90">
+<input type="checkbox" c:purpose="assign" b:behavior="ResourceOccurrenceCustomizationCheckbox" c:resource_id="{$lRsId}" c:occurrence="{$lOccurrenceDt}"/>
+</td>
+<td width="100" style="white-space:nowrap" c:id="formatted_date"><s:value-of b:select="s25_format_date($lOccurrenceDt, id('Prefs')/$tDatePattern)"/></td>
+<td c:id="quantity" width="100" style="white-space:nowrap">
+
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>
+</td>
+<td c:id="available" width="100" style="white-space:nowrap">
+
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>
+</td>
+<td width="284" align="left" style="padding-right:16px">
+</td>
+</tr>	
+</s:template>
+</s:stylesheet>
+<s:behavior b:name="RefreshAvailableResources">
+<s:event b:on="click">
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tAvailabilityControl/$tDateTimeEditor/@c:status = 'pending'">
+<s:task b:action="trigger" b:event="Save" b:target="ancestor::s25:rsrv_wiz/$tAvailabilityControl/$tDateTimeEditor"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="PreCheckResources" b:async="true" b:target="ancestor::s25:rsrv_wiz_resource[1]"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+</div>

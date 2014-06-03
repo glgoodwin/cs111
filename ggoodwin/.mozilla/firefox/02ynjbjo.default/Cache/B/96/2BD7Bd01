@@ -1,0 +1,1273 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" xmlns:s25="http://www.collegenet.com/s25" style="display:none;">
+<s:htmlstructure b:name="s25:rsrv_wiz_repeats" b:behavior="S25RsrvWizEditor::Repeats">
+<div><s:innercontent/></div>
+</s:htmlstructure>
+<style type="text/css">
+#s25 .repeat_container { }
+#s25 .repeat_container .repeat_criteria_container {
+display:			none;
+background-color:	WHITE;
+border:				1px solid #ccc;
+vertical-align:		top;
+margin-bottom:		5px;
+text-align:			left;
+width:				350px;
+}
+#s25 .repeat_criteria_header {
+background-color:	#eee;
+border-bottom:		1px solid #ccc;
+padding:			5px 10px;
+font-weight:		bold;
+text-align:			center;
+}
+#s25 .repeat_criteria {
+padding:			10px 10px 5px;
+}
+#s25 .repeat_criteria INPUT, 
+#s25 .repeat_criteria SELECT {
+width:				auto;
+border-width:		1px;
+}
+#s25 .repeat_criteria .checkbox {
+margin-right:		3px;
+white-space: 		nowrap;
+}
+#s25 .repeat_criteria .checkbox INPUT.input-checkbox {
+margin: 			0 3px 5px 5px;
+}
+#s25 .repeat_criteria INPUT.input-radio {
+margin:				0;
+vertical-align:		-1px;
+}
+#s25 .repeat_criteria .b-datepicker {
+margin:				0 auto;
+}
+#s25 .repeat_criteria_divider {
+border-top:			1px dashed #ccc;
+margin-top:			5px;
+}
+#s25 .repeat_container .occurrence_list {	
+width:				500px;
+border-collapse: 	collapse;
+border:				1px solid #ccc;
+border-right-width:	0;
+}
+#s25 .repeat_container .occurrence_list THEAD TH {
+padding:			5px 10px;
+font-weight:		bold;
+background-color:	#eee;
+border-bottom:		1px solid #ccc;
+border-right:		1px solid #ccc;
+}
+#s25 .repeat_container .occurrence_list THEAD TR.occurrence_headers TH {
+font-weight:		normal;
+background-color:	#FAFAFA;
+color:				#555;
+font-size:			90%;
+}
+#s25 .repeat_container .occurrence_list TBODY TD {
+border-bottom:		1px dotted #ddd;
+border-right:		1px solid #ccc;
+padding:			5px 10px;
+vertical-align:		top;
+}
+#s25 .repeat_container .occurrence_list TBODY TD.remove {
+text-align:			center;
+width:				10px;
+}
+#s25 .repeat_container .occurrence_list TBODY TD.remove IMG {
+width:				11px;
+height:				11px;
+cursor:				pointer;
+}
+#s25 .repeat_container .occurrence_list TBODY TD.date {
+width:				105px;
+text-align:			right;
+white-space:		nowrap;
+}
+#s25 .repeat_container .occurrence_list TBODY TD.comments TEXTAREA {
+width:				100%;
+height:				18px;
+overflow:			hidden;
+border:				1px inset #eee;
+padding-left:		3px;
+padding-top:		2px;
+font-size:			90%;
+}
+#s25 .repeat_container .occurrence_list TBODY TD.comments IMG {
+cursor:				pointer;
+margin-left:		5px;
+vertical-align:		-2px;
+}
+#s25 .repeat_container .occurrence_list TBODY TD.state {
+width:				75px;
+}
+#s25 .repeat_container .occurrence_list TBODY TD.state SELECT {
+width:				80px;
+border-width:		1px;
+border:				1px inset #eee;
+font-family:		Verdana, Geneva, Arial, Helvetica;
+font-size:			90%;
+}
+#s25 .repeat_container .occurrence_list TBODY TD.message {
+background-color:	WHITE;
+text-align:			center;
+white-space:		normal;
+color:				#999;
+font-variant:		italic;
+}
+#s25 .repeat_occurrence_Mon	{ background-color: #ffe2e2; }
+#s25 .repeat_occurrence_Tue	{ background-color: #fffae2; }
+#s25 .repeat_occurrence_Wed	{ background-color: #ecffe2; }
+#s25 .repeat_occurrence_Thu	{ background-color: #e2fef1; }
+#s25 .repeat_occurrence_Fri	{ background-color: #e4f6ff; }
+#s25 .repeat_occurrence_Sat	{ background-color: #e7e2ff; }
+#s25 .repeat_occurrence_Sun	{ background-color: #ffe2ff; }
+#s25 .repeat_occurrence_cancelled TD { 
+background-color:		#DDD;
+}
+#s25 .repeat_occurrence_cancelled TD.comments TEXTAREA { 
+color:					#333;
+background-color:		#EEE;
+}
+#s25 .repeat_occurrence_cancelled TD.state SELECT { 
+color:					RED;
+}
+.repeat_by_day, .repeat_by_position { 
+padding:			5px 10px 5px 28px;
+text-align:			left;
+}
+.repeat_by_day SELECT, .repeat_by_position SELECT { 
+width:				auto !important;
+border-width:		1px;
+}
+.repeat_by_day IMG, .repeat_by_position IMG { 
+margin-left:		5px;
+vertical-align:		-3px;
+cursor:				pointer;
+}
+.add_repeat {
+margin-left:		28px;
+color:				#666;
+font-style:			italic;
+font-size:			90%;
+cursor:				pointer;
+}
+.add_repeat:hover SPAN {
+text-decoration:	underline;
+}
+.add_repeat .sprite_click_plus {
+vertical-align:		-1px;
+}
+</style>
+<s:behavior b:name="S25RsrvWizEditor::Repeats" b:behavior="S25RsrvWizEditor">  
+<s:initatt c:purpose="repeats" c:valid="true"/>
+<s:event b:on="_Init">
+<s:task b:action="trigger" b:event="Reset" b:target="."/>
+</s:event>
+<s:event b:on="Paint">
+
+<s:variable b:name="tDateTimeEd" b:scope="tag" b:select="ancestor::s25:rsrv_wiz_datetime[1]"/>
+<s:variable b:name="lThis" b:scope="local">ancestor::*[@c:editor='true'][1]</s:variable>
+<s:variable b:name="tCurrentDate" b:scope="tag" b:select=""/>
+<s:choose>
+<s:when b:test="not(string-length($tDateTimeEd/$tEventStartDate) = 0)">
+<s:task b:action="assign" b:target="$tCurrentDate" b:scope="tag" b:select="concat(number(substring($tDateTimeEd/$tEventStartDate,5,2)), '/', number(substring($tDateTimeEd/$tEventStartDate,7,2)), '/', number(substring($tDateTimeEd/$tEventStartDate,1,4)) )"/>
+<s:script><![CDATA[
+
+var sDt = _vars['tCurrentDate'][0];
+var pat = 'yyyy-MM-dd';
+sDt = s25_format_date(sDt, pat);
+bpc.setVariable('tCurrentDate',[sDt],'tag');
+
+]]></s:script>
+</s:when>
+<s:when b:test="not(string-length($tDateTimeEd/@c:start_dt) = 0)">
+<s:task b:action="assign" b:target="$tCurrentDate" b:scope="tag" b:select="string($tDateTimeEd/@c:start_dt)"/>
+<s:script><![CDATA[
+
+var sDt = parseInt(_vars['tCurrentDate'][0]);
+var pat = 'yyyy-MM-dd';
+var oDt = new Date(sDt);
+sDt = s25_format_date(oDt, pat);
+bpc.setVariable('tCurrentDate',[sDt],'tag');
+
+]]></s:script>
+</s:when>
+<s:otherwise>
+<s:script><![CDATA[
+
+var pat = 'yyyy-MM-dd';
+sDt = s25_format_date(pat);
+bpc.setVariable('tCurrentDate',[sDt],'tag');
+
+]]></s:script>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lUntilDate" b:select="s25_format_date($tCurrentDate, id('Prefs')/$tDatePattern)"/>
+<s:variable b:name="lUntilSortDate" b:select="s25_format_date($tCurrentDate, 'yyyyMMdd')"/>
+<s:render b:destination="$tContent" b:mode="replacechildren">
+<div class="repeat_container">
+<div c:purpose="repeat_criteria_container" class="repeat_criteria_container">
+<b:deck c:purpose="repeat_types">
+<div c:purpose="daily">
+<div class="repeat_criteria_header">Daily Repeat Criteria</div>
+<div class="repeat_criteria">
+<b>Repeats every </b>
+<select name="daily_repeat_frequency" c:purpose="repeat_frequency" b:behavior="RepeatInput">
+<option value="1" b:state="selected"> day </option>
+<option value="2"> other day </option>
+<option value="3"> 3rd day </option>
+<option value="4"> 4th day </option>
+<option value="5"> 5th day </option>
+<option value="6"> 6th day </option>
+<option value="7"> 7th day </option>
+<option value="8"> 8th day </option>
+<option value="9"> 9th day </option>
+<option value="10"> 10th day </option>
+<option value="11"> 11th day </option>
+<option value="12"> 12th day </option>
+</select>
+</div>
+<div class="repeat_criteria_divider"/>
+<div class="repeat_criteria">
+<input type="radio" class="input-radio" name="daily_repeat_duration" c:purpose="repeat_duration" b:behavior="RepeatRadio" value="date"/>
+<b>Repeats until </b>
+<input name="repeats_until" b:behavior="datepickerInputFormat" b:observe="../b:datepicker[1]" style="font-size:100%"/>
+<b:datepicker b:type="float" b:input="." name="daily_repeat_duration_date" c:purpose="repeat_duration_date" b:format="{id('Prefs')/$tDatePattern}" b:behavior="RepeatDatepicker" b:value="{$lUntilDate}" b:sortvalue="{$lUntilSortDate}"/>
+</div>
+<div class="repeat_criteria">
+<input type="radio" class="input-radio" name="daily_repeat_duration" c:purpose="repeat_duration" b:behavior="RepeatRadio" value="occurrences"/>
+<b>Ends after </b>
+<input type="text" name="daily_repeat_occurrences" c:purpose="repeat_occurrences" b:behavior="RepeatInput" value="" style="width:30px">
+<s:event b:on="Change">
+<s:if b:test="isNaN(string(@value))">
+<s:setatt value=""/>
+</s:if>
+<s:task b:action="select" b:target="../input[@type='radio']"/>
+<s:task b:action="trigger" b:event="Change" b:target="../input[@type='radio']"/>
+</s:event>
+
+</input>
+<b> iterations</b>
+</div>
+</div>
+<div c:purpose="weekly">
+<div class="repeat_criteria_header">Weekly Repeat Criteria</div>
+<div class="repeat_criteria">
+<b>Repeats every </b>
+<select name="weekly_repeat_frequency" c:purpose="repeat_frequency" b:behavior="RepeatInput">
+<option value="1" b:state="selected"> week </option>
+<option value="2"> other week </option>
+<option value="3"> 3rd week </option>
+<option value="4"> 4th week </option>
+<option value="5"> 5th week </option>
+<option value="6"> 6th week </option>
+<option value="7"> 7th week </option>
+<option value="8"> 8th week </option>
+<option value="9"> 9th week </option>
+<option value="10"> 10th week </option>
+<option value="11"> 11th week </option>
+<option value="12"> 12th week </option>
+</select>
+</div>
+<div class="repeat_criteria">
+<span style="float:left; margin-bottom:20px;"><b>Repeats on </b></span>
+<span class="checkbox"><input type="checkbox" name="weekly_repeat_day" b:behavior="RepeatInput" value="MO" c:full_name="Monday"/>Mon</span>
+<span class="checkbox"><input type="checkbox" name="weekly_repeat_day" b:behavior="RepeatInput" value="TU" c:full_name="Tuesday"/>Tue</span>
+<span class="checkbox"><input type="checkbox" name="weekly_repeat_day" b:behavior="RepeatInput" value="WE" c:full_name="Wednesday"/>Wed</span>
+<span class="checkbox"><input type="checkbox" name="weekly_repeat_day" b:behavior="RepeatInput" value="TH" c:full_name="Thursday"/>Thu</span>
+<span class="checkbox"><input type="checkbox" name="weekly_repeat_day" b:behavior="RepeatInput" value="FR" c:full_name="Friday"/>Fri</span>
+<span class="checkbox"><input type="checkbox" name="weekly_repeat_day" b:behavior="RepeatInput" value="SA" c:full_name="Saturday"/>Sat</span>
+<span class="checkbox"><input type="checkbox" name="weekly_repeat_day" b:behavior="RepeatInput" value="SU" c:full_name="Sunday"/>Sun</span>
+</div>
+<div class="repeat_criteria_divider"/>
+<div class="repeat_criteria">
+<input type="radio" class="input-radio" name="weekly_repeat_duration" c:purpose="repeat_duration" b:behavior="RepeatRadio" value="date"/>
+<b>Repeats until </b>
+<input name="repeats_until" b:behavior="datepickerInputFormat" b:observe="../b:datepicker[1]" style="font-size:100%"/>
+<b:datepicker b:type="float" b:input="." name="weekly_repeat_duration_date" c:purpose="repeat_duration_date" b:format="{id('Prefs')/$tDatePattern}" b:behavior="RepeatDatepicker" b:value="{$lUntilDate}" b:sortvalue="{$lUntilSortDate}"/>
+</div>
+<div class="repeat_criteria">
+<input type="radio" class="input-radio" name="weekly_repeat_duration" c:purpose="repeat_duration" b:behavior="RepeatRadio" value="occurrences"/>
+<b>Ends after </b>
+<input type="text" name="weekly_repeat_occurrences" c:purpose="repeat_occurrences" value="" style="width:30px" b:behavior="RepeatInput">
+<s:event b:on="Change">
+<s:if b:test="isNaN(string(@value))">
+<s:setatt value=""/>
+</s:if>
+<s:task b:action="select" b:target="../input[@type='radio']"/>
+<s:task b:action="trigger" b:event="Change" b:target="../input[@type='radio']"/>
+</s:event>
+
+</input>
+<b> iterations</b>
+</div>
+</div>
+<div c:purpose="monthly">
+<div class="repeat_criteria_header">Monthly Repeat Criteria</div>
+<div class="repeat_criteria">
+<b>Repeats every </b>
+<select name="monthly_repeat_frequency" c:purpose="repeat_frequency" b:behavior="RepeatInput">
+<option value="1" b:state="selected"> month </option>
+<option value="2"> other month </option>
+<option value="3"> 3rd month </option>
+<option value="4"> 4th month </option>
+<option value="5"> 5th month </option>
+<option value="6"> 6th month </option>
+<option value="7"> 7th month </option>
+<option value="8"> 8th month </option>
+<option value="9"> 9th month </option>
+<option value="10"> 10th month </option>
+<option value="11"> 11th month </option>
+<option value="12"> 12th month </option>
+</select>
+</div>
+<div class="repeat_criteria_divider"/>
+<div class="repeat_criteria">
+<input type="radio" class="input-radio" name="monthly_repeat_type" c:purpose="monthly_repeat_type" b:behavior="RepeatRadio" value="day">
+<s:event b:on="select">
+<s:task b:action="hide" b:target="ancestor::div[@c:purpose='monthly']/span[@c:purpose='monthly_repeat_position']"/>
+<s:task b:action="show" b:target="ancestor::div[@c:purpose='monthly']/span[@c:purpose='monthly_repeat_day']"/>
+</s:event>
+</input>
+<b>Repeat by Day </b>
+</div>
+<span c:purpose="monthly_repeat_day" style="display:none">
+<span class="add_repeat" c:purpose="add_repeat">
+<s:event b:on="command">
+<s:render b:destination="." b:mode="before">
+<div b:behavior="MonthlyRepeatByDay"/>
+</s:render>
+</s:event>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus"/> <span>Add Repeat Day...</span>
+</span>
+</span>
+<div class="repeat_criteria">
+<input type="radio" class="input-radio" name="monthly_repeat_type" c:purpose="monthly_repeat_type" b:behavior="RepeatRadio" value="position">
+<s:event b:on="select">
+<s:task b:action="hide" b:target="ancestor::div[@c:purpose='monthly']/span[@c:purpose='monthly_repeat_day']"/>
+<s:task b:action="show" b:target="ancestor::div[@c:purpose='monthly']/span[@c:purpose='monthly_repeat_position']"/>
+</s:event>
+</input>
+<b>Repeat by Position </b>
+</div>
+<span c:purpose="monthly_repeat_position" style="display:none">
+<span class="add_repeat" c:purpose="add_repeat">
+<s:event b:on="command">
+<s:render b:destination="." b:mode="before">
+<div b:behavior="MonthlyRepeatByPosition"/>
+</s:render>
+</s:event>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus"/> <span>Add Repeat Position...</span>
+</span>
+</span>
+<div class="repeat_criteria_divider"/>
+<div class="repeat_criteria">
+<input type="radio" class="input-radio" name="monthly_repeat_duration" c:purpose="repeat_duration" b:behavior="RepeatRadio" value="date"/>
+<b>Repeats until </b>
+<input name="repeats_until" b:behavior="datepickerInputFormat" b:observe="../b:datepicker[1]" style="font-size:100%"/>
+<b:datepicker b:type="float" b:input="." name="monthly_repeat_duration_date" c:purpose="repeat_duration_date" b:format="{id('Prefs')/$tDatePattern}" b:behavior="RepeatDatepicker" b:value="{$lUntilDate}" b:sortvalue="{$lUntilSortDate}"/>
+</div>
+<div class="repeat_criteria">
+<input type="radio" class="input-radio" name="monthly_repeat_duration" c:purpose="repeat_duration" b:behavior="RepeatRadio" value="occurrences"/>
+<b>Ends after </b>
+<input type="text" name="monthly_repeat_occurrences" c:purpose="repeat_occurrences" b:behavior="RepeatInput" value="" style="width:30px">
+<s:event b:on="Change">
+<s:if b:test="isNaN(string(@value))">
+<s:setatt value=""/>
+</s:if>
+<s:task b:action="select" b:target="../input[@type='radio']"/>
+<s:task b:action="trigger" b:event="Change" b:target="../input[@type='radio']"/>
+</s:event>
+
+</input>
+<b> iterations</b>
+</div>
+</div>
+<div c:purpose="adhoc">
+<div class="repeat_criteria_header">Ad Hoc Repeat Criteria</div>
+<div class="repeat_criteria" align="center">Click on any date to add it to the Occurrence List.</div>
+<div class="repeat_criteria">
+<b:datepicker c:purpose="adhoc" b:type="inline" b:format="{id('Prefs')/$tDatePattern}" b:value="{$lUntilDate}" b:sortvalue="{$lUntilSortDate}" style="margin: 0 auto">
+<s:event b:on="click">
+<s:super/>
+<s:task b:action="trigger" b:event="NewAdHocDate" b:target="{$lThis}"/>
+</s:event>
+</b:datepicker>
+<br/><br/>
+</div>
+<table c:purpose="adhoc_data_island" style="display:none"/>
+</div>
+</b:deck>
+</div>
+<div align="center"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="RsrvWiz_DateTime_Divider"/></div>
+<table class="occurrence_list">
+<thead>
+<tr><th colspan="4" align="center">Occurrence List</th></tr>
+<tr class="occurrence_headers">
+<th align="center">Date</th>
+<th align="left">Comments</th>
+<th align="left" colspan="2">Status</th>
+</tr>
+</thead>
+<tbody c:id="occurrence_list">
+</tbody>
+</table>
+</div>
+</s:render>
+<s:variable b:name="tRepeatType" b:scope="tag" b:select="'none'"/>
+<s:variable b:name="tProfileCode" b:scope="tag" b:select="string($tEvWiz/$tProfile/r25:profile_code)"/>
+<s:variable b:name="tProfileDescription" b:scope="tag" b:select="string($tEvWiz/$tProfile/r25:profile_description)"/>
+<s:variable b:name="tRepeatCriteriaContainer" b:scope="tag" b:select="$tContent//div[@c:purpose='repeat_criteria_container'][1]"/>
+<s:variable b:name="tRepeatDeck" b:scope="tag" b:select="$tContent//b:deck[@c:purpose='repeat_types'][1]"/>
+<s:variable b:name="tAdHocDataIsland" b:scope="tag" b:select="$tRepeatDeck/div[@c:purpose='adhoc'][1]/table[@c:purpose='adhoc_data_island'][1]"/>
+<s:variable b:name="tOccurrenceList" b:scope="tag" b:select="$tContent//tbody[@c:id='occurrence_list'][1]"/>
+<s:variable b:name="antiReverse" b:scope="tag" b:select="boolean('')"/>
+<s:task b:action="show" b:target="$tContent/div[1]"/>
+</s:event>
+<s:event b:on="Reset">
+<s:task b:action="assign" b:target="$tProfileCode" b:scope="tag" b:select="string($tEvWiz/$tProfile/r25:profile_code)"/>
+
+</s:event>
+<s:event b:on="ChangeRepeatType">
+<s:if b:test="not($tRepeatDeck/div[@c:purpose = $tRepeatType]/@c:init = '1')">
+<s:choose>
+<s:when b:test="$tRepeatType = 'daily'">
+<s:task b:action="trigger" b:event="InitRepeatTypeCommon"/>
+</s:when>
+<s:when b:test="$tRepeatType = 'weekly'">
+<s:task b:action="trigger" b:event="InitRepeatTypeCommon"/>
+<s:task b:action="trigger" b:event="InitRepeatTypeWeekly"/>
+</s:when>
+<s:when b:test="$tRepeatType = 'monthly'">
+<s:task b:action="trigger" b:event="InitRepeatTypeCommon"/>
+<s:task b:action="trigger" b:event="InitRepeatTypeMonthly"/>
+</s:when>
+<s:when b:test="$tRepeatType = 'adhoc'">
+<s:task b:action="trigger" b:event="InitRepeatTypeAdHoc"/>
+</s:when>
+</s:choose>
+</s:if>
+<s:choose>
+<s:when b:test="$tRepeatType = 'none'">
+<s:task b:action="hide" b:target="$tRepeatCriteriaContainer"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="show" b:target="$tRepeatCriteriaContainer"/>
+</s:otherwise>
+</s:choose>
+<s:with b:target="$tRepeatDeck/div[@c:purpose = $tRepeatType]">
+<s:task b:action="select" b:target="."/>
+<s:setatt c:init="1"/>
+</s:with>
+<s:task b:action="trigger" b:event="UpdateOccurrenceList"/>
+
+</s:event>
+<s:event b:on="InitRepeatTypeCommon">
+<s:variable b:name="lSelectedRepeatType" b:select="$tRepeatDeck/div[@c:purpose = $tRepeatType]"/>
+<s:if b:test="($tRepeatType = 'daily' and starts-with($tProfileCode,'D')) or  ($tRepeatType = 'weekly' and starts-with($tProfileCode,'W')) or  ($tRepeatType = 'monthly' and starts-with($tProfileCode,'M'))">
+<s:variable b:name="lProfileCode" b:select="string($tEvWiz/$tProfile/r25:profile_code)"/>
+<s:variable b:name="lRepeatIncrement" b:select="''"/>
+<s:variable b:name="lDurationCount" b:select="''"/>
+<s:variable b:name="lDurationDate" b:select="''"/>
+<s:variable b:name="lDatePattern" b:select="string(id('Prefs')/$tDatePattern)"/>
+<s:script><![CDATA[
+
+var sCode = String(_vars['lProfileCode'][0]);
+debug("sCode = " + sCode);
+if ( sCode.match(/^[a-zA-Z]+(\d+)/) ) {
+var increment = (sCode.match(/^[a-zA-Z]+(\d+)/))[1];
+debug("increment = " + increment);
+bpc.setVariable('lRepeatIncrement',[increment],'local');
+}
+if ( sCode.match(/\d{8}T\d{6}-\d{4}/) ) {
+var sDt = (sCode.match(/\d{8}T\d{6}-\d{4}/))[0];
+debug("sDt = " + sDt);
+var untilDt = sDt.substr(0,4) + '/' + sDt.substr(4,2) + '/' + sDt.substr(6,2);
+debug("### untilDt (1) = " + untilDt);
+untilDt = s25_format_date(untilDt, _vars['lDatePattern'][0]);
+debug("### untilDt (2) = " + untilDt);
+bpc.setVariable('lDurationDate',[untilDt],'local');
+} else if ( sCode.match(/#(\d+)/) ) {
+var repetitions = (sCode.match(/#(\d+)/))[1];
+bpc.setVariable('lDurationCount',[repetitions],'local');
+}
+
+]]></s:script>
+<s:task b:action="select" b:target="$lSelectedRepeatType//select[@c:purpose='repeat_frequency']/option[@value = $lRepeatIncrement]"/>
+<s:if b:test="not(string-length($lDurationDate)=0)">
+<s:task b:action="select" b:target="$lSelectedRepeatType//input[@type='radio' and @c:purpose='repeat_duration' and @value='date']"/>
+<s:with b:target="$lSelectedRepeatType//b:datepicker[@c:purpose='repeat_duration_date']">
+<s:setatt b:value="{$lDurationDate}"/>
+<s:task b:action="trigger" b:event="UpdateSortValue"/>
+<s:task b:action="trigger" b:event="set"/>
+<s:task b:action="trigger" b:event="change"/>
+</s:with>
+<s:fxstyle b:time="100"/>
+</s:if>
+<s:if b:test="not(string-length($lDurationCount)=0)">
+<s:task b:action="select" b:target="$lSelectedRepeatType//input[@type='radio' and @c:purpose='repeat_duration' and @value='occurrences']"/>
+<s:with b:target="$lSelectedRepeatType//input[@c:purpose='repeat_occurrences']">
+<s:script><![CDATA[
+_current.value = _vars['lDurationCount'][0];
+]]></s:script>
+</s:with>
+</s:if>
+</s:if>
+<s:with b:target="$lSelectedRepeatType//*[@c:purpose='repeat_frequency' or @c:purpose='repeat_duration' or @c:purpose='repeat_duration_date' or @c:purpose='repeat_occurrences']">
+<s:setatt c:active="1"/>
+</s:with>
+</s:event>
+<s:event b:on="InitRepeatTypeWeekly">
+<s:variable b:name="lWeeklyCard" b:scope="local" b:select="$tRepeatDeck/div[@c:purpose='weekly']"/>
+<s:if b:test="not(string-length($tProfileCode)=0) and starts-with($tProfileCode,'W')">
+<s:task b:test="contains($tProfileCode, 'MO')" b:action="select" b:target="$lWeeklyCard//input[@type='checkbox' and @name='weekly_repeat_day' and @value='MO']"/>
+<s:task b:test="contains($tProfileCode, 'TU')" b:action="select" b:target="$lWeeklyCard//input[@type='checkbox' and @name='weekly_repeat_day' and @value='TU']"/>
+<s:task b:test="contains($tProfileCode, 'WE')" b:action="select" b:target="$lWeeklyCard//input[@type='checkbox' and @name='weekly_repeat_day' and @value='WE']"/>
+<s:task b:test="contains($tProfileCode, 'TH')" b:action="select" b:target="$lWeeklyCard//input[@type='checkbox' and @name='weekly_repeat_day' and @value='TH']"/>
+<s:task b:test="contains($tProfileCode, 'FR')" b:action="select" b:target="$lWeeklyCard//input[@type='checkbox' and @name='weekly_repeat_day' and @value='FR']"/>
+<s:task b:test="contains($tProfileCode, 'SA')" b:action="select" b:target="$lWeeklyCard//input[@type='checkbox' and @name='weekly_repeat_day' and @value='SA']"/>
+<s:task b:test="contains($tProfileCode, 'SU')" b:action="select" b:target="$lWeeklyCard//input[@type='checkbox' and @name='weekly_repeat_day' and @value='SU']"/>
+</s:if>
+<s:with b:target="$lWeeklyCard//input[@type='checkbox' and @name='weekly_repeat_day']">
+<s:setatt c:active="1"/>
+</s:with>
+</s:event>
+<s:event b:on="InitRepeatTypeMonthly">
+<s:variable b:name="lMonthlyCard" b:scope="local" b:select="$tRepeatDeck/div[@c:purpose='monthly']"/>
+<s:choose>
+<s:when b:test="not(string-length($tProfileCode)=0) and starts-with($tProfileCode,'M')">
+<s:choose>
+<s:when b:test="starts-with($tProfileCode,'MD')">
+<s:task b:action="select" b:target="$lMonthlyCard//input[@type='radio' and @name='monthly_repeat_type' and @value='day']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="select" b:target="$lMonthlyCard//input[@type='radio' and @name='monthly_repeat_type' and @value='position']"/>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lProfileCode" b:scope="local" b:select="string($tProfileCode)"/>
+<s:choose>
+<s:when b:test="starts-with($lProfileCode, 'MD')">
+<s:if b:test="matches($lProfileCode, '^MD\d+\s+((\d+[\+\-]\s+)+)')">
+<s:variable b:name="lDays" b:scope="local" b:select="''"/>
+<s:script><![CDATA[
+
+var sCode = _vars['lProfileCode'][0];
+var sDays = (sCode.match(/MD\d+\s+((\d+[\+\-]\s+)+)/))[1];
+sDays = sDays.replace(/\s$/g,'');
+bpc.setVariable('lDays', [sDays], 'local');
+
+]]></s:script>
+<s:for-each b:target="tokenize($lDays, ' ')">
+<s:render b:mode="before" b:destination="$tRepeatDeck/div[@c:purpose='monthly']/span[@c:purpose='monthly_repeat_day']/span[@c:purpose='add_repeat']">
+<div b:behavior="MonthlyRepeatByDay" c:day="{parseInt($_target)}" c:position="{replace($_target, parseInt($_target), '')}"/>
+</s:render>
+</s:for-each>
+</s:if>
+</s:when>
+<s:when b:test="starts-with($lProfileCode, 'MP')">
+<s:if b:test="matches($lProfileCode, '^MP\d+\s+((\d+[\+\-]\s+[A-Z]{2}\s+)+)')">
+<s:variable b:name="lDays" b:scope="local" b:select="''"/>
+<s:script><![CDATA[
+
+var sCode = _vars['lProfileCode'][0];
+var sDays = (sCode.match(/MP\d+\s+((\d+[\+\-]\s+[A-Z]{2}\s+)+)/))[1];
+sDays = sDays.replace(/\s$/g,'');
+sDays = sDays.replace(/\+\s/g,'+|');
+sDays = sDays.replace(/\-\s/g,'-|');
+bpc.setVariable('lDays', [sDays], 'local');
+
+]]></s:script>
+<s:for-each b:target="tokenize($lDays, ' ')">
+<s:render b:mode="before" b:destination="$tRepeatDeck/div[@c:purpose='monthly']/span[@c:purpose='monthly_repeat_position']/span[@c:purpose='add_repeat']">
+<div b:behavior="MonthlyRepeatByPosition" c:position="{substring-before($_target, '|')}" c:day="{substring-after($_target, '|')}"/>
+</s:render>
+</s:for-each>
+</s:if>
+</s:when>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:task b:action="select" b:target="$lMonthlyCard//input[@type='radio' and @name='monthly_repeat_type' and @value='day']"/>
+</s:otherwise>
+</s:choose>
+<s:with b:target="$lMonthlyCard//input[@type='radio' and @name='monthly_repeat_type']">
+<s:setatt c:active="1"/>
+</s:with>
+</s:event>
+<s:event b:on="InitRepeatTypeAdHoc">
+<s:task b:action="trigger" b:target="$tEvWiz" b:event="OutputCurrentInbox"/>
+<s:if b:test="$tEvWiz/$tProfile//r25:ad_hoc_datelist/r25:ad_hoc_start_dt">
+<s:choose>
+<s:when b:test="count($tEvWiz/$tProfile/r25:reservation) gt 0">
+<s:variable b:name="lEventStartDt" b:select=""/>
+<s:variable b:name="lOccurrence" b:select=""/>
+<s:variable b:name="lOccurrenceSortValue" b:select=""/>
+<s:variable b:name="lOccurrenceDay" b:select=""/>
+<s:variable b:name="lOccurrenceState" b:select=""/>
+<s:variable b:name="lOccurrenceClass" b:select=""/>
+<s:variable b:name="lOccurrenceComment" b:select=""/>
+<s:for-each b:target="$tEvWiz/$tProfile/r25:reservation">
+<s:task b:action="assign" b:target="$lEventStartDt" b:select="substring($_target/r25:event_start_dt,1,19)"/>
+<s:task b:action="assign" b:target="$lOccurrence" b:select="s25_format_date($lEventStartDt, string(id('Prefs')/$tDatePattern))"/>
+<s:task b:action="assign" b:target="$lOccurrenceSortValue" b:select="s25_format_date($lEventStartDt, 'yyyyMMdd')"/>
+<s:task b:action="assign" b:target="$lOccurrenceDay" b:select="s25_format_date($lEventStartDt, 'ddd')"/>
+<s:task b:action="assign" b:target="$lOccurrenceState" b:select="string($tEvWiz/$tInbox/occurrences/occurrence[@event_start_dt = $lEventStartDt]/@state)"/>
+<s:task b:action="assign" b:target="$lOccurrenceClass" b:select="concat('repeat_occurrence_', $lOccurrenceDay)"/>
+<s:task b:test="$lOccurrenceState = '99'" b:action="assign" b:target="$lOccurrenceClass" b:select="concat($lOccurrenceClass, ' repeat_occurrence_cancelled')"/>
+<s:task b:action="assign" b:target="$lOccurrenceComment" b:select="string($tEvWiz/$tInbox/occurrences/occurrence[@event_start_dt = $lEventStartDt]/text())"/>
+<s:render b:destination="$tAdHocDataIsland" b:mode="aslastchild">
+<tr c:purpose="occurrence" c:date="{$lOccurrence}" c:event_start_dt="{$lEventStartDt}" c:sortvalue="{$lOccurrenceSortValue}" c:state="{$lOccurrenceState}" class="{$lOccurrenceClass}">
+<td class="date"><s:textnode b:label="{$lOccurrence}"/></td>
+<td class="comments"><textarea b:behavior="OccurrenceComments"><s:textnode b:label="{$lOccurrenceComment}"/></textarea></td>
+<td class="state"><span b:behavior="RenderOccurrenceState"/></td>
+<td class="remove"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close_small.gif" b:tooltiptext="Remove Occurrence" b:behavior="RemoveAdHocDate" c:sortvalue="{$lOccurrenceSortValue}"/></td>
+</tr>
+</s:render>
+</s:for-each>
+</s:when>
+<s:when b:test="count($tEvWiz/$tInbox/occurrences/occurrence) gt 0">
+<s:variable b:name="lEventStartDt" b:select=""/>
+<s:variable b:name="lOccurrence" b:select=""/>
+<s:variable b:name="lOccurrenceSortValue" b:select=""/>
+<s:variable b:name="lOccurrenceDay" b:select=""/>
+<s:variable b:name="lOccurrenceState" b:select=""/>
+<s:variable b:name="lOccurrenceClass" b:select=""/>
+<s:variable b:name="lOccurrenceComment" b:select=""/>
+<s:for-each b:target="$tEvWiz/$tInbox/occurrences/occurrence">
+<s:task b:action="assign" b:target="$lEventStartDt" b:select="substring($_target/@event_start_dt,1,19)"/>
+<s:task b:action="assign" b:target="$lOccurrence" b:select="s25_format_date($lEventStartDt, string(id('Prefs')/$tDatePattern))"/>
+<s:task b:action="assign" b:target="$lOccurrenceSortValue" b:select="s25_format_date($lEventStartDt, 'yyyyMMdd')"/>
+<s:task b:action="assign" b:target="$lOccurrenceDay" b:select="s25_format_date($lEventStartDt, 'ddd')"/>
+<s:task b:action="assign" b:target="$lOccurrenceState" b:select="string($_target/@state)"/>
+<s:task b:action="assign" b:target="$lOccurrenceClass" b:select="concat('repeat_occurrence_', $lOccurrenceDay)"/>
+<s:task b:test="$lOccurrenceState = '99'" b:action="assign" b:target="$lOccurrenceClass" b:select="concat($lOccurrenceClass, ' repeat_occurrence_cancelled')"/>
+<s:task b:action="assign" b:target="$lOccurrenceComment" b:select="string($_target/text())"/>
+<s:render b:destination="$tAdHocDataIsland" b:mode="aslastchild">
+<tr c:purpose="occurrence" c:date="{$lOccurrence}" c:event_start_dt="{$lEventStartDt}" c:sortvalue="{$lOccurrenceSortValue}" c:state="{$lOccurrenceState}" class="{$lOccurrenceClass}">
+<td class="date"><s:textnode b:label="{$lOccurrence}"/></td>
+<td class="comments"><textarea b:behavior="OccurrenceComments"><s:textnode b:label="{$lOccurrenceComment}"/></textarea></td>
+<td class="state"><span b:behavior="RenderOccurrenceState"/></td>
+<td class="remove"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close_small.gif" b:tooltiptext="Remove Occurrence" b:behavior="RemoveAdHocDate" c:sortvalue="{$lOccurrenceSortValue}"/></td>
+</tr>
+</s:render>
+</s:for-each>
+</s:when>
+<s:otherwise>
+<s:render b:destination="$tOccurrenceList" b:mode="replacechildren">
+<tr c:purpose="message"><td colspan="4" class="message"><s:textnode b:label="No occurrences. Check your dates."/></td></tr>
+</s:render>
+</s:otherwise>
+</s:choose>
+</s:if>
+<s:task b:action="trigger" b:target="$tEvWiz" b:event="OutputCurrentInbox"/>
+</s:event>
+<s:event b:on="NewAdHocDate">
+<s:variable b:name="lAdHocDatePicker" b:select="$tRepeatDeck/div[@c:purpose='adhoc']//b:datepicker[@c:purpose='adhoc'][1]"/>
+
+<s:variable b:name="lEventStartTime" b:scope="local" b:select="concat(substring($tDateTimeEd/$tEventStartTime,1,2),':',substring($tDateTimeEd/$tEventStartTime,3,2),':00')"/>
+<s:variable b:name="lEventStartDt" b:scope="local" b:select="concat(s25_format_date(string($lAdHocDatePicker/@b:value), 'yyyy-MM-dd','input'), 'T', $lEventStartTime)"/>
+<s:variable b:name="lSortDate" b:scope="local" b:select="$lAdHocDatePicker/@b:sortvalue"/>
+<s:variable b:name="lFormattedDate" b:scope="local" b:select="s25_format_date(string($lAdHocDatePicker/@b:value), id('Prefs')/$tDatePattern, 'input')"/>
+<s:variable b:name="lOccurrenceDay" b:scope="local" b:select="s25_format_date(string($lAdHocDatePicker/@b:value), 'ddd', 'input')"/>
+<s:variable b:name="lOccurrenceState" b:select="'1'"/>
+<s:variable b:name="lOccurrenceClass" b:select="concat('repeat_occurrence_', $lOccurrenceDay)"/>
+<s:task b:test="$lOccurrenceState = '99'" b:action="assign" b:target="$lOccurrenceClass" b:select="concat($lOccurrenceClass, ' repeat_occurrence_cancelled')"/>
+<s:variable b:name="lOccurrenceComment" b:select="''"/>
+<s:variable b:name="lCurrentStartDate" b:scope="local" b:select="number($tDateTimeEd/$tStartDatePicker/@b:sortvalue)"/>
+<s:if b:test="not($tOccurrenceList/tr[@c:sortvalue=$lSortDate]) and number($lSortDate) gt $lCurrentStartDate">
+<s:task b:action="remove" b:target="$tOccurrenceList/tr[@c:purpose='message']"/>
+<s:render b:destination="$tOccurrenceList" b:mode="aslastchild">
+<tr c:purpose="occurrence" c:date="{$lFormattedDate}" c:event_start_dt="{$lEventStartDt}" c:sortvalue="{$lSortDate}" c:state="{$lOccurrenceState}" class="{$lOccurrenceClass}">
+<td class="date"><s:textnode b:label="{$lFormattedDate}"/></td>
+<td class="comments"><textarea b:behavior="OccurrenceComments"><s:textnode b:label="{$lOccurrenceComment}"/></textarea></td>
+<td class="state"><span b:behavior="RenderOccurrenceState"/></td>
+<td class="remove"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close_small.gif" b:tooltiptext="Remove Occurrence" b:behavior="RemoveAdHocDate" c:sortvalue="{$lSortDate}"/></td>
+</tr>
+</s:render>
+<s:render b:destination="$tAdHocDataIsland" b:mode="aslastchild">
+<tr c:purpose="occurrence" c:date="{$lFormattedDate}" c:event_start_dt="{$lEventStartDt}" c:sortvalue="{$lSortDate}" c:state="{$lOccurrenceState}" class="{$lOccurrenceClass}">
+<td class="date"><s:textnode b:label="{$lFormattedDate}"/></td>
+<td class="comments"><textarea b:behavior="OccurrenceComments"><s:textnode b:label="{$lOccurrenceComment}"/></textarea></td>
+<td class="state"><span b:behavior="RenderOccurrenceState"/></td>
+<td class="remove"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close_small.gif" b:tooltiptext="Remove Occurrence" b:behavior="RemoveAdHocDate" c:sortvalue="{$lSortDate}"/></td>
+</tr>
+</s:render>
+<s:task b:action="sort" b:target="$tOccurrenceList" b:source="$tOccurrenceList/tr" b:attribute="c:sortvalue" b:reverse="{$antiReverse}"/>
+<s:task b:action="assign" b:target="$antiReverse" b:scope="tag" b:select="not($antiReverse)"/>
+<s:task b:action="trigger" b:event="BroadcastChange"/>
+</s:if>
+</s:event>
+<s:event b:on="Save">
+<s:choose>
+<s:when b:test="($tRepeatType = 'daily' or $tRepeatType = 'weekly' or $tRepeatType = 'monthly') and $tProfileCode = ''">
+<s:setatt c:valid="false"/>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="$tRepeatType = 'daily' or $tRepeatType = 'weekly' or $tRepeatType = 'monthly'">
+<s:task b:action="trigger" b:event="SaveMeetingPattern"/>
+</s:when>
+<s:when b:test="$tRepeatType = 'adhoc'">
+<s:task b:action="trigger" b:event="SaveAdHocDates"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:profile_code" b:value=""/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:rec_type_id" b:value="0"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:rec_type_name" b:value=""/>
+<s:task b:action="remove" b:target="$tEvWiz/$tProfile/r25:ad_hoc_datelist[@status='new']"/>
+<s:for-each b:target="$tEvWiz/$tProfile/r25:ad_hoc_datelist[@status='est']">
+<s:task b:action="set" b:target="$_target/@status" b:value="del"/>
+</s:for-each>
+<s:task b:action="assign" b:target="$tEvWiz/$tHasRepeats" b:scope="tag" b:select="'F'"/>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lEventStartDt" b:select=""/>
+<s:variable b:name="lState" b:select=""/>
+<s:variable b:name="lComments" b:select=""/>
+<s:task b:action="remove" b:target="$tEvWiz/$tInbox/occurrences//occurrence"/>
+<s:for-each b:target="$tOccurrenceList/tr[@c:purpose='occurrence']">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lEventStartDt" b:select="string($_target/@c:event_start_dt)"/>
+<s:task b:action="assign" b:target="$lState" b:select="string($_target/@c:state)"/>
+<s:task b:action="assign" b:target="$lComments" b:select="string($_target//textarea/@value)"/>
+<s:render b:destination="$tEvWiz/$tInbox/occurrences" b:mode="aslastchild">
+<occurrence event_start_dt="{$lEventStartDt}" state="{$lState}"><s:textnode b:label="{$lComments}"/></occurrence>
+</s:render>
+</s:lock></s:sequential>
+</s:for-each>
+<s:setatt c:valid="true"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="BroadcastChange">
+<s:if b:test="@c:init = '1'">
+<s:with b:target="$tDateTimeEd">
+<s:task b:action="trigger" b:event="BroadcastChange"/>
+</s:with>
+</s:if>
+</s:event>
+<s:event b:on="SaveMeetingPattern">
+<s:choose>
+<s:when b:test="not(string-length($tProfileCode) = 0)">
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:rec_type_id" b:value="1"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:rec_type_name" b:value="Recurrence Grammar"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:profile_code" b:value="{$tProfileCode}"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:profile_description" b:value="{$tProfileDescription}"/>
+<s:task b:action="remove" b:target="$tEvWiz/$tProfile/r25:ad_hoc_datelist[@status = 'new']"/>
+<s:for-each b:target="$tEvWiz/$tProfile/r25:ad_hoc_datelist">
+<s:task b:action="set" b:target="$_target/@status" b:value="del"/>
+</s:for-each>
+<s:task b:action="assign" b:target="$tEvWiz/$tHasRepeats" b:scope="tag" b:select="'T'"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:rec_type_id" b:value=""/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:rec_type_name" b:value=""/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:profile_code" b:value=""/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:profile_description" b:value=""/>
+<s:task b:action="assign" b:target="$tEvWiz/$tHasRepeats" b:scope="tag" b:select="'T'"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="remove" b:target="$tEvWiz/$tProfile/r25:ad_hoc_datelist[@status = 'new']"/>
+<s:for-each b:target="$tEvWiz/$tProfile/r25:ad_hoc_datelist">
+<s:task b:action="set" b:target="$_target/@status" b:value="del"/>
+</s:for-each>
+</s:event>
+<s:event b:on="SaveAdHocDates">
+<s:task b:action="remove" b:target="$tEvWiz/$tProfile/r25:ad_hoc_datelist[@status='new']"/>
+<s:for-each b:target="$tEvWiz/$tProfile/r25:ad_hoc_datelist[@status='est']">
+<s:task b:action="set" b:target="$_target/@status" b:value="del"/>
+</s:for-each>
+<s:task b:action="trigger" b:target="$tEvWiz" b:event="OutputCurrentXmlData"/>
+<s:choose>
+<s:when b:test="count($tOccurrenceList/tr[@c:sortvalue]) gt 1">
+<s:variable b:name="lAdHocDates">
+<dates/>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lAdHocDates"/>
+<s:variable b:name="lAdHocDatelist">
+<r25:ad_hoc_datelist status="new">
+<r25:ad_hoc_start_dt/>
+</r25:ad_hoc_datelist>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lAdHocDatelist"/>
+<s:for-each b:target="$tOccurrenceList/tr[@c:purpose='occurrence'][position() gt 1]">
+<s:task b:action="settext" b:target="$lAdHocDatelist/r25:ad_hoc_datelist/r25:ad_hoc_start_dt" b:value="{concat(substring($_target/@c:sortvalue,1,4), '-', substring($_target/@c:sortvalue,5,2), '-', substring($_target/@c:sortvalue,7,2))}"/>
+<s:task b:action="copy" b:source="$lAdHocDatelist/r25:ad_hoc_datelist" b:destination="$lAdHocDates/dates" b:mode="aslastchild"/>
+</s:for-each>
+<s:variable b:name="lAdHocStartDt" b:select="''"/>
+<s:for-each b:target="$lAdHocDates//r25:ad_hoc_datelist">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lAdHocStartDt" b:select="string($_target/r25:ad_hoc_start_dt)"/>
+<s:choose>
+<s:when b:test="exists($tEvWiz/$tProfile/r25:ad_hoc_datelist[string(r25:ad_hoc_start_dt) = $lAdHocStartDt])">
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode = 'clone'">
+<s:task b:action="set" b:target="$tEvWiz/$tProfile/r25:ad_hoc_datelist[string(r25:ad_hoc_start_dt) = $lAdHocStartDt]/@status" b:value="new"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="set" b:target="$tEvWiz/$tProfile/r25:ad_hoc_datelist[string(r25:ad_hoc_start_dt) = $lAdHocStartDt]/@status" b:value="est"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:task b:action="copy" b:destination="$tEvWiz/$tProfile" b:source="$_target" b:mode="aslastchild"/>
+</s:otherwise>
+</s:choose>
+</s:lock></s:sequential>
+</s:for-each>
+<s:task b:action="xml2string" b:variable="$lAdHocDates"/>
+<s:task b:action="string2xml" b:variable="$lAdHocDates"/>
+<s:task b:action="trigger" b:event="OutputCurrentXmlData" b:target="$tEvWiz"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:rec_type_id" b:value="2"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:rec_type_name" b:value="Date/Time List"/>
+<s:task b:action="assign" b:target="$tEvWiz/$tHasRepeats" b:scope="tag" b:select="'T'"/>
+<s:task b:action="trigger" b:target="$tEvWiz" b:event="OutputCurrentXmlData"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:rec_type_id" b:value="0"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:rec_type_name" b:value=""/>
+<s:task b:action="assign" b:target="$tEvWiz/$tHasRepeats" b:scope="tag" b:select="'F'"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="RemoveRepeat">
+<s:task b:action="remove" b:target="$tRepeatDeck/div[@c:purpose = $tRepeatType]//div[@c:purpose='monthly_repeat_by_day' and @c:remove='true']"/>
+<s:task b:action="remove" b:target="$tRepeatDeck/div[@c:purpose = $tRepeatType]//div[@c:purpose='monthly_repeat_by_position' and @c:remove='true']"/>
+<s:task b:action="trigger" b:event="UpdateOccurrenceList"/>
+</s:event>
+<s:event b:on="UpdateOccurrenceList">
+<s:task b:action="trigger" b:target="$tEvWiz" b:event="OutputCurrentInbox"/>
+<s:variable b:name="lEventStartDate" b:select="concat(substring($tDateTimeEd/$tEventStartDate,1,4), '-', substring($tDateTimeEd/$tEventStartDate,5,2), '-', substring($tDateTimeEd/$tEventStartDate,7,2))"/>
+<s:variable b:name="lEventStartHour" b:select="floor($tDateTimeEd/$tEventStartTime div 100)"/>
+<s:task b:test="$lEventStartHour lt 10" b:action="assign" b:target="$lEventStartHour" b:select="concat('0', $lEventStartHour)"/>
+<s:variable b:name="lEventStartMinute" b:select="$tDateTimeEd/$tEventStartTime mod 100"/>
+<s:task b:test="$lEventStartMinute lt 10" b:action="assign" b:target="$lEventStartMinute" b:select="concat('0', $lEventStartMinute)"/>
+<s:variable b:name="lEventStartDateTime" b:select="concat($lEventStartDate, 'T', $lEventStartHour, ':', $lEventStartMinute, ':00')"/>
+<s:variable b:name="lEventEndDate" b:select="concat(substring($tDateTimeEd/$tEventEndDate,1,4), '-', substring($tDateTimeEd/$tEventEndDate,5,2), '-', substring($tDateTimeEd/$tEventEndDate,7,2))"/>
+<s:variable b:name="lEventEndHour" b:select="floor($tDateTimeEd/$tEventEndTime div 100)"/>
+<s:task b:test="$lEventEndHour lt 10" b:action="assign" b:target="$lEventEndHour" b:select="concat('0', $lEventEndHour)"/>
+<s:variable b:name="lEventEndMinute" b:select="$tDateTimeEd/$tEventEndTime mod 100"/>
+<s:task b:test="$lEventEndMinute lt 10" b:action="assign" b:target="$lEventEndMinute" b:select="concat('0', $lEventEndMinute)"/>
+<s:variable b:name="lEventEndDateTime" b:select="concat($lEventEndDate, 'T', $lEventEndHour, ':', $lEventEndMinute, ':00')"/>
+<s:variable b:name="lStartDateChanged" b:select="boolean(string($tDateTimeEd/$tStartDatePicker/@c:changed) = 'T')"/>
+<s:variable b:name="lProfileCode" b:select="''"/>
+<s:choose>
+<s:when b:test="$tRepeatType = 'daily'">
+<s:variable b:name="lRepeatFrequency" b:select="concat('D', $tRepeatDeck/div[@c:purpose='daily']//select[@c:purpose='repeat_frequency']/@value, ' ')"/>
+<s:variable b:name="lRepeatDuration" b:select="''"/>
+<s:variable b:name="lRepeatDurationDate" b:select="string($tRepeatDeck/div[@c:purpose='daily']//b:datepicker[@c:purpose='repeat_duration_date']/@b:sortvalue)"/>
+<s:choose>
+<s:when b:test="$tRepeatDeck/div[@c:purpose='daily']//input[@c:purpose='repeat_duration' and @value='date']/@checked = 'checked' and string-length($lRepeatDurationDate) = 8">
+<s:if b:test="not(number($lRepeatDurationDate) lt number($tDateTimeEd/$tEventStartDate))">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat($lRepeatDurationDate, 'T235900')"/> /&gt;
+</s:if>
+</s:when>
+<s:when b:test="$tRepeatDeck/div[@c:purpose='daily']//input[@c:purpose='repeat_duration' and @value='occurrences']/@checked = 'checked' and isNaN(number($tRepeatDeck/div[@c:purpose='daily']//input[@c:purpose='repeat_occurrences']/@value)) = false()">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat('#', $tRepeatDeck/div[@c:purpose='daily']//input[@c:purpose='repeat_occurrences']/@value)"/>
+</s:when>
+</s:choose>
+<s:if b:test="string-length($lRepeatDuration) gt 1">
+<s:task b:action="assign" b:target="$lProfileCode" b:select="concat($lRepeatFrequency, $lRepeatDuration)"/>
+</s:if>
+</s:when>
+<s:when b:test="$tRepeatType = 'weekly'">	
+<s:variable b:name="lRepeatFrequency" b:select="concat('W', $tRepeatDeck/div[@c:purpose='weekly']//select[@c:purpose='repeat_frequency']/@value, ' ')"/>
+<s:variable b:name="lRepeatDays" b:select="''"/>
+<s:for-each b:target="$tRepeatDeck/div[@c:purpose='weekly']//input[@name='weekly_repeat_day' and @checked='checked']">
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="concat($lRepeatDays, $_target/@value, ' ')"/> /&gt;
+</s:for-each>
+<s:variable b:name="lRepeatDuration" b:select="''"/>
+<s:variable b:name="lRepeatDurationDate" b:select="string($tRepeatDeck/div[@c:purpose='weekly']//b:datepicker[@c:purpose='repeat_duration_date']/@b:sortvalue)"/>
+<s:choose>
+<s:when b:test="$tRepeatDeck/div[@c:purpose='weekly']//input[@c:purpose='repeat_duration' and @value='date']/@checked = 'checked' and string-length($lRepeatDurationDate) = 8">
+<s:if b:test="not(number($lRepeatDurationDate) lt number($tDateTimeEd/$tEventStartDate))">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat($lRepeatDurationDate, 'T235900')"/> /&gt;
+</s:if>
+</s:when>
+<s:when b:test="$tRepeatDeck/div[@c:purpose='weekly']//input[@c:purpose='repeat_duration' and @value='occurrences']/@checked = 'checked' and isNaN(number($tRepeatDeck/div[@c:purpose='weekly']//input[@c:purpose='repeat_occurrences']/@value)) = false()">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat('#', $tRepeatDeck/div[@c:purpose='weekly']//input[@c:purpose='repeat_occurrences']/@value)"/> /&gt;
+</s:when>
+</s:choose>
+<s:if b:test="string-length($lRepeatDuration) gt 1">
+<s:task b:action="assign" b:target="$lProfileCode" b:select="concat($lRepeatFrequency, $lRepeatDays, $lRepeatDuration)"/>
+</s:if>
+</s:when>
+<s:when b:test="$tRepeatType = 'monthly'">	
+<s:variable b:name="lRepeatFrequency" b:select="string($tRepeatDeck/div[@c:purpose='monthly']//select[@c:purpose='repeat_frequency']/@value)"/>
+<s:choose>
+<s:when b:test="$tRepeatDeck/div[@c:purpose='monthly']//input[@c:purpose='monthly_repeat_type' and @value='day']/@checked = 'checked'">
+<s:task b:action="assign" b:target="$lRepeatFrequency" b:select="concat('MD', $lRepeatFrequency, ' ')"/> /&gt;
+<s:for-each b:target="$tRepeatDeck/div[@c:purpose='monthly']//div[@c:purpose='monthly_repeat_by_day']">
+<s:task b:action="assign" b:target="$lRepeatFrequency" b:select="concat($lRepeatFrequency,   $_target/select[@c:purpose='monthly_repeat_day']/@value,  $_target/select[@c:purpose='monthly_repeat_position']/@value,  ' ')"/> /&gt;
+</s:for-each>
+</s:when>
+<s:when b:test="$tRepeatDeck/div[@c:purpose='monthly']//input[@c:purpose='monthly_repeat_type' and @value='position']/@checked = 'checked'">
+<s:task b:action="assign" b:target="$lRepeatFrequency" b:select="concat('MP', $lRepeatFrequency, ' ')"/> /&gt;
+<s:for-each b:target="$tRepeatDeck/div[@c:purpose='monthly']//div[@c:purpose='monthly_repeat_by_position']">
+<s:task b:action="assign" b:target="$lRepeatFrequency" b:select="concat($lRepeatFrequency,   $_target/select[@c:purpose='monthly_repeat_position']/@value, ' ', $_target/select[@c:purpose='monthly_repeat_day']/@value,  ' ')"/> /&gt;
+</s:for-each>
+</s:when>
+</s:choose>
+<s:variable b:name="lRepeatDuration" b:select="''"/>
+<s:variable b:name="lRepeatDurationDate" b:select="string($tRepeatDeck/div[@c:purpose='monthly']//b:datepicker[@c:purpose='repeat_duration_date']/@b:sortvalue)"/>
+<s:choose>
+<s:when b:test="$tRepeatDeck/div[@c:purpose='monthly']//input[@c:purpose='repeat_duration' and @value='date']/@checked = 'checked' and string-length($lRepeatDurationDate) = 8">
+<s:if b:test="not(number($lRepeatDurationDate) lt number($tDateTimeEd/$tEventStartDate))">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat($lRepeatDurationDate, 'T235900')"/> /&gt;
+</s:if>
+</s:when>
+<s:when b:test="$tRepeatDeck/div[@c:purpose='monthly']//input[@c:purpose='repeat_duration' and @value='occurrences']/@checked = 'checked' and isNaN(number($tRepeatDeck/div[@c:purpose='monthly']//input[@c:purpose='repeat_occurrences']/@value)) = false()">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat('#', $tRepeatDeck/div[@c:purpose='monthly']//input[@c:purpose='repeat_occurrences']/@value)"/> /&gt;
+</s:when>
+</s:choose>
+<s:if b:test="string-length($lRepeatDuration) gt 1">
+<s:task b:action="assign" b:target="$lProfileCode" b:select="concat($lRepeatFrequency, $lRepeatDuration)"/>
+</s:if>
+</s:when>
+</s:choose>
+<s:if b:test="$tRepeatType = 'daily' or $tRepeatType = 'weekly' or $tRepeatType = 'monthly'">
+<s:if b:test="not($lProfileCode = '')">
+<s:render b:destination="$tOccurrenceList" b:mode="replacechildren">
+<tr c:purpose="message"><td colspan="4" class="message"><s:textnode b:label="Updating..."/></td></tr>
+</s:render>
+<s:variable b:name="lProfileXml">
+<r25:profile_details>
+<r25:profile status="new">
+<r25:profile_code/>
+<r25:prof_use/>
+<r25:rec_type_id/>
+<r25:pre_event/>
+<r25:post_event/>
+<r25:init_start_dt/>
+<r25:init_end_dt/>
+</r25:profile>
+</r25:profile_details>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lProfileXml"/>
+<s:task b:action="settext" b:target="$lProfileXml//r25:init_start_dt" b:value="{$lEventStartDateTime}"/>
+<s:task b:action="settext" b:target="$lProfileXml//r25:init_end_dt" b:value="{$lEventEndDateTime}"/>
+<s:task b:action="settext" b:target="$lProfileXml//r25:profile_code" b:value="{$lProfileCode}"/>
+<s:task b:action="xml2string" b:variable="$lProfileXml"/>
+<s:variable b:name="lProfileDetail" b:select=""/>
+<s:task b:action="load" b:method="POST" b:url="{concat(id('Config')/$tWsPrefix,'gen_prof_dtl.xml')}" b:data="{$lProfileXml}" b:destination="$lProfileDetail" b:mode="replacechildren">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lProfileDetail"/>
+<s:task b:action="remove" b:target="$tOccurrenceList/tr"/>
+<s:variable b:name="lInitStartDt" b:scope="local" b:select="substring($tEvWiz/$tProfile/r25:init_start_dt,1,10)"/>
+<s:variable b:name="lInitEndDt" b:scope="local" b:select="substring($tEvWiz/$tProfile/r25:init_end_dt,1,10)"/>
+<s:choose>
+<s:when b:test="count($lProfileDetail//r25:reservation) gt 0">
+<s:variable b:name="lEventStartDt" b:select=""/>
+<s:variable b:name="lOccurrence" b:select=""/>
+<s:variable b:name="lOccurrenceSortValue" b:select=""/>
+<s:variable b:name="lOccurrenceDay" b:select=""/>
+<s:variable b:name="lOccurrenceState" b:select="1"/>
+<s:variable b:name="lOccurrenceClass" b:select=""/>
+<s:variable b:name="lOccurrenceComment" b:select=""/>
+<s:variable b:name="lPosition" b:select="1"/>
+<s:for-each b:target="$lProfileDetail//r25:reservation">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lEventStartDt" b:select="substring($_target/r25:event_start_dt,1,19)"/>
+<s:task b:action="assign" b:target="$lOccurrence" b:select="s25_format_date($lEventStartDt, string(id('Prefs')/$tDatePattern))"/>
+<s:task b:action="assign" b:target="$lOccurrenceSortValue" b:select="s25_format_date($lEventStartDt, 'yyyyMMdd')"/>
+<s:task b:action="assign" b:target="$lOccurrenceDay" b:select="s25_format_date($lEventStartDt, 'ddd')"/>
+<s:if b:test="not(string-length($tEvWiz/$tInbox/occurrences/occurrence[@event_start_dt = $lEventStartDt]/@state) = 0)">
+<s:task b:action="assign" b:target="$lOccurrenceState" b:select="string($tEvWiz/$tInbox/occurrences/occurrence[@event_start_dt = $lEventStartDt]/@state)"/>
+</s:if>
+<s:task b:action="assign" b:target="$lOccurrenceClass" b:select="concat('repeat_occurrence_', $lOccurrenceDay)"/>
+<s:task b:test="$lOccurrenceState = '99'" b:action="assign" b:target="$lOccurrenceClass" b:select="concat($lOccurrenceClass, ' repeat_occurrence_cancelled')"/>
+<s:task b:action="assign" b:target="$lOccurrenceComment" b:select="string($tEvWiz/$tInbox/occurrences/occurrence[@event_start_dt = $lEventStartDt]/text())"/>
+<s:if b:test="not(string($lInitStartDt) = substring($tEvWiz/$tInitStartDt,1,19)) or not(string($lInitEndDt) = substring($tEvWiz/$tInitEndDt,1,19))">
+<s:task b:action="assign" b:target="$lOccurrenceComment" b:select="string($tEvWiz/$tInbox/occurrences/occurrence[$lPosition]/text())"/>
+</s:if>
+<s:render b:destination="$tOccurrenceList" b:mode="aslastchild">
+<tr c:purpose="occurrence" c:date="{$lOccurrence}" c:event_start_dt="{$lEventStartDt}" c:sortvalue="{$lOccurrenceSortValue}" c:state="{$lOccurrenceState}" class="{$lOccurrenceClass}">
+<td class="date"><s:textnode b:label="{$lOccurrence}"/></td>
+<td class="comments"><textarea b:behavior="OccurrenceComments"><s:textnode b:label="{$lOccurrenceComment}"/></textarea></td>
+<td class="state"><span b:behavior="RenderOccurrenceState"/></td>
+</tr>
+</s:render>
+<s:task b:action="assign" b:target="$lPosition" b:select="$lPosition + 1"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:when>
+<s:otherwise>
+<s:render b:destination="$tOccurrenceList" b:mode="replacechildren">
+<tr c:purpose="message"><td colspan="4" class="message"><s:textnode b:label="No occurrences. Check your dates."/></td></tr>
+</s:render>
+</s:otherwise>
+</s:choose>
+<s:task b:action="assign" b:target="$tProfileDescription" b:scope="tag" b:select="string($lProfileDetail//r25:profile_description)"/>
+</s:if>
+<s:if b:test="$lProfileCode = ''">
+<s:render b:destination="$tOccurrenceList" b:mode="replacechildren">
+<tr c:purpose="message"><td colspan="4" class="message"><s:textnode b:label="Please indicate when the event stops repeating."/></td></tr>
+</s:render>
+</s:if>
+<s:task b:action="assign" b:target="$tProfileCode" b:scope="tag" b:select="string($lProfileCode)"/>
+</s:if>
+<s:if b:test="$tRepeatType = 'adhoc'">
+<s:variable b:name="lEventStartDate" b:select="replace(substring-before($lEventStartDateTime, 'T'), '-', '')"/>
+<s:task b:action="remove" b:target="$tAdHocDataIsland/tr[number(@c:sortvalue) le number($lEventStartDate)]"/>
+<s:variable b:name="lOccurrenceSortValue" b:scope="local" b:select="s25_format_date($lEventStartDateTime, 'yyyyMMdd')"/>
+<s:variable b:name="lOccurrence" b:scope="local" b:select="s25_format_date($lEventStartDateTime, id('Prefs')/$tDatePattern)"/>
+<s:variable b:name="lOccurrenceDay" b:scope="local" b:select="s25_format_date($lEventStartDateTime, 'ddd')"/>
+<s:variable b:name="lOccurrenceState" b:select="string($tEvWiz/$tInbox/occurrences/occurrence[substring(@event_start_dt,1,19) = $lEventStartDateTime]/@state)"/>
+<s:task b:test="string-length($lOccurrenceState) = 0" b:action="assign" b:target="$lOccurrenceState" b:select="'1'"/>
+<s:variable b:name="lOccurrenceClass" b:select="concat('repeat_occurrence_', $lOccurrenceDay)"/>
+<s:task b:test="$lOccurrenceState = '99'" b:action="assign" b:target="$lOccurrenceClass" b:select="concat($lOccurrenceClass, ' repeat_occurrence_cancelled')"/>
+<s:variable b:name="lOccurrenceComment" b:select="string($tEvWiz/$tInbox/occurrences/occurrence[substring(@event_start_dt,1,19) = $lEventStartDateTime]/text())"/>
+<s:render b:destination="$tOccurrenceList" b:mode="replacechildren">
+<tr c:purpose="occurrence" c:date="{$lOccurrence}" c:event_start_dt="{$lEventStartDateTime}" c:sortvalue="{$lOccurrenceSortValue}" c:state="{$lOccurrenceState}" class="{$lOccurrenceClass}">
+<td class="date"><s:textnode b:label="{$lOccurrence}"/></td>
+<td class="comments"><textarea b:behavior="OccurrenceComments"><s:textnode b:label="{$lOccurrenceComment}"/></textarea></td>
+<td class="state"><span b:behavior="RenderOccurrenceState"/></td>
+<td class="remove"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close_small_disabled.gif" style="cursor:default"/></td>
+</tr>
+</s:render>
+<s:task b:action="copy" b:source="$tAdHocDataIsland/tr" b:destination="$tOccurrenceList" b:mode="aslastchild"/>
+<s:task b:action="sort" b:target="$tOccurrenceList" b:source="$tOccurrenceList/tr" b:attribute="c:sortvalue" b:reverse="{$antiReverse}"/>
+<s:task b:action="assign" b:target="$antiReverse" b:scope="tag" b:select="not($antiReverse)"/>
+</s:if>
+<s:if b:test="$tRepeatType = 'none'">
+<s:variable b:name="lOccurrenceSortValue" b:scope="local" b:select="s25_format_date($lEventStartDateTime, 'yyyyMMdd')"/>
+<s:variable b:name="lOccurrence" b:scope="local" b:select="s25_format_date($lEventStartDateTime, id('Prefs')/$tDatePattern)"/> 
+<s:variable b:name="lOccurrenceDay" b:scope="local" b:select="s25_format_date($lEventStartDateTime, 'ddd')"/>
+<s:variable b:name="lOccurrenceState" b:select="1"/>
+<s:if b:test="not(string-length($tEvWiz/$tInbox/occurrences/occurrence[substring(@event_start_dt,1,19) = $lEventStartDateTime]/@state) = 0)">
+<s:task b:action="assign" b:target="$lOccurrenceState" b:select="string($tEvWiz/$tInbox/occurrences/occurrence[substring(@event_start_dt,1,19) = $lEventStartDateTime]/@state)"/>
+</s:if>
+<s:variable b:name="lOccurrenceClass" b:select="concat('repeat_occurrence_', $lOccurrenceDay)"/>
+<s:task b:test="$lOccurrenceState = '99'" b:action="assign" b:target="$lOccurrenceClass" b:select="concat($lOccurrenceClass, ' repeat_occurrence_cancelled')"/>
+<s:variable b:name="lOccurrenceComment" b:select="string($tEvWiz/$tInbox/occurrences/occurrence[substring(@event_start_dt,1,19) = $lEventStartDateTime]/text())"/>
+<s:if b:test="$lStartDateChanged">
+<s:task b:action="assign" b:target="lOccurrenceComment" b:select="string($tEvWiz/$tInbox/occurrences/occurrence[1]/text())"/>
+</s:if>
+<s:render b:destination="$tOccurrenceList" b:mode="replacechildren">
+<tr c:purpose="occurrence" c:date="{$lOccurrence}" c:event_start_dt="{$lEventStartDateTime}" c:sortvalue="{$lOccurrenceSortValue}" c:state="{$lOccurrenceState}" class="{$lOccurrenceClass}">
+<td class="date"><s:textnode b:label="{$lOccurrence}"/></td>
+<td class="comments"><textarea b:behavior="OccurrenceComments"><s:textnode b:label="{$lOccurrenceComment}"/></textarea></td>
+<td class="state"><span b:behavior="RenderOccurrenceState"/></td>
+</tr>
+</s:render>
+</s:if>
+<s:task b:action="trigger" b:event="BroadcastChange"/>
+<s:setatt c:init="1"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RepeatInput">
+<s:initatt onchange="bpc.trigger('Change', this)"/>
+
+<s:event b:on="Change">
+<s:super/>
+<s:if b:test="@c:active = '1'">
+<s:task b:action="trigger" b:event="UpdateOccurrenceList" b:target="ancestor::s25:rsrv_wiz_repeats[1]"/>
+</s:if>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RepeatRadio">
+<s:initatt onclick="bpc.trigger('Change', this)"/>
+<s:event b:on="Change">
+<s:task b:action="select" b:target="."/>
+<s:if b:test="@c:active = '1'">
+<s:task b:action="trigger" b:event="UpdateOccurrenceList" b:target="ancestor::s25:rsrv_wiz_repeats[1]"/>
+</s:if>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RepeatDatepicker" b:behavior="RepeatInput">
+<s:event b:on="change">
+<s:task b:action="select" b:target="../input[@type='radio']"/>
+<s:super/>
+<s:task b:action="trigger" b:event="Change"/>
+</s:event>
+<s:event b:on="set">
+<s:task b:action="select" b:target="../input[@type='radio']"/>
+<s:super/>
+<s:task b:action="trigger" b:event="Change"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="MonthlyRepeatByDay">
+<s:initatt c:purpose="monthly_repeat_by_day" class="repeat_by_day"/>
+<s:event b:on="construct">
+<s:render b:mode="replacechildren" b:destination=".">
+<span>Repeat </span>
+<select c:purpose="monthly_repeat_day" b:behavior="RepeatInput">
+<option value="1">1 day</option>
+<option value="2">2 days</option>
+<option value="3">3 days</option>
+<option value="4">4 days</option>
+<option value="5">5 days</option>
+<option value="6">6 days</option>
+<option value="7">7 days</option>
+<option value="8">8 days</option>
+<option value="9">9 days</option>
+<option value="10">10 days</option>
+<option value="11">11 days</option>
+<option value="12">12 days</option>
+<option value="13">13 days</option>
+<option value="14">14 days</option>
+<option value="15">15 days</option>
+<option value="16">16 days</option>
+<option value="17">17 days</option>
+<option value="18">18 days</option>
+<option value="19">19 days</option>
+<option value="20">20 days</option>
+<option value="21">21 days</option>
+<option value="22">22 days</option>
+<option value="23">23 days</option>
+<option value="24">24 days</option>
+<option value="25">25 days</option>
+<option value="26">26 days</option>
+<option value="27">27 days</option>
+<option value="28">28 days</option>
+<option value="29">29 days</option>
+<option value="30">30 days</option>
+<option value="31">31 days</option>
+</select>
+<span> from the </span>
+<select c:purpose="monthly_repeat_position" b:behavior="RepeatInput">
+<option value="+">Start of the Month</option>
+<option value="-">End of the Month</option>
+</select>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close.gif" b:tooltiptext="Remove Repeat Day">
+<s:event b:on="command">
+<s:with b:target="ancestor::div[@c:purpose='monthly_repeat_by_day'][1]">
+<s:setatt c:remove="true"/>
+</s:with>
+<s:task b:action="trigger" b:event="RemoveRepeat" b:target="ancestor::s25:rsrv_wiz_repeats[1]"/>
+</s:event>
+</img>
+</s:render>
+<s:if b:test="exists(@c:day)">
+<s:variable b:name="lDay" b:select="string(@c:day)"/>
+<s:task b:action="select" b:target="select[@c:purpose='monthly_repeat_day']/option[@value = $lDay]"/>
+</s:if>
+<s:if b:test="exists(@c:position)">
+<s:variable b:name="lPosition" b:select="string(@c:position)"/>
+<s:task b:action="select" b:target="select[@c:purpose='monthly_repeat_position']/option[@value = $lPosition]"/>
+</s:if>
+<s:with b:target="./select">
+<s:setatt c:active="1"/>
+</s:with>
+<s:task b:action="trigger" b:event="UpdateOccurrenceList" b:target="ancestor::s25:rsrv_wiz_repeats[1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="MonthlyRepeatByPosition">
+<s:initatt c:purpose="monthly_repeat_by_position" class="repeat_by_position"/>
+<s:event b:on="construct">
+<s:render b:mode="replacechildren" b:destination=".">
+<span>Repeat on the </span>
+<select c:purpose="monthly_repeat_position" b:behavior="RepeatInput">
+<option value="1+">First</option>
+<option value="2+">Second</option>
+<option value="3+">Third</option>
+<option value="4+">Fourth</option>
+<option value="5+">Fifth</option>
+<option value="1-">Last</option>
+<option value="2-">Second-To-Last</option>
+<option value="3-">Third-To-Last</option>
+<option value="4-">Fourth-To-Last</option>
+<option value="5-">Fifth-To-Last</option>
+</select>
+<span> </span>
+<select c:purpose="monthly_repeat_day" b:behavior="RepeatInput">
+<option value="MO">Monday</option>
+<option value="TU">Tuesday</option>
+<option value="WE">Wednesday</option>
+<option value="TH">Thursday</option>
+<option value="FR">Friday</option>
+<option value="SA">Saturday</option>
+<option value="SU">Sunday</option>
+</select>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close.gif" b:tooltiptext="Remove Repeat Position">
+<s:event b:on="command">
+<s:with b:target="ancestor::div[@c:purpose='monthly_repeat_by_position'][1]">
+<s:setatt c:remove="true"/>
+</s:with>
+<s:task b:action="trigger" b:event="RemoveRepeat" b:target="ancestor::s25:rsrv_wiz_repeats[1]"/>
+</s:event>
+</img>
+</s:render>
+<s:if b:test="exists(@c:day)">
+<s:variable b:name="lDay" b:select="string(@c:day)"/>
+<s:task b:action="select" b:target="select[@c:purpose='monthly_repeat_day']/option[@value = $lDay]"/>
+</s:if>
+<s:if b:test="exists(@c:position)">
+<s:variable b:name="lPosition" b:select="string(@c:position)"/>
+<s:task b:action="select" b:target="select[@c:purpose='monthly_repeat_position']/option[@value = $lPosition]"/>
+</s:if>
+<s:with b:target="./select">
+<s:setatt c:active="1"/>
+</s:with>
+<s:task b:action="trigger" b:event="UpdateOccurrenceList" b:target="ancestor::s25:rsrv_wiz_repeats[1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RemoveAdHocDate">
+<s:event b:on="click">
+<s:variable b:name="lSortValue" b:select="string(@c:sortvalue)"/>
+<s:with b:target="ancestor::s25:rsrv_wiz_repeats[1]">
+<s:task b:action="remove" b:target="$tAdHocDataIsland/tr[@c:sortvalue = $lSortValue]"/>
+<s:task b:action="remove" b:target="$tOccurrenceList/tr[@c:sortvalue = $lSortValue]"/>
+<s:if b:test="count($tOccurrenceList/tr) = 0">
+<s:render b:destination="$tOccurrenceList" b:mode="replacechildren">
+<tr c:purpose="message"><td colspan="4" class="message"><s:textnode b:label="No Occurrences Selected"/></td></tr>
+</s:render>
+</s:if>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="OccurrenceComments">
+<s:initatt onkeyup="bpc.trigger('Resize', this)" onchange="bpc.trigger('Resize', this)" placeholder="(none)"/>
+<s:event b:on="construct">
+<s:super/>
+<s:task b:action="trigger" b:event="Resize"/>
+<s:setatt c:init="1"/>
+</s:event>
+<s:event b:on="Resize">
+<s:script><![CDATA[
+
+_current.style.height = '18px';
+_current.style.height = (_current.scrollHeight + 4) + 'px';
+
+]]></s:script>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RenderOccurrenceState">
+<s:event b:on="construct">
+<s:render b:destination="." b:mode="replace">
+<select c:purpose="state" b:behavior="OccurrenceState">
+<option value="1" style="color:BLACK">Active</option>
+<option value="99" style="color:RED">Cancelled</option>
+</select>
+</s:render>
+</s:event>
+</s:behavior>
+<s:behavior b:name="OccurrenceState">
+<s:event b:on="construct">
+<s:variable b:name="lInitState" b:select="string(ancestor::tr/@c:state)"/>
+<s:task b:action="select" b:target="option[@value = $lInitState]"/>
+<s:setatt c:init="1"/>
+</s:event>
+<s:event b:on="change">
+<s:variable b:name="lOccurrenceState" b:select="string(@value)"/>
+<s:choose>
+<s:when b:test="$lOccurrenceState = '99'">
+<s:with b:target="ancestor::tr[1]">
+<s:task b:action="addclass" b:value="repeat_occurrence_cancelled"/>
+<s:setatt c:state="99"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="ancestor::tr[1]">
+<s:task b:action="removeclass" b:value="repeat_occurrence_cancelled"/>
+<s:setatt c:state="1"/>
+</s:with>
+</s:otherwise>
+</s:choose>
+<s:task b:test="@c:init = '1'" b:action="trigger" b:event="BroadcastChange" b:target="ancestor::s25:rsrv_wiz_repeats[1]"/>
+</s:event>
+</s:behavior>
+</div>

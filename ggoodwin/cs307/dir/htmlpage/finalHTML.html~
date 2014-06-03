@@ -1,0 +1,66 @@
+<!-- Gabrielle Goodwin
+        cs 307 final project
+        -->
+
+<HEAD>
+<TITLE>CS307 Final Project  Spring 2012</TITLE>
+</HEAD>
+<BODY BGCOLOR="WHITE">
+<CENTER>
+<H1>CS307 Final Project  Spring 2012</H1>
+
+ 
+
+  <IMG SRC="shrink.png">
+
+ 
+
+ 
+
+  <H4>By Gabrielle Goodwin</H4>
+
+<H2>A short space adventure</H2>
+
+</CENTER>
+
+<P align = "center" >For my project I created a space scene. <P align = "center">
+
+  <IMG SRC="satellite.png">
+
+ 
+<P>
+I created an animation that begins with a shuttle docking at a satellite.<P>
+
+  <IMG SRC="shuttle.png">
+
+<P align = "center">
+I then had an alien ship come and shrink the space ship.<P align = "center">
+
+  <IMG SRC="shrink.png">
+<P>
+The animation can be viewed below: <P>
+
+<embed src="animation.mp4"
+       pluginspage="http://quicktime.apple.com"
+       cache=true
+       height=532 width=512
+       controller=true
+       loop=false
+       autoplay=false>
+
+<center>
+
+<br>
+<br>
+<br>
+<br>
+
+<H6>What is David Tennant doing in my spaceship? He shouldn't be
+<A HREF="http://davidtennantinplacesheshouldntbe.tumblr.com/">there.</A>
+</H6>
+
+
+  <IMG SRC="david.png">
+
+</body>
+

@@ -1,0 +1,6 @@
+ 1:Total number of contributions: 1434
+ 2:Total number of contributions of 1 million or greater: 6
+ 3:Largest contribution: 5000000.0
+ 4:Total dollar amount of contributions: 39463219.39
+ 5:Percent of contributions over $100k (number/dollar): 7.67085076709 / 86.3498307962
+ 6:Percentage of contributions over $100k in MA (number/dollar): 8.88888888889 / 68.5140073082

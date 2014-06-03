@@ -1,0 +1,45 @@
+<!-- Gabe and Alex
+  Sets up the html page that includes the form to insert organizations.
+  -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML lang="en">
+<body bgcolor = CCCCFH>
+<head>
+    <title>New Organization</title>
+</head>
+
+
+
+<h1>Join our list of organizations</h1>
+
+<p> This form allows you to create a new organization listing.</p>
+
+<form method=post action="/~ggoodwin/cgi-bin/orgCGI.cgi">
+
+  <fieldset>
+    <legend>Organization info</legend>
+    <table>
+      <tr><td><label for="orgid" accesskey="i">(i) Organization id:/NM:</label></td><td><input type="text" name="orgid" id="orgid"></td></tr>
+
+      <tr><td><label for="orgname" accesskey="n">(n) Org Name (optional):</label></td><td><input type="text" name="orgname" id="orgname"></td></tr>
+
+      <tr><td><label for="address" accesskey="d">(d) Address:</label></td><td><textarea name="address" id="address" rows="3" cols="20"></textarea></td></tr>
+
+      <tr><td><label for="zip" accesskey="b">(b) Zip:</label></td><td><input type="text" name="zip" id="zip"></td></tr>
+
+      <tr><td><label for="url" accesskey="c">(c) Org URL:</label></td><td><input type="text" name="url" id="url"></td></tr>
+
+      <tr><td><label for="orgphone" accesskey="e">(e) Phone Number:</label></td><td><input type="text" name="orgphone" id="orgphone"></td></tr>
+
+      <tr><td><label for="orgbio" accesskey="d">(d) Bio:</label></td><td><textarea name="orgbio" id="orgbio" rows="5" cols="50"></textarea></td></tr>
+
+    </table>
+  </fieldset>    
+
+  <p>
+    <input type='button' value='new form' onClick="window.location='orgInsert.html'">
+    <input type='submit' name='submit' value='Add Organization!'>
+</form>
+
+<body>
+</html>

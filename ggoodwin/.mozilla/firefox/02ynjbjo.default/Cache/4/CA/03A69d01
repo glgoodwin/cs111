@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" xmlns:s25="http://www.collegenet.com/s25" xmlns:bx="http://www.collegenet.com/bx" style="display:none;">
+<s:htmlstructure b:name="s25:rsrv_wiz_type" b:behavior="S25RsrvWizEditor::Type">
+<div><s:innercontent/></div>
+</s:htmlstructure>
+<s:behavior b:name="S25RsrvWizEditor::Type" b:behavior="S25RsrvWizEditor">
+<s:initatt c:purpose="type" c:obj_type_id="7"/>
+<s:event b:on="s25-focus">
+</s:event>
+<s:event b:on="Paint">
+
+<s:variable b:name="tEventTypeMasterListFLS" b:scope="tag" b:select="id('FLS_ML_EVENT_TYPES')"/>
+<s:variable b:name="tAllowedEventTypes" b:scope="tag" b:select="''"/>
+<s:if b:test="string(id('Pref_config_BPE_event_get')) = 'configurations'">
+<s:variable b:name="lSecGroupsConfig" b:select=""/>
+<s:task b:action="string2xml" b:variable="$lSecGroupsConfig" b:source="id('Pref_25L_rsrvwiz_secgroups')"/>
+<s:variable b:name="lSecurityGroup" b:select="tokenize(string(id('WSSessionMgr')/@c:security-group), ',')[1]"/>
+<s:task b:action="assign" b:target="$tAllowedEventTypes" b:scope="tag" b:select="string($lSecGroupsConfig//security_group[@group_id = $lSecurityGroup]/@allowed_event_types)"/>
+<s:task b:action="assign" b:target="$tAllowedEventTypes" b:scope="tag" b:select="replace($tAllowedEventTypes,' ',',')"/>
+</s:if>
+<s:variable b:name="lGroupTypes" b:scope="local" b:select="$tEvWiz/$tPrefXml//editor[@name='type']/type_list"/>
+<s:task b:action="string2xml" b:variable="$lGroupTypes"/>
+<s:variable b:name="tGroupTypes" b:scope="tag" b:select="string-join($lGroupTypes//type/@id, ',')"/>
+<s:variable b:name="tContentOptions" b:scope="tag" b:select=""/>
+<s:variable b:name="tCurrentObject" b:scope="tag" b:select=""/>
+<s:variable b:name="tFavText" b:scope="tag" b:select="'Your Starred Event Types'"/>
+<s:if b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$tFavText" b:scope="tag" b:select="'Suggested Event Types'"/>
+</s:if>
+<s:variable b:name="tFavIconContainer" b:scope="tag" b:select=""/>
+<s:variable b:name="tRegistrationWarning" b:scope="tag" b:select=""/>
+<s:variable b:name="lPrefNames">
+<prefs>
+<name>config_ev_types</name>
+<name>ECommerceURL</name>
+</prefs>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lPrefNames"/>
+<s:for-each b:target="$lPrefNames/prefs/name">
+<s:if b:test="exists(id(concat('Pref_',string($_target))))">
+<s:task b:action="remove" b:target="$_target"/>
+</s:if>
+</s:for-each>
+<s:if b:test="count($lPrefNames/prefs/name) gt 0">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=', string-join($lPrefNames/prefs/name, '+'))"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild"/>
+</s:if>			
+<s:variable b:name="tLastSelectedTypeID" b:scope="tag" b:select="''"/>
+<s:task b:test="$tEvWiz/@c:mode = 'edit' or $tEvWiz/@c:mode = 'clone'" b:action="assign" b:target="$tLastSelectedTypeID" b:scope="tag" b:select="string($tEvWiz/$tEvent/r25:event_type_id/text())"/>
+</s:event>
+<s:event b:on="PaintTypeEditor">
+<s:variable b:name="tObjType" b:scope="tag">eventtype</s:variable>
+<s:variable b:name="lThis" b:scope="local">ancestor::*[@c:editor='true'][1]</s:variable>
+<s:render b:destination="$tContent" b:mode="replacechildren">
+<div class="contentHeader">
+<span class="tooltipMarker">
+<bx:tooltip class="bxTooltipNoIcon" b:delay="5"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="iconHelp"/>
+</span>
+<div c:id="title"><s:textnode b:label="{@c:title}"/></div>
+</div>
+<table align="center" class="contentOptions" cellspacing="0">
+<tr valign="top">
+<td class="contentOptionSelect">
+<div align="center"><div class="currentSelectionHeader">Select an Event Type...</div></div>
+<div c:id="indices" class="RsrvWiz_CriteriaSelectTierOne">
+<div class="RsrvWiz_CriteriaSelectHeader">
+<div class="icon-type">Find by...</div>
+</div>
+<div c:id="options" class="RsrvWiz_CriteriaSelectBody">
+<div b:behavior="TypeIndexOption" c:index_id="fav"> 
+<div class="icon-favorite"><s:textnode b:label="{$tFavText}"/></div>
+</div>
+<div b:behavior="TypeIndexOption" c:index_id="all">
+<div>All Event Types</div>
+</div>
+</div>
+</div>
+<div c:id="types" class="RsrvWiz_CriteriaSelectTierThree">
+<div class="RsrvWiz_ObjectSelectHeader">
+<div class="icon-type">Loading...</div>
+</div>
+<div c:id="options" class="RsrvWiz_ObjectSelectBody">
+<div b:behavior="TypeOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</div>
+</div>
+</td>
+<td class="contentSelections">
+<div align="center"><div class="currentSelectionHeader">Selected Event Type</div></div>
+<div c:id="txt" class="currentSelection">
+<div class="currentSelection_Icons">
+<span c:purpose="FavToggle">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_NotFavorite" style="display:none;" c:purpose="NotFavorite" b:behavior="AddFav" b:tooltiptext="Add this to Your Starred Event Types"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_IsFavorite" style="display:none;" c:purpose="Favorite" b:behavior="RemoveFav" b:tooltiptext="Remove this from Your Starred Event Types"/>
+</span>
+<input type="image" c:purpose="remove" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close.gif" style="display:none" b:action="trigger" b:event="TypeRemove" b:target="{$lThis}"/>
+</div>
+<div class="currentSelectionBlank" c:id="currentEvType" c:obj_type="{$tObjType}" c:obj_id="" c:obj_name="">none selected</div>
+</div>
+<div c:id="ecommerce_warning" style="font-size:90%; color:#444; padding:3px 0; display:none;">
+<b>Note:</b> 
+E-Commerce is not enabled for this Event Type.
+</div>
+<br/>
+<div c:id="reset_warning" class="note" style="margin-top:100px; display:none">
+<b>Note:</b> Changing the Event Type resets the options available for:					
+<ul style="margin:5px 2px 2px; padding-left:25px;">
+<li c:id="ev_custom_attr" style="display:none"><s:textnode b:label="{string($tEvWiz/$tDataXml/r25:events/wizard/threads//editor[@name='ev_custom_attr']/@crumb_title)}"/></li>
+<li c:id="ev_category" style="display:none"><s:textnode b:label="{string($tEvWiz/$tDataXml/r25:events/wizard/threads//editor[@name='ev_category']/@crumb_title)}"/></li>
+<li c:id="contact" style="display:none"><s:textnode b:label="{string($tEvWiz/$tDataXml/r25:events/wizard/threads//editor[@name='contact']/@crumb_title)}"/></li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</s:render>
+<s:task b:action="assign" b:target="$tContentOptions" b:scope="tag" b:select="$tContent/table/tr/td"/>
+<s:variable b:name="tIndices" b:scope="tag" b:select="$tContentOptions/div[@c:id='indices']"/>
+<s:variable b:name="tLastIndex" b:scope="tag" b:select="'-1'"/>
+<s:variable b:name="tTypes" b:scope="tag" b:select="$tContentOptions/div[@c:id='types']"/>
+<s:task b:action="assign" b:target="$tFavIconContainer" b:scope="tag" b:select="$tContentOptions/div[@c:id='txt']//span[@c:purpose='FavToggle']"/>
+<s:task b:action="assign" b:target="$tCurrentObject" b:scope="tag" b:select="$tContentOptions/div[@c:id='txt']/div[@c:id='currentEvType']"/>
+<s:task b:action="assign" b:target="$tRegistrationWarning" b:scope="tag" b:select="$tContentOptions/div[@c:id='ecommerce_warning']"/>
+<s:variable b:name="tResetWarning" b:scope="tag" b:select="$tContentOptions/div[@c:id='reset_warning']"/>
+<s:with b:target="$tResetWarning//li">
+<s:if b:test="@c:id = $tEvWiz/$tPrefXml/wizard/threads/thread/card/editor/@name">
+<s:task b:action="show" b:target="."/>
+<s:task b:action="show" b:target="ancestor::div[@c:id='reset_warning']"/>
+</s:if>
+</s:with>
+<s:render b:destination="$tContent/div[1]/span[1]/bx:tooltip" b:mode="replacechildren"><div xmlns="">Choose the event type that is most appropriate for your event--from a list of Your Starred Event Types or from All Event Types.</div><div xmlns="">The Selected Event Type can be added to (or removed from) Your Starred Event Types by toggling its star icon.</div><div xmlns="">You cannot change the event type once the event is saved.</div></s:render>
+</s:event>
+<s:event b:on="PaintTypeText">
+<s:variable b:name="lEvTypeName" b:scope="local" b:select="$tEvWiz/$tEvent/r25:event_type_name/text()"/>
+<s:variable b:name="lEvTypeId" b:scope="local" b:select="$tEvWiz/$tEvent/r25:event_type_id/text()"/>
+<s:render b:destination="$tContent" b:mode="replacechildren">
+<div class="contentHeader">
+<div c:id="title"><s:textnode b:label="{@c:title}"/></div>
+</div>
+<table align="center" class="contentOptions" cellspacing="0">
+<tr valign="top">
+<td class="contentOptionSelect">
+<div align="center"><div class="currentSelectionHeader">Select an Event Type...</div></div>
+<div align="center" style="margin:25px 0 15px"><i>You cannot change the event type.</i></div>
+</td>
+<td class="contentSelections">
+<div align="center"><div class="currentSelectionHeader">Selected Event Type</div></div>
+<div c:id="txt" class="currentSelection">
+<div class="currentSelection_Icons">
+<span c:purpose="FavToggle">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_NotFavorite" style="display:none;" c:purpose="NotFavorite" b:behavior="AddFav" b:tooltiptext="Add this to Your Starred Event Types"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_IsFavorite" style="display:none;" c:purpose="Favorite" b:behavior="RemoveFav" b:tooltiptext="Remove this from Your Starred Event Types"/>
+</span>
+</div>
+<div class="currentSelectionValue icon-type" c:id="currentEvType" c:obj_type="event_type" c:obj_id="{$lEvTypeId}" c:obj_name="{$lEvTypeName}"><s:textnode b:label="{$lEvTypeName}"/></div>
+</div>
+</td>
+</tr>
+</table>
+</s:render>
+<s:task b:action="assign" b:target="$tCurrentObject" b:scope="tag" b:select="$tContent/table/tr/td/div[@c:id='txt']/div[@c:id='currentEvType']"/>
+</s:event>
+<s:event b:on="Reset">
+<s:variable b:name="lNoEdit" b:scope="local" b:select=""/>
+<s:variable b:name="lNoEditXpath" b:scope="local" b:select=""/>
+<s:variable b:name="lNoEditContent" b:scope="local" b:select=""/>
+<s:if b:test="contains($tEvWiz/$tEvent/r25:event_type_name/@no_edit,'EvXML')">
+<s:task b:action="assign" b:target="$lNoEditContent" b:scope="local" b:select="string($tEvWiz/$tEvent/r25:event_type_name/@no_edit)"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tEvent/r25:event_type_id/@no_edit,'EvXML')">
+<s:task b:action="assign" b:target="$lNoEditContent" b:scope="local" b:select="string($tEvWiz/$tEvent/r25:event_type_id/@no_edit)"/>
+</s:if>
+<s:task b:action="assign" b:target="$lNoEditXpath" b:select="replace($lNoEditContent,'EvXML','$tEvWiz/$tDataXml/r25:events/r25:event')"/>
+<s:task b:test="xpath($lNoEditXpath)" b:action="assign" b:target="$lNoEdit" b:select="'T'"/>
+<s:if b:test="$tEvWiz/$tEvent/r25:event_type_id/@no_edit = 'T'  or $tEvWiz/$tEvent/r25:event_type_name/@no_edit = 'T'  or string(@c:no_edit) = 'true'">
+<s:task b:action="assign" b:target="$lNoEdit" b:select="'T'"/>
+</s:if>
+<s:variable b:name="lEvState" b:scope="local" b:select="$tEvWiz/$tEvent/r25:state_name/text()"/>
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode = 'reserve' or $tEvWiz/@c:mode = 'clone' or string($lEvState) = 'Draft'">
+<s:choose>
+<s:when b:test="$lNoEdit = 'T'">
+<s:task b:action="assign" b:target="$tLastSelectedTypeID" b:scope="tag" b:select="string($tEvWiz/$tEvent/r25:event_type_id/text())"/>
+<s:task b:action="trigger" b:event="PaintTypeText" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:sequential>
+<s:task b:action="trigger" b:event="PaintTypeEditor" b:target="."/>
+<s:variable b:name="lFavCountUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'evtype.xml', '?node_type=E', '&amp;favorite=T', '&amp;scope=normal', '&amp;type_list=',$tGroupTypes, '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/rsrv_evtypes_favcount.xsl')"/>
+<s:if b:test="not($tEventTypeMasterListFLS = 'F' or $tEventTypeMasterListFLS = 'C')">
+<s:variable b:name="lPrefTypeList" b:scope="local" b:select="id('Pref_config_ev_types')"/>					
+<s:task b:action="assign" b:target="$lFavCountUrl" b:select="concat($lFavCountUrl,'&amp;pref_types=',$lPrefTypeList)"/>
+</s:if>
+<s:if b:test="not(string-length($tAllowedEventTypes) = 0)">
+<s:task b:action="assign" b:target="$lFavCountUrl" b:select="concat($lFavCountUrl,'&amp;allowed_event_types=',$tAllowedEventTypes)"/>
+</s:if>
+<s:variable b:name="lFavCount" b:select=""/>
+<s:task b:action="load" b:url="{$lFavCountUrl}" b:method="GET" b:destination="$lFavCount" b:mode="replacechildren">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lFavCount"/>
+<s:choose>
+<s:when b:test="count($lFavCount//type) = 0">
+<s:with b:target="$tIndices/div[@c:id='options']/div[@c:index_id='all']">
+<s:setatt b:state="selected"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="$tIndices/div[@c:id='options']/div[@c:index_id='fav']">
+<s:setatt b:state="selected"/>
+</s:with>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="TypeIndexChange" b:target="."/>
+<s:task b:action="trigger" b:event="PreLoadType" b:target="."/>
+</s:sequential>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$tLastSelectedTypeID" b:scope="tag" b:select="string($tEvWiz/$tEvent/r25:event_type_id/text())"/>
+<s:task b:action="trigger" b:event="PaintTypeText" b:target="."/>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lInstanceMessage" b:scope="local" b:select="string($tEvWiz/$tEvent/r25:event_type_id/@message)"/>
+<s:task b:test="string-length($lInstanceMessage) = 0" b:action="assign" b:target="$lInstanceMessage" b:select="$tEvWiz/$tProfile/r25:event_type_name/@message"/>
+<s:if b:test="string-length($lInstanceMessage) = 0">
+<s:task b:action="assign" b:target="$lInstanceMessage" b:select="string(@c:message)"/>
+</s:if>			
+<s:if b:test="not(string-length($lInstanceMessage) = 0)">
+<s:render b:destination="$tContent//table[@class='contentOptions']" b:mode="asfirstchild">
+<tr><td colspan="3" class="contentMessage"><s:textnode b:label="{$lInstanceMessage}"/></td></tr>
+</s:render>
+</s:if>
+<s:variable b:name="lEditorSupplementaryText" b:select="ancestor::div[@b:behavior='S25RsrvWizCard']/$tEditor[@name='type']/info"/>
+<s:task b:action="xml2string" b:variable="$lEditorSupplementaryText"/>
+<s:if b:test="not(string-length($lEditorSupplementaryText) = 0)">
+<s:script><![CDATA[
+
+var lText = _vars['lEditorSupplementaryText'][0];
+lText = lText.replace(/&lt;/g, '<');
+lText = lText.replace(/&gt;/g, '>');
+var destination = "div[@c:id='container']/div[@c:id='content']//table[@class='contentOptions']";
+bpc.render('<tr><td colspan="3" class="contentMessage">' + lText + '</td></tr>', 'asfirstchild', destination, _current);
+
+]]></s:script>
+</s:if>
+</s:event>
+<s:event b:on="select">
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode='edit' and not($tEvWiz/$tEvent)">
+</s:when>
+<s:otherwise>
+<s:super/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveRsrvWizard">
+<s:variable b:name="lEvent" b:scope="local" b:select="$tEvWiz/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent='LoadSuccess'">
+<s:task b:test="not(@c:init = '1')" b:action="trigger" b:event="select"/>
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="TypeIndexChange">
+<s:variable b:name="lSelOpt" b:select="$tIndices/div[@c:id='options']/div[@b:state='selected']"/>
+<s:if b:test="$lSelOpt/@c:index_id ne '-1' and $lSelOpt/@c:index_id ne $tLastIndex">
+<s:with b:target="$tTypes">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+<s:fxstyle b:time="10"/>
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+Choose from...
+</s:render>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="TypeOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+<s:task b:action="show"/>
+</s:with>
+<s:choose>
+<s:when b:test="$lSelOpt/@c:index_id = 'fav'">
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'evtype.xml', '?node_type=E', '&amp;favorite=T', '&amp;scope=normal', '&amp;type_list=',$tGroupTypes, '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/rsrv_evtypes.xsl')"/>
+<s:if b:test="not($tEventTypeMasterListFLS = 'F' or $tEventTypeMasterListFLS = 'C')">
+<s:variable b:name="lPrefTypeList" b:scope="local" b:select="id('Pref_config_ev_types')"/>					
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;pref_types=',$lPrefTypeList)"/>
+</s:if>
+<s:if b:test="not(string-length($tAllowedEventTypes) = 0)">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;allowed_event_types=',$tAllowedEventTypes)"/>
+</s:if>
+<s:task b:test="id('WSSessionMgr')/@c:user-type = 'web'" b:action="assign" b:target="$lUrl" b:select="concat($lUrl, '&amp;favLabel=Suggested')"/>
+<s:task b:action="load" b:url="{$lUrl}" b:method="GET" b:destination="$tTypes/div[@c:id='options']" b:mode="replacechildren" b:showloading="true"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'evtype.xml', '?node_type=E', '&amp;scope=normal', '&amp;type_list=',$tGroupTypes, '&amp;cache', '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/rsrv_evtypes.xsl')"/>					 
+<s:if b:test="not($tEventTypeMasterListFLS = 'F' or $tEventTypeMasterListFLS = 'C')">
+<s:variable b:name="lPrefTypeList" b:scope="local" b:select="id('Pref_config_ev_types')"/>					
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;pref_types=',$lPrefTypeList)"/>
+</s:if>
+<s:if b:test="not(string-length($tAllowedEventTypes) = 0)">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;allowed_event_types=',$tAllowedEventTypes)"/>
+</s:if>
+<s:task b:action="load" b:url="{$lUrl}" b:method="GET" b:destination="$tTypes/div[@c:id='options']" b:mode="replacechildren" b:showloading="true"/>
+<s:task b:action="remove" b:target="$tTypes/div[@c:id='options']/div[@c:obj_id = -1]"/>
+</s:otherwise>
+</s:choose>
+<s:with b:target="$tTypes/div[@c:id='options']/div[@c:obj_id = $tLastSelectedTypeID]">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:fxstyle b:time="10"/>
+<s:with b:target="$tTypes/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+<s:task b:action="assign" b:target="$tLastIndex" b:scope="tag" b:select="string($lSelOpt/@c:index_id)"/>
+</s:if>
+<s:setatt c:init="1"/>		
+</s:event>
+<s:event b:on="PreLoadType">
+<s:variable b:name="lTypeId" b:scope="local" b:select="string($tEvWiz/$tEvent/r25:event_type_id/text())"/>
+<s:variable b:name="lTypeName" b:scope="local" b:select="string($tEvWiz/$tEvent/r25:event_type_name/text())"/>
+<s:variable b:name="lEvTypeFavStatus" b:scope="local" b:select="'NotFavorite'"/>
+<s:if b:test="not(string-length($lTypeId)=0) and not(string-length($lTypeName)=0) and not($lTypeId = '-1')">
+<s:task b:action="assign" b:target="$tLastSelectedTypeID" b:scope="tag" b:select="''"/>
+<s:task b:action="trigger" b:event="TypeSelect" b:target="."/>
+</s:if>
+<s:task b:action="assign" b:target="$tLastSelectedTypeID" b:scope="tag" b:select="$lTypeId"/>
+</s:event>
+<s:event b:on="Validate">
+<s:setatt c:valid="true" c:error=""/>
+<s:if b:test="@c:required='true' and string-length($tCurrentObject/@c:obj_id)=0">
+<s:setatt c:valid="false" c:error="Event must have a type."/>
+</s:if>
+</s:event>
+<s:event b:on="TypeSelect">
+<s:if b:test="not(string-length($lTypeId)=0) and not(string-length($lTypeName)=0) and not(string($lTypeId) = $tLastSelectedTypeID)">
+<s:task b:action="hide" b:target="$tFavIconContainer"/>
+<s:with b:target="$tCurrentObject">
+<s:if b:test="contains(@class,'currentSelectionBlank')">
+<s:task b:action="removeclass" b:target="." b:value="currentSelectionBlank"/>
+<s:task b:action="addclass" b:target="." b:value="currentSelectionValue"/>
+<s:task b:action="addclass" b:target="." b:value="icon-type"/>
+</s:if>
+<s:task b:action="settext" b:target="." b:value="{$lTypeName}"/>
+<s:setatt c:obj_type="event_type" c:obj_id="{$lTypeId}" c:obj_name="{$lTypeName}"/>
+</s:with>
+<s:task b:action="show" b:target="$tContentOptions/div[@c:id='txt']//input[@c:purpose='remove']"/>
+<s:variable b:name="lEvType" b:scope="local" b:select="$lTypeId"/>
+<s:variable b:name="lTypeAtrbsUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'evtype.xml', '?type_id=',$lEvType, '&amp;scope=extended', '&amp;include=attributes+rules')"/>
+<s:variable b:name="tTypeAtrbs" b:scope="tag" b:select=""/>
+<s:task b:action="load" b:url="{$lTypeAtrbsUrl}" b:method="GET" b:destination="$tTypeAtrbs" b:mode="replace" b:showloading="false"/>
+<s:task b:action="string2xml" b:variable="$tTypeAtrbs"/>
+<s:if b:test="not(id('WSSessionMgr')/@c:user-type = 'web')">
+<s:variable b:name="lTypeFavStatus" b:select="'NotFavorite'"/>
+<s:if b:test="string($tTypeAtrbs/r25:event_types/r25:event_type/r25:favorite) = 'T'">
+<s:task b:action="assign" b:target="$lTypeFavStatus" b:select="'Favorite'"/>
+</s:if>
+<s:with b:target="$tFavIconContainer">
+<s:task b:action="hide" b:target="./img"/>
+<s:task b:action="show" b:target="./img[@c:purpose = $lTypeFavStatus]"/>
+<s:task b:action="show"/>
+</s:with>
+</s:if>
+<s:choose>
+<s:when b:test="count($tEvWiz/$tDataXml/r25:events/wizard/threads//editor[@name='ev_custom_attr']/required_attributes/attribute[@id = $tTypeAtrbs//r25:event_types/r25:event_type/r25:custom_attributes/r25:attribute_id]) &gt; 0">
+<s:with b:target="$tEvWiz/$tCrumbContainer//s25:rsrv_wiz_crumb/div/div[@c:name='ev_custom_attr']/div[@c:id='flag']">
+<s:setatt class="s25rsrvwiz-crumb-flag-required"/>
+</s:with>
+<s:with b:target="$tEvWiz/$tDeck/div/*[@c:editor='true'][@c:id='ev_custom_attr']">
+<s:setatt c:required="true"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="$tEvWiz/$tCrumbContainer//s25:rsrv_wiz_crumb/div/div[@c:name='ev_custom_attr']/div[@c:id='flag']">
+<s:setatt class="s25rsrvwiz-crumb-flag"/>
+</s:with>
+<s:with b:target="$tEvWiz/$tDeck/div/*[@c:editor='true'][@c:id='ev_custom_attr']">
+<s:task b:action="remove" b:target="@c:required"/>
+</s:with>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="UpdateRequiredStatus" b:target="$tEvWiz"/>
+<s:variable b:name="pEvent" b:scope="local" b:select="'TypeChange'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+<s:task b:action="assign" b:target="$tLastSelectedTypeID" b:scope="tag" b:select="string($lTypeId)"/>
+</s:if>
+</s:event>
+<s:event b:on="TypeRemove">
+<s:with b:target="$tCurrentObject">
+<s:task b:action="hide" b:target="$tContentOptions/div[@c:id='txt']//input[@c:purpose='remove']"/>
+<s:task b:action="hide" b:target="$tFavIconContainer"/>		
+<s:task b:action="removeclass" b:value="icon-type"/>
+<s:task b:action="removeclass" b:value="currentSelectionValue"/>
+<s:task b:action="addclass" b:value="currentSelectionBlank"/>
+<s:task b:action="remove" b:target="@c:obj_type"/>
+<s:task b:action="remove" b:target="@c:obj_id"/>
+<s:task b:action="remove" b:target="@c:obj_name"/>
+<s:task b:action="settext" b:target="." b:value="none selected"/>
+</s:with>
+<s:task b:action="hide" b:target="$tRegistrationWarning"/>
+<s:task b:action="trigger" b:event="Save"/>
+<s:with b:target="$tEvWiz/$tCrumbContainer//s25:rsrv_wiz_crumb/div/div[@c:name='ev_custom_attr']/div[@c:id='flag']">
+<s:setatt class="s25rsrvwiz-crumb-flag"/>
+</s:with>
+<s:with b:target="$tEvWiz/$tDeck/div/*[@c:editor='true'][@c:id='ev_custom_attr']">
+<s:task b:action="remove" b:target="@c:required"/>
+</s:with>
+<s:task b:action="trigger" b:event="UpdateRequiredStatus" b:target="$tEvWiz"/>
+<s:task b:action="assign" b:target="$tLastSelectedTypeID" b:select="''"/>
+<s:variable b:name="pEvent" b:scope="local" b:select="'TypeChange'"/>
+<s:task b:action="trigger" b:event="NotifyObservers" b:target="."/>
+</s:event>
+<s:event b:on="Save">
+<s:variable b:name="lObjId" b:scope="local" b:select="$tCurrentObject/@c:obj_id"/>
+<s:variable b:name="lObjName" b:scope="local" b:select="$tCurrentObject/@c:obj_name"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tEvent/r25:event_type_id" b:value="{$lObjId}"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tEvent/r25:event_type_name" b:value="{$lObjName}"/>
+<s:setatt c:crumb="{$lObjName}"/>	        
+</s:event>
+</s:behavior>
+<s:behavior b:name="TypeIndexOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:task b:action="trigger" b:event="TypeIndexChange" b:target="ancestor::*[@c:editor='true' or @c:purpose='attributeContainer'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="TypeOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:super/>
+<s:variable b:name="lTypeId" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:variable b:name="lTypeName" b:scope="local" b:select="string(@c:obj_name)"/>
+<s:with b:target="ancestor::*[@c:editor='true' or @c:purpose='attributeContainer'][1]">
+<s:task b:action="trigger" b:event="TypeSelect"/>
+</s:with>
+</s:event>
+</s:behavior>
+</div>

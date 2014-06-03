@@ -1,0 +1,10 @@
+let rec marbles m c = 
+  (* Replace this stub *)
+  [[0]]
+
+(* Put any auxiliary functions here. 
+   Use "and" rather than "let" to ensure the right scope 
+   for auxiliary functions. *)
+
+
+

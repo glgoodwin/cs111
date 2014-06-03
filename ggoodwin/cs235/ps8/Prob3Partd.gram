@@ -1,0 +1,11 @@
+{variables} 
+F,G,H
+{start variable}
+F
+{productions}
+F -> F10 | G1 | H0;
+G -> % | F110 | G01 | H011;
+H -> % | G100 | H001
+
+
+

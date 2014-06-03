@@ -1,0 +1,8 @@
+{variables}
+S
+
+{start variable}
+S
+
+{productions}
+S -> % | a | b | aaS | Saa | aSa | bbS | Sbb | bSb 

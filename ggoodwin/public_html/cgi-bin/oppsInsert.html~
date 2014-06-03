@@ -1,0 +1,37 @@
+<!-- Gabe and Alex
+  Sets up the html page that includes the form to insert opportunities.
+  Credit to sanderson hwk5 for code -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML lang="en">
+<body bgcolor = CCCCFF>
+<head>
+    <title>Create a new opportunity</title>
+</head>
+
+
+
+<h1>So you need volunteers?</h1>
+
+<p> This form allows you to create a new oppurtunity listing.</p>
+
+<form method=post action="/~ggoodwin/cgi-bin/oppsCGI.cgi">
+
+  <fieldset>
+    <legend>Oppurtunity info</legend>
+    <table>
+      <tr><td><label for="oppid" accesskey="i">(i) Oppurtunity id:/NM:</label></td><td><input type="text" name="oppid" id="oppid"></td></tr>
+      <tr><td><label for="orgid" accesskey="n">(n) Org id (optional):</label></td><td><input type="text" name="orgid" id="orgid"></td></tr>
+      <tr><td><label for="indvid" accesskey="b">(b) Individual id (optional):</label></td><td><input type="text" name="individ" id="individ"></td></tr>
+      <tr><td><label for="title" accesskey="b">(b) Opportunity title:</label></td><td><input type="text" name="title" id="title"></td></tr>
+      <tr><td><label for="oppdesc" accesskey="b">(b) Description of opportunity:</label></td><td><textarea name="oppdesc" id="oppdesc" rows="5" cols="50"></textarea></td></tr>
+      <tr><td><label for="dateadd" accesskey="b">(b) Today's date (YYYY-MM-DD):</label></td><td><input type="text" name="dateadd" id="dateadd"></td></tr>
+    </table>
+  </fieldset>    
+
+  <p>
+    <input type='button' value='new form' onClick="window.location='oppsInsert.html'">
+    <input type='submit' name='submit' value='Add Oppurtunity!'>
+</form>
+
+<body>
+</html>

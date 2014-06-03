@@ -1,0 +1,3 @@
+fun first s = String.sub (s,0)
+
+fun but First s = String.substring (s,1 (String size s) -1)

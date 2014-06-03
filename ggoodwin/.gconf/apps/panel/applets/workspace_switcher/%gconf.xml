@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<gconf>
+	<entry name="applet_iid" mtime="1329441514" type="string">
+		<stringvalue>WnckletFactory::WorkspaceSwitcherApplet</stringvalue>
+	</entry>
+</gconf>

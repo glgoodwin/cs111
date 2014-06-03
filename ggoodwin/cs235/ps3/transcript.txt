@@ -1,0 +1,44 @@
+Standard ML of New Jersey v110.68 [built: Thu Dec 11 21:18:30 2008]
+- use "ps3.sml";
+[opening ps3.sml]
+[autoloading]
+[library $SMLNJ-BASIS/basis.cm is stable]
+[autoloading done]
+val extend = fn : string * string list -> string list
+val caesar = fn : int * string -> string
+val twist = fn : char * string -> string
+val transform = fn : string -> string
+val first = fn : string -> string
+val butFirst = fn : string -> string
+val LTests =
+  ["","a","b","aa","ab","ba","bb","aaa","aab","aba","abb","baa",...]
+  : string list
+val transform2 = fn : string -> string
+val countabRec = fn : string -> int * int
+val countabIter = fn : string -> int * int
+val isInL1 = fn : string -> bool
+val genstringsHelp = fn : string list * string list -> string list
+val genStrings = fn : int * char list -> string list
+val it = () : unit
+-transform2 "Isn't your CS235 class at 9:50 inn SCI 104?"
+= ;
+val it = "isntyourcsclassatinnsci" : string
+- countabRec "abracadabra"
+= ;
+val it = (5,2) : int * int
+- countabIter "abracadabra";
+val it = (5,2) : int * int
+- isInL1 LTests
+= ;
+stdIn:7.1-7.14 Error: operator and operand don't agree [tycon mismatch]
+  operator domain: string
+  operand:         string list
+  in expression:
+    isInL1 LTests
+- List.partition isInL1 LTests;
+val it =
+  (["","b","aa","ab","ba","bb","aab","aba","baa","bbb"],
+   ["a","aaa","abb","bab","bba"]) : string list * string list
+- genStrings (2, [#"a", #"b"]);
+val it = ["aa","ab","ba","bb","a","b",""] : string list
+- 

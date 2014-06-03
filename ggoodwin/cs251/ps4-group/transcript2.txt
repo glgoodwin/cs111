@@ -1,0 +1,96 @@
+# Problem Set 4 - Group
+# Hanhong Lu & Goodwin Gabrielle
+
+# testTiny();;
+Reading ../text/tiny-unsorted.txt into list ...done
+List has 16 elements
+Creating test set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0. seconds)
+done
+List has 16 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0. seconds)
+Testing toList ...(time = 0. seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0. seconds) OK!
+Testing size (nonEmpty) ...(time = 0. seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0. seconds) OK!
+Testing intersection ...(time = 0. seconds) OK!
+Testing difference ...(time = 0. seconds) OK!
+Testing toSexp/fromSexp ...(time = 0. seconds) OK!
+Testing toString ...(time = 0. seconds) OK!
+- : unit = ()
+# testMedium();;
+Reading ../text/medium-unsorted.txt into list ...done
+List has 5525 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.00699900000001 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.004999 seconds)
+done
+List has 5525 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.010998 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.00999899999999 seconds)
+Testing toList ...(time = 0.005999 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 1.222814 seconds) OK!
+Testing size (nonEmpty) ...(time = 0.005999 seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0.005999 seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0. seconds) OK!
+Testing intersection ...(time = 0. seconds) OK!
+Testing difference ...(time = 0. seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.00799900000001 seconds) OK!
+Testing toString ...(time = 0.005999 seconds) OK!
+- : unit = ()
+# testLarge();;
+Reading ../text/large-unsorted.txt into list ...done
+List has 45425 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.056992 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.055991 seconds)
+done
+List has 45425 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.146978 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.145977 seconds)
+Testing toList ...(time = 0.06899 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 83.384323 seconds) OK!
+Testing size (nonEmpty) ...(time = 0.06999 seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0.06899 seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0. seconds) OK!
+Testing intersection ...(time = 0. seconds) OK!
+Testing difference ...(time = 0. seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.06399 seconds) OK!
+Testing toString ...(time = 0.084987 seconds) OK!
+- : unit = ()
+# testSmall();;
+Reading ../text/small-unsorted.txt into list ...done
+List has 476 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.001 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0. seconds)
+done
+List has 476 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.001 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.000999999999976 seconds)
+Testing toList ...(time = 0. seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.00899899999999 seconds) OK!
+Testing size (nonEmpty) ...(time = 0. seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0.001 seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0. seconds) OK!
+Testing intersection ...(time = 0. seconds) OK!
+Testing difference ...(time = 0. seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.000999999999976 seconds) OK!
+Testing toString ...(time = 0.001 seconds) OK!
+- : unit = ()
+# 

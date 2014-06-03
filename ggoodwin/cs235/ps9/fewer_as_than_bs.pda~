@@ -1,0 +1,18 @@
+{states}
+A,B,C,D
+
+{startstate}
+A
+
+{acceptingstates}
+D
+
+{transitions}
+A,%:%/<empty>->B
+B,b:%/b->B
+  b:a/%->B
+  a:%/a->B
+  a:b/%->B
+  %:b/%->C
+C,%:b/%->C
+  %,<empty>->%

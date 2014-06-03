@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:bx="http://www.backbase.com/bx" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" xmlns:s25="http://www.collegenet.com/s25" style="display:none;">
+<s:htmlstructure b:name="s25:subtabbar" b:behavior="s25-subtabbar">
+<span><s:innercontent/></span>
+</s:htmlstructure>
+<s:behavior b:name="s25-subtabbar">
+<s:event b:on="construct">
+
+<s:choose>
+<s:when b:test="@c:purpose = 'home'">
+<s:render b:destination="." b:mode="replacechildren">
+<table cellspacing="0" cellpadding="0" style="width:100%">
+<tr>
+<td> <span style="visibility:hidden">.</span></td>
+<td valign="bottom" align="right" width="250">
+<s25:tabbar class="subtabbar_tabs" id="HomeToggle">
+<s25:tabitem b:behavior="HomeSubtabbarTab" c:purpose="home_my25live"><bx:tooltip><div>Make the Dashboard your view preference for the Home tab.<a href="javascript:void(0)" b:help="subtab_home_dashboard" b:behavior="DirectHelpLink">More info?</a></div></bx:tooltip><span class="layout-subtabbar-label">Dashboard</span>
+</s25:tabitem>
+<s25:tabitem b:behavior="HomeSubtabbarTab" c:purpose="home_calendar"><bx:tooltip><div>Make the Calendar your view preference for the Home tab.<a href="javascript:void(0)" b:help="subtab_home_calendar" b:behavior="DirectHelpLink">More info?</a></div></bx:tooltip><span class="layout-subtabbar-label">Calendar</span>
+</s25:tabitem>
+</s25:tabbar>
+</td>
+</tr>
+</table>
+</s:render>
+<s:variable b:name="lMotd" b:scope="local" select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix, 'motd.xml')}" b:destination="$lMotd" b:mode="replacechildren"/>
+<s:task b:action="string2xml" b:variable="$lMotd"/>
+<s:variable b:name="lMotdText" b:scope="local" b:select="string($lMotd/r25:messages/r25:motd/r25:text)"/>
+<s:if b:test="string-length($lMotdText) gt 0">
+<s:script><![CDATA[
+
+var sXml = String(_vars['lMotdText'][0]);
+if (sXml.charAt(0) == '@') sXml = sXml.substring(1);
+sXml = sXml.replace(/&/g, '&amp;');
+bpc.render('<div id="HomeMessage">' + sXml + '</div>', 'replacechildren', 'table/tr/td[1]', _current);
+
+]]></s:script>
+</s:if>
+</s:when>
+<s:when b:test="@c:purpose = 'event' or @c:purpose = 'space' or @c:purpose = 'resource'">
+<s:variable b:name="bTitle"/>
+<s:choose>
+<s:when b:test="@c:purpose = 'event'">
+<s:task b:action="assign" b:target="$bTitle" b:select="'Events'"/>
+</s:when>
+<s:when b:test="@c:purpose = 'space'">
+<s:task b:action="assign" b:target="$bTitle" b:select="'Locations'"/>
+</s:when>
+<s:when b:test="@c:purpose = 'resource'">
+<s:task b:action="assign" b:target="$bTitle" b:select="'Resources'"/>
+</s:when>
+</s:choose>
+<s:variable b:name="bTitleSingular"/>
+<s:choose>
+<s:when b:test="@c:purpose = 'event'">
+<s:task b:action="assign" b:target="$bTitleSingular" b:select="'Event'"/>
+</s:when>
+<s:when b:test="@c:purpose = 'space'">
+<s:task b:action="assign" b:target="$bTitleSingular" b:select="'Location'"/>
+</s:when>
+<s:when b:test="@c:purpose = 'resource'">
+<s:task b:action="assign" b:target="$bTitleSingular" b:select="'Resource'"/>
+</s:when>
+</s:choose>
+<s:render b:destination="." b:mode="replacechildren">
+<s25:tabbar class="subtabbar_tabs">
+<s25:tabitem b:behavior="SubtabbarTab" c:purpose="{concat(@c:purpose, '_search')}">
+<bx:tooltip>
+<div>
+Specify your own criteria to perform a search.	
+<a href="javascript:void(0)" b:help="{concat('subtab_', lower-case($bTitle) ,'_search')}" b:behavior="DirectHelpLink">More info?</a>
+</div>
+</bx:tooltip>
+<span class="layout-subtabbar-label"><s:textnode b:label="{concat(string('Search For'),' ', $bTitle)}"/></span>
+</s25:tabitem>
+<s25:tabitem b:behavior="SubtabbarTab" c:purpose="{concat(@c:purpose, '_browse')}">
+<bx:tooltip>
+<div>
+<s:textnode b:label="{replace('Choose among existing searches--including those created and saved by you--to find ABC of interest.','ABC',lower-case($bTitle))}"/>
+<a href="javascript:void(0)" b:help="{concat('subtab_', lower-case($bTitle) ,'_search')}" b:behavior="DirectHelpLink">More info?</a>
+</div>
+</bx:tooltip>
+<span class="layout-subtabbar-label"><s:textnode b:label="{replace('Your ABC Searches','ABC',$bTitleSingular)}"/></span>
+</s25:tabitem>
+<s25:tabitem b:behavior="IndividualDetailsTab" c:purpose="{concat(@c:purpose, '_details')}" c:count="0" style="display:none">
+<bx:tooltip>
+<div>
+<s:textnode b:label="{replace('View currently open ABC.','ABC',lower-case($bTitle))}"/>	
+<a href="javascript:void(0)" b:help="{concat(lower-case($bTitle) ,'_view_single')}" b:behavior="DirectHelpLink">More info?</a>
+</div>
+</bx:tooltip>
+<span c:purpose="current_detail" class="layout-subtabbar-label"/>
+<span class="multiple_details layout-subtabbar-label" c:purpose="multiple_details" style="display:none" b:action="select">
+<s:textnode b:label="{concat('Individual',' ', $bTitle)}"/>
+(<span c:purpose="tally"/>)
+</span>
+</s25:tabitem>
+<b:infobox c:id="detail_select" class="IndividualDetails_Infobox">
+<s:event b:on="click">
+<s:super/>
+<s:task b:action="deselect" b:target="."/>
+</s:event>
+<div class="b-infobox-close">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close_small.gif">
+<s:event b:on="click">
+<s:task b:target="ancestor::b:infobox[1]" b:action="deselect"/>
+</s:event>
+</img>
+</div>
+<span/>
+</b:infobox>
+</s25:tabbar>
+</s:render>
+</s:when>
+<s:when b:test="@c:purpose = 'task'">
+<s:render b:destination="." b:mode="replacechildren">
+<s25:tabbar class="subtabbar_tabs">
+<s25:tabitem b:behavior="TasksSubtabbarTab" c:purpose="task_overview">
+<bx:tooltip>
+<div>
+View tasks that require your attention.	
+<a href="javascript:void(0)" b:help="tasks_browse" b:behavior="DirectHelpLink">More info?</a>
+</div>
+</bx:tooltip>
+<span class="layout-subtabbar-label">Overview of Tasks</span>
+</s25:tabitem>
+<s25:tabitem b:behavior="TasksSubtabbarTab" c:purpose="task_agenda">
+<bx:tooltip>
+<div>
+View events with tasks for a particular date range.	
+<a href="javascript:void(0)" b:help="tasks_agenda" b:behavior="DirectHelpLink">More info?</a>
+</div>
+</bx:tooltip>
+<span class="layout-subtabbar-label">Tasks Agenda</span>
+</s25:tabitem>
+</s25:tabbar>
+</s:render>
+</s:when>
+<s:when b:test="@c:purpose = 'reports'">
+<s:render b:destination="." b:mode="replacechildren">
+<s25:tabbar class="subtabbar_tabs" id="ReportsSubtabs">
+<s25:tabitem b:behavior="SubtabbarTab" c:purpose="event_reports">
+<span class="layout-subtabbar-label">Event Reports</span>
+</s25:tabitem>
+<s25:tabitem b:behavior="SubtabbarTab" c:purpose="space_reports">
+<span class="layout-subtabbar-label">Location Reports</span>
+</s25:tabitem>
+<s25:tabitem b:behavior="SubtabbarTab" c:purpose="resource_reports">
+<span class="layout-subtabbar-label">Resource Reports</span>
+</s25:tabitem>
+<s25:tabitem b:behavior="SubtabbarTab" c:purpose="other_reports">
+<span class="layout-subtabbar-label">Other Reports</span>
+</s25:tabitem>							
+</s25:tabbar>
+</s:render>
+</s:when>				
+<s:when b:test="@c:purpose = 'publisher'">
+<s:render b:destination="." b:mode="replacechildren">
+</s:render>
+</s:when>
+<s:when b:test="@c:purpose = 'rsrvwiz'">
+<s:render b:destination="." b:mode="replacechildren">
+<b:button id="btnScheduleEvent" b:behavior="S25Object" c:obj_action="reserve">
+<bx:tooltip>
+<div>
+Create an event and assign or request locations and resources, as required. 
+<a href="javascript:void(0)" b:help="event_create" b:behavior="DirectHelpLink">More info?</a>
+</div>
+</bx:tooltip>
+Create an Event	
+</b:button>
+<s25:tabbar class="subtabbar_tabs">
+<s25:tabitem b:behavior="IndividualDetailsTab" c:purpose="rsrvwiz_new" c:count="0" style="display:none">
+<span class="layout-subtabbar-label" c:purpose="current_detail">
+Events Being Created
+</span>
+<span class="layout-subtabbar-label multiple_details" c:purpose="multiple_details" style="display:none" b:action="select">
+Events Being Created
+(<span c:purpose="tally"/>)
+</span>
+</s25:tabitem>
+<s25:tabitem b:behavior="IndividualDetailsTab" c:purpose="rsrvwiz_edit" c:count="0" style="display:none">
+<span class="layout-subtabbar-label" c:purpose="current_detail">
+Events Being Edited
+</span>
+<span class="layout-subtabbar-label multiple_details" c:purpose="multiple_details" style="display:none" b:action="select">
+Events Being Edited
+(<span c:purpose="tally"/>)
+</span>
+</s25:tabitem>
+<b:infobox c:id="detail_select" class="IndividualDetails_Infobox">
+<s:event b:on="click">
+<s:super/>
+<s:task b:action="deselect" b:target="."/>
+</s:event>
+<div class="b-infobox-close">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close_small.gif">
+<s:event b:on="click">
+<s:task b:target="ancestor::b:infobox[1]" b:action="deselect"/>
+</s:event>
+</img>
+</div>
+<span/>
+</b:infobox>
+</s25:tabbar>
+</s:render>
+</s:when>
+<s:otherwise>
+<s:render b:destination="." b:mode="replacechildren">
+</s:render>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lSpaceSearchFLS" b:scope="local" b:select="id('FLS_SPACE_SEARCH')"/>
+<s:if b:test="$lSpaceSearchFLS = 'N'">
+<s:task b:action="hide" b:target=".//s25:tabitem[@c:purpose='space_search']"/>
+<s:task b:action="hide" b:target=".//s25:tabitem[@c:purpose='space_browse']"/>
+</s:if>
+<s:variable b:name="lEventSearchFLS" b:scope="local" b:select="id('FLS_EVENT_SEARCH')"/>
+<s:if b:test="$lEventSearchFLS = 'N'">
+<s:task b:action="hide" b:target=".//s25:tabitem[@c:purpose='event_search']"/>
+<s:task b:action="hide" b:target=".//s25:tabitem[@c:purpose='event_browse']"/>
+</s:if>
+<s:variable b:name="lResourceSearchFLS" b:scope="local" b:select="id('FLS_RESOURCE_SEARCH')"/>
+<s:if b:test="$lResourceSearchFLS = 'N'">
+<s:task b:action="hide" b:target=".//s25:tabitem[@c:purpose='resource_search']"/>
+<s:task b:action="hide" b:target=".//s25:tabitem[@c:purpose='resource_browse']"/>
+</s:if>
+</s:event>
+<s:event b:on="UpdateIndividualDetailsTab">
+<s:variable b:name="lPurpose" b:select="string(@c:purpose)"/>
+<s:variable b:name="lDetailsTab" b:select=".//s25:tabitem[@c:purpose = concat($lPurpose,'_details')]"/>
+<s:variable b:name="lDetailsCount" b:select="count(id('layout-tabbox-groups')//div[starts-with(@c:purpose, concat($lPurpose,'_details_'))][*/$tPermission = 'Yes'])"/>
+<s:with b:target="$lDetailsTab">
+<s:setatt c:count="{$lDetailsCount}"/>
+</s:with>
+<s:choose>
+<s:when b:test="$lDetailsCount = 0">
+<s:task b:action="hide" b:target="$lDetailsTab"/>
+</s:when>
+<s:when b:test="$lDetailsCount = 1">
+<s:task b:action="hide" b:target="$lDetailsTab/span[@c:purpose = 'multiple_details']"/>
+<s:with b:target="$lDetailsTab/span[@c:purpose = 'current_detail']">
+<s:task b:action="settext" b:target="." b:value="{id('layout-tabbox-groups')//div[starts-with(@c:purpose, concat($lPurpose,'_details_'))]/*[@c:obj_type = $lPurpose]/$tName}"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:task b:action="show" b:target="$lDetailsTab"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="hide" b:target="$lDetailsTab/span[@c:purpose = 'current_detail']"/>
+<s:with b:target="$lDetailsTab/span[@c:purpose = 'multiple_details']">
+<s:task b:action="settext" b:target="span[@c:purpose='tally']" b:value="{$lDetailsCount}"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:task b:action="show" b:target="$lDetailsTab"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="UpdateRsrvWizTabs">
+<s:variable b:name="lCreateTab" b:select=".//s25:tabitem[@c:purpose = 'rsrvwiz_new']"/>
+<s:variable b:name="lCreateCount" b:select="count(id('layout-tabbox-groups')//div[starts-with(@c:purpose, 'rsrvwiz_new_')])"/>
+<s:with b:target="$lCreateTab"><s:setatt c:count="{$lCreateCount}"/></s:with>
+<s:variable b:name="lEditTab" b:select=".//s25:tabitem[@c:purpose = 'rsrvwiz_edit']"/>
+<s:variable b:name="lEditCount" b:select="count(id('layout-tabbox-groups')//div[starts-with(@c:purpose, 'rsrvwiz_edit_')])"/>
+<s:with b:target="$lEditTab"><s:setatt c:count="{$lEditCount}"/></s:with>
+<s:choose>
+<s:when b:test="$lCreateCount = 0">
+<s:task b:action="hide" b:target="$lCreateTab"/>
+</s:when>
+<s:when b:test="$lCreateCount = 1">
+<s:task b:action="hide" b:target="$lCreateTab/span[@c:purpose = 'multiple_details']"/>
+<s:with b:target="$lCreateTab/span[@c:purpose = 'current_detail']">
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:task b:action="show" b:target="$lCreateTab"/>
+<s:task b:action="select" b:target="$lCreateTab"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="hide" b:target="$lCreateTab/span[@c:purpose = 'current_detail']"/>
+<s:with b:target="$lCreateTab/span[@c:purpose = 'multiple_details']">
+<s:task b:action="settext" b:target="span[@c:purpose='tally']" b:value="{$lCreateCount}"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:task b:action="show" b:target="$lCreateTab"/>
+</s:otherwise>
+</s:choose>
+<s:choose>
+<s:when b:test="$lEditCount = 0">
+<s:task b:action="hide" b:target="$lEditTab"/>
+</s:when>
+<s:when b:test="$lEditCount = 1">
+<s:task b:action="hide" b:target="$lEditTab/span[@c:purpose = 'multiple_details']"/>
+<s:with b:target="$lEditTab/span[@c:purpose = 'current_detail']">
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:task b:action="show" b:target="$lEditTab"/>
+<s:task b:action="select" b:target="$lEditTab"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="hide" b:target="$lEditTab/span[@c:purpose = 'current_detail']"/>
+<s:with b:target="$lEditTab/span[@c:purpose = 'multiple_details']">
+<s:task b:action="settext" b:target="span[@c:purpose='tally']" b:value="{$lEditCount}"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:task b:action="show" b:target="$lEditTab"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+
+</s:behavior>
+<s:behavior b:name="SubtabbarTab">
+<s:state b:on="deselect" b:normal=""/>
+<s:state b:on="select" b:normal="s25-tabitem-sel"/>
+<s:event b:on="select">
+<s:super/>
+<s:variable b:name="lGroup" b:scope="local" b:select="string(@c:purpose)"/>
+<s:with b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = $lGroup]">
+<s:choose>
+<s:when b:test="@b:state = 'selected'">
+<s:task b:action="trigger" b:event="Select" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="select" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:with>
+<s:task b:action="trigger" b:event="SaveBookmark" b:target="id('LayoutMgr')"/>
+</s:event>
+<s:event b:on="click">
+<s:super/>
+<s:task b:action="select" b:target="."/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="HomeSubtabbarTab" b:behavior="SubtabbarTab">
+<s:event b:on="select">
+<s:super/>
+<s:if b:test="id('WSSessionMgr')/@c:logged-in='true' and string(id('WSSessionMgr')/@c:contact-id) ne string(id('WSSessionMgr')/@c:viewer-seat)">
+<s:variable b:name="lHomeView" b:scope="local" b:select="substring-after(id('LayoutMgr')/$tTabbox/div[@c:purpose='home']/b:deck/div[@b:state='selected']/@c:purpose, 'home_')"/>
+<s:if b:test="$lHomeView = 'calendar' or $lHomeView = 'my25live'">
+<s:variable b:name="lPrefModeXml" b:select="'&lt;mode&gt;&lt;/mode&gt;'"/>
+<s:task b:action="string2xml" b:variable="$lPrefModeXml"/>
+<s:task b:action="settext" b:target="$lPrefModeXml/mode" b:value="{$lHomeView}"/>
+<s:variable b:name="lPrefModeValue" b:scope="local" b:select=""/>
+<s:task b:action="xml2string" b:source="$lPrefModeXml" b:variable="$lPrefModeValue"/>
+<s:task b:action="settext" b:target="id('Pref_25L_home_mode')" b:value="{$lPrefModeValue}"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_25L_home_mode')"/>
+</s:if>
+</s:if>
+</s:event>
+</s:behavior>
+<s:behavior b:name="TasksSubtabbarTab" b:behavior="SubtabbarTab">
+<s:event b:on="select">
+<s:super/>
+<s:if b:test="id('WSSessionMgr')/@c:logged-in='true' and  string(id('WSSessionMgr')/@c:contact-id) ne string(id('WSSessionMgr')/@c:viewer-seat)">
+<s:variable b:name="lTasksView" b:scope="local" b:select="'Overview'"/>
+<s:task b:test="@c:purpose = 'task_agenda'" b:action="assign" b:target="$lTasksView" b:select="'Agenda'"/>
+<s:variable b:name="lPrefViewXml" b:select="'&lt;view&gt;&lt;/view&gt;'"/>
+<s:task b:action="string2xml" b:variable="$lPrefViewXml"/>
+<s:task b:action="settext" b:target="$lPrefViewXml/view" b:value="{$lTasksView}"/>
+<s:variable b:name="lPrefViewValue" b:scope="local" b:select=""/>
+<s:task b:action="xml2string" b:source="$lPrefViewXml" b:variable="$lPrefViewValue"/>
+<s:task b:action="settext" b:target="id('Pref_25L_task_view')" b:value="{$lPrefViewValue}"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_25L_task_view')"/>
+</s:if>
+</s:event>
+</s:behavior>
+<s:behavior b:name="IndividualDetailsTab" b:behavior="SubtabbarTab">
+<s:initatt class="IndividualDetails_Tab"/>
+<s:event b:on="select">
+<s:super/>
+<s:variable b:name="lPurpose" b:select="@c:purpose"/>
+<s:choose>
+<s:when b:test="not(number(@c:count) = 1) and not(id('layout-tabbox-groups')//div[@c:purpose = $lPurpose]/@b:state='selected')">
+<s:task b:action="deselect" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="deselect" b:target="preceding-sibling::s25:tabitem"/>
+<s:task b:action="deselect" b:target="following-sibling::s25:tabitem"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="click">
+<s:choose>
+<s:when b:test="number(@c:count) = 1">
+<s:super/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="ShowDetailsTabDropdown"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="select" b:target="."/>
+</s:event>
+<s:event b:on="ShowDetailsTabDropdown">
+<s:variable b:name="lPurpose" b:select="string(@c:purpose)"/>
+<s:variable b:name="lDetailsInfobox" b:select="../b:infobox"/>
+<s:task b:action="remove" b:target="$lDetailsInfobox/*"/>
+<s:for-each b:target="id('layout-tabbox-groups')//div[@b:behavior='LayoutTabboxBuffer'][starts-with(@c:purpose, concat($lPurpose,'_'))]/*">
+<s:render b:destination="$lDetailsInfobox" b:mode="aslastchild">
+<div c:purpose="{$_target/@c:purpose}" c:group="{$lPurpose}">
+<s:event b:on="mouseenter">
+<s:setstyle b:background-color="#eee"/>
+</s:event>
+<s:event b:on="mouseleave">
+<s:setstyle b:background-color="transparent"/>
+</s:event>
+<s:event b:on="command">
+<s:variable b:name="lPurpose" b:select="string(@c:purpose)"/>
+<s:task b:action="select" b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = $lPurpose]"/>
+<s:task b:action="trigger" b:event="SaveBookmark" b:target="id('LayoutMgr')"/>
+</s:event>
+<s:textnode b:label="{$_target/@c:obj_name}"/>
+<s:textnode b:label="{$_target/@c:title}"/>
+</div>
+</s:render>
+</s:for-each>
+
+<s:variable b:name="lGroup"/>
+<s:choose>
+<s:when b:test="$lPurpose = 'event_details'">
+<s:task b:action="assign" b:target="$lGroup" b:select="'Events'"/>
+</s:when>
+<s:when b:test="$lPurpose = 'space_details'">
+<s:task b:action="assign" b:target="$lGroup" b:select="'Locations'"/>
+</s:when>
+<s:when b:test="$lPurpose = 'resource_details'">
+<s:task b:action="assign" b:target="$lGroup" b:select="'Resources'"/>
+</s:when>
+</s:choose>
+<s:if b:test="not(starts-with(@c:purpose,'rsrvwiz_'))">
+<s:variable b:name="lClose" b:scope="local" b:select="'Close All Individual'"/>
+<s:render b:destination="$lDetailsInfobox" b:mode="aslastchild">
+<div class="CloseAll" c:group="{$lPurpose}">
+<s:event b:on="command">
+<s:variable b:name="pDetailsGroup" b:select="string(@c:group)"/>
+<s:task b:action="trigger" b:event="CloseGroupDetails" b:target="id('LayoutMgr')"/>
+</s:event>
+<s:textnode b:label="{concat($lClose, ' ', $lGroup)}"/>
+</div>
+</s:render>
+</s:if>
+<s:task b:action="select" b:target="$lDetailsInfobox"/>
+</s:event>
+</s:behavior>
+</div>

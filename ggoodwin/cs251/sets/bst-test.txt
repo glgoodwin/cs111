@@ -1,0 +1,272 @@
+**********************************************************************
+This file contains two testing results for BSTSet.
+The first is from the new implementation of intersection.
+The second is from the old implementation of intersection,
+  which was very slow (for the particular test performed)
+**********************************************************************
+First test (fast implementation of intersection).
+**********************************************************************
+
+# BSTSetTest.testAll();;
+Reading ../text/1000-unsorted.txt into list ...done
+List has 1000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.005 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.004999 seconds)
+done
+List has 1000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.008998 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.007999 seconds)
+Testing toList ...(time = 0. seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.002999 seconds) OK!
+Testing size (nonEmpty) ...(time = 0. seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.004999 seconds) OK!
+Testing intersection ...(time = 0.005999 seconds) OK!
+Testing difference ...(time = 0.004999 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.004999 seconds) OK!
+Testing toString ...(time = 0.002 seconds) OK!
+Reading ../text/2000-unsorted.txt into list ...done
+List has 2000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.026995 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.007999 seconds)
+done
+List has 2000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.014998 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.014998 seconds)
+Testing toList ...(time = 0.001 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.004999 seconds) OK!
+Testing size (nonEmpty) ...(time = 0. seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.008998 seconds) OK!
+Testing intersection ...(time = 0.011999 seconds) OK!
+Testing difference ...(time = 0.009998 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.008999 seconds) OK!
+Testing toString ...(time = 0.001999 seconds) OK!
+Reading ../text/4000-unsorted.txt into list ...done
+List has 4000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.016998 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.019997 seconds)
+done
+List has 4000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.034995 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.031995 seconds)
+Testing toList ...(time = 0.002999 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.012998 seconds) OK!
+Testing size (nonEmpty) ...(time = 0.001 seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.020997 seconds) OK!
+Testing intersection ...(time = 0.024996 seconds) OK!
+Testing difference ...(time = 0.020997 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.015997 seconds) OK!
+Testing toString ...(time = 0.005 seconds) OK!
+Reading ../text/8000-unsorted.txt into list ...done
+List has 8000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.050992 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.042994 seconds)
+done
+List has 8000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.079988 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.073989 seconds)
+Testing toList ...(time = 0.003999 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.025996 seconds) OK!
+Testing size (nonEmpty) ...(time = 0.001 seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.045994 seconds) OK!
+Testing intersection ...(time = 0.056992 seconds) OK!
+Testing difference ...(time = 0.047993 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.032995 seconds) OK!
+Testing toString ...(time = 0.011998 seconds) OK!
+Reading ../text/16000-unsorted.txt into list ...done
+List has 16000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.119981 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.115982 seconds)
+done
+List has 16000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.188971 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.188971 seconds)
+Testing toList ...(time = 0.007999 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.056991 seconds) OK!
+Testing size (nonEmpty) ...(time = 0.003 seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.111983 seconds) OK!
+Testing intersection ...(time = 0.126981 seconds) OK!
+Testing difference ...(time = 0.107983 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.07399 seconds) OK!
+Testing toString ...(time = 0.041993 seconds) OK!
+Reading ../text/32000-unsorted.txt into list ...done
+List has 32000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.432934 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.419936 seconds)
+done
+List has 32000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.691895 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.676896 seconds)
+Testing toList ...(time = 0.019997 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.195971 seconds) OK!
+Testing size (nonEmpty) ...(time = 0.006999 seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.372944 seconds) OK!
+Testing intersection ...(time = 0.427934 seconds) OK!
+Testing difference ...(time = 0.387941 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.216967 seconds) OK!
+Testing toString ...(time = 0.102984 seconds) OK!
+- : unit = ()
+
+
+**********************************************************************
+This is the second test, from the old implementation of intersection,
+  which was very slow (for the particular test performed)
+**********************************************************************
+# BSTSetTest.testAll();;
+Reading ../text/1000-unsorted.txt into list ...done
+List has 1000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.004 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.002999 seconds)
+done
+List has 1000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.005999 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.006999 seconds)
+Testing toList ...(time = 0. seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.001999 seconds) OK!
+Testing size (nonEmpty) ...(time = 0. seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.003999 seconds) OK!
+Testing intersection ...(time = 0.016997 seconds) OK!
+Testing difference ...(time = 0.004999 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.022996 seconds) OK!
+Testing toString ...(time = 0.001 seconds) OK!
+Reading ../text/2000-unsorted.txt into list ...done
+List has 2000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.007998 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.005999 seconds)
+done
+List has 2000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.014998 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.013998 seconds)
+Testing toList ...(time = 0.001 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.004999 seconds) OK!
+Testing size (nonEmpty) ...(time = 0. seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.007998 seconds) OK!
+Testing intersection ...(time = 0.069989 seconds) OK!
+Testing difference ...(time = 0.008999 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.007999 seconds) OK!
+Testing toString ...(time = 0.004 seconds) OK!
+Reading ../text/4000-unsorted.txt into list ...done
+List has 4000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.018997 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.018997 seconds)
+done
+List has 4000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.034995 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.031995 seconds)
+Testing toList ...(time = 0.001 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.010998 seconds) OK!
+Testing size (nonEmpty) ...(time = 0. seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.019997 seconds) OK!
+Testing intersection ...(time = 0.308953 seconds) OK!
+Testing difference ...(time = 0.021997 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.016997 seconds) OK!
+Testing toString ...(time = 0.004 seconds) OK!
+Reading ../text/8000-unsorted.txt into list ...done
+List has 8000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.047993 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.074989 seconds)
+done
+List has 8000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.079988 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.073988 seconds)
+Testing toList ...(time = 0.003 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.026996 seconds) OK!
+Testing size (nonEmpty) ...(time = 0.001 seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.048992 seconds) OK!
+Testing intersection ...(time = 1.360793 seconds) OK!
+Testing difference ...(time = 0.047992 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.034995 seconds) OK!
+Testing toString ...(time = 0.010998 seconds) OK!
+Reading ../text/16000-unsorted.txt into list ...done
+List has 16000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.103984 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.110983 seconds)
+done
+List has 16000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.19397 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.194971 seconds)
+Testing toList ...(time = 0.005999 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.057991 seconds) OK!
+Testing size (nonEmpty) ...(time = 0.002 seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.114983 seconds) OK!
+Testing intersection ...(time = 7.353882 seconds) OK!
+Testing difference ...(time = 0.113983 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.074989 seconds) OK!
+Testing toString ...(time = 0.033995 seconds) OK!
+Reading ../text/32000-unsorted.txt into list ...done
+List has 32000 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.290956 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.279958 seconds)
+done
+List has 32000 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.495925 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.478927 seconds)
+Testing toList ...(time = 0.015998 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.13298 seconds) OK!
+Testing size (nonEmpty) ...(time = 0.004999 seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0.254961 seconds) OK!
+Testing intersection ...(time = 45.771042 seconds) OK!
+Testing difference ...(time = 0.244963 seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.153977 seconds) OK!
+Testing toString ...(time = 0.082986 seconds) OK!
+- : unit = ()
+# 

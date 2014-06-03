@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<head>
+<title>FP</title>
+<meta http-equiv="content-type" content="text/html" charset="utf-8">
+<link rel="stylesheet" type="text/css" href="place-s.css" media="screen">
+<link rel="stylesheet" type="text/css" href="place-p.css" media="print">
+</head>
+
+<body>
+
+<table align="center"><tbody>
+<tr>
+<td class="topbar"><a href="./" class="topbar">PLACE</a></td>
+<td class="topbar"><a href="languages.html" class="topbar">languages</a></td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h1>FP</h1>
+
+<p>FP (short for Function Programming) was invented by John Backus and described in his famous <a href="#can-etc">Turing Award lecture</a>.  It is not really a programming language per se, as its content is not fixed, and it lacks input/output facilities.  Backus, who is also the chief designer of <a href="fortran.html"><span class="csc">Fortran</span></a>, one of the authors of the Backus-Naur Form (a metalanguage for describing the syntax of formal languages), and a member of the committee that created <a href="algol60.html"><span class="csc">Algol&nbsp;60</span></a>, actually described a family of languages that he called ‘FP systems’.  What got to be known as ‘FP language’ is the particular instance of such a system, described in the mentioned article.</p>
+
+<p>FP is a purely functional language.  Moreover, the style of programming that it represents can be described as <em>combinator-based</em>.  A program in FP is a set of functions.  The functions have no free variables and not even explicitly mentioned arguments.  In fact, each function has precisely one argument, so no naming of that is ever required.  New functions can be defined using the existing ones by applying a predefined set of <em>combining forms</em> on them.  A program is executed by applying one of the funcions to a <em>data object</em>, and it is only then that data comes into use.</p>
+
+<p>Because the functions are always defined without explicit reference to data (wherever constants are needed in a definition, they are provided by constant-producing functions), and because only application is used (but not functional abstraction, as in the λ-calculus based languages), this style of programming is also known as <em>function-level</em>, <em>variable-free</em>, or <em>applicative</em>.</p>
+
+<p>Data objects are always constant in FP.  A datum can be atomic, such as a number, a Boolean, a character or a string, or it can be a compound value.  The only form of data structuring in FP is sequence construction.  Sequences are heterogeneous and symmetric, in that arbitrary new values (including sequences) can be appended to any of their ends.  There are a number of predefined functions providing useful operations on sequences, including direct access through indexing.</p>
+
+<p>A distinguishing feature of FP is the strict separation between (ordinary, first-order) functions and combining forms (higher-order functions).  This is different from the treatment of functions in λ-calculus and in most other functional languages.  More specifically, in FP the combining forms are predefined, with no provision for defining new ones, always have explicit arguments, and can be nested.  In contrast, functions cannot be nested and never have explicit arguments, but new functions can be defined as necessary.  Unlike functions, a combining form can have more than one argument.</p>
+
+<p>In the mid 1980s Backus and his colleagues came up with the language <a href="#fl-design">FL</a>.  FL was ‘<i>the result of an effort to design a practical functional programming language based on [...] FP.</i>’  Many new features were added in FL with respect to FP: ability to define new combining forms, local definitions (a <code>where</code> clause), first-class exceptions, input/output facilities, user-defined datatypes with predicate-based pattern-matching, many predefined functions and some combining forms.  In some (insignificant) respects FL's syntax differs from that of FP.</p>
+
+<p>FL was implemented and some programs of various size and complexity seem to have been written in it, but currently (as of 2012) no trace of publicly available information on all this is likely to be found.</p>
+
+<h3>An Example</h3>
+
+<p>Here is an example of a function definition in FP that makes use of most of FP's combining forms and some of its predefined functions.  The function computes the Cartesian product (a.k.a. direct product) of an ordered set of ordered sets.  Ordered sets are naturally represented as FP sequences.  For example, for the sequence <code>&lt;&lt;1,2&gt;,&lt;3&gt;,&lt;4,5,6&gt;&gt;</code> the result is<br>
+<center>
+<code>&lt;&lt;1,3,4&gt;,&lt;1,3,5&gt;,&lt;1,3,6&gt;,&lt;2,3,4&gt;,&lt;2,3,5&gt;,&lt;2,3,6&gt;&gt;</code>.</p>
+</center>
+
+<pre>
+<code>Def</code> cart ≡ /(cat&ensp;<code>∘</code>&ensp;α&ensp;((α&ensp;apndl)<code>&ensp;∘&ensp;</code>distl)&ensp;<code>∘</code>&ensp;distr)&ensp;<code>∘</code>&ensp;apndr&ensp;<code>∘</code>&ensp;[id,<span style="text-decoration:overline">&lt;ø&gt;</span>]
+</pre>
+
+<p>Understanding the definition requires knowledge of how its building blocks work, so there follows short explanation of these.</p>
+
+<p></p>
+
+<p><code>id</code> is the identity function.</p>
+
+<p><code>&lt;ø&gt;</code> is the sequence that contains the empty sequence (<code>ø</code>) as a single item, and correspondingly <code><span style="text-decoration:overline">&lt;ø&gt;</span></code> is the function that produces that sequence.</p>
+
+<p><code>[</code>...<code>]</code> is the <i>construction</i> combining form.  For any set of functions <code><i>f</i><sub>1</sub>,...,<i>f</i><sub>n</sub></code>, <code>[<i>f</i><sub>1</sub>,...,<i>f</i><sub>n</sub>]</code> transforms a value <code>x</code> into a sequence of values <code>[<i>f</i><sub>1</sub><i>x</i>,...,<i>f</i><sub>n</sub><i>x</i>]</code>.</p>
+
+<p><code>cat</code> is concatenation of sequences: it joins the sequences that comprise a sequence into a single sequence.</p>
+
+<p><code>apndl</code> and <code>apndr</code> append an item to the left and right end of a sequence, respectively.  More precisely, <code>apndl</code> transforms <code>&lt;<i>y</i>,&lt;<i>x</i><sub>1</sub>,...,<i>x</i><sub>n</sub>&gt;&gt;</code> into <code>&lt;<i>y</i>,<i>x</i><sub>1</sub>,...,<i>x</i><sub>n</sub>&gt;</code>, and <code>apndr</code> transforms <code>&lt;&lt;<i>x</i><sub>1</sub>,...,<i>x</i><sub>n</sub>&gt;,<i>y</i>&gt;</code> into  <code>&lt;<i>x</i><sub>1</sub>,...,<i>x</i><sub>n</sub>,<i>y</i>&gt;</code>.</p>
+
+<p><code>distl</code> and <code>distr</code> construct pairs by ‘distributing an item along a sequence’.  Namely, <code>distl</code> transforms <code>&lt;<i>y</i>,&lt;<i>x</i><sub>1</sub>,...,<i>x</i><sub>n</sub>&gt;&gt;</code> into <code>&lt;&lt;<i>y</i>,<i>x</i><sub>1</sub>&gt;,...,&lt;<i>y</i>,<i>x</i><sub>n</sub>&gt;&gt;</code>, and <code>distr</code> transforms <code>&lt;&lt;<i>x</i><sub>1</sub>,...,<i>x</i><sub>n</sub>&gt;,<i>y</i>&gt;</code> into  <code>&lt;&lt;<i>x</i><sub>1</sub>,<i>y</i>&gt;,...,&lt;<i>x</i><sub>n</sub>,<i>y</i>&gt;&gt;</code>.</p>
+
+<p><code>∘</code> is the <i>composition</i> of functions &ndash; a combining form.  For any two functions <code>f</code> and <code>g</code>, <code>f∘g</code> is the function that, for an argument <code>x</code>, computes <code>f(g(x))</code>.</p>
+
+<p><code>α</code> is the <i>apply-to-all</i> combining form (the function <i>map</i> in other languages).  For any function <code>f</code>, <code>αf</code> transforms a sequence <code>&lt;<i>x</i><sub>1</sub>,...,<i>x</i><sub>n</sub>&gt;</code> into <code>&lt;<i>fx</i><sub>1</sub>,...,<i>fx</i><sub>n</sub>&gt;</code>.</p>
+
+<p><code>/</code> is the <i>insert</i> combining form.  For a function <code>f</code>, <code>/f</code> transforms a sequence <code>&lt;<i>x</i><sub>1</sub>,...,<i>x</i><sub>n</sub>&gt;</code> into the value <code>&nbsp;<i>x</i><sub>1</sub>&nbsp;f'&nbsp;(<i>x</i><sub>2</sub>&nbsp;f'&nbsp;(...(<i>x</i><sub>n-1</sub>&nbsp;f'&nbsp;<i>x</i><sub>n</sub>)...))</code> (assuming that <code>f'</code> is the infix operator corresponding to <code>f</code>).</p>
+
+<p>Finally, here is how the function <code>cart</code> works.  <code>apndr<code>∘</code>[id,<span style="text-decoration:overline">&lt;ø&gt;</span>]</code> adds the sequence <code>&lt;ø&gt;</code>, representing the empty Cartesian product, to the end of the initial sequence of sequences.  Then the function <code>cat<code>∘</code>α((α&ensp;apndl)<code>∘</code>distl)<code>∘</code>distr</code> is repeatedly (due to <code>/</code>) applied, once for each sequence, starting from the last one.  With each application, the contribution of the corresponding sequence is accumulated to the overall result (which was initially <code>&lt;ø&gt;</code>).  To that end, <code>distr</code> pairs the so-far-known result sequence with each item of the currently used argument sequence, so that, by applying (through the outer <code>α</code>) the function <code>(α&ensp;apndl)<code>∘</code>distl</code> to each pair, that item is put in front of each sequence in the result (pairing it with those sequences by <code>distl</code> and then adding it in front of the sequences by <code>α&ensp;apndl</code>), and then, applying <code>cat</code>, all such sequences are catenated into one.</p>
+
+<h3>Philosophy and Influence</h3>
+
+<p>Both Backus's paper and FP were extremely influential in the promotion of the functional programming paradigm and the development of the subsequent functional languages.  Backus eloquently exposed the inherent defects of imperative languages, and stressed the advantages of the purely functional style.</p>
+
+<p>Backus' criticism of imperative languages can be summarized as follows:</p>
+
+<ul>
+<li>They tend to process data in a ‘word-at-a-time’ manner, i.e. in individual items instead of in whole conceptual units.</li>
+<li>They lack good abilities for combination (are too rigid for that).</li>
+<li>Their constructs lack useful mathematical properties.</li>
+</ul>
+
+<p>At a somewhat greater level of detail, Backus observed that the problems with imperative languages lie in the separation between expressions and statements that they exhibit, their complicated naming and substitution rules, the intimate and unavoidable interdependence between data and actions in them, etc.  It was precisely these defects that Backus' proposal was meant to overcome.</p>
+
+<p>Ensuring that computation (functions) is defined completely separate from the data on which it operates would make it possible to build complex programs, each part of which can be described entirely by the effect that it has on its own argument.  With no data interrelations between functions, the whole program could always be constructed by combining independent parts.</p>
+
+<p>Additional advantage is that in the absence of named function arguments it is much easier to treat functions as objects in a suitably constructed algebra and thus to formulate and prove facts about their properties and do useful transformations of code.</p>
+
+<p>An important trait of the line of thought that characterizes FP is the tendency to avoid all kinds of repetition, i.e., not only loops but also recursion, as much as possible.  Since repetition's role is to fill the gap between ‘word-at-a-time’ processing and having some work done on a whole data collection, it had to be replaced by powerful functions and combining forms that would allow such collections to be processed as a whole.</p>
+
+<p>Kenneth Iverson's work was recognized in this respect for the applicative, not λ- but combinator-based style of his language <a href="apl.html">APL</a> and for the rich possibilities in this language for operating on entire aggregates of data.  However, Backus observed that <a href="apl.html">APL</a> was still too much an imperative language, and that it had an insufficient number of combining forms.</p>
+
+<p>Modern functional languages, such as <a href="sml.html"><span class="csc">Standard&nbsp;ML</span></a> and <a href="haskell.html"><span class="csc">Haskell</span></a>, as well as modern thinking in functional programming theory, practice and teaching (see e.g. the papers of J.&nbsp;Hughes, of E.&nbsp;Mejer etc., and of J.&nbsp;Gibbons below), bear much in common with the philosophy of FP.  In particular, J.&nbsp;Hughes' article, also very influential as a functional programming advocacy text, makes a very strong point of that ‘<i>better modularity alone is the key to the power of functional languages</i>’ and that using higher-order functions provides a ‘glue’ (i.e., means of combination) that ‘<i>allows greatly improved modularisation</i>’.</p>
+
+<p>Much research has gone into discovering general patterns of recursion.  Once found, such patterns become standard library functions, thus obviating the need for direct use of recursion in programs.</p>
+
+<p>On the other hand, FP's fixing of the number of combining forms was obviously considered restrictive and not followed in most other languages.  Also, except for <a href="apl.html">APL</a> and its descendants, such as <a href="j.html">J</a>, <a href="k.html">K</a>, and <a href="nial.html"><span class="csc">Nial</span></a>, there is no distinction between ordinary and higher-order functions (combining forms), and the latter are usually not built in the language but expressed as any other function.</p>
+
+<p>Unlike FP, most modern functional languages are not combinator-based but make use of the full λ-calculus to define functions, although of course it is possible to write variable-free programs in them.  A notable exception is the experimental language <a href="joy.html"><span class="csc">Joy</span></a>, which not only is combinator-based, but leaves out even application, and uses <em>composition</em> – syntactically expressed as <em>concatenation</em> – as the only form of function combination.</p>
+
+<h3>Links of Relevance:</h3>
+
+<p>The article that introduced FP: <a name="can-etc" href="http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf"><em>Can Programming Be Liberated from the von Neumann Style? A Functional Style and Its Algebra of Programs (1977 ACM Turing Award Lecture)</em></a></p>
+
+<p><a name="fl-design" href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.49.3651"><em>The FL Project: The Design of a Functional Language</em></a></p>
+
+<p><a href="http://www.archive.org/details/JohnBack1987"><em>Function Level Programming and the FL Language</em></a> (a 3/4-hour video lecture of J.&nbsp;Backus)</p>
+
+<dl><dt>Implementations:</dt>
+<dd><a href="http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/prolog/impl/fp_lp/fp/0.html">An interpreter for FP in C</a></dd>
+<dd><a href="http://web.archive.org/web/20070718003104/http://www.isc.org/sources/devel/lang/fpc.php">An FP to C translator</a></dd> <!-- redirects -->
+<dd><a href="http://web.archive.org/web/20071117184619rn_1/www.iit.edu/~tc/fp.zip">An interpreter for FP in Icon</a> and <a href="http://web.archive.org/web/20071117184619rn_1/www.iit.edu/~tc/fp.ps">a description of the dialect of FP accepted</a></dd>
+<dd><a href="http://search.cpan.org/~seano/Language-FP-0.03/FP.pm">An interpreter for FP in Perl</a></dd>
+<dd><a href="http://www.cse.sc.edu/~bays/FPlink">An on-line, interactive interpreter for FP in Java</a></dd></dl>
+
+<dl><dt><a href="http://plasm.net">‘PLaSM: functional language for computing with geometry’</a>: a geometry-oriented extension of a subset of FL<br>
+(the name is for <em><b>P</b>rogramming <b>La</b>nguage for <b>S</b>olid <b>M</b>odeling</em>)</dt>
+<dd><a href="http://www.plasm.net/docs/tutorial">PLaSM brief reference</a></dd></dl>
+
+<dl><dt>These articles are not directly related to FP, but represent later development in the field of applicative programming:</dt>
+<dd><a href="http://www.cse.chalmers.se/~rjmh/Papers/whyfp.html"><em>Why functional programming matters</em></a></dd>
+<dd><a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.41.125"><em>Functional programming with bananas, lenses, envelopes and barbed wire</em></a></dd>
+<dd><a href="http://web.comlab.ox.ac.uk/oucl/work/jeremy.gibbons/publications/nzfpdc-squiggol.ps.gz"><em>An Introduction to the Bird-Meertens formalism</em></a></dd></dl>
+
+<hr>
+
+<table align="center"><tbody>
+<tr>
+<td class="topbar"><a href="./" class="topbar">PLACE</a></td>
+<td class="topbar"><a href="languages.html" class="topbar">languages</a></td>
+</tr>
+</tbody></table>
+
+<p style="font-family:monospace;text-align:right">boykobbatgmaildotcom</p>
+
+</body>
+</html>

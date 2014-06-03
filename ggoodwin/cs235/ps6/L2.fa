@@ -1,0 +1,17 @@
+{states}
+A, B, C, D, E
+{start state}
+A
+{accepting states}
+D
+{transitions}
+A,% -> B;
+B,aa -> B; 
+B,% -> C;
+C,b -> C;
+C,% -> D;
+C,a -> D;
+A,bb -> E;
+E,a -> E;
+E,b -> E;
+E,a -> D

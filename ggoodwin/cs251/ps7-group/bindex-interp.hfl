@@ -1,0 +1,69 @@
+; Environment-model interpreter for BINDEX written HOFL
+
+;; The file env.hfl contains the environment functions you need for this program.
+;; Loading env.hfl also loads:
+;; (1) option.hfl -- the HOFL implementation of options
+;; (2) list-utils.hfl -- the HOFL implementation of some higher-order list functions.
+;; You may need/want to use some of these in your code
+(load "env.hfl") 
+
+;; The file bindex-AST contains functions for manipulating the abstract syntax
+;; of BINDEX programs and expressions. You should use these functions in your
+;; code for RUN, EVAL, and BINAPPLY. 
+(load "bindex-AST.hfl")
+
+;; Note: use the HOFL error construct for any error situations. 
+
+;; Run the BINDEX program PGM on the values in the argument list ARGS
+(def (run pgm args)
+ (prog = (prg? pgm))
+ (fmls = ((pgm-formals pgm) (second pgm)))
+ (body = ((pgm-body pgm) (third pgm)))
+  
+ (flen = length fmls)
+ (ilen = length args)
+ (if (= (flen) (ilen)) 
+     (eval (quote (body (Env.make fmls args))))
+     (sym (Eval Error)))
+
+  
+
+;; Evaluate the BINDEX expression EXP relative to the environment ENV.
+(def (eval exp env)
+   (quote (match exp with 
+      Lit i -> i
+    | Var name -> 
+	(match Env.lookup name env with 
+           Some(i) -> i 
+         | None -> raise (EvalError("Unbound variable: " ^ name)))
+    | BinApp(rator,rand1,rand2) -> 
+	binApply rator (eval rand1 env) (eval rand2 env)
+    | Bind(name,defn,body) -> 
+        eval body (Env.bind name (eval defn env) env)))
+
+;; Apply the BINDEX arithmetic operator OP (represented as a symbol) to the
+;; arguments X and Y.
+(def (binapply op x  y)
+  (quote (match op with 
+    | Add -> x + y
+    | Sub -> x - y
+    | Mul -> x * y
+    | Div -> if y = 0 then 
+               raise (EvalError ("Division by 0: " 
+                                 ^ (string_of_int x)))
+             else 
+               x / y
+    | Rem -> if y = 0 then 
+               raise (EvalError ("Remainder by 0: "
+                                 ^ (string_of_int x)))
+             else 
+               x mod y)
+
+;; This function (which is already implemented for you) calls your RUN function
+;; on the BINDEX program in the file PGMFILE and the argument list ARGS.
+;; It's an easy way to test your RUN function. The files "avg.bdx" and "squares.bdx"
+;; have been provided for you, but you are encouraged to create some additional
+;; files with BINDEX test programs. 
+(def (runFile pgmFile args)
+  (run (stringToSexp (fileToString pgmFile)) args))
+

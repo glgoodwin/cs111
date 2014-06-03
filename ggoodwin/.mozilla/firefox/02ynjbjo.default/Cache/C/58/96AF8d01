@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" xmlns:s25="http://www.collegenet.com/s25" xmlns:bx="http://www.collegenet.com/bx" style="display:none;">
+<s:htmlstructure b:name="s25:rsrv_wiz_addl_sponsor" b:behavior="S25RsrvWizEditor::AddlSponsor">
+<div><s:innercontent/></div>
+</s:htmlstructure>
+<s:behavior b:name="S25RsrvWizEditor::AddlSponsor" b:behavior="S25RsrvWizEditor">
+<s:initatt c:purpose="addl_sponsor" c:obj_type_id="2"/>
+<s:event b:on="s25-focus">
+</s:event>
+<s:event b:on="Paint">
+
+<s:variable b:name="tObjType" b:scope="tag">organization</s:variable>
+<s:variable b:name="tContentOptions" b:scope="tag" b:select=""/>
+<s:variable b:name="tCurrentObject" b:scope="tag" b:select=""/>
+<s:variable b:name="tOrgSelect" b:scope="tag" b:select=""/>
+<s:variable b:name="tFavIconContainer" b:scope="tag" b:select=""/>
+<s:variable b:name="lOrgNew" b:scope="tag" b:select="'Create New Organization'"/>
+</s:event>
+<s:event b:on="PaintControl">
+<s:variable b:name="lThis" b:scope="local">ancestor::*[@c:editor='true'][1]</s:variable>
+<s:render b:destination="$tContent" b:mode="replacechildren">
+<div class="contentHeader">
+<span class="tooltipMarker">
+<bx:tooltip class="bxTooltipNoIcon" b:delay="5"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="iconHelp"/>
+</span>
+<div c:id="title"><s:textnode b:label="{@c:title}"/></div>
+</div>
+<table align="center" class="contentOptions" cellspacing="0">
+<tr valign="top">
+<td class="contentOptionSelect">
+<div align="center"><div class="currentSelectionHeader">Select Your Organizations</div></div>
+<div c:id="indices" class="RsrvWiz_CriteriaSelectTierOne">
+<div class="RsrvWiz_CriteriaSelectHeader">
+<div class="icon-org">Find by...</div>
+</div>
+<div c:id="options" class="RsrvWiz_CriteriaSelectBody">
+<div b:behavior="OrgIndexOption" c:index_id="-1" b:disabled="true">Loading...</div>
+</div>
+</div>
+<div c:id="divisions" class="RsrvWiz_CriteriaSelectTierTwo">
+<div class="RsrvWiz_CriteriaSelectHeader">
+<div class="icon-org">Loading...</div>
+</div>
+<div c:id="options" class="RsrvWiz_CriteriaSelectBody">
+<div b:behavior="OrgDivisionOption" c:division_id="-1" b:disabled="true">Loading...</div>
+</div>
+<div c:id="search" class="RsrvWiz_CriteriaSelectBody RsrvWiz_CriteriaSearch" style="display:none">
+<div>Search by Organization Name:</div><br/>
+<input type="text" name="needle" value="" b:required="false" b:valid="true" style="width:150px" b:behavior="RsrvWizInput">
+<s:whenactive>
+<s:keys b:keys="enter" b:action="trigger" b:event="LoadSearch" b:target="{$lThis}"/>
+</s:whenactive>
+</input>
+<b:button b:action="trigger" b:event="LoadSearch" b:target="{$lThis}">Search</b:button>
+</div>
+</div>
+<div c:id="orgs" class="RsrvWiz_CriteriaSelectTierThree">
+<div class="RsrvWiz_ObjectSelectHeader">
+<div class="icon-org">Choose from...</div>
+</div>
+<div c:id="options" class="RsrvWiz_ObjectSelectBody">
+<div b:behavior="OrgOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</div>
+</div>
+</td>
+<td class="contentSelections">
+<div align="center"><div class="currentSelectionHeader">Selected Organizations</div></div>
+<div c:purpose="Organization" class="currentSelection currentSelectionBlank" c:org_id="-1" style="display:none">
+none selected
+</div>			
+</td>
+</tr>
+</table>
+</s:render>
+<s:task b:action="assign" b:target="$tContentOptions" b:scope="tag" b:select="$tContent/table/tr/td"/>
+<s:choose>
+<s:when b:test="count($tEvWiz/$tEvent/r25:organization[r25:primary = 'F']) gt 0">
+<s:variable b:name="lOrgID" b:select=""/>
+<s:variable b:name="lOrgName" b:select=""/>
+<s:for-each b:target="$tEvWiz/$tEvent/r25:organization[r25:primary = 'F']">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lOrgID" b:select="string($_target/r25:organization_id)"/>
+<s:task b:action="assign" b:target="$lOrgName" b:select="string($_target/r25:organization_name)"/>
+<s:task b:action="trigger" b:event="OrgSelect"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:when>
+<s:otherwise>
+<s:task b:action="show" b:target="$tContent//table/tr/td[@class='contentSelections']/div[@c:purpose='Organization' and @c:org_id='-1']"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="MarkDuplicateOrg"/>
+<s:variable b:name="tIndices" b:scope="tag" b:select="$tContentOptions/div[@c:id='indices']"/>
+<s:variable b:name="tDivisions" b:scope="tag" b:select="$tContentOptions/div[@c:id='divisions']"/>
+<s:variable b:name="tLastDivision" b:scope="tag" b:select="'-1'"/>
+<s:variable b:name="tOrgs" b:scope="tag" b:select="$tContentOptions/div[@c:id='orgs']"/>
+<s:variable b:name="tNeedle" b:scope="tag" b:select="$tDivisions/div[@c:id='search']//input[@type='text' and @name='needle']"/>
+<s:task b:action="trigger" b:event="LoadIndices"/>
+<s:variable b:name="lFavCountUrl" b:select="concat(id('Config')/$tWsPrefix,'organizations.xml?favorite=T','&amp;scope=list')"/>
+<s:variable b:name="lFavCount" b:select=""/>
+<s:task b:action="load" b:url="{$lFavCountUrl}" b:method="GET" b:destination="$lFavCount" b:mode="replacechildren">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lFavCount"/>
+<s:choose>
+<s:when b:test="count($lFavCount//r25:item) = 0">
+<s:task b:action="select" b:target="$tIndices//div[@c:index_id = 'search']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="select" b:target="$tIndices//div[@c:index_id = 'fav']"/>
+</s:otherwise>
+</s:choose>
+<s:render b:destination="$tContent/div[1]/span[1]/bx:tooltip" b:mode="replacechildren"><div xmlns="">For the primary event sponsor, and for any additional organization(s) sponsoring the event, choose from a list of Your Starred Organizations or Search by organization name. Alternatively, you can browse organizations by selecting among Index of names, organization Types, or Categories.</div><div xmlns="">To search for an organization, click &apos;Search&apos; in the &apos;Find by&apos; list, then enter all or the first part of the organization name. Click the &apos;Search&apos; button. Choose an organization from the Choose from... list.</div><div xmlns="">Click Create New Organization to add an organization to the database.</div><div xmlns="">The Selected Organization can be added to (or removed from) Your Starred Organizations by toggling its star icon.</div></s:render>
+</s:event>
+<s:event b:on="PaintText">
+<s:render b:destination="$tContent" b:mode="asfirstchild">
+<div class="contentHeader">
+<div c:id="title"><s:textnode b:label="{@c:title}"/></div>
+</div>
+</s:render>
+<s:task b:action="transform" b:datasource="$tEvWiz/$tEvent" b:stylesheet="$Orgs_text" b:destination="$tContent" b:mode="aslastchild"/>
+<s:fxstyle b:time="1"/>
+<s:task b:action="assign" b:target="$tContentOptions" b:scope="tag" b:select="$tContent/div[@class='contentOptions']"/>
+</s:event>
+<s:event b:on="Reset">
+<s:if b:test="$tEvWiz/$tEvent//r25:organization[r25:primary='F']/@required = 'T'">
+<s:setatt c:required="true"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tEvent//r25:organization[r25:primary='F']/@required,'EvXML')">
+<s:variable b:name="lRequiredXpath" b:scope="local" b:select=""/>
+<s:variable b:name="lRequiredContent" b:scope="local" b:select="string($tEvWiz/$tEvent//r25:organization[r25:primary='F']/ @required)"/>
+<s:task b:action="assign" b:target="$lRequiredXpath" b:select="replace($lRequiredContent,'EvXML', '$tEvWiz/$tDataXml/r25:events/r25:event')"/>
+<s:if b:test="xpath($lRequiredXpath)">
+<s:setatt c:required="true"/>
+</s:if>
+</s:if>
+<s:variable b:name="lNoEdit" b:scope="local" b:select=""/>
+<s:if b:test="@c:no_edit = 'true'">
+<s:task b:action="assign" b:target="$lNoEdit" b:select="'T'"/>
+<s:setatt c:no_edit="T"/>
+</s:if>
+<s:if b:test="$tEvWiz/$tEvent//r25:organization[r25:primary='F']/@required = 'T'">
+<s:task b:action="assign" b:target="$lNoEdit" b:select="'T'"/>
+<s:setatt c:no_edit="T"/>
+</s:if>			
+<s:if b:test="contains($tEvWiz/$tEvent//r25:organization[r25:primary='F']/@no_edit,'EvXML')">
+<s:variable b:name="lNoEditXpath" b:scope="local" b:select=""/>
+<s:variable b:name="lNoEditContent" b:scope="local" b:select="string($tEvWiz/$tEvent//r25:organization[r25:primary='F']/@no_edit)"/>
+<s:task b:action="assign" b:target="$lNoEditXpath" b:select="replace($lNoEditContent,'EvXML','$tEvWiz/$tDataXml/r25:events/r25:event')"/>
+<s:setatt c:no_edit="{$lNoEditXpath}"/>
+<s:if b:test="xpath($lNoEditXpath)">
+<s:task b:action="assign" b:target="$lNoEdit" b:select="'T'"/>
+</s:if>
+</s:if>
+<s:if b:test="$tEvWiz/$tEvent//r25:organization[r25:primary='F']/@no_edit = 'T'">
+<s:task b:action="assign" b:target="$lNoEdit" b:select="'T'"/>
+<s:setatt c:no_edit="T"/>
+</s:if>
+<s:choose>
+<s:when b:test="$lNoEdit = 'T'">
+<s:task b:action="trigger" b:event="PaintText" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="PaintControl" b:target="."/>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lInstanceMessage" b:scope="local" b:select="string($tEvWiz/$tEvent/r25:organization[r25:primary = 'F']/@message)"/>
+<s:if b:test="string-length($lInstanceMessage) = 0">
+<s:task b:action="assign" b:target="$lInstanceMessage" b:select="string(@c:message)"/>
+</s:if>
+<s:if b:test="not(string-length($lInstanceMessage) = 0)">
+<s:choose>
+<s:when b:test="$tContent//table[@class='contentOptions']">
+<s:render b:destination="$tContent//table[@class='contentOptions']" b:mode="asfirstchild">
+<tr><td colspan="3" class="contentMessage"><s:textnode b:label="{$lInstanceMessage}"/></td></tr>
+</s:render>
+</s:when>
+<s:otherwise>
+<s:render b:destination="$tContent//*[@class='contentOptions']" b:mode="before">
+<div class="contentMessage"><s:textnode b:label="{$lInstanceMessage}"/></div>
+</s:render>
+</s:otherwise>
+</s:choose>
+</s:if>
+<s:variable b:name="lEditorSupplementaryText" b:select="ancestor::div[@b:behavior='S25RsrvWizCard']/$tEditor[@name='additional_sponsor']/info"/>
+<s:task b:action="xml2string" b:variable="$lEditorSupplementaryText"/>
+<s:if b:test="not(string-length($lEditorSupplementaryText) = 0)">
+<s:choose>
+<s:when b:test="$tContent//table[@class='contentOptions']">
+<s:script><![CDATA[
+
+var lText = _vars['lEditorSupplementaryText'][0];
+lText = lText.replace(/&lt;/g, '<');
+lText = lText.replace(/&gt;/g, '>');
+var destination = "div[@c:id='container']/div[@c:id='content']//table[@class='contentOptions']";
+bpc.render('<tr><td colspan="3" class="contentMessage">' + lText + '</td></tr>', 'asfirstchild', destination, _current);
+
+]]></s:script>
+</s:when>
+<s:otherwise>
+<s:script><![CDATA[
+
+var lText = _vars['lEditorSupplementaryText'][0];
+lText = lText.replace(/&lt;/g, '<');
+lText = lText.replace(/&gt;/g, '>');
+var destination = "div[@c:id='container']/div[@c:id='content']//*[@class='contentOptions']";
+bpc.render('<div class="contentMessage">' + lText + '</div>', 'before', destination, _current);
+
+]]></s:script>
+</s:otherwise>
+</s:choose>
+</s:if>
+</s:event>
+<s:event b:on="select">
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode='edit' and not($tEvWiz/$tEvent)">
+</s:when>
+<s:otherwise>
+<s:super/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveRsrvWizard">
+<s:variable b:name="lEvent" b:scope="local" b:select="$tEvWiz/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent='LoadSuccess'">
+<s:task b:test="not(@c:init = '1')" b:action="trigger" b:event="select"/>
+</s:when>
+<s:when b:test="$lEvent='PrimaryOrganizationChange'">
+<s:task b:action="trigger" b:event="MarkDuplicateOrg"/>
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="Validate">
+<s:setatt c:valid="true" c:error=""/>
+<s:if b:test="@c:required='true' and count($tContentOptions//div[@c:purpose='Organization' and not(@c:org_id='-1')]) = 0">
+<s:setatt c:valid="false" c:error="Event must have a primary organization."/>
+</s:if>
+</s:event>
+<s:event b:on="Save">
+<s:variable b:name="lEvent" b:scope="local" b:select="$tEvWiz/$tEvent"/>
+<s:variable b:name="lOrgFragment" b:scope="local">
+<r25:organization status="new">
+<r25:organization_id/>
+<r25:organization_name/>
+<r25:primary>F</r25:primary>
+</r25:organization>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lOrgFragment"/>
+<s:variable b:name="lCurrentOrgs" b:scope="local" b:select="$tContentOptions//div[@c:purpose='Organization' and not(@c:org_id='-1')]/div[@c:id='currentAddlOrganization']"/>
+<s:choose>
+<s:when b:test="$lEvent/@status = 'new'">
+<s:task b:action="remove" b:target="$lEvent/r25:organization[r25:primary = 'F']"/>
+<s:for-each b:target="$lCurrentOrgs">
+<s:sequential><s:lock>
+<s:task b:action="settext" b:target="$lOrgFragment/r25:organization/r25:organization_id" b:value="{$_target/@c:obj_id}"/>
+<s:task b:action="settext" b:target="$lOrgFragment/r25:organization/r25:organization_name" b:value="{$_target/@c:obj_name}"/>
+<s:task b:action="copy" b:source="$lOrgFragment/r25:organization" b:destination="$tEvWiz/$tDataXml/r25:events/r25:event" b:mode="aslastchild"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:when>
+<s:otherwise>
+<s:task b:action="remove" b:target="$lEvent/r25:organization[string-length(r25:primary) = 0]"/>
+<s:task b:action="remove" b:target="$lEvent/r25:organization[r25:primary = 'F'][@status = 'new']"/>
+<s:task b:action="set" b:target="$lEvent/r25:organization[r25:primary = 'F'][@status = 'est']/@status" b:value="del"/>
+<s:for-each b:target="$lCurrentOrgs">
+<s:sequential><s:lock>  
+<s:choose>
+<s:when b:test="$lEvent/r25:organization[r25:primary='F']/r25:organization_id = $_target/@c:obj_id">
+<s:variable b:name="lObjId" b:scope="local" b:select="string($_target/@c:obj_id)"/>
+<s:task b:action="set" b:target="$lEvent/r25:organization[r25:primary = 'F' and r25:organization_id = $lObjId]/@status" b:value="est"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lOrgFragment/r25:organization/r25:organization_id" b:value="{$_target/@c:obj_id}"/>
+<s:task b:action="settext" b:target="$lOrgFragment/r25:organization/r25:organization_name" b:value="{$_target/@c:obj_name}"/>
+<s:task b:action="copy" b:source="$lOrgFragment/r25:organization" b:destination="$lEvent" b:mode="aslastchild"/>        
+</s:otherwise>
+</s:choose>
+</s:lock></s:sequential>
+</s:for-each>
+</s:otherwise>
+</s:choose>
+<s:setatt c:crumb="{string-join($lCurrentOrgs/@c:obj_name, ';; ')}"/>
+</s:event>
+<s:event b:on="LoadIndices">
+<s:variable b:name="lIndex">
+<indices>
+<index>
+<id>names</id>
+<name>Names</name>
+<query>null.xml</query>
+<xsl>names.xsl</xsl>
+</index>
+<index>
+<id>types</id>
+<name>Types</name>
+<query>orgtypes.xml</query>
+<xsl>types.xsl</xsl>
+</index>
+<index>
+<id>categories</id>
+<name>Categories</name>
+<query>orgcat.xml</query>
+<xsl>categories.xsl</xsl>
+</index>
+</indices>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lIndex"/>
+<s:task b:action="settext" b:target="$lIndex//index[id='names']/name" b:value="Index"/>
+<s:task b:action="settext" b:target="$lIndex//index[id='types']/name" b:value="Types"/>
+<s:task b:action="settext" b:target="$lIndex//index[id='categories']/name" b:value="Categories"/>
+<s:variable b:name="lFavText" b:select="'Your Starred Organizations'"/>
+<s:if b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavText" b:select="'Suggested Organizations'"/>
+</s:if>
+<s:task b:action="transform" b:datasource="$lIndex//indices[1]" b:stylesheet="$OrgIndex" b:destination="$tIndices/div[@c:id='options']" b:mode="replacechildren"/>
+<s:if b:test="string(id('FLS_CU_ACCOUNT')) = 'F'">
+<s:render b:destination="$tIndices/div[@c:id='options']" b:mode="aslastchild">
+<div b:behavior="ObjectOption">
+<s:event b:on="click">
+<s:task b:action="remove" b:target="//s25:rsrv_wiz_sponsor/@c:new_org_target"/>
+<s:task b:action="remove" b:target="//s25:rsrv_wiz_addl_sponsor/@c:new_org_target"/>
+<s:with b:target="ancestor::s25:rsrv_wiz_addl_sponsor[1]">
+<s:setatt c:new_org_target="true"/>
+</s:with>
+<s:task b:action="trigger" b:event="25Live_OrgNew" b:target="id('Controller')"/>
+</s:event>
+<div><s:textnode b:label="{$lOrgNew}"/></div>
+</div>
+</s:render>
+</s:if>
+</s:event>
+<s:event b:on="OrgIndexChange">
+<s:variable b:name="lSelOpt" b:select="$tIndices/div[@c:id='options']/div[@b:state='selected']"/>
+<s:if b:test="$lSelOpt/@c:index_id ne '-1'">
+<s:choose>
+<s:when b:test="$lSelOpt/@c:index_id = 'fav'">
+<s:with b:target="$tDivisions">
+<s:task b:action="hide" b:target="div[@c:id='search']"/>
+<s:task b:action="show" b:target="div[@c:id='options']"/>
+<s:task b:action="hide"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="OrgDivisionOption" b:state="selected" c:param="&amp;favorite=T" c:division_id="fav">
+<s:textnode b:label="{$lSelOpt/div/text()}"/>
+</div>
+</s:render>
+</s:with>
+<s:task b:action="trigger" b:event="OrgDivisionChange"/>
+</s:when>
+<s:when b:test="$lSelOpt/@c:index_id = 'search'">
+<s:with b:target="$tNeedle">
+<s:setatt value=""/>
+</s:with>
+<s:with b:target="$tDivisions">
+<s:task b:action="hide"/>
+<s:task b:action="hide" b:target="div[@c:id='options']"/>
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+<s:textnode b:label="{$lSelOpt/div/text()}"/>
+</s:render>
+<s:task b:action="show" b:target="div[@c:id='search']"/>
+<s:task b:action="show"/>
+</s:with>
+<s:with b:target="$tOrgs">
+<s:task b:action="hide"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="$tOrgs">
+<s:task b:action="hide"/>
+</s:with>
+<s:with b:target="$tDivisions">
+<s:task b:action="hide"/>
+<s:task b:action="hide" b:target="div[@c:id='search']"/>
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+<s:fxstyle b:time="10"/>
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+<s:textnode b:label="{$lSelOpt/text()}"/>
+</s:render>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="OrgDivisionOption" c:division_id="-1" b:disabled="true">
+Loading...
+</div>
+</s:render>
+<s:task b:action="show" b:target="div[@c:id='options']"/>
+<s:task b:action="show"/>
+</s:with>
+<s:variable b:name="lUrl" b:select="concat($tEvWiz/@c:r25ws_prefix,$lSelOpt/@c:query, '?otransform=',$tEvWiz/@c:xsl_prefix,'s25-event-wiz/browse_org_',$lSelOpt/@c:xsl, '&amp;cache')"/>
+<s:if b:test="$lSelOpt/@c:index_id = 'names'">
+<s:if b:test="not(exists(id('Pref_AcctDirBreakPoint')))">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=AcctDirBreakPoint')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild"/>
+</s:if>
+<s:variable b:name="lBreakpoints" b:scope="local" b:select="string(id('Pref_AcctDirBreakPoint'))"/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;breakpoints=',$lBreakpoints)"/>
+</s:if>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tDivisions/div[@c:id='options']" b:mode="replacechildren"/>
+</s:otherwise>
+</s:choose>
+</s:if>
+</s:event>
+<s:event b:on="OrgDivisionChange">
+<s:variable b:name="lSelOpt" b:select="$tDivisions/div[@c:id='options']/div[@b:state='selected']"/>
+<s:if b:test="$lSelOpt/@c:division_id ne '-1' and $lSelOpt/@c:division_id ne $tLastDivision">
+<s:with b:target="$tOrgs">
+<s:task b:action="show"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="OrgOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+</s:with>
+<s:variable b:name="lUrl" b:select="concat($tEvWiz/@c:r25ws_prefix,'organizations.xml?scope=list&amp;', 'otransform=',$tEvWiz/@c:xsl_prefix,'s25-event-wiz/browse_org_divisions.xsl')"/>
+<s:choose>
+<s:when b:test="exists($tDivisions/@c:param)">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl, '&amp;',$tDivisions/@c:param,'=',$lSelOpt/@value)"/>
+</s:when>
+<s:when b:test="exists($lSelOpt/@c:param)">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl, $lSelOpt/@c:param)"/>
+</s:when>
+</s:choose>
+<s:if b:test="not(contains($lUrl, 'favorite=T'))">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;cache')"/>
+</s:if>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tOrgs/div[@c:id='options']" b:mode="replacechildren"/>
+<s:if b:test="starts-with($bpc_browser, 'ie')">
+<s:with b:target="$tOrgs/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+</s:if>
+<s:task b:action="assign" b:target="$tLastDivision" b:scope="tag" b:select="string($lSelOpt/@division_id)"/>
+</s:if>
+</s:event>
+<s:event b:on="OrgSelect">
+<s:if b:test="not(string-length($lOrgID)=0) and not(string-length($lOrgName)=0) and not($tContentOptions//div[@class='currentSelection' and @c:org_id = $lOrgID])">
+<s:task b:action="hide" b:target="$tContentOptions//div[@c:purpose='Organization' and @c:org_id = '-1']"/>
+<s:render b:destination="$tContentOptions//div[@c:purpose='Organization'][last()]" b:mode="after">
+<div c:id="txt" class="currentSelection" c:purpose="Organization" c:org_id="{$lOrgID}">
+<div class="currentSelection_Icons">
+<span c:purpose="FavToggle">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_NotFavorite" style="display:none;" c:purpose="NotFavorite" b:behavior="AddFavOrg" b:tooltiptext="Add this to Your Starred Organizations"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_IsFavorite" style="display:none;" c:purpose="Favorite" b:behavior="RemoveFavOrg" b:tooltiptext="Remove this from Your Starred Organizations"/>
+</span>
+<input type="image" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close.gif" b:behavior="RemoveOrg" c:org_id="{$lOrgID}"/>
+</div>
+<div class="currentSelectionValue icon-org" c:id="currentAddlOrganization" c:obj_type="organization" c:obj_id="{$lOrgID}" c:obj_name="{$lOrgName}">
+<s:textnode b:label="{$lOrgName}"/>
+</div>
+</div>
+</s:render>
+<s:if b:test="not(id('WSSessionMgr')/@c:user-type = 'web')">
+<s:variable b:name="lOrgAtrbsUrl" b:select="concat($tEvWiz/@c:r25ws_prefix,'organization.xml', '?organization_id=',$lOrgID, '&amp;scope=minimal')"/>
+<s:variable b:name="lOrgAtrbs" b:select=""/>
+<s:task b:action="load" b:url="{$lOrgAtrbsUrl}" b:method="GET" b:destination="$lOrgAtrbs" b:mode="replace" b:showloading="false"/>
+<s:task b:action="string2xml" b:variable="$lOrgAtrbs"/>
+<s:variable b:name="lOrgFavStatus" b:select="'NotFavorite'"/>
+<s:if b:test="string($lOrgAtrbs/r25:organizations/r25:organization/r25:favorite) = 'T'">
+<s:task b:action="assign" b:target="$lOrgFavStatus" b:select="'Favorite'"/>
+</s:if>
+<s:with b:target="$tContentOptions//div[@c:purpose='Organization' and @c:org_id=$lOrgID]">
+<s:task b:action="hide" b:target="div/span[@c:purpose='FavToggle']/img"/>
+<s:task b:action="show" b:target="div/span[@c:purpose='FavToggle']/img[@c:purpose = $lOrgFavStatus]"/>
+</s:with>
+</s:if>
+<s:task b:action="trigger" b:event="MarkDuplicateOrg"/>
+</s:if>
+</s:event>
+<s:event b:on="MarkDuplicateOrg">
+<s:event b:action="msg" b:value="s25:rsrv_wiz_addl_sponsor: MarkDuplicateOrg"/>
+<s:variable b:name="lSelectedPrimaryOrg" b:select="''"/>
+<s:choose>
+<s:when b:test="exists($tEvWiz/$tDeck//s25:rsrv_wiz_sponsor)">
+<s:event b:action="msg" b:value="{concat('s25:rsrv_wiz_addl_sponsor: MarkDuplicateOrg: s25:rsrv_wiz_sponsor/$tLastSelectedOrg = ', $tEvWiz/$tDeck//s25:rsrv_wiz_sponsor/$tLastSelectedOrg)}"/>
+<s:task b:action="assign" b:target="$lSelectedPrimaryOrg" b:select="string($tEvWiz/$tDeck//s25:rsrv_wiz_sponsor/$tLastSelectedOrg)"/>
+</s:when>
+<s:when b:test="$tEvWiz/$tEvent/r25:organization[r25:primary='T']">
+<s:task b:action="assign" b:target="$lSelectedPrimaryOrg" b:select="string($tEvWiz/$tEvent/r25:organization[r25:primary='T']/r25:organization_id)"/>
+</s:when>
+</s:choose>
+<s:event b:action="msg" b:value="{concat('s25:rsrv_wiz_addl_sponsor: MarkDuplicateOrg: $lSelectedPrimaryOrg = ', $lSelectedPrimaryOrg)}"/>
+<s:task b:action="remove" b:target="$tContentOptions//div[@c:purpose='Organization' and not(@c:org_id = $lSelectedPrimaryOrg)]/div[@c:id='already_primary']"/>
+<s:with b:target="$tContentOptions//div[@c:purpose='Organization' and @c:org_id = $lSelectedPrimaryOrg]">
+<s:if b:test="not(div[@c:id='already_primary'])">
+<s:render b:destination="." b:mode="aslastchild">
+<div c:id="already_primary" class="note" style="margin-left:20px;">
+<b>Note:</b> This organization is currently selected as the primary organization for this event.
+</div>
+</s:render>
+</s:if>
+</s:with>
+</s:event>
+<s:event b:on="LoadSearch">
+<s:task b:action="focus" b:target="$tNeedle"/>
+<s:if b:test="not(string-length($tNeedle/@value)=0)">
+<s:with b:target="$tOrgs">
+<s:task b:action="show"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="OrgOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+</s:with>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat($tEvWiz/@c:r25ws_prefix,'search.xml', '?q=',normalize-space($tNeedle/@value), '&amp;object_type=2', '&amp;otransform=',$tEvWiz/@c:xsl_prefix, 's25-event-wiz/org_search.xsl')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tOrgs/div[@c:id='options']" b:mode="replacechildren"/>
+<s:with b:target="$tOrgs/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+<s:with b:target="$tNeedle">
+<s:setatt b:valid="true" b:required="false"/>
+</s:with>
+<s:task b:action="assign" b:target="$tLastDivision" b:scope="tag" b:select="'search'"/>
+</s:if>
+</s:event>
+</s:behavior>
+<s:behavior b:name="OrgIndexOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:task b:action="trigger" b:event="OrgIndexChange" b:target="ancestor::*[@c:editor='true' or @c:purpose='attributeContainer'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="OrgDivisionOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:task b:action="trigger" b:event="OrgDivisionChange" b:target="ancestor::*[@c:editor='true' or @c:purpose='attributeContainer'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="OrgOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:super/>
+<s:variable b:name="lOrgID" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:variable b:name="lOrgName" b:scope="local" b:select="string(@c:obj_name)"/>
+<s:with b:target="ancestor::*[@c:editor='true' or @c:purpose='attributeContainer'][1]">
+<s:task b:action="trigger" b:event="OrgSelect"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RemoveOrg">
+<s:initatt class="RsrvWiz_org_remove" b:tooltiptext="Click to remove this organization from the event."/>
+<s:event b:on="command">
+<s:variable b:name="lObjId" b:scope="local" b:select="@c:org_id"/>
+<s:if b:test="count(ancestor::s25:rsrv_wiz_addl_sponsor[1]/$tContentOptions//div[@c:purpose='Organization' and not(@c:org_id='-1')]) = 1">
+<s:task b:action="show" b:target="ancestor::s25:rsrv_wiz_addl_sponsor[1]/$tContentOptions//div[@c:purpose='Organization' and @c:org_id = '-1']"/>
+</s:if>
+<s:task b:action="remove" b:target="ancestor::div[@c:purpose='Organization'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="AddFavOrg" b:behavior="AddFav">
+<s:event b:on="click">
+<s:task b:action="assign" b:target="ancestor::s25:rsrv_wiz_addl_sponsor[1]/$tCurrentObject" b:select="ancestor::div[@c:purpose='Organization'][1]/div[@c:id='currentAddlOrganization']"/>
+<s:super/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RemoveFavOrg" b:behavior="RemoveFav">
+<s:event b:on="click">
+<s:task b:action="assign" b:target="ancestor::s25:rsrv_wiz_addl_sponsor[1]/$tCurrentObject" b:select="ancestor::div[@c:purpose='Organization'][1]/div[@c:id='currentAddlOrganization']"/>
+<s:super/>
+</s:event>
+</s:behavior>
+<s:stylesheet b:name="Orgs_text">
+<s:template b:match="/">
+<div class="contentOptions" align="center">
+<s:apply-templates b:select="r25:organization[r25:primary = 'F']"/>
+<br/>
+<div class="input-note" style="width:400px; text-align:left">
+Additional Organizations are not currently editable.
+</div>
+</div>
+</s:template>
+<s:template b:match="r25:organization">
+<div c:id="txt" class="currentSelection" c:purpose="Organization">
+<div class="currentSelectionValue icon-org" style="width:400px; text-align:left" c:id="currentAddlOrganization" c:obj_type="organization">
+<s:attribute b:name="c:obj_id">
+<s:value-of b:select="r25:organization_id"/>
+</s:attribute>
+<s:attribute b:name="c:obj_name">
+<s:value-of b:select="r25:organization_name"/>
+</s:attribute>
+<s:value-of b:select="r25:organization_name"/>
+</div>
+</div>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="OrgIndex">
+<s:template b:match="/">
+<div b:behavior="OrgIndexOption" c:index_id="fav">
+<div class="icon-favorite"><s:value-of b:select="$lFavText"/></div>
+</div>
+<div b:behavior="OrgIndexOption" c:index_id="search" c:query="null.xml" c:xsl="search.xsl">
+<div class="icon-search">Search</div>
+</div>
+<s:apply-templates b:select="index"/>
+</s:template>
+<s:template b:match="index">
+<div b:behavior="OrgIndexOption">
+<s:attribute b:name="c:index_id">
+<s:value-of b:select="id"/>
+</s:attribute>
+<s:attribute b:name="c:query">
+<s:value-of b:select="query"/>
+</s:attribute>
+<s:attribute b:name="c:xsl">
+<s:value-of b:select="xsl"/>
+</s:attribute>
+<s:value-of b:select="name/text()"/>
+</div>
+</s:template>
+</s:stylesheet>
+</div>

@@ -1,0 +1,15 @@
+(def (decorate ornaments tree)
+  (nth 1 (visit tree ornaments ornaments)))
+
+;; Flesh out the following skeleton for PS8 Problem 2
+(def (visit tree ornaments orns)
+  (cond ((not (list? tree))
+	 (bind orn (head orns)
+	   (list 
+	   	 (bind orns (if (empty? (tail orns))
+		      	       (ornaments)
+			       (tail orns)))								orn)))
+	((empty? tree) (list #e #e))
+	(else (bind visit-head (visit (head tree) ornaments orns)
+		(bind visit-tail (visit (tail tree) ornaments orns)
+		  (list ornaments orns))))))

@@ -1,0 +1,36 @@
+
+	oc-FP: An OCAML implementation of John Backus' FP system
+
+
+Reference site: http://christophe.deleuze.free.fr/D/fp.html
+
+This is oc-FP source distribution.  Check the reference site for
+documentation about this implementation and FP in general.
+
+To compile oc-FP, you need the Objective Caml compiler, version 3.06
+or above.  Just run:
+
+  $ ./compile.sh
+
+Then, run fp by:
+
+  $ ./fp
+  oc-fp version 0.21
+  (c) 2003 Christophe Deleuze
+
+Some example functions are provided in "examples.fp".  Load them with:
+
+  # Load "examples.fp"
+  Loading definitions from examples.fp.
+  T
+
+and play with the system:
+
+  # iota : 5
+  <1, 2, 3, 4, 5>
+  # /* o iota : 5
+  120
+
+
+Any comment, suggestion, bug report or whatever should be sent to
+elviok AT free DOT fr.

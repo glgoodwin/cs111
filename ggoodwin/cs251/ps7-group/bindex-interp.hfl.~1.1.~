@@ -1,0 +1,40 @@
+; Environment-model interpreter for BINDEX written HOFL
+
+;; The file env.hfl contains the environment functions you need for this program.
+;; Loading env.hfl also loads:
+;; (1) option.hfl -- the HOFL implementation of options
+;; (2) list-utils.hfl -- the HOFL implementation of some higher-order list functions.
+;; You may need/want to use some of these in your code
+(load "env.hfl") 
+
+;; The file bindex-AST contains functions for manipulating the abstract syntax
+;; of BINDEX programs and expressions. You should use these functions in your
+;; code for RUN, EVAL, and BINAPPLY. 
+(load "bindex-AST.hfl")
+
+;; Note: use the HOFL error construct for any error situations. 
+
+;; Run the BINDEX program PGM on the values in the argument list ARGS
+(def (run pgm args)
+  ;; Replace this stub
+  (sym run-stub))
+
+;; Evaluate the BINDEX expression EXP relative to the environment ENV.
+(def (eval exp env)
+   ;; Replace this stub
+  (sym eval-stub))
+
+;; Apply the BINDEX arithmetic operator OP (represented as a symbol) to the
+;; arguments X and Y.
+(def (binapply op x  y)
+  ;; Replace this stub
+  (sym binapply-stub))
+
+;; This function (which is already implemented for you) calls your RUN function
+;; on the BINDEX program in the file PGMFILE and the argument list ARGS.
+;; It's an easy way to test your RUN function. The files "avg.bdx" and "squares.bdx"
+;; have been provided for you, but you are encouraged to create some additional
+;; files with BINDEX test programs. 
+(def (runFile pgmFile args)
+  (run (stringToSexp (fileToString pgmFile)) args))
+

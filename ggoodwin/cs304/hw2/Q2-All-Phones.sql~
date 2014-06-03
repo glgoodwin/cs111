@@ -1,0 +1,1 @@
+select * from names inner join phone using (id)\G

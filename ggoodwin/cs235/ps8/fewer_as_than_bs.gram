@@ -1,0 +1,9 @@
+{variables}
+S, T
+
+{start variable}
+S
+
+{productions}
+S -> TbS | TbT;
+T -> aTbT | bTaT | % 

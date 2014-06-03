@@ -1,0 +1,78 @@
+/*-- Gabe and Alex   cs304 Final Project
+-- Creates the database tables.  Useful for moving the database to a team account in the future */
+
+/*
+--This is the primary table. All other tables exist to support this table. Each opportunity has its own id, as well as an org_id OR ind_id, which will associate the opportunity with the organization or individual who is offering it. It has further information about the opportunity. The d_opp (date opportunity is offered) field is not mandatory, because an opportunity could conceivably have a flexible or as-of-yet-undecided date. The d_added (date added) field is mandatory because the computer will add this date without action on the user’s part.*/
+
+create table opps(/*-- oppurtunities. Opps will make life easier in the future.*/
+	opp_id int not null,
+	org_id int,
+	ind_id int,
+	title varchar(140),
+	opp_descrip varchar(1200), /*--detailed description, should be long*/
+	date_added varchar(10));/*-- YYYY-MM-DD format, easier than using date type
+	--optional fields, uncomment to add
+	-- date_off date, --date opp is offered
+	-- num_hours int, -- num of hours being offered
+	-- is_recurring boolean, 
+	-- category int, -- would be found on category table
+	-- pre_reqs int, --would be found on pre reqs table
+	-- date_exp date -- date opp expires
+	);*/
+
+
+/*------------------
+--Each organization contains only fields that support the opportunities table. It has standard information like id, name, address, short description/biography and a website. The org also has a contact. This contact is an individual from the individuals table, who has a phone number, email and associated information. By including a contact, students and admins can keep track of their main line of communication. The larger the organization, the more critical this contact would be. This field is not mandatory however because it is conceivable that no individual contact has been made with an organization.*/
+
+create table orgs( /*--organizations*/
+	org_id int not null,
+	org_name varchar(50),
+	address varchar(200),
+	zip varchar(5),
+	url varchar(50),
+	org_phone int,
+	org_bio varchar(1200));
+	/*-- optional fields. uncomment to add
+	-- contact int, -- id of contact from indv table
+	-- category int, --id of category form category table
+	-- org_notes varchar(1200)
+	);*/
+
+/*----------------------------
+--The individuals table serves the dual purpose of including both individual contacts that are associated with organizations, as well as independent individuals offering opportunities unconnected with an organization. Each individual has standard contact information as well an optional org_id, which would associate them with an organization should they belong to one.*/
+
+create table indv( /*--individuals*/
+	ind_id int not null,
+	first varchar(50),
+	last varchar(50),
+	ind_phone1 int,
+	email varchar(50),
+	date_added varchar(10));
+	/*-- optional fields, uncomment to add
+	-- ind_phone2 int,
+	-- org_id int, -- id of org indv is associated with
+	-- ind_notes varchar(1200)
+	);*/
+
+/*--------------------------
+--Pre_reqs earns its own table because new pre-reqs will be continually added. Users will be able to select from a list of predetermined pre-reqs as well as add their own if they find the list lacks what they need. Pre_reqs are an optional field in the opportunities table.*/
+
+create table pre_reqs(
+	pre_id int not null,
+	pre_title varchar(140)
+	);
+
+/*-------------------------
+--Categories functions identically to pre_reqs, in that it is assumed that new categories will be continually added. Categories are an optional field in both the opportunities field and the organizations field because adding a category could facilitate searching and matching.*/
+
+create table categories(
+	cat_id int not null,
+	cat_name varchar(50)
+	);
+
+/*--------------------------
+--This is a temporary table that will be created empty at the beginning of each session, and dropped when the session is ended. It will hold the users -Y´starred¡ listings, and will be associated with a ´print to¡ function that will allow the user to save a copy of this table. Because it is listing opportunities, it only needs the opp_id.*/
+
+create table temp_starred(
+	opp_id int not null
+	); 	

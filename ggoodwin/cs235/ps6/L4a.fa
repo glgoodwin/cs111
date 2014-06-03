@@ -1,0 +1,9 @@
+{states}
+A, B, C, D, E, H, F, G, I, J, K
+{start state}
+A
+{accepting states}
+K
+{transitions}
+A, 1 -> B; B, % -> C; C, % -> D; D, % -> E; E, % -> F; F, 01 -> G; G, % -> E; E,
+ % -> C; D, % -> H; H, % -> I; I, 1 -> J; J, % -> H; H, % -> C; C, 1 -> K

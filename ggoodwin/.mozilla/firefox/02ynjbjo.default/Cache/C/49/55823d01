@@ -1,0 +1,2841 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:s25="http://www.collegenet.com/s25" xmlns:bx="http://www.collegenet.com/bx" style="display:none;">
+<script type="text/javascript"><![CDATA[
+loadScript('utils/jquery-ui-1.8.16/js/jquery-ui-1.8.17.sortable.min.js');
+]]></script>
+<s:include b:url="{concat($s25_controlpath,'s25-data/s25-data.xml')}" b:once="true"/>
+<s:htmlstructure b:name="s25:my25live" b:behavior="My25Live">
+<div><s:innercontent/></div>
+</s:htmlstructure>
+<style type="text/css">
+
+#My25Live { width: 100%; margin-top: 15px; }
+#My25Live_table { border-collapse: collapse; width: 100%; }
+#My25Live_table .My25Live_column { width: 32%; vertical-align: top; }
+#My25Live_table .My25Live_spacer_column { width: 2%; }
+#My25Live_table .My25Live_spacer_column IMG { width: 15px; height:15px; }
+#My25Live_table .section { margin-bottom: 25px; }
+#My25Live_table #WhatsNew { margin-bottom: 25px; }
+#My25Live_table .sectionHead, 
+#hiddenWidgets .sectionHead,
+#WhatsNewHeader {
+background-color:	#FAF0DC;
+border:				1px solid #999;
+font-weight:		bold;
+border-top-left-radius:			4px;
+-moz-border-radius-topleft:		4px;
+-webkit-border-top-left-radius:	4px;
+font-family:		Tahoma, Geneva, sans-serif;
+font-size:			130%;
+font-weight:		normal;
+}
+#WhatsNewHeader {
+padding: 	5px 6px 5px 7px;
+cursor:		default;
+}
+#My25Live_table .sectionHead { 
+position:			relative;
+}
+.isIE #My25Live_table .sectionHead { 
+position:			static;
+}
+#My25Live_table .sectionHead DIV { margin: 5px 6px 5px 7px; }
+#My25Live_table .sectionHead .icon-search,
+#My25Live_table .sectionHead .icon-event-fav,
+#My25Live_table .sectionHead .icon-space-fav,
+#My25Live_table .sectionHead .icon-resource-fav,
+#My25Live_table .sectionHead .icon-task { padding-left: 20px; }
+#My25Live_table .sectionHead .sectionToggle {
+position:			absolute;
+right:				0;
+top:				0;
+bottom:				0;
+background-color:	#ddd;
+border-left:		1px solid #999;
+padding:			5px 8px 0;
+margin:				0;
+}
+.isIE #My25Live_table .sectionHead .sectionToggle {
+position:			relative;
+top:				auto;
+right:				auto;
+bottom:				auto;
+float:				right;
+height:				27px;
+border-bottom:		1px solid #999;
+}
+#My25Live_table .sectionHead .sectionToggle IMG { width: 11px; height: 11px; cursor: pointer; }
+#My25Live_table .sectionHead .sectionToggle IMG.toggleCollapse { display: none; }
+#My25Live_table .sectionHead .sectionRemove {
+float:				right;
+background-color:	#ddd;
+border-left:		1px solid #999;
+border-bottom:		1px solid #999;
+height:				28px;
+padding:			6px 8px 0;
+margin:				0;
+}
+#My25Live_table .sectionHead .sectionRemove IMG { width: 13px; height: 13px; cursor: pointer; }
+#My25Live_table .sectionHead .My25Live_Refresh {
+float:				right;
+margin:				5px 40px 0;
+cursor:				pointer;
+}
+.isIE #My25Live_table .sectionHead .My25Live_Refresh {
+margin:				5px 8px 0;
+}
+#My25Live_table .sectionBody, #WhatsNewBody {
+background-color:	#F8F8F8;
+border-style:		solid;
+border-color:		#999;
+border-width:		0px 1px 1px;
+}
+#My25Live_table .sectionBody .textOnly { padding: 10px;	}
+#My25Live_table .sectionBody P { margin-top: 0px; margin-bottom: 12px; }
+#My25Live_table .sectionBody A { text-decoration: none; }
+#My25Live_table .sectionBody A:hover { text-decoration: underline; }
+#My25Live_table .sectionBody TD { font-size: inherit; }
+#My25Live_table .loading {
+padding:			10px;
+text-align:			center;
+font-style:			italic;
+}
+#My25Live_table .loading IMG { 
+vertical-align: 	-3px; 
+margin-right: 		2px; 
+height:				16px;
+width:				16px;
+}
+#WhatsNewBody {
+padding:			10px 20px;
+}
+#WhatsNewBody UL {
+margin:				0 0 15px;
+padding-left: 		15px;
+}
+#WhatsNewBody UL LI {
+margin-right:		8px;
+margin-bottom:		12px;
+list-style-image:	url('https://25live-b.collegenet.com/hybridssl/v21.0/gfx/bullet_arrow.gif');
+}
+#WhatsNewBody UL LI .WhatsNewItemHead {
+font-size:			110%;
+font-weight:		bold;
+color:				#222;
+}
+#WhatsNewBody UL LI .WhatsNewItemBody {
+font-size:			90%;
+color:				#666;
+padding:			2px 0;
+}
+#WhatsNewBody P { margin: 0 0 5px; }
+#WhatsNewBody A { text-decoration: none; }
+#WhatsNewBody A:hover { text-decoration: underline; }
+#My25Live_RecentlyViewed { }
+#My25Live_RecentlyViewed_Body { 
+display: 		none;  
+max-height:		250px;
+overflow:		auto;
+}
+#My25Live_EventCreation { display: none; }
+.My25Live_EventCreation_RegTM {
+font-size:			75%;
+position:			relative;
+top:				-4px;
+}
+#My25Live_EventCreation .sectionHead .My25Live_Refresh {
+margin-right:		10px;
+}
+#My25Live_EventCreation .sectionBody {
+text-align:			center;
+padding:			10px;
+}
+#My25Live_EventCreation #My25Live_EventCreationButton {
+font-family:		Verdana;
+font-size:			140%;
+background-color:	#d2eac2;
+margin:				7px auto;
+padding:			3px 10px;
+}
+.isIE #My25Live_EventCreation #My25Live_EventCreationButton {
+width:				200px;
+}
+.My25Live_EventCreation_Prompt {
+font-family:		Arial;
+line-height:		175%;
+}
+.My25Live_EventCreation_Prompt SPAN {
+white-space:		nowrap;
+}
+.My25Live_EventCreation_Prompt B {
+font-size:			130%;
+margin:				0 1px;
+}
+#My25Live_EventCreation .sectionBody .timespinner {
+white-space:		nowrap;
+margin-left:		10px;
+margin-right:		10px;
+}
+#My25Live_EventCreation .sectionBody DIV DIV DIV {
+margin-bottom:		10px;
+}
+#My25Live_EventCreation_Divider {
+}
+#My25Live_EventCreation_Attendees {
+width:				30px;
+}
+.isIE #My25Live_EventCreation_Collections {
+width:				150px;
+}
+#My25Live_EventCreation_AvailableLocationResults, 
+#My25Live_EventCreation_FindingLocations,
+#My25Live_EventCreation_AvailableLocationResultDesc	{
+display:			none;
+border:				1px solid #999;
+}
+#My25Live_EventCreation_AvailableLocationResults {
+max-height:			200px;
+overflow:			auto;
+background-color:	#E6F1F7;
+text-align:			left;
+margin-bottom:		0px;
+}
+.isIE #My25Live_EventCreation_AvailableLocationResults {
+height:				200px;
+}
+#My25Live_EventCreation_FindingLocations,
+#My25Live_EventCreation_AvailableLocationResultDesc {
+background-color:	#ddd;
+min-height:			45px;
+}
+.isIE #My25Live_EventCreation_FindingLocations,
+.isIE #My25Live_EventCreation_AvailableLocationResultDesc {
+height:				65px;
+}
+#My25Live_EventCreation_AvailableLocationResultDesc {
+padding:			10px;
+}
+#My25Live_EventCreation_AvailableLocationResults .My25Live_EventCreation_ResultItem {
+padding:			5px;
+border-bottom:		1px solid #ccc;
+margin:				0px !important;
+}
+#My25Live_EventCreation_AvailableLocationResults .My25Live_EventCreation_ResultItem DIV {
+margin:				0px !important;
+}
+#My25Live_EventCreation_AvailableLocationResults .My25Live_EventCreation_ResultItem .My25Live_EventCreation_ResultItem_Use {
+float:				right;
+text-align:			right;
+font-size:			90%;
+font-weight:		bold;
+cursor:				pointer;
+color:				#0000C8;
+}
+#My25Live_EventCreation_AvailableLocationResults .My25Live_EventCreation_ResultItem .My25Live_EventCreation_ResultItem_Details {
+padding-left:		20px;
+}
+#My25Live_EventCreation_AvailableLocationResults .My25Live_EventCreation_ResultItem .My25Live_EventCreation_ResultItem_Details DIV {
+padding-top:		3px;
+font-size:			90%;
+}
+#My25Live_EventCreation_S25Object { display: none; }
+#My25Live_EventCreation_AllLocations_SelectContainer {
+margin-right:		10%; 
+margin-left:		10%; 
+}
+.isIE #My25Live_EventCreation_AllLocations_SelectContainer {
+width:				100%;
+}
+#My25Live_EventCreation_AllLocations_SelectContainer SELECT {
+width:				100%;
+}
+#My25Live_EventCreation_AllLocations_Search BUTTON.b-button {
+padding:			1px;
+}
+#My25Live_EventCreation_AllLocations_Search BUTTON.b-button DIV {
+margin-bottom:		0px !important;
+}
+#My25Live_EventCreation_AllLocations_Container {
+display:		none;
+}
+#My25Live_EventCreation_AdvancedSearchLink {
+display:			none;
+font-size:			90%;
+font-style:			italic;
+padding-top:		10px;
+margin-bottom:		0 !important;
+}
+#My25Live_EventCreation_BrowseLink {
+font-size:			90%;
+font-style:			italic;
+border-top:			1px dotted #ddd;
+margin:				10px 5% 0 !important;
+padding-top:		10px;
+}
+#s25 .My25Live_EventCreation_Button {
+background-image:		url('https://25live-a.collegenet.com/hybridssl/v21.0/gfx/retrieve.png');
+background-position:	right center;
+background-repeat:		no-repeat;
+padding:				3px 18px 3px 3px;
+}
+#s25 .My25Live_EventCreation_Button DIV {
+margin:				0px !important;
+}
+#My25Live_EventCreation_StartOver {
+display:			none;
+}
+#My25Live_ScheduleEvent {
+display:			none;
+}
+#My25Live_ScheduleEvent .sectionBody {
+border-width:		1px !important;
+text-align:			center;
+padding:			10px 30px 10px 60px;
+}
+#My25Live_ScheduleEvent #My25Live_btnScheduleEvent {
+font-family:		Verdana;
+font-size:			140%;
+background-color:	#d2eac2;
+margin:				7px auto;
+padding:			3px 10px;
+max-width:			175px;
+}
+.isIE #My25Live_ScheduleEvent #My25Live_btnScheduleEvent {
+width:				175px;
+}
+#My25Live_ScheduleEvent div.fauxButton {
+display: 			none;
+font-family:		Verdana;
+font-size:			100%;
+background-color:	#d2eac2;
+margin:				0 auto;
+padding:			1px 10px;
+width: 				160px;
+border: 			2px solid #dddddd;
+color: 				#999999;
+}
+#My25Live_ScheduleEvent #My25Live_btnFindLocation {
+font-family:		Verdana;
+font-size:			120%;
+background-color:	#E6F1F7;
+margin:				7px auto;
+padding:			3px 10px;
+}
+#My25Live_DraftsSummary, #My25Live_DraftsSummary_Body { display: none; }
+#My25Live_DraftsSummary .sectionHead { background-color: #B4D3E6; }
+#My25Live_DraftsSummary_Body {  background-color: #eee; padding: 10px; }
+#My25Live_DraftsSummary_Body .My25Live_DraftLink { margin-bottom: 5px; }
+#My25Live_EventsSummary, #My25Live_EventsSummary_Body { display: none; }
+#My25Live_EventsSummary .sectionHead { background-color: #D2EAC2; }
+#My25Live_EventsSummary_Body {  background-color: #eee; padding: 10px; }
+#My25Live_EventsSummary_Body .My25Live_EventLink { margin-bottom: 5px; }
+#My25Live_QuickSearch { display: none; }
+#My25Live_QuickSearch_Body { display: none; padding: 10px; text-align: center; }
+#My25Live_QuickSearchTable TD { padding: 0px 5px 5px 0px; }
+#My25Live_QuickSearch_Events, #My25Live_QuickSearch_Locations, #My25Live_QuickSearch_Resources {
+background-position:	5px top;
+background-repeat:		no-repeat;
+height:					62px;
+margin:					0 auto 10px;
+display:				none;
+padding:				27px 0 0 45px;
+max-width:				300px;
+text-align:				left;
+}
+.isIE #My25Live_QuickSearch_Events, .isIE #My25Live_QuickSearch_Locations, .isIE #My25Live_QuickSearch_Resources {
+width:					250px;
+}
+#My25Live_QuickSearch_Events	{ background-image: url('https://25live-a.collegenet.com/hybridssl/v21.0/gfx/ornament_event.png'); }
+#My25Live_QuickSearch_Locations	{ background-image: url('https://25live-a.collegenet.com/hybridssl/v21.0/gfx/ornament_location.png'); }
+#My25Live_QuickSearch_Resources	{ background-image: url('https://25live-a.collegenet.com/hybridssl/v21.0/gfx/ornament_resource.png'); }
+#My25Live_QuickSearch .My25Live_QuickSearchInput {
+font-size:			110%;
+color:				#666;
+border: 			1px solid #888;
+font-family:		Arial;
+background-color:	WHITE;
+height:				22px;
+padding:			3px;
+min-width:			100px;
+width:				75%;
+}
+.isIE #My25Live_QuickSearch .My25Live_QuickSearchInput {
+width:				75%;
+width:				150px;
+}
+#My25Live_QuickSearch .My25Live_QuickSearch_Button {
+margin-left:		2px;
+padding:			2px 3px;
+}
+#My25Live_Favorites_Loading {
+background-color:	#F8F8F8;
+border:				1px solid #999;
+}
+#My25Live_Favorites_Events, 
+#My25Live_Favorites_Event_Searches, 
+#My25Live_Favorites_Locations, 
+#My25Live_Favorites_Location_Searches, 
+#My25Live_Favorites_Resources, 
+#My25Live_Favorites_Resource_Searches { display: none; }
+#My25Live_Favorites_Events .sectionHead, #My25Live_Favorites_Event_Searches .sectionHead { background-color: #D2EAC2; }
+#My25Live_Favorites_Locations .sectionHead, #My25Live_Favorites_Location_Searches .sectionHead { background-color: #E6F1F7; }
+#My25Live_Favorites_Resources .sectionHead, #My25Live_Favorites_Resource_Searches .sectionHead { background-color: #F2E1E1; }
+#My25Live_Favorites_Events .sectionBody, 
+#My25Live_Favorites_Event_Searches .sectionBody, 
+#My25Live_Favorites_Locations .sectionBody, 
+#My25Live_Favorites_Location_Searches .sectionBody, 
+#My25Live_Favorites_Resources .sectionBody, 
+#My25Live_Favorites_Resource_Searches .sectionBody { display: none; }
+#My25Live_Favorites_Events_Body,
+#My25Live_Favorites_Event_Searches_Body,
+#My25Live_Favorites_Locations_Body,
+#My25Live_Favorites_Location_Searches_Body,
+#My25Live_Favorites_Resources_Body,  
+#My25Live_Favorites_Resource_Searches_Body { display: none }
+.isIE #My25Live_Favorites_Events_Body,
+.isIE #My25Live_Favorites_Event_Searches_Body,
+.isIE #My25Live_Favorites_Locations_Body,
+.isIE #My25Live_Favorites_Location_Searches_Body,
+.isIE #My25Live_Favorites_Resources_Body, 
+.isIE #My25Live_Favorites_Resource_Searches_Body { width: 100% }
+.My25Live_Favorite_Object {
+border-bottom:		1px solid #eee;
+font-weight:		bold;
+padding:			5px 5px 5px 7px;
+}
+.My25Live_Favorite_Object .My25Live_Favorite_Object_Actions { 
+float: 			right; 
+text-align:		right;
+width:			60px;
+}
+.My25Live_Favorite_Object .My25Live_Favorite_Object_LongName { 
+font-size:			90%;
+color:				BLACK;
+font-weight:		normal;
+}
+#My25Live_Favorites_Locations_Link {
+display:			none;
+text-align:			center;
+padding:			5px;
+border-top:			1px solid #aaa;
+background-color:	#eee;
+margin-top:			10px;
+}
+#My25Live_Favorites_Locations_Link IMG {
+border:				0px;
+vertical-align:		-3px;
+}
+#My25Live_TasksSummary .sectionHead { background-color: #F6D5A6; }
+#My25Live_TasksSummary, #My25Live_TasksSummary_Body { display: none; }
+#My25Live_TasksSummary .sectionBody { padding: 10px; }
+#My25Live_TasksSummary .sectionBody DIV { padding-bottom: 10px; }
+#My25Live_TasksSummary_Counts .loading { text-align: left; padding: 0 0 10px; }
+.slot {
+width: 100%
+border: dashed 1px #9a9;
+background-color: #ded;
+min-height: 40px;
+margin: 0px 0px 20px 0px;
+}
+#toolbox {
+display: none;
+background-color: #eee;
+border: 1px solid #999;
+border-radius:			4px;
+-moz-border-radius:		4px;
+-webkit-border-radius:	4px;
+padding:		3px 8px;
+}
+#toolboxHolder #toolbox { 
+float: left;
+width: 100%;
+margin-bottom: 15px; 
+}
+#splashHolder { 
+cursor:			pointer;
+}
+#splashHolder #toolbox { 
+width: 100%;
+margin-bottom: 25px; 
+}
+#toolbox .slot {
+background-color: #ded;
+border: dashed 1px #9a9;
+margin: 4px;
+height: 28px;
+min-height: 28px;
+width: 250px;
+padding: 3px;
+float:left;
+}
+#toolbox #splash {
+font-weight:	bold;
+text-align:		center;
+}
+#splashHolder #toolbox #splash {
+padding: 0px;
+}
+#splashHolder A { text-decoration: none; }
+#splashHolder:hover A { text-decoration: underline; }
+.isIE #splashHolder A:hover { text-decoration: underline; }
+#toolbox #splash IMG {
+margin-right:	5px;
+vertical-align:	-3px;
+border: 0px;
+}
+#toolbox #toolboxInstructions {
+display: 		none;
+text-align:		center;
+margin-bottom:	5px;
+color:			#666;
+border-bottom:	1px dashed #ccc;
+padding:		5px 25px 10px;
+}
+#toolbox #toolboxInstructions SPAN {
+white-space:	nowrap;
+margin-right:	5px;
+}
+#toolbox #doneButton, #toolbox #dashboardResetButton {
+display: none;
+padding: 3px;
+background-color: #ffffff;
+border: solid 1px #999;
+margin: 0px 3px;
+float:right;
+cursor: default;
+text-align: center;
+cursor:		pointer;
+}
+#toolbox #doneButton:hover, #toolbox #dashboardResetButton:hover {
+background-color: #ddd;
+}
+#toolbox #doneButton { width: 50px; }
+#toolbox #dashboardResetButton { width: 115px; }
+#My25Live_table .section {
+width: 100%;
+}
+#toolbox .section {
+float: left;
+width: 250px;
+font-size: 90%;
+margin: 4px;
+display: none;
+}
+#toolbox .section .sectionHead DIV {
+margin-right:	5px;
+}
+#toolbox .section .sectionHead, .handle { cursor: move; }
+.notLoggedIn #toolbox .section .sectionHead, .notLoggedIn .handle { cursor: default; }
+#toolbox .section .sectionHead .sectionToggle { display: none; }
+#toolbox .section .sectionHead .My25Live_Refresh { display: none; }
+#toolbox .section .sectionBody { display: none !important; }
+#splashHolder #toollbox .section { display: none; }
+#My25Live_ScheduleEvent { }
+#My25Live_ScheduleEvent img.handle { 
+float: left; 
+margin: 8px 0px 0px 1px; 
+}
+#toolbox #My25Live_ScheduleEvent img.handle { 
+float: 		left; 
+height:		16px;
+width:		16px;
+margin:		10px 0 0 10px;
+opacity:	0;
+filter:		alpha(opacity=0);
+}
+#toolbox #My25Live_ScheduleEvent .sectionBody  { 
+display: 	block !important; 
+padding:	4px 10px 4px 20px;
+background-image:		url('https://25live-a.collegenet.com/hybridssl/v21.0/gfx/icon_create.gif');
+background-repeat:		no-repeat;
+background-position:	10px center;
+}
+#toolbox #My25Live_ScheduleEvent #My25Live_btnScheduleEvent {
+display:			none;
+}
+#toolbox #My25Live_ScheduleEvent div.fauxButton {
+display:			block;
+}
+#toolbox .section #My25Live_QuickSearch .sectionBody,
+#toolbox .section #My25Live_Favorites_Event_Searches .sectionBody,
+#toolbox .section #My25Live_Favorites_Location_Searches .sectionBody,
+#toolbox .section #My25Live_Favorites_Resource_Searches .sectionBody,
+#toolbox .section #My25Live_EventsSummary .sectionBody,
+#toolbox .section #My25Live_DraftsSummary .sectionBody,
+#toolbox .section #My25Live_TasksSummary .sectionBody,
+#toolbox .section #My25Live_RecentlyViewed .sectionBody,
+#toolbox .section #My25Live_Favorites_Events .sectionBody,
+#toolbox .section #My25Live_Favorites_Locations .sectionBody,
+#toolbox .section #My25Live_Favorites_Resources .sectionBody {
+display: none;
+margin: 0px;
+}
+.nobudge { }
+#s25 div#openToolbox {
+border: solid 1px #000;
+margin: 0 0 20px 0;
+background-repeat: no-repeat;
+background-position: 6px 3px;
+line-height: 24px;
+background-color: #EEE;
+}
+#s25 div#openToolbox a {
+color: #0000c8;
+text-decoration: none;
+font-weight: bold;
+font-size: 11px;
+font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+padding: 5px;
+}
+#s25 div#openToolbox a:hover {
+text-decoration: underline;
+}
+
+</style>
+<s:behavior b:name="My25Live" b:behavior="S25Data">
+<s:initatt c:purpose="My25Live" id="My25Live" c:init="0"/>
+<s:event b:on="construct">
+<s:super/>
+
+<s:variable b:name="tWhatsNewVersion" b:scope="tag" b:select="''"/>
+<s:variable b:name="tDefaultQuickSearchText" b:scope="tag" b:select="'Keyword or Event Reference...'"/>
+<s:variable b:name="tAllLocationsXml" b:scope="tag" b:select="''"/>
+<s:variable b:name="tAvailabilityPostXml" b:scope="tag" b:select="''"/>
+<s:variable b:name="tCapacityBreakpoints" b:scope="tag" b:select="'0,5,10,15,20,25,30,40,50,75,100,150,200,300,500,1000,10000,100000'"/>
+<s:variable b:name="tLastMaxCapacity" b:scope="tag" b:select="0"/>
+<s:variable b:name="tLastMinCapacity" b:scope="tag" b:select="0"/>
+<s:variable b:name="tLastCollectionLocations" b:scope="tag" b:select=""/>
+<s:variable b:name="lPrefNames">
+<prefs>
+<name>25L_my25live_sections</name>
+<name>25L_event_system_options</name>
+<name>25L_space_system_options</name>
+<name>25L_resource_system_options</name>
+<name>25L_dashboard_widget_order</name>
+</prefs>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lPrefNames"/>
+<s:for-each b:target="$lPrefNames/prefs/name">
+<s:if b:test="exists(id(concat('Pref_',string($_target))))">
+<s:task b:action="remove" b:target="$_target"/>
+</s:if>
+</s:for-each>
+<s:if b:test="count($lPrefNames/prefs/name) gt 0">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=', string-join($lPrefNames/prefs/name, '+'))"/>
+<s:task b:test="id('WSSessionMgr')/@c:logged-in = 'false'" b:action="assign" b:target="$lPrefUrl" b:select="concat($lPrefUrl,'&amp;cache')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+</s:if>
+<s:variable b:name="testWOPref" b:select="string(id('Pref_25L_dashboard_widget_order'))"/>
+<s:variable b:name="tPrefSectionsXml" b:scope="tag" b:select="string(id('Pref_25L_my25live_sections'))"/>
+<s:task b:action="string2xml" b:variable="$tPrefSectionsXml"/>
+<s:variable b:name="tPrefEventOptionsXml" b:scope="tag" b:select="string(id('Pref_25L_event_system_options'))"/>
+<s:task b:action="string2xml" b:variable="$tPrefEventOptionsXml"/>
+<s:variable b:name="tPrefLocationOptionsXml" b:scope="tag" b:select="string(id('Pref_25L_space_system_options'))"/>
+<s:task b:action="string2xml" b:variable="$tPrefLocationOptionsXml"/>
+<s:variable b:name="tPrefResourceOptionsXml" b:scope="tag" b:select="string(id('Pref_25L_resource_system_options'))"/>
+<s:task b:action="string2xml" b:variable="$tPrefResourceOptionsXml"/>
+<s:variable b:name="tPrefWidgetOrder" b:scope="tag" b:select="string(id('Pref_25L_dashboard_widget_order'))"/>
+<s:variable b:name="tSections" b:scope="tag">
+<sections>
+<section title="Quick Search" name="search" expanded="true"/>
+<section title="Recently Viewed" name="recent" expanded="true"/>
+<section title="Your Drafts" name="drafts" expanded="true"/>
+<section title="Your Events" name="events" expanded="true"/>
+<section title="Tasks" name="tasks" expanded="true"/>
+<section title="Your Starred Events" name="fav_events" expanded="true"/>
+<section title="Your Starred Locations" name="fav_locations" expanded="true"/>
+<section title="Your Starred Resources" name="fav_resources" expanded="true"/>
+<section title="Your Starred Event Searches" name="fav_event_searches" expanded="true"/>
+<section title="Your Starred Location Searches" name="fav_location_searches" expanded="true"/>
+<section title="Your Starred Resource Searches" name="fav_resource_searches" expanded="true"/>
+</sections>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$tSections"/>
+<s:for-each b:target="$tSections/sections/section">
+<s:if b:test="$_target/@name = $tPrefSectionsXml/sections/section/@name">
+<s:task b:action="set" b:target="$_target/@expanded" b:value="{string($tPrefSectionsXml/sections/section[@name = $_target/@name]/@expanded)}"/>
+</s:if>
+</s:for-each>
+<s:variable b:name="tDefaultWidgetOrder" b:scope="tag">
+{
+"column1" : ["My25Live_QuickSearch","My25Live_Favorites_Event_Searches","My25Live_Favorites_Location_Searches","My25Live_Favorites_Resource_Searches"],
+"column2" : ["My25Live_ScheduleEvent","My25Live_EventCreation","My25Live_EventsSummary","My25Live_DraftsSummary","My25Live_TasksSummary"],
+"column3" : ["My25Live_RecentlyViewed","My25Live_Favorites_Events","My25Live_Favorites_Locations","My25Live_Favorites_Resources"],
+"hidden" : []
+}
+</s:variable>
+<s:script><![CDATA[
+
+var defaultObj = s25_parse_json(String(bpc.getVariable('tDefaultWidgetOrder','tag',document.getElementById('My25Live'))));
+var prefsObj = s25_parse_json(String(bpc.getVariable('tPrefWidgetOrder','tag',document.getElementById('My25Live'))));
+var resultsObj = s25_parse_json('{"column1":[],"column2":[],"column3":[],"hidden":[]}'); 
+var allDefaults = [];
+var noPref = [];
+function widgetOrderString(jsonObj) {
+var result = '{';
+for (vars in jsonObj) {
+var varValue = jsonObj[vars];
+if (varValue instanceof Array) {
+result += '"' + vars + '":["';
+result += varValue.join('","');
+result += '"],';
+} else {
+result += '"' + vars + '":' + varValue + ',';
+}
+}
+result = result.replace(/,$/,'');
+result += '}';
+return result;
+}
+$(function() {
+for (cols in defaultObj) {
+allDefaults = allDefaults.concat(defaultObj[cols]);		
+}
+for (items in allDefaults) {
+var inPrefs = false;
+for (cols in prefsObj) {
+column = prefsObj[cols]
+var slotCounter = 0;
+for (slots in column) {
+var prefItem = column[slots];
+if (allDefaults[items] == prefItem) {
+resultsObj[cols][slotCounter] = prefItem;
+inPrefs = true;
+break;
+}
+slotCounter++;
+if (inPrefs) {
+break;
+}
+}
+}
+if (!inPrefs) {
+noPref.push(allDefaults[items]);
+}
+}
+for (items in noPref) {
+for (cols in defaultObj) {
+column = defaultObj[cols];
+var slotCounter = 0;
+var inDefault = false;
+for (slots in column) {
+var defaultItem = column[slots];
+if (defaultItem == noPref[items]) {
+inDefault = true;
+resultsObj[cols].push(defaultItem);
+break;
+}
+slotCounter++;
+if (inDefault) {
+break;
+}
+}
+}
+}
+for (cols in resultsObj) {
+cleanColumn = resultsObj[cols];
+for (var cleanCounter = 0;cleanCounter < cleanColumn.length;cleanCounter++) {
+if (cleanColumn[cleanCounter] == undefined || cleanColumn[cleanCounter] == "") {
+resultsObj[cols].splice(cleanCounter,1);
+} 
+}
+}
+bpc.setVariable('tPrefWidgetOrder',[widgetOrderString(resultsObj)],'tag',_current);
+});
+
+]]></s:script>
+<s:task b:action="trigger" b:event="Paint"/>
+<s:setatt c:init="1"/>
+</s:event>
+<s:event b:on="Paint">
+<s:render b:destination="." b:mode="replacechildren">
+<div id="dashboard">
+<table id="My25Live_table" border="0" align="center">
+<tr>
+<td colspan="5" id="toolboxHolder"/>
+</tr>
+<tr>
+<td class="My25Live_column" id="My25Live_column1"/>
+<td class="My25Live_spacer_column"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif"/></td>
+<td class="My25Live_column" id="My25Live_column2"/>
+<td class="My25Live_spacer_column"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif"/></td>
+<td class="My25Live_column" id="My25Live_column3"/>
+</tr>
+</table>
+</div>
+</s:render>
+<s:variable b:name="lPrefHiddenTutorialsXml" b:scope="tag" b:select="string(id('Pref_25L_hidden_tutorials'))"/>
+<s:task b:action="string2xml" b:variable="$lPrefHiddenTutorialsXml"/>
+<s:if b:test="not($lPrefHiddenTutorialsXml/tutorials)">
+<s:task b:action="assign" b:target="$lPrefHiddenTutorialsXml" b:scope="tag" b:select="'&lt;tutorials&gt;&lt;/tutorials&gt;'"/>
+<s:task b:action="string2xml" b:variable="$lPrefHiddenTutorialsXml"/>
+</s:if>
+<s:task b:action="assign" b:target="$tWhatsNewVersion" b:scope="tag" b:select="'WhatsNew21'"/>
+<s:if b:test="id('WSSessionMgr')/@c:logged-in = 'true' and not($lPrefHiddenTutorialsXml//tutorial = $tWhatsNewVersion)">
+<s:render b:destination="id('My25Live_column2')" b:mode="aslastchild">
+<div id="WhatsNew">
+<div id="WhatsNewHeader">
+<div class="icon-25live">What&apos;s New in 25Live?</div>
+</div>
+<div id="WhatsNewBody">
+<ul>
+<li><div class="WhatsNewItemHead">Customize Your Dashboard</div><div class="WhatsNewItemBody">Use drag-and-drop to rearrange, remove, or restore sections to the Dashboard. Click "Customize Dashboard" for details.</div></li>
+<li><div class="WhatsNewItemHead">Event Assignment Details</div><div class="WhatsNewItemBody">When creating or editing events, 25Live now always remembers location and resource instructions, location layouts, and resource quantities.</div></li>
+<li><div class="WhatsNewItemHead">Event Creation and Editing Improvements</div><div class="WhatsNewItemBody">Occurrence comments and status are now editable, and more details about location/resource conflicts are provided.</div></li>
+<li><div class="WhatsNewItemHead">Quickly Change Event State</div><div class="WhatsNewItemBody">Change an event's state from any event view on the Events tab without having to edit the event.</div></li>
+<li><div class="WhatsNewItemHead">Event Images</div><div class="WhatsNewItemBody">Users are now able to attach diagrams and images to events using the new custom attribute type.</div></li>
+<li><div class="WhatsNewItemHead">E-Commerce Fees and Discounts</div><div class="WhatsNewItemBody">Event managers may now attach discounts and/or automatic fees when creating E-Commerce forms.</div></li>
+</ul>
+<p align="center">View the <a href="javascript:void(0)" onclick="return false;" b:action="trigger" b:event="ViewReleaseNotes" b:target="id('LayoutMgr')">Release Notes</a> for more details and updates.</p>
+<p align="right"><b:button b:action="trigger" b:event="HideWhatsNew" b:target="id('My25Live')">Dismiss</b:button></p>
+</div>
+</div>
+</s:render>
+</s:if>
+<s:variable b:name="lStartDate" b:select=""/>
+<s:variable b:name="lStartDateSort" b:select=""/>
+<s:variable b:name="lPattern" b:select="id('Prefs')/$tDatePattern"/>
+<s:variable b:name="lStartTime" b:select=""/>
+<s:variable b:name="lEndTime" b:select=""/>
+<s:script><![CDATA[
+
+var now = new Date();
+bpc.setVariable('lStartDate', [s25_format_date(now, _vars['lPattern'][0]), 'input'], 'local', _current);
+bpc.setVariable('lStartDateSort', [s25_format_date(now, 'yyyyMMdd')], 'local', _current);
+now.setHours(now.getHours() + 1, 0, 0, 0);
+bpc.setVariable('lStartTime', [s25_format_date(now, 'h24mm')], 'local', _current);
+now.setHours(now.getHours() + 1);
+bpc.setVariable('lEndTime', [s25_format_date(now, 'h24mm')], 'local', _current);
+
+]]></s:script>
+<s:variable b:name="lStartDt" b:scope="local" b:select=""/>
+<s:variable b:name="lStartDtMs" b:scope="local" b:select="number(0)"/>
+<s:variable b:name="lLabelStartDt" b:scope="local" b:select=""/>
+<s:variable b:name="lEndDt" b:scope="local" b:select=""/>
+<s:variable b:name="lEndDtMs" b:scope="local" b:select="number(0)"/>
+<s:variable b:name="lLabelEndDt" b:scope="local" b:select=""/>
+<s:variable b:name="pattern" b:scope="local" b:select="string(id('Prefs')/$tDatePattern)"/>
+<s:script><![CDATA[
+
+var sPat = SentenceNavPattern; // defined in s25-date.js
+var sNavPat = String(_vars['pattern'][0]);
+var sDt = new Date();
+sDt.setHours(0,0,1,0);
+bpc.setVariable('lStartDt',[s25_format_date(sDt,sPat)],'local');
+bpc.setVariable('lStartDtMs',[sDt.getTime()],'local');
+bpc.setVariable('lLabelStartDt',[s25_format_date(sDt.getTime(), sNavPat, 'input')],'local');
+var eDt = new Date();
+eDt.setDate(eDt.getDate() + 6); // 6 day interval creates the desired *range* of 7 days
+eDt.setHours(23,59,59,0);
+bpc.setVariable('lEndDt',[s25_format_date(eDt,sPat)],'local');
+bpc.setVariable('lEndDtMs',[eDt.getTime()],'local');
+bpc.setVariable('lLabelEndDt',[s25_format_date(eDt, sNavPat, 'input')],'local');
+
+]]></s:script>
+<s:variable b:name="lDateRangeLabel" b:select="concat($lLabelStartDt,' through ',$lLabelEndDt)"/>
+<s:variable b:name="lDashboardToolboxPrompt" b:scope="local" b:select="'Customize Dashboard'"/>
+<s:variable b:name="lDashboardToolboxTitle" b:scope="local" b:select="'Trash Can'"/>
+<s:variable b:name="lDashboardToolboxInstructionsCustomize" b:scope="local" b:select="'Drag dashboard elements to rearrange them.'"/>
+<s:variable b:name="lDashboardToolboxInstructionsAdd" b:scope="local" b:select="'Watch for the cursor change, then drag an element from the dashboard to this area to hide it from view.'"/>
+<s:variable b:name="lDashboardToolboxInstructionsRemove" b:scope="local" b:select="'Drag a hidden element from this area to reposition it on your Dashboard.'"/>
+<s:variable b:name="lDashboardToolboxEditButton" b:scope="local" b:select="'Edit Dashboard'"/>
+<s:variable b:name="lDashboardToolboxResetButton" b:scope="local" b:select="'Reset Dashboard'"/>
+<s:variable b:name="lDashboardToolboxDoneButton" b:scope="local" b:select="'Done'"/>
+<s:variable b:name="lDashboardToolboxSaveButton" b:scope="local" b:select="'Save Dashboard'"/>
+<s:variable b:name="lDashboardToolboxSaveSuccess" b:scope="local" b:select="'Dashboard configuration saved successfully.'"/>
+<s:variable b:name="lDashboardToolboxSaveFail" b:scope="local" b:select="'Dashboard configuration could not be saved.'"/>
+<s:variable b:name="lGif"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif"/></s:variable>
+<s:variable b:name="lGear"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/icon_gear.png"/></s:variable>
+<s:script><![CDATA[
+
+var toolboxPrompt = bpc.getVariable('lDashboardToolboxPrompt','local',_current);
+var toolboxTitle = bpc.getVariable('lDashboardToolboxTitle','local',_current);
+var toolboxInstructionsCustomize = bpc.getVariable('lDashboardToolboxInstructionsCustomize','local',_current);
+var toolboxInstructionsAdd = bpc.getVariable('lDashboardToolboxInstructionsAdd','local',_current);
+var toolboxInstructionsRemove = bpc.getVariable('lDashboardToolboxInstructionsRemove','local',_current);
+var toolboxInstructions = bpc.getVariable('lDashboardToolboxInstructions','local',_current);
+var editButton = bpc.getVariable('lDashboardToolboxEditButton','local',_current);
+var saveButton = bpc.getVariable('lDashboardToolboxSaveButton','local',_current);
+var resetButton = bpc.getVariable('lDashboardToolboxResetButton','local',_current);
+var toolboxDoneButton = bpc.getVariable('lDashboardToolboxDoneButton','local',_current);
+var saveSuccess = bpc.getVariable('lDashboardToolboxSaveSuccess','local',_current);
+var saveFail = bpc.getVariable('lDashboardToolboxSaveFail','local',_current);
+if (saveFail == undefined) {
+saveFail = "Dashboard configuration could not be saved.";
+}
+var gif = bpc.getVariable('lGif','local',_current);
+var gear = bpc.getVariable('lGear','local',_current);
+var widgetOrder = s25_parse_json(String(bpc.getVariable('tPrefWidgetOrder','tag',document.getElementById('My25Live'))));
+var widgetCol1 = new Array();
+var widgetCol2 = new Array();
+var widgetCol3 = new Array();
+var widgetToolbox = new Array();
+var widgetFound = new Array();
+for (var i in widgetOrder.hidden) {
+if (!inArray(widgetOrder.hidden[i],widgetFound)) {
+widgetToolbox.push(widgetOrder.hidden[i]);
+widgetFound.push(widgetOrder.hidden[i]);
+}
+}
+for (var i in widgetOrder.column1) {
+if (!inArray(widgetOrder.column1[i],widgetFound)) {
+widgetCol1.push(widgetOrder.column1[i]);
+widgetFound.push(widgetOrder.column1[i]);
+}
+}
+for (var i in widgetOrder.column2) {
+if (!inArray(widgetOrder.column2[i],widgetFound)) {
+widgetCol2.push(widgetOrder.column2[i]);
+widgetFound.push(widgetOrder.column2[i]);
+}
+}
+for (var i in widgetOrder.column3) {
+if (!inArray(widgetOrder.column3[i],widgetFound)) {
+widgetCol3.push(widgetOrder.column3[i]);
+widgetFound.push(widgetOrder.column3[i]);
+}
+}
+var sXml_column1 = '';
+for (var i = 0; i < widgetOrder.column1.length; i++) {
+if (widgetOrder.column1[i] != '') {
+sXml_column1 += '<div class="section" id="' + widgetOrder.column1[i] + '" style="opacity:0.0" c:ondash="true"></div>\n';
+}
+}
+bpc.render(sXml_column1, 'aslastchild', "id('My25Live_column1')", _current);
+var sXml_column2 = '';
+for (var i = 0; i < widgetOrder.column2.length; i++) {
+if (widgetOrder.column2[i] != '') {
+sXml_column2 += '<div class="section" id="' + widgetOrder.column2[i] + '" style="opacity:0.0" c:ondash="true"></div>\n';
+}
+}
+bpc.render(sXml_column2, 'aslastchild', "id('My25Live_column2')", _current);
+var sXml_column3 = '<div id="splashHolder">';
+sXml_column3 += '<div id="toolbox">';
+sXml_column3 += '<div id="splash">';
+sXml_column3 += '<a href="javascript:void(0)" onclick="return false;">' + gear + toolboxPrompt + '</a>';
+sXml_column3 += '</div>';
+sXml_column3 += '<div id="doneButton">' + toolboxDoneButton + '</div>';
+sXml_column3 += '<div id="dashboardResetButton">' + resetButton + '</div>';
+sXml_column3 += '<div id="toolboxInstructions">';
+sXml_column3 += '<span>' + toolboxInstructionsCustomize + '</span> ';
+sXml_column3 += '<span>' + toolboxInstructionsAdd + '</span> ';
+sXml_column3 += '<span>' + toolboxInstructionsRemove + '</span> ';
+sXml_column3 += '</div>';
+if (widgetOrder.hidden) {
+for (var i = 0; i < widgetOrder.hidden.length; i++) {
+if (widgetOrder.hidden[i] != '') {
+sXml_column3 += '<div class="section" id="' + widgetOrder.hidden[i] + '" style="opacity:1.0" c:ondash="false"></div>\n';
+}
+}
+}
+sXml_column3 += '</div>';
+sXml_column3 += '</div>';
+for (var i = 0; i < widgetOrder.column3.length; i++) {
+if (widgetOrder.column3[i] != '') {
+sXml_column3 += '<div class="section" id="' + widgetOrder.column3[i] + '" style="opacity:0.0" c:ondash="true"></div>\n';
+}
+}
+bpc.render(sXml_column3, 'aslastchild', "id('My25Live_column3')", _current);
+ 
+]]></s:script>
+<s:fxstyle b:time="100"/>
+<s:variable b:name="lShowBox" b:scope="local" b:select=""/>
+<s:variable b:name="lSpaceHide" b:scope="local" b:select="'T'"/>
+<s:variable b:name="lResourceHide" b:scope="local" b:select="'T'"/>
+<s:variable b:name="lEventHide" b:scope="local" b:select="'T'"/>
+<s:if b:test="not(string(id('FLS_EVENT_LIST')) = 'N' or string(id('FLS_EVENT_SEARCH') = 'N'))">
+<s:task b:action="show" b:target="id('My25Live_QuickSearch_Events')"/>
+<s:task b:action="assign" b:target="$lEventHide" b:select="'F'"/>
+</s:if>
+<s:if b:test="not(string(id('FLS_SPACE_LIST')) = 'N' or string(id('FLS_SPACE_SEARCH') = 'N'))">
+<s:task b:action="show" b:target="id('My25Live_QuickSearch_Locations')"/>
+<s:task b:action="assign" b:target="$lSpaceHide" b:select="'F'"/>
+</s:if>
+<s:if b:test="not(string(id('FLS_RESOURCE_LIST')) = 'N' or string(id('FLS_RESOURCE_SEARCH') = 'N'))">
+<s:task b:action="show" b:target="id('My25Live_QuickSearch_Resources')"/>
+<s:task b:action="assign" b:target="$lResourceHide" b:select="'F'"/>
+</s:if> 
+<s:if b:test="not($lSpaceHide = 'T' and $lResourceHide = 'T' and $lEventHide = 'T')">
+<s:task b:action="trigger" b:event="InitQuickSearch"/>
+<s:task b:test="$lEventHide = 'F'" b:action="show" b:target="id('My25Live_QuickSearch_Events')"/>
+<s:task b:test="$lSpaceHide = 'F'" b:action="show" b:target="id('My25Live_QuickSearch_Locations')"/>
+<s:task b:test="$lResourceHide = 'F'" b:action="show" b:target="id('My25Live_QuickSearch_Resources')"/>
+<s:if b:test="$tSections/sections/section[@name='search']/@expanded = 'true'">
+<s:task b:action="trigger" b:target="id('My25Live_QuickSearch')//img[@c:purpose='expand']" b:event="click"/>
+</s:if>
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_QuickSearch')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+<s:if b:test="not(string(id('FLS_SPEEDBOOK')) = 'N') and not(string(id('FLS_EVENT_LIST')) = 'N') and not(string(id('FLS_SPACE_LIST')) = 'N')">
+<s:task b:action="trigger" b:event="InitEventCreation"/>
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_EventCreation')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+<s:if b:test="not(string(id('FLS_SPEEDBOOK')) = 'N') and not(string(id('FLS_EVENT_LIST')) = 'N')">
+<s:task b:action="trigger" b:event="InitScheduleEvent"/>
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_ScheduleEvent')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+<s:task b:action="trigger" b:event="InitRecentlyViewed"/>
+<s:if b:test="$tSections/sections/section[@name='recent']/@expanded = 'true'">
+<s:task b:action="trigger" b:target="id('My25Live_RecentlyViewed')//img[@c:purpose='expand']" b:event="click"/>
+</s:if>
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_RecentlyViewed')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+<s:task b:action="trigger" b:event="PaintRecentlyViewed"/>
+<s:task b:action="trigger" b:event="PaintFavorites"/>
+<s:task b:action="trigger" b:event="PaintFavoriteSearches"/>
+<s:if b:test="id('WSSessionMgr')/@c:logged-in = 'true'">
+<s:if b:test="not(string(id('FLS_TASK_LIST')) = 'N')">
+<s:task b:action="trigger" b:event="InitTasksSummary"/>
+<s:if b:test="$tSections/sections/section[@name='tasks']/@expanded = 'true'">
+<s:task b:action="trigger" b:target="id('My25Live_TasksSummary')//img[@c:purpose='expand']" b:event="click"/>
+</s:if>
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_TasksSummary')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+<s:if b:test="string(id('FLS_EVENT_LIST')) = 'F' and string(id('FLS_EVENT_EVS')) = 'F' and string(id('FLS_EVENT_SEARCH')) = 'F'">
+<s:task b:action="trigger" b:event="InitEventsSummary"/>
+<s:if b:test="$tSections/sections/section[@name='events']/@expanded = 'true'">
+<s:task b:action="trigger" b:target="id('My25Live_EventsSummary')//img[@c:purpose='expand']" b:event="click"/>
+</s:if>
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_EventsSummary')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+<s:if b:test="not(string(id('FLS_EVENT_LIST')) = 'N') and (string(id('FLS_EVENT_DRAFT')) = 'F' or string(id('FLS_EVENT_DRAFT')) = 'C')">
+<s:task b:action="trigger" b:event="InitDraftsSummary"/>
+<s:if b:test="$tSections/sections/section[@name='drafts']/@expanded = 'true'">
+<s:task b:action="trigger" b:target="id('My25Live_DraftsSummary')//img[@c:purpose='expand']" b:event="click"/>
+</s:if>
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_DraftsSummary')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+</s:if>
+<s:task b:target="id('bxLoading')" b:action="trigger" b:event="HideLoading"/>
+<s:variable b:name="lDashboardToolboxResetConfirm" b:scope="local" b:select="'Are you sure you want to reset the dashboard?'"/>
+<s:script><![CDATA[
+
+var resetConfirm = bpc.getVariable('lDashboardToolboxResetConfirm','local',_current);
+$(function() {
+if ( $('#WSSessionMgr').attr('c:logged-in') == 'true') {
+$('#toolbox').fadeIn();
+$('#toolbox').children('.section').hide();
+$('.My25Live_column').sortable({
+items: '.section',
+handle: '.handle',
+tolerance: 'pointer',
+opacity: 0.8,
+scrollSpeed: 10,
+scrollSensitivity: 40,
+connectWith: '.My25Live_column,#toolbox',
+placeholder: 'slot'
+});
+$('#toolbox').sortable({
+items: '.section',
+handle: '.sectionHead, .handle',
+tolerance: 'pointer',
+opacity: 0.8,
+scrollSpeed: 10,
+scrollSensitivity: 40,
+connectWith: '.My25Live_column',
+placeholder: 'slot'
+});
+$('#toolbox').sortable('disable');
+$('#splash').bind('click',function() {
+$('#toolbox').fadeOut(function() {
+$('#toolbox').prependTo('#toolboxHolder');
+$('#toolbox').sortable('enable');
+$('#toolbox').fadeIn();
+});
+$('#toolbox').children('.section').each(function() { 
+if ($(this).attr('id') != 'My25Live_ScheduleEvent') { 
+$(this).data('hidden',$(this).find('.sectionBody').is(':hidden'));
+$(this).find('.sectionBody').hide();
+}
+});
+});
+$('#toolbox').bind('click sortupdate',function() {
+$toolbox = $(this);
+$(this).children('#splash').fadeOut('250',function() {
+$toolbox.children('.section').fadeIn();
+$toolbox.children('#toolboxInstructions,#doneButton,#dashboardResetButton').fadeIn();
+});
+if ($(this).parents('#splashHolder').length > 0) {
+$(this).fadeOut(function() {
+$(this).prependTo('#toolboxHolder');
+$('#toolbox').sortable('enable');
+$(this).fadeIn();
+});
+}
+});
+$('#toolbox').bind('sortreceive',function(event, ui) {
+var $widget = ui.item;
+var widgetId = $widget.attr('id');
+$widget.data('hidden',$widget.find('.sectionBody').is(':hidden'));
+if ($widget.attr('id') != 'My25Live_ScheduleEvent') {
+$widget.find('.sectionBody').fadeOut();
+}
+bpc.setBXMLAttribute('c:ondash','false', document.getElementById(widgetId))
+if ($(this).parents('#splashHolder').length > 0) {
+$(this).fadeOut(function() {
+$(this).prependTo('#toolboxHolder');
+$(this).fadeIn();
+});
+}
+});
+$('#toolbox').bind('sortremove',function(event, ui) {
+var $widget = ui.item;
+var widgetId = $widget.attr('id');
+var sectionTitle = $widget.find('.handle').text().replace(/^\s+/,'').replace(/\s+$/,'');
+if (sectionTitle = 'Your Event Drafts') {
+sectionTitle = 'Your Drafts';
+}
+var $sectionPrefs = $(bpc.getVariable('tPrefSectionsXml','tag',document.getElementById('My25Live')));
+if (widgetId != 'My25Live_ScheduleEvent') {
+if ($widget.data('hidden') == false || widgetId == 'My25Live_EventCreation') {
+$widget.find('.sectionBody').fadeIn();
+}
+}
+bpc.setBXMLAttribute('c:ondash','true', document.getElementById(widgetId))
+var isPrefExpanded = $sectionPrefs.find('section[title="' + sectionTitle + '"]').attr('expanded');
+if (isPrefExpanded == "true") {
+var expandButtonXPath = 'id("' + widgetId + '")//img[@c:purpose="expand"]';
+$(expandButtonXPath).css('border','solid 1px #f00');
+bpc.trigger('click',bpc.xpath(expandButtonXPath)[0]);
+}
+});
+$('.handle').bind('click',function(event) {
+event.stopPropagation();
+});
+$('.My25Live_column, #toolbox').bind('sortupdate',function() {
+saveWidgets();
+});
+$('#doneButton').click(function(event) {
+event.stopPropagation();
+$('#toolbox').sortable('disable');
+$(this).fadeOut();
+$('#toolboxInstructions,#dashboardResetButton').fadeOut();
+$doneButton = $(this);
+$('#toolbox').fadeOut(function() {
+$doneButton.siblings('.section').hide();
+$('#toolbox').prependTo('#splashHolder');
+$('#toolbox').fadeIn();
+$(this).children('#splash').fadeIn();
+});
+});
+}
+});
+$('#dashboardResetButton').click(function() {
+var reallySure = confirm(resetConfirm);
+if (reallySure) {
+var defaultPref = '{';
+defaultPref += '"column1" : ["My25Live_QuickSearch","My25Live_Favorites_Event_Searches","My25Live_Favorites_Location_Searches","My25Live_Favorites_Resource_Searches"],';
+defaultPref += '"column2" : ["My25Live_ScheduleEvent","My25Live_EventCreation","My25Live_EventsSummary","My25Live_DraftsSummary","My25Live_TasksSummary"],';
+defaultPref += '"column3" : ["My25Live_RecentlyViewed","My25Live_Favorites_Events","My25Live_Favorites_Locations","My25Live_Favorites_Resources"],';
+defaultPref += '"hidden" : [],';
+defaultPref += '"default" : false,';
+defaultPref += '"reset" : true';
+defaultPref += '}';
+defaultPrefObj = s25_parse_json(defaultPref);
+var $col1 = jQuery('#My25Live_column1');
+var $col2 = jQuery('#My25Live_column2');
+var $col3 = jQuery('#My25Live_column3');
+var $hiddenWidgets = jQuery('#hiddenWidgets')
+for (var i in defaultPrefObj.column1) {
+moveWidgetTo(defaultPrefObj.column1[i],'My25Live_column1');
+}
+for (var i in defaultPrefObj.column2) {
+moveWidgetTo(defaultPrefObj.column2[i],'My25Live_column2');
+}
+for (var i in defaultPrefObj.column3) {
+moveWidgetTo(defaultPrefObj.column3[i],'My25Live_column3');
+}
+saveDashboardPref(defaultPref);
+}
+});
+function saveWidgets() {
+var sortableCol1 = jQuery('#My25Live_column1').sortable('toArray');
+var sortableCol2 = jQuery('#My25Live_column2').sortable('toArray');
+var sortableCol3 = jQuery('#My25Live_column3').sortable('toArray');
+var sortableToolbox = jQuery('#toolbox').sortable('toArray');
+var col1 = new Array();
+var col2 = new Array();
+var col3 = new Array();
+var toolbox = new Array();
+var found = new Array();
+for (var i in sortableToolbox) {
+if (!inArray(sortableToolbox[i],found)) {
+toolbox.push(sortableToolbox[i]);
+found.push(sortableToolbox[i]);
+}
+}
+for (var i in sortableCol1) {
+if (!inArray(sortableCol1[i],found)) {
+col1.push(sortableCol1[i]);
+found.push(sortableCol1[i]);
+}
+}
+for (var i in sortableCol2) {
+if (!inArray(sortableCol2[i],found)) {
+col2.push(sortableCol2[i]);
+found.push(sortableCol2[i]);
+}
+}
+for (var i in sortableCol3) {
+if (!inArray(sortableCol3[i],found)) {
+col3.push(sortableCol3[i]);
+found.push(sortableCol3[i]);
+}
+}
+var pref = '{';
+if (col1.length != 0) {
+pref += '"column1":["' + col1.join('","') + '"],';
+} else {
+pref += '"column1":[],';
+}
+if (col2.length != 0) {
+pref += '"column2":["' + col2.join('","') + '"],';
+} else {
+pref += '"column2":[],';
+}
+if (col3.length != 0) {
+pref += '"column3":["' + col3.join('","') + '"],';
+} else {
+pref += '"column3":[],';
+}
+if (toolbox.length != 0) {
+var hiddenPref = '"hidden":["' + toolbox.join('","') + '"]';
+hiddenPref = hiddenPref.replace(/"",/,'').replace(/""/,'');
+pref += hiddenPref;
+} else {
+pref += '"hidden":[]';
+}
+pref += '}';
+saveDashboardPref(pref);
+}
+function moveWidgetTo(widgetId,containerId) {
+$moveTarget = jQuery('#' + widgetId);
+$moveContainer = jQuery('#' + containerId)
+$moveTarget.fadeOut();
+$moveContainer.append($moveTarget);
+if ($moveTarget.css('opacity') != 0) {
+$moveTarget.fadeIn();
+}
+if (widgetId != 'My25Live_ScheduleEvent') {
+if ($moveTarget.data('hidden') == false) {
+$moveTarget.find('.sectionBody').fadeIn();
+}
+}
+}
+function saveDashboardPref(pref) {
+var tWsPrefix = bpc.getVariable('tWsPrefix','tag',document.getElementById('Config'));
+var widgetOrderPrefId = "";
+var putUrl = tWsPrefix + 'preference.xml?name=25L_dashboard_widget_order';
+putUrl += '&type=U&async=F&track=F';
+var saveSuccessMessage = jQuery('#dashboardSaveSuccess').text();
+var saveFailMessage = jQuery('#dashboardSaveFail').text();
+jQuery.ajax({
+url: tWsPrefix + 'preference.xml?name=25L_dashboard_widget_order&type=U',
+type: 'GET',
+dataType: 'text',
+success: function(data, textStatus, jqXHR) {
+var rawXml = data.toString().replace(/<\?xml version="1\.0"\?>/,'');
+xmlDoc = $.parseXML( rawXml );
+$xml = $(xmlDoc);
+$preferenceTag = $xml.find('r25\\:preference')
+widgetOrderPrefId = $preferenceTag.attr('id');
+var prefXml = '<r25:preferences xmlns:r25="http://www.collegenet.com/r25">';
+prefXml += '<r25:preference id="' + widgetOrderPrefId + '" status="mod">';
+prefXml += '<r25:preference_name>25L_dashboard_widget_order</r25:preference_name>';
+prefXml += '<r25:preference_value>' + pref + '</r25:preference_value>';
+prefXml += '<r25:preference_type>U</r25:preference_type>';
+prefXml += '</r25:preference>';
+prefXml += '</r25:preferences>';
+jQuery.ajax({
+url: putUrl,
+data: prefXml,
+type: 'PUT',
+contentType: 'text/xml',
+error: function() {
+alert(saveFail);
+}
+});
+},
+error: function() {
+alert(saveFail);
+}
+});
+}
+
+]]></s:script>
+</s:event>
+<s:event b:on="InitQuickSearch">
+<s:render b:destination="id('My25Live_QuickSearch')" b:mode="replacechildren">
+<div class="sectionHead" b:textselect="false" c:ondash="true">
+<div class="sectionToggle" c:pref="search">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_minus" b:behavior="CollapseSection" c:purpose="collapse"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus" b:behavior="ExpandSection" c:purpose="expand"/>
+</div>
+<div class="icon-search handle">
+<bx:tooltip>
+<div>
+Enter whole word(s) or a start-of-word fragment to find events, locations, or resources.
+<a href="javascript:void(0)" b:help="home_search" b:behavior="DirectHelpLink">More info?</a>
+</div>
+</bx:tooltip>
+<span class="sectionTitle">Quick Search</span>
+</div>
+</div>
+<div class="sectionBody" id="My25Live_QuickSearch_Body">
+<div id="My25Live_QuickSearch_Events">
+<input type="text" c:group="event" b:behavior="QuickSearchInput" value="Search Events"/>
+<b:button class="My25Live_QuickSearch_Button" b:action="trigger" b:event="OnKeyPressEnter" b:target="../input[@type='text']">Go</b:button>
+</div>
+<div id="My25Live_QuickSearch_Locations">
+<input type="text" c:group="space" b:behavior="QuickSearchInput" value="Search Locations"/>
+<b:button class="My25Live_QuickSearch_Button" b:action="trigger" b:event="OnKeyPressEnter" b:target="../input[@type='text']">Go</b:button>
+</div>
+<div id="My25Live_QuickSearch_Resources">
+<input type="text" c:group="resource" b:behavior="QuickSearchInput" value="Search Resources"/>
+<b:button class="My25Live_QuickSearch_Button" b:action="trigger" b:event="OnKeyPressEnter" b:target="../input[@type='text']">Go</b:button>
+</div>
+</div>
+</s:render>
+</s:event>
+<s:event b:on="InitEventCreation">
+<s:render b:destination="id('My25Live_EventCreation')" b:mode="replacechildren">
+<div class="sectionHead" b:textselect="false">
+<img b:behavior="RefreshSection" id="My25Live_EventCreation_StartOver" b:tooltiptext="Start Over">
+<s:event b:on="click">
+<s:task b:action="hide" b:target="."/>
+<s:with b:target="id('My25Live_EventCreation_FindLocation')">
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_FindLocation')/div"/>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_FindLocation')/a"/>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_FindLocation')"/>
+<s:with b:target=".//b:datepicker[@c:purpose='startdate']">
+<s:task b:action="trigger" b:event="SelectToday"/>
+<s:task b:action="trigger" b:event="change"/>
+</s:with>
+<s:with b:target=".//s25:time_spinner[@c:purpose='start_time']">
+<s:setatt b:value="{$lStartTime}"/>
+<s:task b:action="trigger" b:event="input-change"/>
+</s:with>
+<s:with b:target=".//s25:time_spinner[@c:purpose='end_time']">
+<s:setatt b:value="{$lEndTime}"/>
+<s:task b:action="trigger" b:event="input-change"/>
+</s:with>
+<s:with b:target="id('My25Live_EventCreation_Attendees')">
+<s:setatt value=""/>
+</s:with>
+<s:task b:action="select" b:target=".//select[@c:purpose='collections']/option[@value='-1']"/>
+</s:with>
+<s:with b:target="id('My25Live_EventCreation_FindTime')">
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_FindTime')/div"/>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_FindTime')/a"/>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_FindTime')"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_AllLocations_Container')"/>
+<s:task b:action="set" b:target="id('My25Live_EventCreation_LocationKeyword')/@value" b:value=""/>
+<s:with b:target=".//bx:daterangepicker">
+<s:setatt b:start-date="{$lStartDt}" b:start-date-ms="{$lStartDtMs}" b:end-date="{$lEndDt}" b:end-date-ms="{$lEndDtMs}"/>
+<s:task b:action="trigger" b:event="construct"/>
+</s:with>
+<s:task b:action="trigger" b:event="AvailabilityDateRangeSelect" b:target="id('My25Live')"/>
+</s:with>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_Divider')"/>
+</s:event>
+</img>
+<div class="icon-rsrvwiz handle">Find Available Locations</div>
+</div>
+<div class="sectionBody">  
+<div id="My25Live_EventCreation_FindLocation">
+<a href="javascript:void(0)" onclick="return false" class="My25Live_EventCreation_Prompt">
+<s:event b:on="command">
+<s:choose>
+<s:when b:test="not(id('WSSessionMgr')/@c:logged-in='true')">
+<s:task b:action="trigger" b:event="25Live_SignIn" b:target="id('Controller')"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="PrepAvailableLocations" b:target="id('My25Live')" b:async="true"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_FindTime')"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_Divider')"/>
+<s:task b:action="blur" b:target="."/>
+<s:task b:action="hide" b:target="."/>
+<s:task b:action="show" b:target="../div"/>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_StartOver')"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:execute>
+<s:render b:destination="." b:mode="aslastchild"><span xmlns="">
+            <b>I know WHEN</b> my event should take place -- </span><span xmlns="">help me<b> find a location!</b>
+          </span></s:render>
+</s:execute>
+</a>
+<div style="display:none">
+<div>Enter the desired date and time for your event:</div>
+<div>
+<b>Date:</b> 
+<input name="start_date" b:behavior="datepickerInputFormat" b:observe="../b:datepicker[1]" style="font-size:100%">
+<s:event b:on="change">
+<s:super/>
+<s:task b:action="trigger" b:event="ResetAvailableLocations" b:target="id('My25Live')"/>
+</s:event>
+</input>
+<b:datepicker b:type="float" b:input="." c:purpose="startdate" b:format="{id('Prefs')/$tDatePattern}" b:value="{$lStartDate}" b:sortvalue="{$lStartDateSort}"/>
+</div>
+<div>
+<span class="timespinner">
+<b>Start Time:</b> 
+<s25:time_spinner c:purpose="start_time" b:step="{string(id('Prefs')/$tMinuteInc)}" b:format="{string(id('Prefs')/$tTimeDisplay)}" b:value="{$lStartTime}">
+<s:event b:on="change">
+<s:super/>
+<s:task b:action="trigger" b:event="ResetAvailableLocations" b:target="id('My25Live')"/>
+</s:event>
+</s25:time_spinner>
+</span>
+<span class="timespinner">
+<b>End Time:</b> 
+<s25:time_spinner c:purpose="end_time" b:step="{string(id('Prefs')/$tMinuteInc)}" b:format="{string(id('Prefs')/$tTimeDisplay)}" b:value="{$lEndTime}">
+<s:event b:on="change">
+<s:super/>
+<s:task b:action="trigger" b:event="ResetAvailableLocations" b:target="id('My25Live')"/>
+</s:event>
+</s25:time_spinner>
+</span>
+</div>
+<div>
+<b>Number of Attendees:</b> 
+<input type="text" id="My25Live_EventCreation_Attendees" c:purpose="attendees">
+<s:event b:on="change">
+<s:super/>
+<s:task b:action="trigger" b:event="ResetAvailableLocations" b:target="id('My25Live')"/>
+</s:event>
+<s:event b:on="keyup">
+<s:super/>
+<s:task b:action="trigger" b:event="ResetAvailableLocations" b:target="id('My25Live')"/>
+</s:event>
+</input> <span style="font-size:90%;color:#666">(required)</span>
+</div>
+<div>
+<b>Search within:</b> 
+<select c:purpose="collections" id="My25Live_EventCreation_Collections" onchange="bpc.trigger('ResetAvailableLocations', document.getElementById('My25Live'))">
+<option value="-1">Loading...</option>
+</select>
+</div>
+<div c:purpose="results" id="My25Live_EventCreation_AvailableLocationResults"/>
+<div id="My25Live_EventCreation_FindingLocations" class="loading">
+<div style="margin-top:10px"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/> <span c:id="progress">Finding available locations based on your info...</span></div>
+</div>
+<div c:purpose="result_desc" id="My25Live_EventCreation_AvailableLocationResultDesc">
+<div/>
+<span c:id="check_larger_capacity">
+<a href="javascript:void" onclick="this.blur(); return false">
+<s:event b:on="command">
+<s:task b:action="trigger" b:event="ShowMoreAvailableLocations" b:target="id('My25Live')"/>
+</s:event>
+Do you want to check Matching Locations with a Larger Max Capacity?
+</a>
+</span>
+<span c:id="no_larger_capacity">
+There are no Matching Locations with a Larger Max Capacity for us to search.
+</span>
+</div>
+<div id="My25Live_EventCreation_AdvancedSearchLink">
+<a href="javascript:void(0)" onclick="return false" b:behavior="My25Live_EventCreation_AdvancedSearchLink">
+Need more options? Try the Location Search...
+</a>
+</div>
+<b:button class="My25Live_EventCreation_Button" id="My25Live_EventCreation_AvailableLocationTrigger" b:action="trigger" b:event="ShowAvailableLocations" b:target="id('My25Live')">
+Show me what&apos;s available!
+</b:button>
+</div>
+</div>
+<div id="My25Live_EventCreation_Divider" class="divider"><span>OR</span></div>
+<div id="My25Live_EventCreation_FindTime">
+<a href="javascript:void(0)" onclick="return false" class="My25Live_EventCreation_Prompt">
+<s:event b:on="command">
+<s:choose>
+<s:when b:test="not(id('WSSessionMgr')/@c:logged-in='true')">
+<s:task b:action="trigger" b:event="25Live_SignIn" b:target="id('Controller')"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_FindLocation')"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_Divider')"/>
+<s:task b:action="blur" b:target="."/>
+<s:task b:action="hide" b:target="."/>
+<s:task b:action="show" b:target="../div"/>
+<s:task b:action="focus" b:target="id('My25Live_EventCreation_LocationKeyword')"/>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_StartOver')"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:execute>
+<s:render b:destination="." b:mode="aslastchild"><span xmlns="">
+            <b>I know WHERE</b> my event should take place -- </span><span xmlns="">help me<b> choose a time!</b>
+          </span></s:render>
+</s:execute>
+</a>
+<div style="display:none">
+<div id="My25Live_EventCreation_AllLocations_Search">
+Find Location by Name: 
+<input type="text" id="My25Live_EventCreation_LocationKeyword"> 
+<s:whenactive>
+<s:keys b:keys="enter" b:action="trigger" b:event="FindLocationByName" b:target="id('My25Live')"/>
+</s:whenactive>
+</input>
+<b:button b:action="trigger" b:event="FindLocationByName" b:target="id('My25Live')" style="margin-bottom:0px;">Go</b:button>
+</div>
+<span id="My25Live_EventCreation_AllLocations_Container">
+<div id="My25Live_EventCreation_AllLocations_SelectContainer" class="icon-space">
+<select c:purpose="location_list" id="My25Live_EventCreation_AllLocations">
+<option value="-1">Loading...</option>
+</select>
+</div>
+<div>
+<span>Somewhere between: </span> 
+<s25:magic_link c:id="daterange" c:default="{$lDateRangeLabel}">
+<s:event b:on="Paint">
+<s:render b:destination="$tLink" b:mode="aslastchild">
+<bx:tooltip>
+<div>Click to select a start and end date.
+<a href="javascript:void(0)" b:help="basic_date_range" b:behavior="DirectHelpLink">More info?</a>
+</div>
+</bx:tooltip>
+</s:render>
+<s:render b:destination="$tInfoBox" b:mode="replacechildren">
+<bx:daterangepicker b:start-date="{$lStartDt}" b:start-date-ms="{$lStartDtMs}" b:end-date="{$lEndDt}" b:end-date-ms="{$lEndDtMs}"/>
+<div class="daterangepickerFinish">
+<b:button b:action="trigger" b:event="AvailabilityDateRangeSelect" b:target="id('My25Live')">Select Date Range</b:button>
+</div>
+</s:render>
+<s:task b:action="addclass" b:target="$tInfoBox" b:value="viewOptions_DateRangePicker_Infobox"/>
+</s:event>
+</s25:magic_link>
+</div>
+<b:button class="My25Live_EventCreation_Button" b:action="trigger" b:event="ViewLocationAvailability" b:target="id('My25Live')">
+Show me this location&apos;s availability
+</b:button>
+</span>
+<div id="My25Live_EventCreation_BrowseLink">
+<a href="javascript:void(0)" onclick="return false" b:behavior="My25Live_EventCreation_BrowseLink">
+Don&apos;t know the exact Location? Search by Location Groups...
+</a>
+</div>
+</div>
+</div>
+<div id="My25Live_EventCreation_S25Object" b:behavior="S25Object" c:obj_type="space" c:obj_id="" c:obj_action="" c:start_dt="" c:end_dt="" c:start_time="" c:end_time="" c:headcount=""/>
+</div>
+</s:render>
+</s:event>
+<s:event b:on="InitScheduleEvent">
+<s:render b:destination="id('My25Live_ScheduleEvent')" b:mode="replacechildren">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/ornament_rsrvwiz.png" class="handle"/>
+<div class="sectionBody">
+<b:button b:behavior="S25Object" id="My25Live_btnScheduleEvent" c:obj_type="" c:obj_action="reserve" c:rsrv_start_dt="" c:rsrv_end_dt="">
+<s:event b:on="command">
+<s:choose>
+<s:when b:test="not(id('WSSessionMgr')/@c:logged-in='true')">
+<s:task b:action="trigger" b:event="25Live_SignIn" b:target="id('Controller')"/>
+</s:when>
+<s:otherwise>
+<s:super/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<bx:tooltip>
+<div>
+Click to create an event and assign or request locations and resources, as required.
+<a href="javascript:void(0)" b:help="event_create" b:behavior="DirectHelpLink">More info?</a>
+</div>
+</bx:tooltip>
+Create an Event
+</b:button>
+<div class="fauxButton">Create an Event</div>
+</div>
+</s:render>
+</s:event>
+<s:event b:on="InitRecentlyViewed">
+<s:render b:destination="id('My25Live_RecentlyViewed')" b:mode="replacechildren">
+<div class="sectionHead" b:textselect="false">
+<div class="sectionToggle" c:pref="recent">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_minus" b:behavior="CollapseSection" c:purpose="collapse"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus" b:behavior="ExpandSection" c:purpose="expand"/>
+</div>
+<div class="icon-25live handle"><s:textnode b:label="Recently Viewed"/></div>
+</div>
+<div class="sectionBody" id="My25Live_RecentlyViewed_Body" c:loaded="F">
+<div class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Loading...</div>
+</div>
+</s:render>
+</s:event>
+<s:event b:on="PaintRecentlyViewed">
+<s:choose>
+<s:when b:test="count(id('RecentlyViewedObjects')/recent_object) = 0">
+<s:render b:destination="id('My25Live_RecentlyViewed_Body')" b:mode="replacechildren">
+<div align="center" style="padding:5px; color:#666; font-style:italic"><s:textnode b:label="(none)"/></div>
+</s:render>
+</s:when>
+<s:otherwise>
+<s:task b:action="transform" b:datasource="id('RecentlyViewedObjects')" b:stylesheet="$RecentlyViewedXsl" b:destination="id('My25Live_RecentlyViewed_Body')" b:mode="replacechildren"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="PaintFavorites">
+<s:variable b:name="lHeaderPrefix" b:select="'Your Starred'"/>
+<s:variable b:name="lEventHeaderPrefix" b:select="'Your Starred'"/>
+<s:variable b:name="lHeaderClassSuffix" b:select="'-fav'"/>
+<s:choose>
+<s:when b:test="id('WSSessionMgr')/@c:logged-in = 'false'">
+<s:task b:action="assign" b:target="$lHeaderPrefix" b:select="'Popular'"/>
+<s:task b:action="assign" b:target="$lEventHeaderPrefix" b:select="'Featured'"/>
+<s:task b:action="assign" b:target="$lHeaderClassSuffix" b:select="''"/>
+</s:when>
+<s:when b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lHeaderPrefix" b:select="'Suggested'"/>
+<s:task b:action="assign" b:target="$lEventHeaderPrefix" b:select="'Featured'"/>
+<s:task b:action="assign" b:target="$lHeaderClassSuffix" b:select="''"/>
+</s:when>
+</s:choose>
+<s:if b:test="not(string(id('FLS_EVENT_LIST')) = 'N')">
+<s:render b:destination="id('My25Live_Favorites_Events')" b:mode="aslastchild">
+<div class="sectionHead" b:textselect="false">
+<div class="sectionToggle" c:pref="fav_events">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_minus" b:behavior="CollapseSection" c:purpose="collapse"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus" b:behavior="ExpandSection" c:purpose="expand">
+<s:event b:on="click">
+<s:super/>
+<s:if b:test="id('My25Live_Favorites_Events_Body')/@c:loaded='F'">
+<s:task b:action="trigger" b:target="id('My25Live')" b:event="PaintFavoriteEvents"/>
+</s:if>
+</s:event>
+</img>
+</div>
+<img b:behavior="RefreshSection"/>
+<div class="{concat('icon-event',$lHeaderClassSuffix, ' handle')}">
+<span class="sectionTitle"><s:textnode b:label="{concat($lEventHeaderPrefix, ' ','Events')}"/></span>
+</div>
+</div>
+<div class="sectionBody" id="My25Live_Favorites_Events_Body" c:loaded="F"/>
+</s:render>
+<s:if b:test="$tSections/sections/section[@name='fav_events']/@expanded = 'true'">
+<s:task b:action="trigger" b:target="id('My25Live_Favorites_Events')//img[@c:purpose='expand']" b:event="click"/>
+</s:if>
+<s:if b:test="not(id('My25Live_Favorites_Events')/@c:hidden='T')">
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_Favorites_Events')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+</s:if>
+<s:if b:test="not(string(id('FLS_SPACE_LIST')) = 'N')">
+<s:render b:destination="id('My25Live_Favorites_Locations')" b:mode="aslastchild">
+<div class="sectionHead" b:textselect="false">
+<div class="sectionToggle" c:pref="fav_locations">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_minus" b:behavior="CollapseSection" c:purpose="collapse"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus" b:behavior="ExpandSection" c:purpose="expand">
+<s:event b:on="click">
+<s:super/>
+<s:if b:test="id('My25Live_Favorites_Locations_Body')/@c:loaded='F'">
+<s:task b:action="trigger" b:target="id('My25Live')" b:event="PaintFavoriteLocations"/>
+</s:if>
+</s:event>
+</img>
+</div>
+<img b:behavior="RefreshSection"/>
+<div class="{concat('icon-space',$lHeaderClassSuffix, ' handle')}">
+<span class="sectionTitle"><s:textnode b:label="{concat($lHeaderPrefix, ' ','Locations')}"/></span> 
+</div>
+</div>
+<div class="sectionBody">
+<div id="My25Live_Favorites_Locations_Body" c:loaded="F"/>
+<div id="My25Live_Favorites_Locations_Link">
+<a b:behavior="FavoriteLocations"><img src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/calendar.gif"/></a>
+<a b:behavior="FavoriteLocations" class="s25-object" c:id="text">See when these locations are available</a>
+</div>
+</div>
+</s:render>
+<s:if b:test="$tSections/sections/section[@name='fav_locations']/@expanded = 'true'">
+<s:task b:action="trigger" b:target="id('My25Live_Favorites_Locations')//img[@c:purpose='expand']" b:event="click"/>
+</s:if>
+<s:if b:test="not(id('My25Live_Favorites_Locations')/@c:hidden='T')">
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_Favorites_Locations')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+</s:if>
+<s:if b:test="not(string(id('FLS_RESOURCE_LIST')) = 'N')">
+<s:render b:destination="id('My25Live_Favorites_Resources')" b:mode="aslastchild">
+<div class="sectionHead" b:textselect="false">
+<div class="sectionToggle" c:pref="fav_resources">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_minus" b:behavior="CollapseSection" c:purpose="collapse"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus" b:behavior="ExpandSection" c:purpose="expand">
+<s:event b:on="click">
+<s:super/>
+<s:if b:test="id('My25Live_Favorites_Resources_Body')/@c:loaded='F'">
+<s:task b:action="trigger" b:target="id('My25Live')" b:event="PaintFavoriteResources"/>
+</s:if>
+</s:event>
+</img>
+</div>
+<img b:behavior="RefreshSection"/>
+<div class="{concat('icon-resource',$lHeaderClassSuffix, ' handle')}">
+<span class="sectionTitle"><s:textnode b:label="{concat($lHeaderPrefix, ' ','Resources')}"/></span> 
+</div>
+</div>
+<div class="sectionBody" id="My25Live_Favorites_Resources_Body" c:loaded="F"/>
+</s:render>
+<s:if b:test="$tSections/sections/section[@name='fav_resources']/@expanded = 'true'">
+<s:task b:action="trigger" b:target="id('My25Live_Favorites_Resources')//img[@c:purpose='expand']" b:event="click"/>
+</s:if>
+<s:if b:test="not(id('My25Live_Favorites_Resources')/@c:hidden='T')">
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_Favorites_Resources')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="PaintFavoriteEvents">
+<s:if b:test="id('My25Live_Favorites_Events')/@c:ondash = 'true'">
+<s:with b:target="id('My25Live_Favorites_Events_Body')">
+<s:render b:destination="." b:mode="replacechildren">
+<div class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Loading... </div>
+</s:render>
+<s:setatt c:loaded="T"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:variable b:name="lFavEventsUrl" b:select="concat(id('Config')/$tWsPrefix,'events.xml?favorite=T', '&amp;otransform=', id('Config')/$tXslPrefix, 's25-my25live/favorite_events.xsl', '&amp;logged-in=', id('WSSessionMgr')/@c:logged-in, '&amp;name_display=', id('Pref_config_ev_display'), '&amp;user-type=', id('WSSessionMgr')/@c:user-type)"/>
+<s:task b:test="id('WSSessionMgr')/@c:logged-in = 'false'" b:action="assign" b:target="$lFavEventsUrl" b:select="concat($lFavEventsUrl,'&amp;cache')"/>
+<s:task b:action="load" b:method="GET" b:asyc="true" b:showloading="false" b:url="{$lFavEventsUrl}" b:destination="id('My25Live_Favorites_Events_Body')" b:mode="replacechildren">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+</s:if>
+</s:event>
+<s:event b:on="PaintFavoriteLocations">
+<s:if b:test="id('My25Live_Favorites_Locations')/@c:ondash = 'true'">
+<s:with b:target="id('My25Live_Favorites_Locations_Body')">
+<s:render b:destination="." b:mode="replacechildren">
+<div class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Loading... </div>
+</s:render>
+<s:setatt c:loaded="T"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:variable b:name="lFavLocationsUrl" b:select="concat(id('Config')/$tWsPrefix,'spaces.xml?favorite=T', '&amp;otransform=', id('Config')/$tXslPrefix, 's25-my25live/favorite_locations.xsl', '&amp;logged-in=', id('WSSessionMgr')/@c:logged-in, '&amp;user-type=', id('WSSessionMgr')/@c:user-type)"/>
+<s:task b:test="id('WSSessionMgr')/@c:logged-in = 'false'" b:action="assign" b:target="$lFavLocationsUrl" b:select="concat($lFavLocationsUrl,'&amp;cache')"/>
+<s:task b:action="load" b:method="GET" b:asyc="true" b:showloading="false" b:url="{$lFavLocationsUrl}" b:destination="id('My25Live_Favorites_Locations_Body')" b:mode="replacechildren">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+</s:if>
+</s:event>
+<s:event b:on="PaintFavoriteResources">
+<s:if b:test="id('My25Live_Favorites_Resources')/@c:ondash = 'true'">
+<s:with b:target="id('My25Live_Favorites_Resources_Body')">
+<s:render b:destination="." b:mode="replacechildren">
+<div class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Loading... </div>
+</s:render>
+<s:setatt c:loaded="T"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:variable b:name="lFavResourcesUrl" b:select="concat(id('Config')/$tWsPrefix,'resources.xml?favorite=T', '&amp;otransform=', id('Config')/$tXslPrefix, 's25-my25live/favorite_resources.xsl', '&amp;logged-in=', id('WSSessionMgr')/@c:logged-in, '&amp;user-type=', id('WSSessionMgr')/@c:user-type)"/>
+<s:task b:test="id('WSSessionMgr')/@c:logged-in = 'false'" b:action="assign" b:target="$lFavResourcesUrl" b:select="concat($lFavResourcesUrl,'&amp;cache')"/>
+<s:task b:action="load" b:method="GET" b:asyc="true" b:showloading="false" b:url="{$lFavResourcesUrl}" b:destination="id('My25Live_Favorites_Resources_Body')" b:mode="replacechildren">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+</s:if>
+</s:event>
+<s:event b:on="PaintFavoriteSearches">
+<s:variable b:name="lHeaderPrefix" b:select="'Your Starred'"/>
+<s:if b:test="id('WSSessionMgr')/@c:logged-in = 'false' or id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lHeaderPrefix" b:select="'Public'"/>
+</s:if>
+<s:if b:test="not(string(id('FLS_EVENT_LIST')) = 'N') and  not(string(id('FLS_EVENT_SEARCH')) = 'N') and  string($tPrefEventOptionsXml/event_options/index[@section_id='event_collection']/@visible) = 'true'">
+<s:render b:destination="id('My25Live_Favorites_Event_Searches')" b:mode="aslastchild">
+<div class="sectionHead" b:textselect="false">
+<div class="sectionToggle" c:pref="fav_event_searches">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_minus" b:behavior="CollapseSection" c:purpose="collapse"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus" b:behavior="ExpandSection" c:purpose="expand">
+<s:event b:on="click">
+<s:super/>
+<s:if b:test="id('My25Live_Favorites_Event_Searches_Body')/@c:loaded='F'">
+<s:task b:action="trigger" b:target="id('My25Live')" b:event="PaintFavoriteEventSearches"/>
+</s:if>
+</s:event>
+</img>
+</div>
+<img b:behavior="RefreshSection"/>
+<div class="icon-search handle">
+<span class="sectionTitle"><s:textnode b:label="{concat($lHeaderPrefix, ' ','Event Searches')}"/></span>
+</div>
+</div>
+<div class="sectionBody" id="My25Live_Favorites_Event_Searches_Body" c:loaded="F"/>
+</s:render>
+<s:if b:test="$tSections/sections/section[@name='fav_event_searches']/@expanded = 'true'">
+<s:task b:action="trigger" b:target="id('My25Live_Favorites_Event_Searches')//img[@c:purpose='expand']" b:event="click"/>
+</s:if>
+<s:if b:test="not(id('My25Live_Favorites_Event_Searches')/@c:hidden='T')">
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_Favorites_Event_Searches')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+</s:if>
+<s:if b:test="not(string(id('FLS_SPACE_LIST')) = 'N') and  not(string(id('FLS_SPACE_SEARCH')) = 'N') and  string($tPrefLocationOptionsXml/location_options/index[@section_id='collection']/@visible) = 'true'">
+<s:render b:destination="id('My25Live_Favorites_Location_Searches')" b:mode="aslastchild">
+<div class="sectionHead" b:textselect="false">
+<div class="sectionToggle" c:pref="fav_location_searches">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_minus" b:behavior="CollapseSection" c:purpose="collapse"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus" b:behavior="ExpandSection" c:purpose="expand">
+<s:event b:on="click">
+<s:super/>
+<s:if b:test="id('My25Live_Favorites_Location_Searches_Body')/@c:loaded='F'">
+<s:task b:action="trigger" b:target="id('My25Live')" b:event="PaintFavoriteLocationSearches"/>
+</s:if>
+</s:event>
+</img>
+</div>
+<img b:behavior="RefreshSection"/>
+<div class="icon-search handle">
+<span class="sectionTitle"><s:textnode b:label="{concat($lHeaderPrefix, ' ','Location Searches')}"/></span>
+</div>
+</div>
+<div class="sectionBody" id="My25Live_Favorites_Location_Searches_Body" c:loaded="F"/>
+</s:render>
+<s:if b:test="$tSections/sections/section[@name='fav_location_searches']/@expanded = 'true'">
+<s:task b:action="trigger" b:target="id('My25Live_Favorites_Location_Searches')//img[@c:purpose='expand']" b:event="click"/>
+</s:if>
+<s:if b:test="not(id('My25Live_Favorites_Location_Searches')/@c:hidden='T')">
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_Favorites_Location_Searches')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+</s:if>
+<s:if b:test="not(string(id('FLS_RESOURCE_LIST')) = 'N') and  not(string(id('FLS_RESOURCE_SEARCH')) = 'N') and  string($tPrefResourceOptionsXml/resource_options/index[@section_id='collection']/@visible) = 'true'">
+<s:render b:destination="id('My25Live_Favorites_Resource_Searches')" b:mode="aslastchild">
+<div class="sectionHead" b:textselect="false">
+<div class="sectionToggle" c:pref="fav_resource_searches">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_minus" b:behavior="CollapseSection" c:purpose="collapse"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus" b:behavior="ExpandSection" c:purpose="expand">
+<s:event b:on="click">
+<s:super/>
+<s:if b:test="id('My25Live_Favorites_Resource_Searches_Body')/@c:loaded='F'">
+<s:task b:action="trigger" b:target="id('My25Live')" b:event="PaintFavoriteResourceSearches"/>
+</s:if>
+</s:event>
+</img>
+</div>
+<img b:behavior="RefreshSection"/>
+<div class="icon-search handle">
+<span class="sectionTitle"><s:textnode b:label="{concat($lHeaderPrefix, ' ','Resource Searches')}"/></span>
+</div>
+</div>
+<div class="sectionBody" id="My25Live_Favorites_Resource_Searches_Body" c:loaded="F"/>
+</s:render>
+<s:if b:test="$tSections/sections/section[@name='fav_resource_searches']/@expanded = 'true'">
+<s:task b:action="trigger" b:target="id('My25Live_Favorites_Resource_Searches')//img[@c:purpose='expand']" b:event="click"/>
+</s:if>
+<s:if b:test="not(id('My25Live_Favorites_Resource_Searches')/@c:hidden='T')">
+<s:sequential>
+<s:variable b:name="lSection" b:select="id('My25Live_Favorites_Resource_Searches')"/>
+<s:task b:action="trigger" b:event="FadeIn"/>
+</s:sequential>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="PaintFavoriteEventSearches">
+<s:if b:test="id('My25Live_Favorites_Event_Searches')/@c:ondash = 'true'">
+<s:with b:target="id('My25Live_Favorites_Event_Searches_Body')">
+<s:render b:destination="." b:mode="replacechildren">
+<div class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Loading... </div>
+</s:render>
+<s:setatt c:loaded="T"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:variable b:name="lFavEventSearchesUrl" b:select="concat(id('Config')/$tWsPrefix,'event_searches.xml')"/>
+<s:choose>
+<s:when b:test="id('WSSessionMgr')/@c:logged-in = 'false' or id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavEventSearchesUrl" b:select="concat($lFavEventSearchesUrl,'?user=',id('Pref_config_search_user'))"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$lFavEventSearchesUrl" b:select="concat($lFavEventSearchesUrl,'?favorites=T')"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="assign" b:target="$lFavEventSearchesUrl" b:select="concat($lFavEventSearchesUrl, '&amp;otransform=', id('Config')/$tXslPrefix, 's25-my25live/favorite_event_searches.xsl',  '&amp;logged-in=', id('WSSessionMgr')/@c:logged-in,  '&amp;user-type=', id('WSSessionMgr')/@c:user-type)"/>
+<s:task b:test="id('WSSessionMgr')/@c:logged-in = 'false'" b:action="assign" b:target="$lFavEventSearchesUrl" b:select="concat($lFavEventSearchesUrl,'&amp;cache')"/>
+<s:task b:action="load" b:method="GET" b:asyc="true" b:showloading="false" b:url="{$lFavEventSearchesUrl}" b:destination="id('My25Live_Favorites_Event_Searches_Body')" b:mode="replacechildren">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+</s:if>
+</s:event>
+<s:event b:on="PaintFavoriteLocationSearches">
+<s:if b:test="id('My25Live_Favorites_Location_Searches')/@c:ondash = 'true'">
+<s:with b:target="id('My25Live_Favorites_Location_Searches_Body')">
+<s:render b:destination="." b:mode="replacechildren">
+<div class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Loading... </div>
+</s:render>
+<s:setatt c:loaded="T"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:variable b:name="lFavLocationSearchesUrl" b:select="concat(id('Config')/$tWsPrefix,'space_searches.xml')"/>
+<s:choose>
+<s:when b:test="id('WSSessionMgr')/@c:logged-in = 'false' or id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavLocationSearchesUrl" b:select="concat($lFavLocationSearchesUrl,'?user=',id('Pref_config_search_user'))"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$lFavLocationSearchesUrl" b:select="concat($lFavLocationSearchesUrl,'?favorites=T')"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="assign" b:target="$lFavLocationSearchesUrl" b:select="concat($lFavLocationSearchesUrl, '&amp;otransform=', id('Config')/$tXslPrefix, 's25-my25live/favorite_location_searches.xsl',  '&amp;logged-in=', id('WSSessionMgr')/@c:logged-in,  '&amp;user-type=', id('WSSessionMgr')/@c:user-type)"/>
+<s:task b:test="id('WSSessionMgr')/@c:logged-in = 'false'" b:action="assign" b:target="$lFavLocationSearchesUrl" b:select="concat($lFavLocationSearchesUrl,'&amp;cache')"/>
+<s:task b:action="load" b:method="GET" b:asyc="true" b:showloading="false" b:url="{$lFavLocationSearchesUrl}" b:destination="id('My25Live_Favorites_Location_Searches_Body')" b:mode="replacechildren">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+</s:if>
+</s:event>
+<s:event b:on="PaintFavoriteResourceSearches">
+<s:if b:test="id('My25Live_Favorites_Resource_Searches')/@c:ondash = 'true'">
+<s:with b:target="id('My25Live_Favorites_Resource_Searches_Body')">
+<s:render b:destination="." b:mode="replacechildren">
+<div class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Loading... </div>
+</s:render>
+<s:setatt c:loaded="T"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:variable b:name="lFavResourceSearchesUrl" b:select="concat(id('Config')/$tWsPrefix,'res_searches.xml')"/>
+<s:choose>
+<s:when b:test="id('WSSessionMgr')/@c:logged-in = 'false' or id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavResourceSearchesUrl" b:select="concat($lFavResourceSearchesUrl,'?user=',id('Pref_config_search_user'))"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$lFavResourceSearchesUrl" b:select="concat($lFavResourceSearchesUrl,'?favorites=T')"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="assign" b:target="$lFavResourceSearchesUrl" b:select="concat($lFavResourceSearchesUrl, '&amp;otransform=', id('Config')/$tXslPrefix, 's25-my25live/favorite_resource_searches.xsl',  '&amp;logged-in=', id('WSSessionMgr')/@c:logged-in,  '&amp;user-type=', id('WSSessionMgr')/@c:user-type)"/>
+<s:task b:test="id('WSSessionMgr')/@c:logged-in = 'false'" b:action="assign" b:target="$lFavResourceSearchesUrl" b:select="concat($lFavResourceSearchesUrl,'&amp;cache')"/>
+<s:task b:action="load" b:method="GET" b:asyc="true" b:showloading="false" b:url="{$lFavResourceSearchesUrl}" b:destination="id('My25Live_Favorites_Resource_Searches_Body')" b:mode="replacechildren">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+</s:if>
+</s:event>
+<s:event b:on="InitEventsSummary">
+<s:render b:destination="id('My25Live_EventsSummary')" b:mode="replacechildren">
+<div class="sectionHead" b:textselect="false">
+<div class="sectionToggle" c:pref="events">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_minus" b:behavior="CollapseSection" c:purpose="collapse"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus" b:behavior="ExpandSection" c:purpose="expand">
+<s:event b:on="click">
+<s:super/>
+<s:if b:test="id('My25Live_EventsSummary_Body')/@c:loaded='F'">
+<s:task b:action="trigger" b:target="id('My25Live')" b:event="PaintEventsSummary" b:async="true"/>
+</s:if>
+</s:event>
+</img>
+</div>
+<img b:behavior="RefreshSection"/>
+<div class="icon-event handle">
+<bx:tooltip>
+<div>Access upcoming events that you are scheduling or requesting.</div>
+</bx:tooltip>
+<span class="sectionTitle">Your Events</span>
+</div>
+</div>
+<div class="sectionBody" id="My25Live_EventsSummary_Body" c:loaded="F">
+<span id="My25Live_EventsSummary_Counts"/>
+</div>
+</s:render>
+</s:event>
+<s:event b:on="PaintEventsSummary">
+<s:if b:test="id('My25Live_EventsSummary')/@c:ondash = 'true'">
+<s:if b:test="id('WSSessionMgr')/@c:logged-in = 'true'">
+<s:task b:action="show" b:target="id('My25Live_EventsSummary')"/>
+<s:if b:test="$tSections/sections/section[@name='events']/@expanded = 'true'">
+<s:render b:destination="id('My25Live_EventsSummary_Counts')" b:mode="replacechildren">
+<div class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Loading... </div>
+</s:render>
+<s:with b:target="id('My25Live_EventsSummary_Body')">
+<s:setatt c:loaded="T"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:variable b:name="lYesterday" b:select=""/>
+<s:script><![CDATA[
+
+var yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+var yesterdayFormatted = s25_format_date(yesterday, 'yyyyMMdd');
+bpc.setVariable('lYesterday', [yesterdayFormatted], 'local');
+
+]]></s:script>
+<s:choose>
+<s:when b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="load" b:method="GET" b:showloading="false" b:url="{concat(id('Config')/$tWsPrefix,'null.xml', '?role_id=-1', '&amp;end_after=',$lYesterday, '&amp;otransform=',id('Config')/$tXslPrefix, 's25-my25live/events_count.xsl')}" b:destination="id('My25Live_EventsSummary_Counts')" b:mode="replacechildren"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="load" b:method="GET" b:showloading="false" b:url="{concat(id('Config')/$tWsPrefix,'null.xml', '?end_after=',$lYesterday, '&amp;otransform=',id('Config')/$tXslPrefix, 's25-my25live/events_count.xsl')}" b:destination="id('My25Live_EventsSummary_Counts')" b:mode="replacechildren"/>
+</s:otherwise>
+</s:choose>
+</s:if>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="InitDraftsSummary">
+<s:render b:destination="id('My25Live_DraftsSummary')" b:mode="replacechildren">
+<div class="sectionHead" b:textselect="false">
+<div class="sectionToggle" c:pref="drafts">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_minus" b:behavior="CollapseSection" c:purpose="collapse"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus" b:behavior="ExpandSection" c:purpose="expand">
+<s:event b:on="click">
+<s:super/>
+<s:if b:test="id('My25Live_DraftsSummary_Body')/@c:loaded='F'">
+<s:task b:action="trigger" b:target="id('My25Live')" b:event="PaintDraftsSummary" b:async="true"/>
+</s:if>
+</s:event>
+</img>
+</div>
+<img b:behavior="RefreshSection"/>
+<div class="icon-draft handle">
+<bx:tooltip>
+<div>
+Access events you&apos;re scheduling or requesting that are still in the Draft state.	
+<a href="javascript:void(0)" b:help="home_drafts" b:behavior="DirectHelpLink">More info?</a>
+</div>
+</bx:tooltip>
+<span class="sectionTitle">Your Event Drafts</span>
+</div>
+</div>
+<div class="sectionBody" id="My25Live_DraftsSummary_Body" c:loaded="F">
+<span id="My25Live_DraftsSummary_Counts"/>
+</div>
+</s:render>
+</s:event>
+<s:event b:on="PaintDraftsSummary">
+<s:if b:test="id('My25Live_DraftsSummary')/@c:ondash = 'true'">
+<s:if b:test="id('WSSessionMgr')/@c:logged-in = 'true'">
+<s:task b:action="show" b:target="id('My25Live_DraftsSummary')"/>
+<s:if b:test="$tSections/sections/section[@name='drafts']/@expanded = 'true'">
+<s:render b:destination="id('My25Live_DraftsSummary_Counts')" b:mode="replacechildren">
+<div class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Loading... </div>
+</s:render>
+<s:with b:target="id('My25Live_DraftsSummary_Body')">
+<s:setatt c:loaded="T"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:variable b:name="lYesterday" b:select=""/>
+<s:script><![CDATA[
+
+var yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+var yesterdayFormatted = s25_format_date(yesterday, 'yyyyMMdd');
+bpc.setVariable('lYesterday', [yesterdayFormatted], 'local');
+
+]]></s:script>
+<s:choose>
+<s:when b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="load" b:method="GET" b:showloading="false" b:url="{concat(id('Config')/$tWsPrefix,'null.xml', '?role_id=-1', '&amp;end_after=',$lYesterday, '&amp;otransform=',id('Config')/$tXslPrefix, 's25-my25live/drafts_count.xsl')}" b:destination="id('My25Live_DraftsSummary_Counts')" b:mode="replacechildren"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="load" b:method="GET" b:showloading="false" b:url="{concat(id('Config')/$tWsPrefix,'null.xml', '?end_after=',$lYesterday, '&amp;otransform=',id('Config')/$tXslPrefix, 's25-my25live/drafts_count.xsl')}" b:destination="id('My25Live_DraftsSummary_Counts')" b:mode="replacechildren"/>
+</s:otherwise>
+</s:choose>
+</s:if>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="InitTasksSummary">
+<s:render b:destination="id('My25Live_TasksSummary')" b:mode="replacechildren">
+<div class="sectionHead" b:textselect="false">
+<div class="sectionToggle" c:pref="tasks">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_minus" b:behavior="CollapseSection" c:purpose="collapse"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_click_plus" b:behavior="ExpandSection" c:purpose="expand">
+<s:event b:on="click">
+<s:super/>
+<s:if b:test="id('My25Live_TasksSummary_Body')/@c:loaded='F'">
+<s:task b:action="trigger" b:target="id('My25Live')" b:event="PaintTasksSummary" b:async="true"/>
+</s:if>
+</s:event>
+</img>
+</div>
+<img b:behavior="RefreshSection"/>
+<div class="icon-task handle">
+<span class="sectionTitle">Tasks</span>
+</div>
+</div>
+<div class="sectionBody" id="My25Live_TasksSummary_Body" c:loaded="F">
+<span id="My25Live_TasksSummary_Counts"/>
+</div>
+</s:render>
+</s:event>
+<s:event b:on="PaintTasksSummary">
+<s:if b:test="id('My25Live_TasksSummary')/@c:ondash = 'true'">
+<s:if b:test="id('WSSessionMgr')/@c:logged-in = 'true' and not(string(id('FLS_TASK_LIST')) = 'N')">
+<s:task b:action="show" b:target="id('My25Live_TasksSummary')"/>
+<s:if b:test="$tSections/sections/section[@name='tasks']/@expanded = 'true'">
+<s:with b:target="id('My25Live_TasksSummary_Body')">
+<s:setatt c:loaded="T"/>
+<s:task b:action="show" b:target="."/>
+</s:with>
+
+<s:render b:destination="id('My25Live_TasksSummary_Counts')" b:mode="replacechildren">
+<div c:id="checking_agenda" class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Checking Today&apos;s Agenda...</div>
+</s:render>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'reservations.xml', '?tasks=T', '&amp;scope=count', '&amp;otransform=', id('Config')/$tXslPrefix,'s25-my25live/agenda_count.xsl')}" b:showloading="false" b:destination="id('My25Live_TasksSummary_Counts')/div[@c:id='checking_agenda']" b:mode="replace"/>
+<s:render b:destination="id('My25Live_TasksSummary_Counts')" b:mode="aslastchild">
+<div c:id="checking_outstanding" class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Checking Outstanding Tasks...</div>
+</s:render>
+<s:task b:action="load" b:method="GET" b:showloading="false" b:url="{concat(id('Config')/$tWsPrefix,'tasks.xml', '?outstanding=T', '&amp;scope=count', '&amp;otransform=', id('Config')/$tXslPrefix, 's25-my25live/tasks_count.xsl')}" b:destination="id('My25Live_TasksSummary_Counts')/div[@c:id='checking_outstanding']" b:mode="replace"/>
+<s:render b:destination="id('My25Live_TasksSummary_Counts')" b:mode="aslastchild">
+<div c:id="checking_flagged" class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Checking Flagged Tasks...</div>
+</s:render>
+<s:task b:action="load" b:method="GET" b:showloading="false" b:url="{concat(id('Config')/$tWsPrefix,'tasks.xml', '?unread=T', '&amp;scope=count', '&amp;otransform=', id('Config')/$tXslPrefix, 's25-my25live/tasks_count.xsl')}" b:destination="id('My25Live_TasksSummary_Counts')/div[@c:id='checking_flagged']" b:mode="replace"/>
+<s:render b:destination="id('My25Live_TasksSummary_Counts')" b:mode="aslastchild">
+<div c:id="checking_assigned_by" class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Checking Tasks Assigned By You...</div>
+</s:render>
+<s:variable b:name="lStartDt" b:scope="local" b:select=""/>
+<s:variable b:name="lEndDt" b:scope="local" b:select=""/>
+<s:script><![CDATA[
+
+var oStartDt = new Date();
+oStartDt.setHours(0,0,1,0);
+oStartDt.setDate(oStartDt.getDate()-30);
+var oEndDt = new Date();
+oEndDt.setHours(23,59,59,0);
+oEndDt.setDate(oEndDt.getDate()+30);
+sPat = 'yyyyMMddThh24mmss';
+bpc.setVariable('lStartDt',[s25_format_date(oStartDt,sPat)],'local');
+bpc.setVariable('lEndDt',[s25_format_date(oEndDt,sPat)],'local');
+
+]]></s:script>
+<s:task b:action="load" b:method="GET" b:showloading="false" b:url="{concat(id('Config')/$tWsPrefix,'tasks.xml', '?assigned_by=',id('WSSessionMgr')/@c:contact-id, '&amp;scope=count', '&amp;task_type=1+2+3+4+5', '&amp;due_start_dt=',$lStartDt, '&amp;due_end_dt=',$lEndDt, '&amp;otransform=', id('Config')/$tXslPrefix, 's25-my25live/tasks_count.xsl')}" b:destination="id('My25Live_TasksSummary_Counts')/div[@c:id='checking_assigned_by']" b:mode="replace"/>
+<s:render b:destination="id('My25Live_TasksSummary_Counts')" b:mode="aslastchild">
+<div c:id="checking_searches" class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Checking Tasks Searches...</div>
+</s:render>
+<s:variable b:name="lTaskSearches" b:scope="local" b:select=""/>
+<s:task b:action="load" b:showloading="false" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'task_searches.xml')}" b:destination="$lTaskSearches"/>
+<s:task b:action="string2xml" b:variable="$lTaskSearches"/>
+<s:task b:action="remove" b:target="id('My25Live_TasksSummary_Counts')/div[@c:id='checking_searches']"/>
+<s:for-each b:target="$lTaskSearches/r25:task_searches/r25:task_search">
+<s:sequential><s:lock>
+<s:render b:destination="id('My25Live_TasksSummary_Counts')" b:mode="aslastchild">
+<div c:id="{$_target/r25:query_id}" class="loading"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/> <s:textnode b:label="{replace('Checking SEARCH_NAME...','SEARCH_NAME',$_target/r25:query_name)}"/></div>
+</s:render>
+<s:task b:action="load" b:method="GET" b:showloading="false" b:url="{concat(id('Config')/$tWsPrefix,'tasks.xml', '?query_id=', $_target/r25:query_id, '&amp;query_name=', $_target/r25:query_name, '&amp;scope=count', '&amp;otransform=', id('Config')/$tXslPrefix, 's25-my25live/tasks_count.xsl')}" b:destination="id('My25Live_TasksSummary_Counts')/div[@c:id = $_target/r25:query_id]" b:mode="replace"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:if>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="PrepAvailableLocations">
+<s:choose>
+<s:when b:test="id('FLS_SPACE_SEARCH') = 'N'">
+<s:render b:destination="id('My25Live_EventCreation_Collections')" b:mode="replacechildren">
+<option value="-1">
+All Locations
+</option>
+</s:render>
+</s:when>
+<s:otherwise>
+<s:task b:action="load" b:method="GET" b:async="true" b:showloading="false" b:url="{concat(id('Config')/$tWsPrefix,'space_searches.xml', '?default_user=',id('Pref_config_search_user'),  '&amp;favorites=T',  '&amp;cache',  '&amp;otransform=',id('Config')/$tXslPrefix,'s25-my25live/location_collections.xsl')}" b:destination="id('My25Live_EventCreation_Collections')" b:mode="replacechildren">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+</s:otherwise>
+</s:choose>
+<s:task b:action="load" b:method="GET" b:showloading="false" b:url="{concat(id('Config')/$tWsPrefix,'spaces.xml', '?otransform=',id('Config')/$tXslPrefix,'s25-my25live/space_availability_template.xsl', '&amp;cache')}" b:destination="$tAvailabilityPostXml">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$tAvailabilityPostXml"/>
+</s:event>
+<s:event b:on="ShowAvailableLocations">
+<s:variable b:name="lAttendeeCount" b:select="number(id('My25Live_EventCreation_Attendees')/@value)"/>
+<s:variable b:name="lCollectionID" b:select="number(id('My25Live_EventCreation_Collections')/@value)"/>
+<s:choose>
+<s:when b:test="not(boolean($lAttendeeCount)) or $lAttendeeCount lt 0">
+<s:task b:action="alert" b:value="You must enter a valid value for the Number of Attendees."/>
+<s:task b:action="set" b:target="id('My25Live_EventCreation_Attendees')/@value" b:value=""/>
+<s:task b:action="focus" b:target="id('My25Live_EventCreation_Attendees')"/>
+</s:when>
+<s:when b:test="$lCollectionID = 0">
+<s:task b:action="alert" b:value="You must specify which Location Search to use."/>
+<s:task b:action="focus" b:target="id('My25Live_EventCreation_Collections')"/>
+</s:when>
+<s:otherwise>
+<s:with b:target="id('My25Live_EventCreation_AvailableLocationResults')">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+<s:fxstyle b:time="10"/>
+<s:task b:action="remove" b:target="id('My25Live_EventCreation_AvailableLocationResults')/*"/>
+<s:render b:destination="id('My25Live_EventCreation_FindingLocations')//span[@c:id='progress']" b:mode="replace">
+<span c:id="progress">Finding available locations based on your info...</span>
+</s:render>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_FindingLocations')"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_AvailableLocationTrigger')"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_AdvancedSearchLink')"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')"/>
+<s:if b:test="count($tAvailabilityPostXml//r25:space) = 0">
+<s:task b:action="trigger" b:event="PrepAvailableLocations"/>
+</s:if>
+<s:variable b:name="lAvailabilityPostXml" b:select="''"/>
+<s:task b:action="xml2string" b:variable="$lAvailabilityPostXml" b:source="$tAvailabilityPostXml"/>
+<s:task b:action="string2xml" b:variable="$lAvailabilityPostXml"/>
+<s:variable b:name="lCapacityMin" b:select=""/>
+<s:variable b:name="lCapacityMax" b:select=""/>
+<s:for-each b:target="tokenize($tCapacityBreakpoints, ',')">
+<s:sequential><s:lock>
+<s:if b:test="$lAttendeeCount le number($_target) and empty($lCapacityMin)">
+<s:task b:action="assign" b:target="$lCapacityMin" b:select="number($lAttendeeCount)"/>
+</s:if>
+<s:if b:test="$lAttendeeCount lt number($_target) and empty($lCapacityMax)">
+<s:task b:action="assign" b:target="$lCapacityMax" b:select="number($_target)"/>
+</s:if>
+</s:lock></s:sequential>
+</s:for-each>
+<s:task b:test="empty($lCapacityMin)" b:action="assign" b:target="$lCapacityMin" b:select="$lAttendeeCount"/>
+<s:task b:test="empty($lCapacityMax)" b:action="assign" b:target="$lCapacityMax" b:select="100000"/>
+<s:task b:action="assign" b:target="$tLastMinCapacity" b:scope="tag" b:select="number($lCapacityMin)"/>
+<s:task b:action="assign" b:target="$tLastMaxCapacity" b:scope="tag" b:select="number($lCapacityMax)"/>
+<s:task b:action="remove" b:target="$lAvailabilityPostXml//r25:space[number(r25:max_capacity) lt $lCapacityMin]"/>
+<s:task b:action="remove" b:target="$lAvailabilityPostXml//r25:space[number(r25:max_capacity) gt $lCapacityMax]"/>
+<s:task b:action="xml2string" b:variable="$lAvailabilityPostXml"/>
+<s:task b:action="string2xml" b:variable="$lAvailabilityPostXml"/>
+<s:choose>
+<s:when b:test="$lCollectionID = '-1'">
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'spaces.xml?cache')}" b:destination="$tLastCollectionLocations">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$tLastCollectionLocations"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'spaces.xml?query_id=',$lCollectionID,'&amp;cache')}" b:destination="$tLastCollectionLocations">
+<s:httpheader b:name="Accept" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$tLastCollectionLocations"/>
+<s:task b:action="remove" b:target="$lAvailabilityPostXml//r25:space[not(r25:space_id = $tLastCollectionLocations//r25:space_id)]"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="SubmitLocationAvailabilityCheck"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ShowMoreAvailableLocations">
+<s:render b:destination="id('My25Live_EventCreation_FindingLocations')//span[@c:id='progress']" b:mode="replace">
+<span c:id="progress">Finding available locations based on your info...</span>
+</s:render>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_FindingLocations')"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_AvailableLocationTrigger')"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')"/>
+<s:variable b:name="lAvailabilityPostXml" b:select="''"/>
+<s:task b:action="xml2string" b:variable="$lAvailabilityPostXml" b:source="$tAvailabilityPostXml"/>
+<s:task b:action="string2xml" b:variable="$lAvailabilityPostXml"/>
+<s:variable b:name="lCapacityMin" b:select="$tLastMaxCapacity + 1"/>
+<s:variable b:name="lCapacityMax" b:select=""/>
+<s:for-each b:target="tokenize($tCapacityBreakpoints, ',')">
+<s:sequential><s:lock>
+<s:if b:test="$lCapacityMin lt number($_target) and empty($lCapacityMax)">
+<s:task b:action="assign" b:target="$lCapacityMax" b:select="number($_target)"/>
+</s:if>
+</s:lock></s:sequential>
+</s:for-each>
+<s:task b:test="empty($lCapacityMin)" b:action="assign" b:target="$lCapacityMin" b:select="0"/>
+<s:task b:test="empty($lCapacityMax)" b:action="assign" b:target="$lCapacityMax" b:select="1000000"/>
+<s:task b:action="assign" b:target="$tLastMinCapacity" b:scope="tag" b:select="number($lCapacityMin)"/>
+<s:task b:action="assign" b:target="$tLastMaxCapacity" b:scope="tag" b:select="number($lCapacityMax)"/>
+<s:task b:action="remove" b:target="$lAvailabilityPostXml//r25:space[number(r25:max_capacity) lt $lCapacityMin]"/>
+<s:task b:action="remove" b:target="$lAvailabilityPostXml//r25:space[number(r25:max_capacity) gt $lCapacityMax]"/>
+<s:task b:action="remove" b:target="$lAvailabilityPostXml//r25:space[not(r25:space_id = $tLastCollectionLocations//r25:space_id)]"/>
+<s:task b:action="trigger" b:event="SubmitLocationAvailabilityCheck"/>
+</s:event>
+<s:event b:on="SubmitLocationAvailabilityCheck">
+<s:choose>
+<s:when b:test="count($lAvailabilityPostXml//r25:space) = 0">
+<s:render b:destination="id('My25Live_EventCreation_AvailableLocationResultDesc')/div" b:mode="replacechildren"><span xmlns="">There are <b>No Matching Locations</b> with a Max Capacity between <b>
+              <span c:id="min">MIN</span>
+            </b> and <b>
+              <span c:id="max">MAX</span>
+            </b>.</span></s:render>
+<s:task b:action="trigger" b:event="UpdateCapacityPrompt"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lDate" b:select="string(id('My25Live_EventCreation')//b:datepicker/@b:sortvalue)"/>
+<s:variable b:name="lStartTime" b:select="string(id('My25Live_EventCreation')//s25:time_spinner[@c:purpose='start_time']/@b:stored-value)"/>
+<s:variable b:name="lEndTime" b:select="string(id('My25Live_EventCreation')//s25:time_spinner[@c:purpose='end_time']/@b:stored-value)"/>
+<s:task b:action="settext" b:target="$lAvailabilityPostXml/r25:space_availability/r25:dates/r25:start_dt" b:value="{concat($lDate,'T',$lStartTime,'00')}"/>
+<s:task b:action="settext" b:target="$lAvailabilityPostXml/r25:space_availability/r25:dates/r25:end_dt" b:value="{concat($lDate,'T',$lEndTime,'00')}"/>
+<s:task b:action="xml2string" b:variable="$lAvailabilityPostXml"/>
+<s:variable b:name="lAsyncResultsTxt" b:select=""/>
+<s:task b:action="load" b:method="POST" b:url="{concat(id('Config')/$tWsPrefix,'space_avail.xml?otransform=',id('Config')/$tXslPrefix,'s25-my25live/available_spaces.xsl','&amp;async=T')}" b:data="{$lAvailabilityPostXml}" b:destination="$lAsyncResultsTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:if b:test="starts-with($lAsyncResultsTxt,'&lt;?')">
+<s:script><![CDATA[
+
+var s = String(_vars['lAsyncResultsTxt'][0]);
+s = s.replace(/\s*<\?.*?\?>/,'');
+s = s.replace(/\s+&\s+/g,' &amp; ');
+s = s.replace(/\s+%\s+/g,' &#37; ');
+bpc.setVariable('lAsyncResultsTxt',[s],'local');
+
+]]></s:script>
+</s:if>
+<s:variable b:name="lAsyncResultsXml" b:scope="local" b:select=""/>
+<s:task b:action="string2xml" b:source="$lAsyncResultsTxt" b:variable="$lAsyncResultsXml"/>
+<s:variable b:name="lAsyncResultKey" b:select="string($lAsyncResultsXml//r25:key)"/>
+<s:task b:action="trigger" b:event="LoadAsyncResults"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="LoadAsyncResults">
+<s:variable b:name="lResultsTxt" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'results?request=',$lAsyncResultKey)}" b:destination="$lResultsTxt" b:showloading="false">
+</s:task>
+<s:if b:test="starts-with($lResultsTxt,'&lt;?')">
+<s:script><![CDATA[
+
+var s = String(_vars['lResultsTxt'][0]);
+s = s.replace(/\s*<\?.*?\?>/,'');
+s = s.replace(/\s+&\s+/g,' &amp; ');
+s = s.replace(/\s+%\s+/g,' &#37; ');
+bpc.setVariable('lResultsTxt',[s],'local');
+
+]]></s:script>
+</s:if>
+<s:variable b:name="lResultsXml" b:select=""/>
+<s:task b:action="string2xml" b:source="$lResultsTxt" b:variable="$lResultsXml"/>
+<s:choose>
+<s:when b:test="$lResultsXml//r25:progress">
+<s:if b:test="not(string-length($lResultsXml//r25:progress) = 0)">
+<s:render b:destination="id('My25Live_EventCreation_FindingLocations')//span[@c:id='progress']" b:mode="replace">
+<span c:id="progress"><s:textnode b:label="{string($lResultsXml//r25:progress)}"/></span>
+</s:render>
+</s:if>
+<s:variable b:name="lRsrvWizPurpose" b:select="string(@c:purpose)"/>
+<s:script><![CDATA[
+
+var key = _vars['lAsyncResultKey'][0];
+window.setTimeout("bpc.execute('<s:variable b:name=\"lAsyncResultKey\" b:select=\"\\'" + key + "\\'\" /><s:task b:action=\"trigger\" b:event=\"LoadAsyncResults\" b:target=\"id(\\'My25Live\\')\" />', _current)", 500);
+
+]]></s:script>
+</s:when>
+<s:otherwise>
+<s:task b:action="copy" b:source="$lResultsTxt" b:destination="id('My25Live_EventCreation_AvailableLocationResults')" b:mode="aslastchild"/>
+<s:variable b:name="lResultTally" b:select="count(id('My25Live_EventCreation_AvailableLocationResults')/div[last()]/div[@c:purpose='available_location'])"/>
+<s:choose>
+<s:when b:test="$lResultTally = 0">
+<s:render b:destination="id('My25Live_EventCreation_AvailableLocationResultDesc')/div" b:mode="replacechildren"><span xmlns="">There are <b>No Matching Locations</b> with a Max Capacity between <b>
+              <span c:id="min">MIN</span>
+            </b> and <b>
+              <span c:id="max">MAX</span>
+            </b>.</span></s:render>
+</s:when>
+<s:when b:test="$lResultTally = 1">
+<s:render b:destination="id('My25Live_EventCreation_AvailableLocationResultDesc')/div" b:mode="replacechildren"><span xmlns="">We searched Matching Locations with a Max Capacity between <b>
+              <span c:id="min">MIN</span>
+            </b> and <b>
+              <span c:id="max">MAX</span>
+            </b> and found <b>
+              <span c:id="tally">###</span> Available <span c:id="locations">LOCATIONS</span>
+            </b> for your selected Date and Time.</span></s:render>
+<s:task b:action="settext" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')//span[@c:id='tally']" b:value="{string($lResultTally)}"/>
+<s:task b:action="settext" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')//span[@c:id='locations']" b:value="Location"/>
+</s:when>
+<s:otherwise>
+<s:render b:destination="id('My25Live_EventCreation_AvailableLocationResultDesc')/div" b:mode="replacechildren"><span xmlns="">We searched Matching Locations with a Max Capacity between <b>
+              <span c:id="min">MIN</span>
+            </b> and <b>
+              <span c:id="max">MAX</span>
+            </b> and found <b>
+              <span c:id="tally">###</span> Available <span c:id="locations">LOCATIONS</span>
+            </b> for your selected Date and Time.</span></s:render>
+<s:task b:action="settext" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')//span[@c:id='tally']" b:value="{string($lResultTally)}"/>
+<s:task b:action="settext" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')//span[@c:id='locations']" b:value="Locations"/>
+</s:otherwise>
+</s:choose>
+<s:if b:test="$lResultTally gt 0">
+<s:with b:target="id('My25Live_EventCreation_AvailableLocationResults')">
+<s:task b:action="show" b:target="."/>
+<s:with b:target="div[position() != last()]">
+<s:setstyle b:background-color="#f3f3f3"/>
+</s:with>
+<s:script><![CDATA[
+
+var totalHeight = 0;
+for (a=0; a< _current.childNodes.length - 1; a++) {
+totalHeight += parseInt( _current.childNodes[a].offsetHeight );
+}
+_current.scrollTop = totalHeight;
+
+]]></s:script>								
+</s:with>
+</s:if>
+<s:task b:action="trigger" b:event="UpdateCapacityPrompt"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="UpdateCapacityPrompt">
+<s:task b:action="settext" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')//span[@c:id='min']" b:value="{string($tLastMinCapacity)}"/>
+<s:task b:action="settext" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')//span[@c:id='max']" b:value="{string($tLastMaxCapacity)}"/>
+<s:choose>
+<s:when b:test="exists($tLastCollectionLocations//r25:space[r25:max_capacity gt $tLastMaxCapacity])">
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')/span[@c:id='no_larger_capacity']"/>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')/span[@c:id='check_larger_capacity']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')/span[@c:id='check_larger_capacity']"/>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')/span[@c:id='no_larger_capacity']"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_FindingLocations')"/>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_AdvancedSearchLink')"/>
+</s:event>
+<s:event b:on="ResetAvailableLocations">
+<s:with b:target="id('My25Live_EventCreation')//s25:time_spinner[@c:purpose='end_time']">
+<s:if b:test="number(@b:stored-value) lt number(id('My25Live_EventCreation')//s25:time_spinner[@c:purpose='start_time']/@b:stored-value)">
+<s:setatt b:value="{id('My25Live_EventCreation')//s25:time_spinner[@c:purpose='start_time']/@b:value}"/>
+<s:task b:action="trigger" b:event="input-change"/>
+</s:if>
+</s:with>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_AvailableLocationResults')"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_AvailableLocationResultDesc')"/>
+<s:task b:action="hide" b:target="id('My25Live_EventCreation_AdvancedSearchLink')"/>
+<s:task b:action="show" b:target="id('My25Live_EventCreation_AvailableLocationTrigger')"/>
+</s:event>
+<s:event b:on="LaunchEventCreation">
+<s:variable b:name="lDate" b:select="string(id('My25Live_EventCreation')//b:datepicker[@c:purpose='startdate']/@b:sortvalue)"/>
+<s:script><![CDATA[
+
+var sDate = _vars['lDate'][0];
+sDate = sDate.substring(4,6) + "/" + sDate.substring(6,8) + "/" + sDate.substring(0,4);
+var oDate = new Date(sDate);
+var iDate = oDate.getTime();
+bpc.setVariable('lDate', [iDate], 'local', '_current');
+
+]]></s:script>
+<s:task b:action="set" b:target="id('My25Live_EventCreation_S25Object')/@c:start_dt" b:value="{$lDate}"/>
+<s:variable b:name="lStartTime" b:select="string(id('My25Live_EventCreation')//s25:time_spinner[@c:purpose='start_time']/@b:stored-value)"/>
+<s:task b:action="set" b:target="id('My25Live_EventCreation_S25Object')/@c:start_time" b:value="{$lStartTime}"/>
+<s:variable b:name="lEndTime" b:select="string(id('My25Live_EventCreation')//s25:time_spinner[@c:purpose='end_time']/@b:stored-value)"/>
+<s:task b:action="set" b:target="id('My25Live_EventCreation_S25Object')/@c:end_time" b:value="{$lEndTime}"/>
+<s:variable b:name="lHeadCount" b:select="string(id('My25Live_EventCreation_Attendees')/@value)"/>
+<s:task b:action="set" b:target="id('My25Live_EventCreation_S25Object')/@c:headcount" b:value="{$lHeadCount}"/>
+<s:task b:action="set" b:target="id('My25Live_EventCreation_S25Object')/@c:obj_action" b:value="reserve"/>
+<s:task b:action="trigger" b:event="command" b:target="id('My25Live_EventCreation_S25Object')"/>
+</s:event>
+<s:event b:on="FadeIn" b:async="true">
+<s:if b:test="declared($lSection)">
+<s:with b:target="$lSection">
+<s:setstyle b:display="block"/>
+<s:if b:test="not(starts-with($bpc_browser, 'ie'))">
+<s:fxstyle b:opacity="100" b:time="1000"/>
+</s:if>
+</s:with>
+</s:if>
+</s:event>
+<s:event b:on="AvailabilityDateRangeSelect">
+<s:variable b:name="lStartDt" b:scope="local" b:select="string(id('My25Live_EventCreation')//bx:daterangepicker/@b:start-date-ms)"/>
+<s:variable b:name="lEndDt" b:scope="local" b:select="string(id('My25Live_EventCreation')//bx:daterangepicker/@b:end-date-ms)"/>
+<s:variable b:name="pattern" b:scope="local" b:select="string(id('Prefs')/$tDatePattern)"/>
+<s:variable b:name="lLabelStartDt" b:scope="local" b:select=""/>
+<s:variable b:name="lLabelEndDt" b:scope="local" b:select=""/>
+<s:script><![CDATA[
+
+var oStartDt = new Date(Number(_vars['lStartDt'][0]));
+var oEndDt = new Date(Number(_vars['lEndDt'][0]));
+oStartDt.setHours(0,0,1,0);
+oEndDt.setHours(23,59,59,0);
+bpc.setVariable('lStartDt',[oStartDt.getTime()],'local');
+bpc.setVariable('lEndDt',[oEndDt.getTime()],'local');
+var sNavPat = String(_vars['pattern'][0]);
+bpc.setVariable('lLabelStartDt',[s25_format_date(oStartDt, sNavPat, 'input')],'local');
+bpc.setVariable('lLabelEndDt',[s25_format_date(oEndDt, sNavPat, 'input')],'local');
+
+]]></s:script>
+<s:with b:target="id('My25Live_EventCreation')//bx:daterangepicker/ancestor::s25:magic_link[1]">
+<s:choose>
+<s:when b:test="$lLabelStartDt = $lLabelEndDt">
+<s:task b:action="settext" b:target="$tLink" b:value="{$lLabelStartDt}"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$tLink" b:value="{concat($lLabelStartDt,' through ',$lLabelEndDt)}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="Close"/>
+</s:with>
+</s:event>
+<s:event b:on="FindLocationByName">
+<s:if b:test="replace(id('My25Live_EventCreation_LocationKeyword')/@value, ' ', '') != ''">
+<s:task b:action="show" b:target="id('My25Live_EventCreation_AllLocations_Container')"/>
+<s:render b:destination="id('My25Live_EventCreation_AllLocations')" b:mode="replacechildren">
+<option value="-1">Loading...</option>
+</s:render>
+<s:task b:action="load" b:method="GET" b:async="true" b:showloading="true" b:url="{concat(id('Config')/$tWsPrefix,'spaces.xml', '?name=',id('My25Live_EventCreation_LocationKeyword')/@value, '&amp;otransform=',id('Config')/$tXslPrefix,'s25-my25live/space_options.xsl')}" b:destination="id('My25Live_EventCreation_AllLocations')" b:mode="replacechildren"/>
+</s:if>
+</s:event>
+<s:event b:on="ViewLocationAvailability">
+<s:if b:test="not(id('My25Live_EventCreation_AllLocations')/@value = '-1')">
+<s:variable b:name="lObjID" b:scope="local" b:select="string(id('My25Live_EventCreation_AllLocations')//option[@b:state = 'selected']/@value)"/>		
+<s:with b:target="id('My25Live_EventCreation_S25Object')">
+<s:setatt c:obj_action="view" c:obj_id="{$lObjID}" c:start_dt="{string(id('My25Live_EventCreation')//bx:daterangepicker/@b:start-date-ms)}" c:end_dt="{string(id('My25Live_EventCreation')//bx:daterangepicker/@b:end-date-ms)}"/>
+</s:with>
+<s:with b:target="id('s25-tabitem-locations')">
+<s:setatt c:forceview="Availability"/>
+</s:with>
+<s:task b:action="trigger" b:event="command" b:target="id('My25Live_EventCreation_S25Object')"/>
+</s:if>
+</s:event>
+<s:event b:on="SaveSectionPrefs">
+<s:if b:test="id('WSSessionMgr')/@c:logged-in='true'">
+<s:task b:action="assign" b:target="$tPrefSectionsXml" b:scope="tag" b:select="$tSections"/>
+<s:variable b:name="lPrefSectionsValue" b:scope="local" b:select=""/>
+<s:task b:action="xml2string" b:source="$tPrefSectionsXml" b:variable="$lPrefSectionsValue"/>
+<s:task b:action="settext" b:target="id('Pref_25L_my25live_sections')" b:value="{$lPrefSectionsValue}"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_25L_my25live_sections')"/>
+</s:if>
+</s:event>
+<s:event b:on="SaveWidgetOrderPref">
+<s:if b:test="id('WSSessionMgr')/@c:logged-in='true'">
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_25L_dashboard_widget_order')"/>
+</s:if>
+</s:event>
+<s:event b:on="HideWhatsNew">
+<s:task b:action="hide" b:target="id('WhatsNew')"/>
+<s:variable b:name="lPrefHiddenTutorialsXml" b:scope="tag" b:select="string(id('Pref_25L_hidden_tutorials'))"/>
+<s:task b:action="string2xml" b:variable="$lPrefHiddenTutorialsXml"/>
+<s:if b:test="not($lPrefHiddenTutorialsXml/tutorials)">
+<s:task b:action="assign" b:target="$lPrefHiddenTutorialsXml" b:scope="tag" b:select="'&lt;tutorials&gt;&lt;/tutorials&gt;'"/>
+<s:task b:action="string2xml" b:variable="$lPrefHiddenTutorialsXml"/>
+</s:if>
+<s:if b:test="not($lPrefHiddenTutorialsXml//tutorial = $tWhatsNewVersion)">
+<s:variable b:name="lWhatsNewTutorial">	
+<tutorial/>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lWhatsNewTutorial"/>
+<s:task b:action="settext" b:target="$lWhatsNewTutorial/tutorial" b:value="{$tWhatsNewVersion}"/>
+<s:task b:action="copy" b:source="$lWhatsNewTutorial/tutorial" b:destination="$lPrefHiddenTutorialsXml/tutorials" b:mode="aslastchild"/>
+<s:task b:action="xml2string" b:variable="$lPrefHiddenTutorialsXml"/>
+<s:task b:action="assign" b:target="$lPrefHiddenTutorialsXml" b:select="replace($lPrefHiddenTutorialsXml, ' xmlns=&#34;http://www.w3.org/1999/xhtml&#34;', '')"/>
+<s:task b:action="settext" b:target="id('Pref_25L_hidden_tutorials')" b:value="{$lPrefHiddenTutorialsXml}"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_25L_hidden_tutorials')"/>
+</s:if>
+</s:event>
+</s:behavior>
+<s:behavior b:name="FavoriteLocations">
+<s:event b:on="command">
+<s:with b:target="id('Controller')/$tInbox/selected_space_search">
+<s:setatt search="space_favorite=T" grouping="custom"/>
+</s:with>
+<s:task b:action="set" b:target="id('s25-tabitem-locations')/@c:forceview" b:value="Availability"/>
+<s:with b:target="id('LayoutMgr')/$tTabbox//div[@b:behavior='LayoutTabboxBuffer' and @c:purpose = 'space_browse']">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="QuickSearchInput">
+<s:event b:on="construct">
+<s:setatt class="My25Live_QuickSearchInput"/>
+<s:variable b:name="tDefaultText" b:scope="tag" b:select="string(@value)"/>
+<s:variable b:name="tGroup" b:scope="tag" b:select="string(@c:group)"/>
+</s:event>
+<s:whenactive>
+<s:keys b:keys="enter" b:action="trigger" b:event="OnKeyPressEnter" b:target="."/>
+</s:whenactive>
+<s:event b:on="command">
+<s:if b:test="@value eq $tDefaultText">
+<s:setatt value=""/>
+<s:setstyle b:color="#000000"/>
+</s:if>
+</s:event>
+<s:event b:on="blur">
+<s:if b:test="@value eq ''">
+<s:setatt value="{$tDefaultText}"/>
+<s:setstyle b:color="#666666"/>
+</s:if>
+</s:event>
+<s:event b:on="focus">
+<s:super/>
+<s:task b:action="trigger" b:event="command"/>
+</s:event>
+<s:event b:on="rmbclick"><s:super/></s:event>
+<s:event b:on="rmbdown"/>
+<s:event b:on="rmbup"/>
+<s:event b:on="OnKeyPressEnter">
+<s:choose>
+<s:when b:test="string(@value) = $tDefaultText">
+</s:when>
+<s:when b:test="string-length(@value) = 0">
+<s:task b:action="alert" b:value="You have not entered a search term."/>
+</s:when>
+<s:when b:test="string-length(@value) = 1">
+<s:task b:action="alert" b:value="Search terms must be at least two characters long."/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lSearchTerm" b:select="string(@value)"/>
+<s:choose>
+<s:when b:test="$tGroup = 'event' and matches($lSearchTerm, '^\d{4}\-[A-Za-z]{6}$')">
+<s:variable b:name="lEventByLocator" select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix, 'event.xml?scope=list&amp;event_locator=', $lSearchTerm)}" b:destination="$lEventByLocator">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lEventByLocator"/>
+<s:choose>
+<s:when b:test="count($lEventByLocator//r25:item) = 0">
+<s:task b:action="alert" b:value="There are no events that match that Event Locator."/>
+</s:when>
+<s:otherwise>
+<s:with b:target="id('bxLoading')">
+<s:task b:action="settext" b:target="$tMain" b:value="{concat('Loading', ' ', $lEventByLocator//r25:name)}"/>
+<s:task b:action="trigger" b:event="ShowLoading" b:target="."/>
+</s:with>
+<s:with b:target="id('Controller')/$tInbox/selected_obj">
+<s:setatt obj_type="event" obj_id="{string($lEventByLocator//r25:id[1])}"/>
+</s:with>
+<s:task b:action="trigger" b:event="ViewObjectDetail" b:target="id('LayoutMgr')"/>
+<s:task b:target="id('bxLoading')" b:action="trigger" b:event="HideLoading"/>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:with b:target="id('layout-tabbar')/s25:tabitem[@c:group = $tGroup]">
+<s:setatt c:searchterm="{$lSearchTerm}"/>
+</s:with>
+<s:with b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = concat($tGroup,'_search')]">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+<s:setatt value=""/>
+<s:task b:action="trigger" b:event="blur"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:behavior b:name="TasksLink">
+<s:event b:on="command">
+<s:variable b:name="lTasksView" b:select="string(@c:id)"/>
+<s:with b:target="id('s25-tabitem-tasks')">
+<s:setatt c:forceview="{$lTasksView}"/>
+</s:with>
+<s:with b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'task_overview']">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="EventsLink">
+<s:event b:on="command">
+<s:variable b:name="lRoleID" b:select="string(@c:role)"/>
+<s:with b:target="id('Controller')/$tInbox/selected_event_search">
+<s:setatt search="{concat('&amp;role_id=',$lRoleID)}" grouping="custom"/>
+</s:with>
+<s:with b:target="id('LayoutMgr')/$tTabbox//div[@b:behavior='LayoutTabboxBuffer' and @c:purpose = 'event_browse']">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="DraftsLink">
+<s:event b:on="command">
+<s:variable b:name="lRoleID" b:select="string(@c:role)"/>
+<s:with b:target="id('Controller')/$tInbox/selected_event_search">
+<s:setatt search="{concat('&amp;state=0','&amp;role_id=',$lRoleID)}" grouping="custom"/>
+</s:with>
+<s:with b:target="id('LayoutMgr')/$tTabbox//div[@b:behavior='LayoutTabboxBuffer' and @c:purpose = 'event_browse']">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="SearchLink">
+<s:event b:on="command">
+<s:variable b:name="lQueryType" b:select="string(@c:query_type)"/>
+<s:variable b:name="lQueryID" b:select="string(@c:query_id)"/>
+<s:variable b:name="lQueryGroup" b:select="string(@c:grouping)"/>
+<s:choose>
+<s:when b:test="$lQueryType = 'event'">
+<s:with b:target="id('Controller')/$tInbox/selected_event_search">
+<s:setatt search="{concat('&amp;event_query_id=',$lQueryID)}" grouping="{$lQueryGroup}"/>
+</s:with>
+<s:with b:target="id('LayoutMgr')/$tTabbox//div[@b:behavior='LayoutTabboxBuffer' and @c:purpose = 'event_browse']">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+</s:when>
+<s:when b:test="$lQueryType = 'space'">
+<s:with b:target="id('Controller')/$tInbox/selected_space_search">
+<s:setatt search="{concat('&amp;space_query_id=',$lQueryID)}" grouping="{$lQueryGroup}"/>
+</s:with>
+<s:with b:target="id('LayoutMgr')/$tTabbox//div[@b:behavior='LayoutTabboxBuffer' and @c:purpose = 'space_browse']">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+</s:when>
+<s:when b:test="$lQueryType = 'resource'">
+<s:with b:target="id('Controller')/$tInbox/selected_resource_search">
+<s:setatt search="{concat('&amp;resource_query_id=',$lQueryID)}" grouping="{$lQueryGroup}"/>
+</s:with>
+<s:with b:target="id('LayoutMgr')/$tTabbox//div[@b:behavior='LayoutTabboxBuffer' and @c:purpose = 'resource_browse']">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+</s:when>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:behavior b:name="AgendaLink">
+<s:event b:on="command">
+<s:with b:target="id('s25-tabitem-tasks')">
+<s:variable b:name="lStartDtMs" b:select=""/>
+<s:variable b:name="lEndDtMs" b:select=""/>
+<s:script><![CDATA[
+
+var start = new Date();
+start.setHours(0,0,1,0);
+bpc.setVariable('lStartDtMs', [start.getTime()], 'local');
+var end = new Date();
+end.setHours(23,59,59,0);
+bpc.setVariable('lEndDtMs', [end.getTime()], 'local');
+
+]]></s:script>
+<s:setatt c:start_dt="{$lStartDtMs}" c:end_dt="{$lStartDtMs}"/>
+</s:with>
+<s:with b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'task_agenda']">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ExpandSection">
+<s:initatt b:tooltiptext="Expand this Section"/>
+<s:event b:on="construct">
+<s:super/>
+<s:task b:action="addclass" b:value="toggleExpand"/>
+</s:event>
+<s:event b:on="click">
+<s:task b:action="show" b:target="ancestor::div[@class='sectionHead'][1]/following-sibling::div[@class='sectionBody'][1]"/>
+<s:setstyle b:display="none"/>
+<s:with b:target="../img[@c:purpose='collapse']">
+<s:setstyle b:display="inline"/>
+</s:with>
+<s:if b:test="id('WSSessionMgr')/@c:logged-in = 'true'">
+<s:variable b:name="lPrefNode" b:select="string(../@c:pref)"/>
+<s:if b:test="not($lPrefNode = '') and not(id('My25Live')/$tSections/sections/section[@name = $lPrefNode]/@expanded = 'true')">
+<s:task b:action="set" b:target="id('My25Live')/$tSections/sections/section[@name = $lPrefNode]/@expanded" b:value="true"/>
+<s:task b:action="trigger" b:event="SaveSectionPrefs" b:target="id('My25Live')"/>
+</s:if>
+</s:if>
+</s:event>
+</s:behavior>
+<s:behavior b:name="CollapseSection">
+<s:initatt b:tooltiptext="Collapse this Section"/>
+<s:event b:on="construct">
+<s:super/>
+<s:task b:action="addclass" b:value="toggleCollapse"/>
+</s:event>
+<s:event b:on="click">
+<s:task b:action="hide" b:target="ancestor::div[@class='sectionHead'][1]/following-sibling::div[@class='sectionBody'][1]"/>
+<s:setstyle b:display="none"/>
+<s:with b:target="../img[@c:purpose='expand']">
+<s:setstyle b:display="inline"/>
+</s:with>
+<s:if b:test="id('WSSessionMgr')/@c:logged-in = 'true'">
+<s:variable b:name="lPrefNode" b:select="string(../@c:pref)"/>
+<s:if b:test="not($lPrefNode = '') and not(id('My25Live')/$tSections/sections/section[@name = $lPrefNode]/@expanded = 'false')">
+<s:task b:action="set" b:target="id('My25Live')/$tSections/sections/section[@name = $lPrefNode]/@expanded" b:value="false"/>
+<s:task b:action="trigger" b:event="SaveSectionPrefs" b:target="id('My25Live')"/>
+</s:if>
+</s:if>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RefreshSection">
+<s:initatt src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/icon_refresh.png" class="My25Live_Refresh" b:tooltiptext="Refresh this Section"/>
+<s:event b:on="click">
+<s:with b:target="ancestor::div[@class='section'][1]//div[@c:loaded][1]">
+<s:setatt c:loaded="F"/>
+</s:with>
+<s:task b:action="trigger" b:target="ancestor::div[@class='section'][1]//img[@c:purpose='expand'][1]" b:event="click"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="WhatsNewItemHead">
+<s:initatt href="javascript:void(0)" class="WhatsNewItemHead"/>
+<s:event b:on="command">
+<s:task b:action="show" b:target="following-sibling::div[1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="My25Live_EventCreation_AdvancedSearchLink">
+<s:event b:on="command">
+<s:variable b:name="lDateValue" b:select="string(id('My25Live_EventCreation')//b:datepicker[@c:purpose='startdate']/@b:sortvalue)"/>
+<s:script><![CDATA[
+
+var sDate = _vars['lDateValue'][0];
+var oDate = new Date(sDate.substring(4,6) + "/" + sDate.substring(6,8) + "/" + sDate.substring(0,4));
+bpc.setVariable('lDateValue', [oDate.getTime()])
+
+]]></s:script>
+<s:with b:target="id('s25-tabitem-locations')">
+<s:setatt c:start_dt="{$lDateValue}"/>
+</s:with>
+<s:with b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'space_search']">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="My25Live_EventCreation_BrowseLink">
+<s:event b:on="command">
+<s:with b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'space_browse']">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:stylesheet b:name="RecentlyViewedXsl">
+<s:template b:match="/">
+<s:apply-templates b:select="recent_object"/>
+</s:template>
+<s:template b:match="recent_object">
+<s:variable b:name="q">'</s:variable>
+<div class="My25Live_Favorite_Object">
+<div>
+<s:attribute b:name="class" b:select="concat('icon-', @obj_type)"/>
+<span b:behavior="S25Object">
+<s:attribute b:name="c:obj_type" b:select="@obj_type"/>
+<s:attribute b:name="c:obj_id" b:select="@obj_id"/>
+<s:value-of b:select="text()"/>
+</span>
+<bx:tooltip> 
+<s:choose>
+<s:when b:test="@obj_type = 'event'">
+<s:attribute b:name="c:event_id" b:select="@obj_id"/>
+Loading Event Summary...
+</s:when>
+<s:when b:test="@obj_type = 'space'">
+<s:attribute b:name="c:space_id" b:select="@obj_id"/>
+Loading Location Summary...
+</s:when>
+<s:when b:test="@obj_type = 'resource'">
+<s:attribute b:name="c:resource_id" b:select="@obj_id"/>
+Loading Resource Summary...
+</s:when>
+</s:choose>
+</bx:tooltip>
+</div>
+</div>
+</s:template>
+</s:stylesheet>
+</div>

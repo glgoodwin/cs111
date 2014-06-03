@@ -1,0 +1,24 @@
+(* CS251 Spring'11 Problem Set 1 *)
+
+(* Replace the following stub for the function f. *)
+let rec f n= 
+    if n <= 2 then
+	n
+    else
+      n + f(n/2) + f(n/3)
+;;
+
+(* Replace the following stub for the function g. *)
+let rec g n =  
+    if n <= 2 then
+      (n,1)
+    else
+      let rec sum d = 
+	if d <= 2 then
+	  (n + f(n/2) + f(n/3),1)
+	else 
+	  let (r,c) = sum (d-1)
+	      in (r, c+d)
+    in sum (n/2);;
+
+

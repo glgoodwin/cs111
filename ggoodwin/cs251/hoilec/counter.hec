@@ -1,0 +1,47 @@
+(hoilec () (main)
+  (def (main)
+    (bind a (new-counter)
+      (seq (a "inc")
+	   (bind b (new-counter)
+	     (seq (a "inc")
+		  (b "inc")
+		  (a "inc"))))))
+  (def new-counter ;; Corresponds to Counter constructor method in Java
+    ;; numCounters and allCounters correspond to the Counter class (static) variables in Java 
+    (bindpar ((numCounters (cell 0))
+	      (allCounters (cell #e)))
+      ;; The displayCounter function corresponds to the class method in Java.
+      ;; It is visible to all instances.
+      (bindrec ((displayCounters
+		 (fun () 
+	           (bind counters (cell (^ allCounters))
+		     (seq (while (not (empty? (^ counters)))
+				 (seq (print (str+ ((head (^ counters)) "toString") "; "))
+				      (:= counters (tail (^ counters)))))
+			  (println ""))))))
+	(fun () ;; This is the constructor method itself
+          ;; id and count correspond to the Counter instance variables in Java 
+          (bindpar ((id (cell 0))
+	  	    (count (cell 0)))
+  	    (bindrec ((this 
+		       (fun (msg) ;; This message dispatch function corresponds to a Java Counter instance
+			 (cond ;; Each clause corresponds to the body of an instance method
+			   ((str= msg "inc")
+			    (seq (:= count (+ 1 (^ count)))
+				 (displayCounters)))
+			   ((str= msg "toString")
+			    (str+ "["
+				  (str+ (toString (^ id))
+					(str+ " of "
+					      (str+ (toString (^ numCounters))
+						    (str+ ":" (str+ (toString (^ count)) "]")))))))
+			   (else (error (str+ "Unknown instance message: " msg)))))))
+	      (seq (:= numCounters (+ 1 (^ numCounters)))
+		   (:= id (^ numCounters))
+		   (:= allCounters (prep this (^ allCounters)))
+		   (displayCounters)
+		   this ;; Return this as the new instance
+		   ))))))
+    ))
+	      
+	     

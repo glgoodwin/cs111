@@ -1,0 +1,36 @@
+/**Gabe Goodwin
+   StockGUI.java
+   CS230 Final Project
+
+
+   This class will display the GUI created by the StockGUI class**/
+
+import javax.swing.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+
+public class ShowStockGui{
+
+
+    public static void main(String[] args){
+	StockGUI gui = new StockGUI();
+	JFrame frame = new JFrame("Test");
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	frame.getContentPane().add(gui);
+	
+	frame.pack();
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	frame.setVisible(true);
+	frame.setDefaultLookAndFeelDecorated(true);
+	frame.setSize(800,500);
+    }
+
+
+
+
+
+
+}

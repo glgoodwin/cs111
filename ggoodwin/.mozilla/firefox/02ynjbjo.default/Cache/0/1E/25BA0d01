@@ -1,0 +1,930 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" style="display:none;">
+<script type="text/javascript"><![CDATA[
+
+HTTPMgr.prototype.set_handler = function(sHandler, oElm)
+{
+var o = { sHandler:sHandler, oElm:oElm };
+this._aHandlers.push(o);
+};
+HTTPMgr.prototype.set_observer = function(iCode, sHandler, oElm)
+{
+var sCode = String(iCode);
+var o = { sHandler:sHandler, oElm:oElm };
+if ( this._oObservers[sCode] ) {
+if ( this._oObservers[sCode] instanceof Array ) {
+this._oObservers[sCode].push(o);
+}
+} else {
+this._oObservers[sCode] = [];
+this._oObservers[sCode].push(o);
+}
+};
+HTTPMgr.prototype.get_handler = function()
+{
+if ( this._aHandlers.length > 0 ) {
+return this._aHandlers.shift();
+}
+return false;
+};
+HTTPMgr.prototype.get_observer = function(iCode)
+{
+var sCode = String(iCode);
+var aHndl = [];
+if ( this._oObservers[sCode] ) {
+aHndl = this._oObservers[sCode];
+}
+for ( var name in this._oObservers ) {
+var sName = String(name);
+if ( sName.match(/\*/g) ) {
+sName = sName.replace(/\*/g,'');
+var re = new RegExp('^'+sName);
+if ( sCode.match(re) ) {
+aHndl = aHndl.concat(this._oObservers[name]);
+}
+}
+}
+if ( aHndl.length > 0 ) {
+return aHndl;
+}
+return false;
+};
+HTTPMgr.prototype.peek = function(iCode)
+{
+var bRet = ( this._aHandlers.length > 0 ) ? true : false;
+bRet = ( this.get_observer(iCode) ) ? true : bRet;
+return bRet;
+};
+HTTPMgr.prototype.reset = function() {
+this._aHandlers = [];
+this._oObservers = {};
+};
+function HTTPMgr() {
+this._aHandlers = [];
+this._oObservers = {};
+};
+var gHTTPMgr = new HTTPMgr();
+
+]]></script>
+<s:httpcode b:type="100">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="101">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="200">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="201">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="202">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+if ( bpc.getBXMLAttribute('c:async',oElm) == 'T' ) {
+var mtch = http.responseText.match(/key>(.*?)</);
+if ( mtch != null ) {
+var key = ( mtch.length > 1 ) ? mtch[1] : '';
+bpc.setVariable('tAsyncKey',[key],'tag',oElm);
+}
+bpc.setBXMLAttribute('c:async','F',oElm);
+}
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="203">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="204">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="205">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="206">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="300">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="301">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="302">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="303">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="304">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="305">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="306">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="307">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="400">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="401">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="402">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="403">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="404">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="405">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="406">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="407">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="408">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="409">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="410">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="411">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="412">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="413">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="414">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="415">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="416">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="417">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="500">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="501">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="502">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="503">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="504">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="505">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<s:httpcode b:type="425">
+<s:script><![CDATA[
+
+var http = _vars['_httpObject'];
+http = ( http instanceof Array ) ? http[0] : null;
+var aNS = bpc.xpath("id('HttpMgr')",_current);
+var oElm = ( aNS instanceof Array ) ? aNS[0] : null;
+if ( http != null && oElm != null ) {
+bpc.setVariable('tStatus',[http.status],'tag',oElm);
+bpc.setVariable('tStatusText',[http.statusText],'tag',oElm);
+bpc.setVariable('tResponseText',[http.responseText],'tag',oElm);
+bpc.setVariable('tResponseHeaders',[http.getAllResponseHeaders()],
+'tag',oElm);
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="HandleHttpResponse" b:target="id('HttpMgr')"/>
+</s:httpcode>
+<div id="HttpMgr" c:purpose="HttpMgr" c:async="F">
+<s:event b:on="construct">
+<s:variable b:name="tStatus" b:scope="tag" b:select=""/>
+<s:variable b:name="tStatusText" b:scope="tag" b:select=""/>
+<s:variable b:name="tResponseText" b:scope="tag" b:select=""/>
+<s:variable b:name="tResponseHeaders" b:scope="tag" b:select=""/>
+<s:variable b:name="tHttpObject" b:scope="tag" b:select=""/>
+<s:variable b:name="tAsyncKey" b:scope="tag" b:select=""/>
+</s:event>
+<s:event b:on="SetHandler">
+<s:variable b:name="lHandler" b:scope="local" b:select="string($pHandler)"/>
+<s:variable b:name="lNode" b:scope="local" b:select="$pNode"/>
+<s:script><![CDATA[
+
+var sHandler = _vars['lHandler'][0];
+var oElm = _vars['lNode'][0];
+gHTTPMgr.set_handler(sHandler,oElm);
+
+]]></s:script>
+</s:event>
+<s:event b:on="SetObserver">
+<s:variable b:name="lCode" b:scope="local" b:select="string('*')"/>
+<s:if b:test="declared($pCode)">
+<s:task b:action="assign" b:target="$lCode" b:scope="local" b:select="string($pCode)"/>
+</s:if>
+<s:variable b:name="lHandler" b:scope="local" b:select="string($pHandler)"/>
+<s:variable b:name="lNode" b:scope="local" b:select="$pNode"/>
+<s:script><![CDATA[
+
+var iCode = _vars['lCode'][0];
+var sHandler = _vars['lHandler'][0];
+var oElm = _vars['lNode'][0];
+gHTTPMgr.set_observer(iCode,sHandler,oElm);
+
+]]></s:script>
+</s:event>
+<s:event b:on="Load">
+<s:variable b:name="url" b:scope="local" b:select="$pUrl"/>
+<s:variable b:name="method" b:scope="local" b:select="string('GET')"/>
+<s:if b:test="declared($pMethod)">
+<s:task b:action="assign" b:target="method" b:scope="local" b:select="$pMethod"/>
+</s:if>
+<s:variable b:name="data" b:scope="local" b:select="string('')"/>
+<s:if b:test="declared($pData)">
+<s:task b:action="assign" b:target="data" b:scope="local" b:select="$pData"/>
+</s:if>
+<s:variable b:name="destination" b:scope="local" b:select="$tResponseText"/>
+<s:if b:test="declared($pDestination)">
+<s:task b:action="assign" b:target="destination" b:scope="local" b:select="$pDestination"/>
+</s:if>
+<s:variable b:name="mode" b:scope="local" b:select="string('replacechildren')"/>
+<s:if b:test="declared($pMode)">
+<s:task b:action="assign" b:target="data" b:scope="local" b:select="$pMode"/>
+</s:if>
+<s:choose>
+<s:when b:test="$method eq 'GET'">
+<s:task b:action="load" b:url="{$url}" b:method="{$method}" b:data="{$data}" b:destination="$destination" b:mode="{$mode}"/>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="contains($data,'?&gt;')">
+<s:task b:action="load" b:url="{$url}" b:method="{$method}" b:data="{$data}" b:destination="$destination" b:mode="{$mode}">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+</s:when>
+<s:otherwise>
+<s:task b:action="load" b:url="{$url}" b:method="{$method}" b:data="{$data}" b:destination="$destination" b:mode="{$mode}"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="Reset">
+<s:script><![CDATA[
+
+gHTTPMgr.reset();
+
+]]></s:script>
+</s:event>
+<s:event b:on="HandleHttpResponse">
+<s:variable b:name="lCode" b:scope="local" b:select="string($tStatus)"/>
+<s:script><![CDATA[
+
+var iCode = _vars['lCode'][0];
+var oHndl = {};
+var aHndl = [];
+if ( (oHndl = gHTTPMgr.get_handler()) ) {
+bpc.trigger(oHndl.sHandler,oHndl.oElm);
+}
+if ( (aHndl = gHTTPMgr.get_observer(iCode)) ) {
+for ( var i=0; i < aHndl.length; i++ ) {
+bpc.trigger(aHndl[i].sHandler,aHndl[i].oElm);
+}
+}
+
+]]></s:script>
+</s:event>
+</div>
+</div>

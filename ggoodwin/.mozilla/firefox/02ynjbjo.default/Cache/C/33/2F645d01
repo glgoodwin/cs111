@@ -1,0 +1,2226 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" xmlns:s25="http://www.collegenet.com/s25" xmlns:bx="http://www.collegenet.com/bx" style="display:none;">
+<s:htmlstructure b:name="s25:rsrv_wiz_space" b:behavior="S25RsrvWizEditor::Space">
+<div><s:innercontent/></div>
+</s:htmlstructure>
+<s:behavior b:name="S25RsrvWizEditor::Space" b:behavior="S25RsrvWizEditor">
+<s:initatt c:purpose="space" c:obj_type_id="4"/>
+<s:event b:on="s25-focus">
+</s:event>
+<s:event b:on="Paint">
+
+<s:variable b:name="tSpaceMasterListFLS" b:scope="tag" b:select="string(id('FLS_ML_SPACE'))"/>
+<s:variable b:name="tRespXml" b:scope="tag" b:select=""/>
+<s:variable b:name="tRespStr" b:scope="tag" b:select=""/>
+<s:variable b:name="tHttpStatus" b:scope="tag" b:select=""/>
+<s:variable b:name="tHasPrefs" b:scope="tag" b:select="'false'"/>
+<s:variable b:name="lPrefNames">
+<prefs>
+<name>config_sp_features</name>
+<name>config_sp_categories</name>
+<name>config_sp_layouts</name>
+<name>25L_rsrvwiz_hide_unavail_sp</name>
+<name>25L_space_system_options</name>
+<name>SpaceDirBreakPoint</name>
+</prefs>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lPrefNames"/>
+<s:for-each b:target="$lPrefNames/prefs/name">
+<s:if b:test="exists(id(concat('Pref_',string($_target))))">
+<s:task b:action="remove" b:target="$_target"/>
+</s:if>
+</s:for-each>
+<s:if b:test="count($lPrefNames/prefs/name) gt 0">
+<s:variable b:name="lPrefUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'preference.xml', '?otransform=',id('Config')/$tXslPrefix,'prefs.foal', '&amp;name=', string-join($lPrefNames/prefs/name, '+'))"/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="id('PrefsDataIsland')" b:mode="aslastchild"/>
+</s:if>
+<s:variable b:name="tObjType" b:scope="tag">space</s:variable>
+<s:variable b:name="lThis" b:scope="local">ancestor::*[@c:editor='true'][1]</s:variable>
+<s:if b:test="$tEvWiz/$tProfile/r25:space_pref">
+<s:task b:action="assign" b:target="$tHasPrefs" b:select="'true'"/>
+<s:variable b:name="lPrefUrl" b:scope="local" b:select=""/>
+<s:variable b:name="lQueryID" b:scope="local" b:select="$tEvWiz/$tProfile/r25:space_pref/r25:sp_query_id"/>
+<s:task b:action="assign" b:target="$lPrefUrl" b:select="concat(id('Config')/$tWsPrefix,'space_search.xml?query_id=',$lQueryID)"/>
+<s:variable b:name="lResp" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{$lPrefUrl}" b:destination="$lResp">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lResp"/>
+<s:if b:test="count($lResp//r25:step_param) = 0">
+<s:task b:action="assign" b:target="$tHasPrefs" b:select="'false'"/>				
+</s:if>
+</s:if>
+<s:render b:destination="$tContent" b:mode="replacechildren">
+<div class="contentHeader">
+<span class="tooltipMarker">
+<bx:tooltip class="bxTooltipNoIcon" b:delay="5"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="iconHelp"/>
+</span>
+<div c:id="title"><s:textnode b:label="{@c:title}"/></div>
+</div>
+<table align="center" class="contentOptions" cellspacing="0">
+<tr c:id="preferenceMessage" style="display:none">
+<td colspan="3" class="preferenceMessage"/>
+</tr>
+<tr valign="top" c:id="workarea">
+<td class="contentOptionSelect">
+<div align="center"><div class="currentSelectionHeader">Select Your Locations</div></div>
+<div c:id="indices" class="RsrvWiz_CriteriaSelectTierOne">
+<div class="RsrvWiz_CriteriaSelectHeader">
+<div class="icon-space">Find by...</div>
+</div>
+<div c:id="options" class="RsrvWiz_CriteriaSelectBody">
+<div b:behavior="SpaceIndexOption" c:index_id="-1" b:disabled="true">Loading...</div>
+</div>
+</div>
+<div c:id="divisions" class="RsrvWiz_CriteriaSelectTierTwo">
+<div class="RsrvWiz_CriteriaSelectHeader">
+<div class="icon-space">Loading...</div>
+</div>
+<div c:id="options" class="RsrvWiz_CriteriaSelectBody">
+<div b:behavior="SpaceDivisionOption" c:division_id="-1" b:disabled="true">Loading...</div>
+</div>
+<div c:id="search" class="RsrvWiz_CriteriaSelectBody RsrvWiz_CriteriaSearch" style="display:none">
+<div>Search by Location Name:</div><br/>
+<input type="text" name="needle" value="" b:required="false" b:valid="true" b:behavior="RsrvWizInput">
+<s:whenactive>
+<s:keys b:keys="enter" b:action="trigger" b:event="LoadSearch" b:target="{$lThis}"/>
+</s:whenactive>
+</input>
+<b:button b:action="trigger" b:event="LoadSearch" b:target="{$lThis}">Search</b:button>
+</div>
+</div>
+<div c:id="spaces" class="RsrvWiz_CriteriaSelectTierThree">
+<div class="RsrvWiz_ObjectSelectHeader">
+<div class="icon-space">Choose from...</div>
+</div>
+<div c:id="options" class="RsrvWiz_ObjectSelectBody RsrvWiz_ObjectSelectBody_HideUnavailable">
+<div b:behavior="SpaceOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</div>
+<div c:id="rsrvwiz_icon_tip" class="RsrvWiz_ResultTip" style="display:none">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close_small.gif" class="RsrvWiz_ResultTip_Close" b:behavior="HideIconTips"/>
+<span>Hover over <img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/checkmark.png" class="RsrWiz_ResultTip_Image"/> or <img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/warning.png" class="RsrWiz_ResultTip_Image"/> icons for availability details.</span>
+</div>
+<div class="RsrvWiz_ResultOptions" style="height:34px;">
+<span class="RsrvWiz_HideUnavailable">
+<input type="checkbox" name="hide_unavailable">
+<s:event b:on="command">
+<s:super/>
+<s:task b:action="trigger" b:event="ShowHideUnavailable" b:target="{$lThis}"/>
+</s:event>
+</input> <span b:behavior="ToggleInput">Hide Unavailable</span>
+</span>
+<span class="RsrvWiz_ResultRefresh" b:behavior="RefreshAvailableLocations">
+<img class="RsrvWiz_RecheckAvailability" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/icon_refresh.png" b:tooltiptext="Re-Check Availability"/>Refresh
+</span>
+</div>
+</div>
+</td>
+<td class="contentSelections">
+<div align="center"><div class="currentSelectionHeader">Selected Locations</div></div>
+<div c:id="txt" class="currentSelection">
+<div class="currentSelectionBlank" c:id="nospace" c:obj_type="{$tObjType}" style="display:none">none selected</div>
+</div>
+</td>
+</tr>
+</table>
+
+</s:render>
+<s:if b:test="$tEvWiz/$tProfile/r25:space_pref and $tHasPrefs = 'true'">
+<s:variable b:name="lSpaceQueryID" b:select="string($tEvWiz/$tProfile/r25:space_pref/r25:sp_query_id)"/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'space_search.xml?query_id=',$lSpaceQueryID,  '&amp;otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/space_preferences.xsl')}" b:destination="$tContent//table/tr[@c:id='preferenceMessage']/td" b:mode="asfirstchild"/>
+<s:task b:action="show" b:target="$tContent//table/tr[@c:id='preferenceMessage']"/>
+</s:if>
+<s:variable b:name="tContentOptions" b:scope="tag" b:select="$tContent/table/tr/td"/>
+<s:variable b:name="tCurrentObject" b:scope="tag" b:select="$tContentOptions/div[@c:id='txt']/span[@c:id='currentSpace']"/>
+<s:variable b:name="tPreCheckLastDates" b:scope="tag" b:select="''"/>
+<s:if b:test="$tEvWiz/$tInbox/reserve/obj[@obj_type='space' and not(@obj_id='')] or string-length($tEvWiz/$tProfile//r25:space_id) gt 0">
+<s:task b:action="assign" b:target="$tEvWiz/$tHasSpaces" b:select="'T'"/>
+</s:if>
+<s:variable b:name="lNoEditXpath" b:scope="local" b:select=""/>
+<s:variable b:name="lNoEditContent" b:scope="local" b:select=""/>
+<s:if b:test="contains($tEvWiz/$tEvent//r25:space/@no_edit,'EvXML')">
+<s:task b:action="assign" b:target="$lNoEditContent" b:select="string($tEvWiz/$tEvent//r25:space/@no_edit)"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tProfile/@no_edit,'EvXML')">
+<s:task b:action="assign" b:target="$lNoEditContent" b:select="string($tEvWiz/$tProfile/@no_edit)"/>
+</s:if>
+<s:task b:action="assign" b:target="$lNoEditXpath" b:select="replace($lNoEditContent,'EvXML','$tEvWiz/$tDataXml/r25:events/r25:event')"/>
+<s:if b:test="xpath($lNoEditXpath)">
+<s:setatt c:no_edit="true"/>
+</s:if>
+<s:if b:test="$tEvWiz/$tEvent//r25:space/@no_edit = 'T'">
+<s:setatt c:no_edit="true"/>
+</s:if>
+<s:if b:test="id('FLS_EVENT_SPACE_PROFILE') = 'N'">
+<s:setatt c:no_edit="true"/>
+</s:if>
+<s:if b:test="not(string(@c:no_edit) = 'true')">
+<s:with b:target="$tEvWiz">
+<s:task b:action="assign" b:target="$tSpaceEditor" b:select="'T'"/>
+</s:with>
+<s:variable b:name="tIndices" b:scope="tag" b:select="$tContentOptions/div[@c:id='indices']"/>
+<s:variable b:name="tLastIndex" b:scope="tag" b:select="'-1'"/>
+<s:variable b:name="tDivisions" b:scope="tag" b:select="$tContentOptions/div[@c:id='divisions']"/>
+<s:variable b:name="tLastDivision" b:scope="tag" b:select="'-1'"/>
+<s:variable b:name="tSpaces" b:scope="tag" b:select="$tContentOptions/div[@c:id='spaces']"/>
+<s:variable b:name="tHideUnavailable" b:scope="tag" b:select="$tSpaces//input[@name='hide_unavailable']"/>
+<s:if b:test="id('Pref_25L_rsrvwiz_hide_unavail_sp') = 'true'">
+<s:with b:target="$tHideUnavailable">
+<s:setatt b:state="selected" checked="checked"/>
+</s:with>
+</s:if>
+<s:variable b:name="tNeedle" b:scope="tag" b:select="$tDivisions/div[@c:id='search']//input[@type='text' and @name='needle']"/>
+<s:task b:action="trigger" b:event="LoadIndices"/>
+<s:choose>
+<s:when b:test="$tEvWiz/$tProfile/r25:space_pref and $tHasPrefs = 'true'">
+<s:task b:action="select" b:target="$tIndices//div[@c:index_id = 'prefs']"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lFavCountUrl" b:select="concat(id('Config')/$tWsPrefix,'spaces.xml?favorite=T','&amp;scope=list')"/>
+<s:variable b:name="lFavCount" b:select=""/>
+<s:task b:action="load" b:url="{$lFavCountUrl}" b:method="GET" b:destination="$lFavCount" b:mode="replacechildren">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lFavCount"/>
+<s:choose>
+<s:when b:test="count($lFavCount//r25:item) = 0">
+<s:task b:action="select" b:target="$tIndices//div[@c:index_id = 'search']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="select" b:target="$tIndices//div[@c:index_id = 'fav']"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:if>
+<s:render b:destination="$tContent/div[1]/span[1]/bx:tooltip" b:mode="replacechildren"><div xmlns="">Choose from a list of Your Starred Locations or Search by location name. Alternatively, you can browse locations by selecting among Location Searches, Index of names, Categories, Features, Layouts, or Capacities.</div><div xmlns="">To search for a location, click &apos;Search&apos; in the &apos;Find by&apos; list, then enter all or the first part of the location short or formal name. Click the &apos;Search&apos; button. A checkbox under the Choose from... list lets you hide or show unavailable locations.</div><div xmlns="">You can hover over a location name to learn more about it.</div><div xmlns="">You may assign multiple locations by event occurrence. Click Modify Selected Occurrences to complete details for each occurrence of a location assignment. You may elect to share the location with other event activities, if appropriate.</div><div xmlns="">
+              <b>Note: </b>You can modify selected location instructions and layout, and they will be retained even if the location is saved as an event preference only. You cannot &quot;unshare&quot; a shared location after it&apos;s been saved.</div><div xmlns="">If you don&apos;t have permission to save your selected location(s), your preferences are saved with the event so they&apos;re available to the 25Live user with the required scheduler permissions.</div><div xmlns="">A Selected Location can be added to (or removed from) Your Starred Locations by toggling its star icon.</div></s:render>
+</s:event>
+<s:event b:on="Reset">
+<s:sequential><s:lock>
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode = 'edit' or $tEvWiz/@c:mode = 'clone'">
+<s:task b:action="trigger" b:event="Reset_existing" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="Reset_new" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:lock></s:sequential>
+<s:variable b:name="lMessage" b:scope="local" b:select="string($tEvWiz/$tEvent//r25:space[string-length(@message &gt; 0)]/@message)"/>
+<s:if b:test="string-length($lMessage) = 0">
+<s:task b:action="assign" b:target="$lMessage" b:select="string(@c:message)"/>
+</s:if>		
+<s:render b:test="not(string-length($lMessage) = 0)" b:destination="$tContent//table" b:mode="asfirstchild">
+<tr c:id="message"><td colspan="3"><s:textnode b:label="{$lMessage}"/></td></tr>
+</s:render>
+<s:variable b:name="lEditorSupplementaryText" b:select="ancestor::div[@b:behavior='S25RsrvWizCard']/$tEditor[@name='space']/info"/>
+<s:task b:action="xml2string" b:variable="$lEditorSupplementaryText"/>
+<s:if b:test="not(string-length($lEditorSupplementaryText) = 0)">
+<s:script><![CDATA[
+
+var lText = _vars['lEditorSupplementaryText'][0];
+lText = lText.replace(/&lt;/g, '<');
+lText = lText.replace(/&gt;/g, '>');
+var destination = "div[@c:id='container']/div[@c:id='content']//table";
+bpc.render('<tr><td colspan="3" class="contentMessage">' + lText + '</td></tr>', 'asfirstchild', destination, _current);
+
+]]></s:script>
+</s:if>
+</s:event>
+<s:event b:on="Reset_new">
+<s:choose>
+<s:when b:test="string(@c:no_edit) = 'true'">
+<s:task b:action="trigger" b:event="LoadText" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="$tEvWiz/$tInbox/reserve/obj[@obj_type='space' and not(@obj_id='')]">
+<s:variable b:name="lObj" b:scope="local" b:select="$tEvWiz/$tInbox/reserve/obj[@obj_type='space' and not(@obj_id='')][1]"/>
+<s:variable b:name="lSpaceID" b:select="$lObj/@obj_id"/>
+<s:variable b:name="lSpaceName" b:select="$lObj/@obj_name"/>
+<s:task b:action="trigger" b:event="SpaceSelect" b:target="."/>
+<s:task b:action="remove" b:target="$lObj"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="show" b:target="$tContentOptions/div[@c:id='txt']/div[@c:id='nospace']"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="Reset_existing">
+<s:choose>
+<s:when b:test="string(@c:no_edit) = 'true'">
+<s:task b:action="trigger" b:event="LoadText" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="$tEvWiz/$tProfile//r25:space_reservation">
+<s:task b:action="transform" b:datasource="$tEvWiz/$tProfile" b:stylesheet="$Spaces" b:destination="$tContentOptions/div[@c:id='txt']" b:mode="replacechildren"/>
+<s:task b:action="trigger" b:event="CheckAssignmentPolicy" b:target="."/>
+</s:when>
+<s:when b:test="$tEvWiz/$tInbox/reserve/obj[@obj_type='space']">
+<s:task b:action="transform" b:datasource="$tEvWiz/$tInbox/reserve" b:stylesheet="$Spaces" b:destination="$tContentOptions/div[@c:id='txt']" b:mode="replacechildren"/>
+<s:task b:action="trigger" b:event="CheckAssignmentPolicy" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="show" b:target="$tContentOptions/div[@c:id='txt']/div[@c:id='nospace']"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="CheckAssignmentPolicy">
+<s:for-each b:target="$tContentOptions/div[@c:id='txt']//div[@c:purpose='Space']">
+<s:sequential>
+<s:lock>
+<s:variable b:name="lSpaceID" b:scope="local" b:select="$_target/@c:space_id"/>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'space_assign.xml?space_id=',$lSpaceID,'&amp;cache')"/>
+<s:variable b:name="lDest" b:scope="local" b:select=""/>
+<s:task b:action="load" b:url="{$lUrl}" b:destination="$lDest" b:showloading="false"/>
+<s:task b:action="string2xml" b:variable="$lDest"/>
+<s:variable b:name="lSecurityGroupID" b:select="id('WSSessionMgr')/@c:security-group"/>
+<s:variable b:name="lSpaceAccess" b:select="$lDest//r25:security_group[r25:security_group_id = $lSecurityGroupID]/r25:access_level"/>
+<s:variable b:name="lSpaceAssignOver" b:scope="local" b:select="id('FLS_SPACE_ASSIGN_OVER')"/>
+<s:if b:test="not($lSpaceAccess = 'N') or $lSpaceAssignOver = 'F'">
+<s:with b:target="$tContentOptions/div[@c:id='txt']//div[@c:purpose='Space'][@c:space_id = $lSpaceID]/div[@class='currentSelection_Icons']">
+<s:task b:action="show" b:target="input[@b:behavior='RemoveSpace']"/>
+</s:with>
+</s:if>
+<s:if b:test="$lSpaceAccess = 'N' and $lSpaceAssignOver = 'N'">
+<s:task b:action="hide" b:target="$tContentOptions//div[@c:purpose='location_customization']"/>						
+</s:if>
+</s:lock>
+</s:sequential>
+</s:for-each>
+</s:event>
+<s:event b:on="select">
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode='edit' and not($tEvWiz/$tEvent)">
+</s:when>
+<s:otherwise>
+<s:variable b:name="lFirstLoad" b:select="not(@c:init = '1')"/>
+<s:super/>
+<s:if b:test="not($lFirstLoad)">
+<s:task b:action="trigger" b:event="UpdateAvailabilityVars" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:if b:test="$tEvWiz/$tHasDates = 'T' and not(@c:no_edit = 'true')">
+<s:task b:action="trigger" b:event="BuildAvailabilityDates" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:if b:test="not($tEvWiz/$tAvailabilityControl/$tAvailabilityDates = $tPreCheckLastDates)">
+<s:task b:action="trigger" b:event="SpaceDivisionChange"/>
+</s:if>
+</s:if>
+</s:if>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveRsrvWizard">
+<s:variable b:name="lEvent" b:scope="local" b:select="$tEvWiz/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent='LoadSuccess'">
+<s:task b:test="not(@c:init = '1')" b:action="trigger" b:event="select"/>
+</s:when>
+<s:when b:test="$lEvent='DateChangePending'">
+<s:with b:target="$tContentOptions/div[@c:id='txt']/div[@c:purpose='Space']">
+<s:setatt c:valid="U"/>
+<s:task b:action="trigger" b:event="ValidityUpdate"/>
+</s:with>
+<s:task b:action="trigger" b:event="PreCheckSpaces" b:async="true"/>
+</s:when>
+<s:when b:test="$lEvent='DateChange'">
+<s:for-each b:target="$tContentOptions/div[@c:id='txt']/div[@c:purpose='Space']">
+<s:sequential><s:lock>
+<s:with b:target="$_target"> 
+<s:task b:action="trigger" b:event="PaintCustomizationInfobox"/>
+</s:with>
+<s:variable b:name="lSpaceID" b:select="string($_target/@c:space_id)"/>
+<s:variable b:name="lSpaceName" b:select="string($_target/@c:space_name)"/>
+<!-- <s:task b:action="trigger" b:event="DeletePendingSpaceRsrv" b:target="$tEvWiz/$tAvailabilityControl"/> -->
+<s:task b:action="trigger" b:event="CreatePendingSpaceRsrv" b:target="$tEvWiz/$tAvailabilityControl"/>
+</s:lock></s:sequential>
+</s:for-each>
+<s:task b:action="trigger" b:event="Validate"/>
+<s:task b:action="trigger" b:event="PreCheckSpaces" b:async="true"/>
+</s:when>
+<s:when b:test="$lEvent='FinalCheck'">
+<s:for-each b:target="$tContentOptions/div[@c:id='txt']/div[@c:purpose='Space']">
+<s:sequential><s:lock>
+<s:with b:target="$_target"> 
+<s:task b:action="trigger" b:event="PaintCustomizationInfobox" />
+</s:with>
+<s:variable b:name="lSpaceID" b:select="string($_target/@c:space_id)" />
+<s:variable b:name="lSpaceName" b:select="string($_target/@c:space_name)" />
+<!-- <s:task b:action="trigger" b:event="DeletePendingSpaceRsrv" b:target="$tEvWiz/$tAvailabilityControl" /> -->
+<s:task b:action="trigger" b:event="CreatePendingSpaceRsrv" b:target="$tEvWiz/$tAvailabilityControl" />
+</s:lock></s:sequential>
+</s:for-each>
+<s:task b:action="trigger" b:event="Validate" />
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="LoadText">
+<s:variable b:name="lEvID" b:scope="local" b:select="1"/>
+<s:with b:target="$tContent/table/tr[@c:id='workarea']/td[1]">
+<s:task b:action="remove" b:target="div[@c:id='indices']"/>
+<s:task b:action="remove" b:target="div[@c:id='divisions']"/>
+<s:task b:action="remove" b:target="div[@c:id='spaces']"/>
+<s:render b:destination="." b:mode="aslastchild">
+<div align="center" style="margin:25px 0 15px">
+<i>Event Locations are not currently editable.</i>
+</div>
+</s:render>
+</s:with>
+<s:choose>
+<s:when b:test="$tEvWiz/$tProfile//r25:space_reservation">
+<s:variable b:name="lDatePattern" b:select="string(id('Prefs')/$tDatePattern)"/>
+<s:variable b:name="lLabelOccurrence" b:select="'Occurrence:'"/>
+<s:variable b:name="lLabelLayout" b:select="'Layout:'"/>
+<s:variable b:name="lLabelInstructions" b:select="'Setup Instructions:'"/>
+<s:variable b:name="lNone" b:select="'(none)'"/>
+<s:task b:action="transform" b:datasource="$tEvWiz/$tProfile" b:stylesheet="$Spaces_text" b:destination="$tContentOptions/div[@c:id='txt']" b:mode="replacechildren"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="show" b:target="$tContentOptions/div[@c:id='txt']/div[@c:id='nospace']"/>
+</s:otherwise>
+</s:choose>
+<s:fxstyle b:time="1"/>
+<s:task b:action="move" b:source="$tContent//table/tr[@c:id='message']/td/text()" b:destination="$tContent//table/tr[@c:id='workarea']/td[1]" b:mode="replacechildren"/>
+<s:task b:action="remove" b:target="$tContent//table/tr[@c:id='message']"/>
+</s:event>
+<s:event b:on="Validate">
+<s:setatt c:valid="true" c:error=""/>
+<s:choose>
+<s:when b:test="$tEvWiz/$tProfile/r25:space_pref">
+<s:setatt c:valid="true" c:crumb=""/>
+</s:when>
+<s:when b:test="@c:required = 'true' and count($tContentOptions/div[@c:id='txt']//div[@c:purpose='Space']/div[@c:id='currentSpace']) = 0">
+<s:setatt c:valid="false" c:crumb="" c:error="Event must have a location assigned."/>
+</s:when>
+<s:when b:test="$tContentOptions/div[@c:id='txt']//div[@c:purpose='Space']/@c:valid = 'F'">
+<s:setatt c:valid="false" c:crumb="" c:error="One or more of the locations selected is unavailable."/>
+</s:when>
+<s:otherwise>
+<s:setatt c:valid="true" c:crumb=""/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="Save"/>
+</s:event>
+<s:event b:on="Save">
+<s:if b:test="not(string(@c:no_edit) = 'true')">
+<s:variable b:scope="local" b:name="lCrumbText" b:select="''"/>
+<s:variable b:name="lReserve" b:scope="local" b:select="$tEvWiz/$tInbox/reserve"/>
+<s:task b:action="remove" b:target="$lReserve//obj[@obj_type='space']"/>
+<s:variable b:name="lSpaceObjects" b:select="$tContentOptions/div[@c:id='txt']//div[@c:purpose='Space']"/>
+<s:for-each b:target="$lSpaceObjects">
+<s:sequential>
+<s:lock>
+<s:variable b:name="lSpId" b:scope="local" b:select="$_target/@c:space_id"/>
+<s:variable b:name="lSpName" b:scope="local" b:select="$_target/div[@c:id='currentSpace']/span[@b:behavior='S25Object'][1]/@c:obj_name"/>
+<s:variable b:name="lSpLayout" b:scope="local" b:select="string($_target/span[@c:purpose='customizations']//select[@c:purpose='layout']/option[@b:state='selected']/@value)"/>
+<s:variable b:name="lSpLayoutName" b:scope="local" b:select="string($_target/span[@c:purpose='customizations']//select[@c:purpose='layout']/option[@b:state='selected']/@c:layout_name)"/>
+<s:variable b:name="lSpInstructions" b:scope="local" b:select="string($_target/span[@c:purpose='customizations']//textarea[@b:behavior='SpaceText']/@value)"/>
+<s:variable b:name="lSpShare" b:scope="local" b:select="'F'"/>
+<s:task b:test="$_target/span[@c:purpose='customizations']//input[@type='checkbox' and @c:purpose='share']/@b:state = 'selected'" b:action="assign" b:target="$lSpShare" b:select="'T'"/>
+<s:render b:destination="$lReserve" b:mode="aslastchild">
+<obj obj_type="space" obj_id="{$lSpId}" obj_name="{$lSpName}" obj_layout="{$lSpLayout}" obj_layout_name="{$lSpLayoutName}" obj_instructions="{$lSpInstructions}" obj_share="{$lSpShare}"/>
+</s:render>
+<s:if b:test="$tEvWiz/$tHasRepeats = 'T'">
+<s:for-each b:target="$_target/div[@c:purpose='location_customization']//table/tbody/tr">
+<s:task b:action="assign" b:target="$lSpLayout" b:select="string($_target/td/select[@c:purpose='layout']/option[@b:state='selected']/@value)"/>
+<s:task b:action="assign" b:target="$lSpLayoutName" b:select="string($_target/td/select[@c:purpose='layout']/option[@b:state='selected']/@c:layout_name)"/>
+<s:task b:action="assign" b:target="$lSpInstructions" b:select="concat($_target/td/span[@c:id='instructions']/textarea/@value, ' ')"/>
+<s:task b:action="assign" b:target="$lSpShare" b:select="'F'"/>
+<s:task b:test="$_target/td/input[@type='checkbox' and @c:purpose='share']/@b:state = 'selected'" b:action="assign" b:target="$lSpShare" b:select="'T'"/>
+<s:choose>
+<s:when b:test="$_target/td/input[@type='checkbox' and @c:purpose='assign' and @b:state='selected']">
+<s:render b:destination="$lReserve/obj[@obj_type='space' and @obj_id=$lSpId]" b:mode="aslastchild">
+<occurrence date="{$_target/td/input[@type='checkbox' and @c:purpose='assign']/@c:occurrence}" obj_layout="{$lSpLayout}" obj_layout_name="{$lSpLayoutName}" obj_instructions="{$lSpInstructions}" obj_share="{$lSpShare}"/>
+</s:render>
+</s:when>
+<s:otherwise>
+<s:render b:destination="$lReserve/obj[@obj_type='space' and @obj_id=$lSpId]" b:mode="aslastchild">
+<exemption date="{$_target/td/input[@type='checkbox' and @c:purpose='assign']/@c:occurrence}" obj_layout="{$lSpLayout}" obj_layout_name="{$lSpLayoutName}" obj_instructions="{$lSpInstructions}" obj_share="{$lSpShare}"/>
+</s:render>
+</s:otherwise>
+</s:choose>
+</s:for-each>
+</s:if>
+<s:choose>
+<s:when b:test="$lCrumbText = ''">
+<s:task b:action="assign" b:scope="local" b:target="$lCrumbText" b:select="$lSpName"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:scope="local" b:target="$lCrumbText" b:select="concat($lCrumbText, ';; ', $lSpName)"/>
+</s:otherwise>
+</s:choose>
+</s:lock>
+</s:sequential>
+</s:for-each>
+<s:choose>
+<s:when b:test="$lReserve/obj[@obj_type='space']">
+<s:task b:action="assign" b:target="$tEvWiz/$tHasSpaces" b:select="'T'"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$tEvWiz/$tHasSpaces" b:select="'F'"/>
+</s:otherwise>
+</s:choose>
+<s:setatt c:crumb="{$lCrumbText}"/>
+</s:if>
+</s:event>
+<s:event b:on="LoadIndices">
+<s:variable b:name="lPrefs" b:select="string(id('Pref_25L_space_system_options'))"/>
+<s:task b:action="string2xml" b:variable="$lPrefs"/>
+<s:variable b:name="lDefaultUser" b:select="string(id('Pref_config_search_user'))"/>
+<s:variable b:name="lFavText" b:select="'Your Starred Locations'"/>
+<s:if b:test="id('WSSessionMgr')/@c:user-type = 'web'">
+<s:task b:action="assign" b:target="$lFavText" b:select="'Suggested Locations'"/>
+</s:if>
+<s:variable b:name="lIndices" b:select="$lPrefs/location_options"/>
+<s:task b:action="transform" b:datasource="$lIndices" b:stylesheet="$SpaceIndexSelect" b:destination="$tIndices/div[@c:id='options']" b:mode="replacechildren" b:showloading="true"/>
+</s:event>
+<s:event b:on="SpaceIndexChange">
+<s:variable b:name="lSelOpt" b:select="$tIndices/div[@c:id='options']/div[@b:state='selected']"/>
+<s:if b:test="$lSelOpt/@c:index_id ne '-1' and $lSelOpt/@c:index_id ne $tLastIndex">
+<s:choose>
+<s:when b:test="$lSelOpt/@c:index_id = 'fav'">
+<s:with b:target="$tDivisions">
+<s:task b:action="hide" b:target="div[@c:id='search']"/>
+<s:task b:action="show" b:target="div[@c:id='options']"/>
+<s:task b:action="hide"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="SpaceDivisionOption" b:state="selected" c:param="&amp;favorite=T" c:division_id="fav">
+<s:textnode b:label="{$lSelOpt/div/text()}"/>
+</div>
+</s:render>
+</s:with>
+<s:task b:action="trigger" b:event="SpaceDivisionChange"/>
+</s:when>
+<s:when b:test="$lSelOpt/@c:index_id = 'prefs'">
+<s:variable b:name="lSpaceQueryID" b:select="string($tEvWiz/$tProfile/r25:space_pref/r25:sp_query_id)"/>
+<s:with b:target="$tDivisions">
+<s:task b:action="hide" b:target="div[@c:id='search']"/>
+<s:task b:action="show" b:target="div[@c:id='options']"/>
+<s:task b:action="hide"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="SpaceDivisionOption" b:state="selected" c:param="{concat('&amp;query_id=',$lSpaceQueryID)}" c:division_id="prefs">
+<s:textnode b:label="{$lSelOpt/div/text()}"/>
+</div>
+</s:render>
+</s:with>
+<s:task b:action="trigger" b:event="SpaceDivisionChange"/>
+</s:when>
+<s:when b:test="$lSelOpt/@c:index_id = 'search'">
+<s:with b:target="$tSpaces">
+<s:task b:action="hide"/>
+</s:with>
+<s:with b:target="$tNeedle">
+<s:setatt value=""/>
+</s:with>
+<s:with b:target="$tDivisions">
+<s:task b:action="hide"/>
+<s:task b:action="hide" b:target="div[@c:id='options']"/>
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+<s:textnode b:label="{$lSelOpt/div/text()}"/>
+</s:render>
+<s:task b:action="show" b:target="div[@c:id='search']"/>
+<s:task b:action="show"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="$tSpaces">
+<s:task b:action="hide"/>
+</s:with>
+<s:with b:target="$tDivisions">
+<s:task b:action="hide" b:target="div[@c:id='search']"/>
+<s:task b:action="show" b:target="div[@c:id='options']"/>
+<s:task b:action="show"/>
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+<s:fxstyle b:time="10"/>
+<s:render b:destination="div[1]/div" b:mode="replacechildren">
+<s:textnode b:label="{$lSelOpt/text()}"/>
+</s:render>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="SpaceDivisionOption" c:division_id="-1" b:disabled="true">
+Loading...
+</div>
+</s:render>
+</s:with>
+<s:variable b:name="lUrl" b:select="concat(id('Config')/$tWsPrefix,$lSelOpt/@c:query, '?otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/browse_space_',$lSelOpt/@c:xsl)"/>
+<s:if b:test="$lSelOpt/@c:index_id = 'keyword'">
+<s:variable b:name="lBreakpoints" b:scope="local" b:select="string(id('Pref_SpaceDirBreakPoint'))"/>
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;breakpoints=',$lBreakpoints)"/>
+</s:if>
+<s:if b:test="not($tSpaceMasterListFLS = 'F' or $tSpaceMasterListFLS = 'C')">
+<s:variable b:name="lSpFeatures" b:scope="local" b:select="id('Pref_config_sp_features')"/>
+<s:variable b:name="lSpCategories" b:scope="local" b:select="id('Pref_config_sp_categories')"/>
+<s:variable b:name="lSpLayouts" b:scope="local" b:select="id('Pref_config_sp_layouts')"/>
+<s:if b:test="$lSelOpt/@c:index_id = 'category'">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;categories=',$lSpCategories)"/>
+</s:if>
+<s:if b:test="$lSelOpt/@c:index_id = 'feature'">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;features=',$lSpFeatures)"/>
+</s:if>
+<s:if b:test="$lSelOpt/@c:index_id = 'layout'">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;layouts=',$lSpLayouts)"/>
+</s:if>
+</s:if>
+<s:if b:test="not(contains($lUrl, 'favorite')) and not(contains($lUrl, 'browse_space_searches'))">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;cache')"/>
+</s:if>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tDivisions/div[@c:id='options']" b:mode="replacechildren"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="assign" b:target="$tLastIndex" b:scope="tag" b:select="string($lSelOpt/@c:index_id)"/>
+</s:if>
+</s:event>
+<s:event b:on="SpaceDivisionChange">
+<s:variable b:name="lSelOpt" b:select="$tDivisions/div[@c:id='options']/div[@b:state='selected']"/>
+<s:if b:test="$lSelOpt/@c:division_id ne '-1' and $lSelOpt/@c:division_id ne $tLastDivision">
+<s:with b:target="$tSpaces">
+<s:task b:action="show"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="SpaceOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+</s:with>
+<s:variable b:name="lUrl" b:select="concat($tEvWiz/@c:r25ws_prefix,'spaces.xml', '?otransform=',$tEvWiz/@c:xsl_prefix,'s25-event-wiz/browse_space_divisions.xsl',$lSelOpt/@c:param)"/>
+<s:if b:test="$tHideUnavailable/@b:state = 'selected'">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl, '&amp;hide_unavailable=T')"/>
+</s:if>
+<s:if b:test="not(contains($lUrl, 'favorite'))">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl,'&amp;cache')"/>
+</s:if>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tSpaces/div[@c:id='options']" b:mode="replacechildren"/>
+<s:if b:test="starts-with($bpc_browser, 'ie')">
+<s:with b:target="$tSpaces/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+</s:if>
+<s:task b:action="trigger" b:event="PreCheckSpaces" b:async="true"/>
+<s:task b:action="assign" b:target="$tLastDivision" b:scope="tag" b:select="string($lSelOpt/@division_id)"/>
+</s:if>
+</s:event>
+<s:event b:on="LoadSearch">
+<s:task b:action="focus" b:target="$tNeedle"/>
+<s:if b:test="not(string-length($tNeedle/@value)=0)">
+<s:with b:target="$tSpaces">
+<s:task b:action="show"/>
+<s:render b:destination="div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="SpaceOption" c:obj_id="-1" b:disabled="true">Loading...</div>
+</s:render>
+</s:with>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat($tEvWiz/@c:r25ws_prefix,'spaces.xml', '?name=',normalize-space($tNeedle/@value), '&amp;otransform=',$tEvWiz/@c:xsl_prefix,'s25-event-wiz/space_search.xsl')"/>
+<s:task b:action="load" b:method="GET" b:url="{$lUrl}" b:destination="$tSpaces/div[@c:id='options']" b:mode="replacechildren"/>
+
+<s:with b:target="$tSpaces/div[@c:id='options']">
+<s:script><![CDATA[_current.scrollTop = 0;]]></s:script>
+</s:with>
+<s:with b:target="$tNeedle">
+<s:setatt b:valid="true" b:required="false"/>
+<s:task b:action="focus"/>
+</s:with>
+<s:task b:action="trigger" b:event="PreCheckSpaces" b:async="true"/>
+<s:task b:action="assign" b:target="$tLastDivision" b:scope="tag" b:select="'search'"/>
+</s:if>
+</s:event>
+<s:event b:on="PreCheckSpaces">
+<s:variable b:name="lTargetSpaces" b:select="$tSpaces/div[@c:id='options']/div[@c:obj_type='space' and not(@c:obj_id='-1')]"/>
+<s:task b:action="hide" b:target="$tSpaces/div[@c:id='rsrvwiz_icon_tip']"/>
+<s:task b:action="trigger" b:event="UpdateAvailabilityVars" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:choose>
+<s:when b:test="$tEvWiz/$tHasDates = 'T' and count($lTargetSpaces) gt 0"> 
+<s:task b:action="hide" b:target="$lTargetSpaces/div[@c:purpose='availability']//img"/>
+<s:with b:target="$lTargetSpaces/div[@c:purpose='availability']/img[@c:id='checking']">
+<s:setstyle b:display="inline"/>
+</s:with>
+<s:variable b:name="lSpaceList" b:scope="local" b:select="''"/>
+<s:variable b:name="lSpaceXml" b:scope="local">
+<r25:space>
+<r25:space_id/>
+</r25:space>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lSpaceXml"/>
+<s:for-each b:target="$lTargetSpaces">
+<s:sequential>
+<s:lock>
+<s:variable b:name="lSpace" b:scope="local" b:select=""/>
+<s:task b:action="settext" b:target="$lSpaceXml/r25:space/r25:space_id" b:value="{string($_target/@c:obj_id)}"/>
+<s:task b:action="xml2string" b:source="$lSpaceXml" b:variable="$lSpace"/>
+<s:task b:action="assign" b:target="$lSpaceList" b:select="concat($lSpaceList,$lSpace)"/>
+</s:lock>
+</s:sequential>
+</s:for-each>
+<s:variable b:name="lCheckSpacesXml" b:select=""/>
+<s:variable b:name="lEventID" b:select="string($tEvWiz/$tEvent/r25:event_id)"/>
+<s:task b:action="trigger" b:event="BuildAvailabilityDates" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:variable b:name="lCurrentDates" b:select="$tEvWiz/$tAvailabilityControl/$tAvailabilityDates"/>
+<s:script><![CDATA[
+
+var sSpaceList = _vars['lSpaceList'][0];
+var sDateList = _vars['lCurrentDates'][0];
+var sEventID = _vars['lEventID'][0];
+var sSpaceXml =	'<r25:space_availability xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event_id>' + sEventID + '</r25:event_id> ' + 
+'</r25:event> ' + 
+'<r25:requirements> ' + 
+sSpaceList + 
+'<r25:hide_conflicts>F</r25:hide_conflicts>' + 
+'<r25:allow_sharing>T</r25:allow_sharing>' + 
+'</r25:requirements> ' + 
+sDateList + 
+'</r25:space_availability>';
+bpc.setVariable('lCheckSpacesXml',[sSpaceXml]);
+
+]]></s:script>
+<s:task b:action="assign" b:target="$lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'space_avail.xml', '?otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/space_precheck.xsl')"/>
+<s:if b:test="$tHideUnavailable/@b:state = 'selected'">
+<s:task b:action="assign" b:target="$lUrl" b:select="concat($lUrl, '&amp;hide_unavailable=T')"/>
+</s:if>
+<s:task b:action="load" b:method="POST" b:url="{$lUrl}" b:data="{$lCheckSpacesXml}" b:destination="$tSpaces/div[@c:id='options']" b:mode="replacechildren" b:showloading="false" b:async="true">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="assign" b:target="$tPreCheckLastDates" b:scope="tag" b:select="$tEvWiz/$tAvailabilityControl/$tAvailabilityDates"/>
+<s:task b:action="trigger" b:event="UpdateAvailabilityVars" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:if b:test="$tEvWiz/$tHasDates = 'T'">
+<s:variable b:name="lPrefHiddenTutorialsXml" b:scope="tag" b:select="string(id('Pref_25L_hidden_tutorials'))"/>
+<s:task b:action="string2xml" b:variable="$lPrefHiddenTutorialsXml"/>
+<s:if b:test="not($lPrefHiddenTutorialsXml/tutorials)">
+<s:task b:action="assign" b:target="$lPrefHiddenTutorialsXml" b:scope="tag" b:select="'&lt;tutorials&gt;&lt;/tutorials&gt;'"/>
+<s:task b:action="string2xml" b:variable="$lPrefHiddenTutorialsXml"/>
+</s:if>
+<s:if b:test="not($lPrefHiddenTutorialsXml//tutorial = 'RsrvWizIconTip')">
+<s:task b:action="show" b:target="$tSpaces/div[@c:id='rsrvwiz_icon_tip']"/>
+</s:if>
+</s:if>
+</s:when>
+<s:otherwise>
+<s:with b:target="$lTargetSpaces/div[@c:purpose='availability']">
+<s:task b:action="hide" b:target=".//img"/>
+<s:render b:destination="." b:mode="aslastchild">
+<img c:id="unknown" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/caution.png" b:tooltiptext="Until you select a Date and Time, we cannot determine if this Location has conflicts."/>
+</s:render>
+</s:with>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ShowHideUnavailable">
+<s:choose>
+<s:when b:test="$tHideUnavailable/@b:state = 'selected'">
+<s:task b:action="remove" b:target="$tSpaces/div[@c:id='options']/div[@c:available='false']"/>
+<s:if b:test="count($tSpaces/div[@c:id='options']/div) = 0">
+<s:render b:destination="$tSpaces/div[@c:id='options']" b:mode="replacechildren">
+<div b:behavior="SpaceOption" c:obj_id="-1" b:disabled="true">
+No Results
+</div>
+</s:render>
+</s:if>
+<s:if b:test="not(id('Pref_25L_rsrvwiz_hide_unavail_sp') = 'true') and string(id('WSSessionMgr')/@c:contact-id) ne string(id('WSSessionMgr')/@c:viewer-seat)">
+<s:task b:action="settext" b:target="id('Pref_25L_rsrvwiz_hide_unavail_sp')" b:value="true"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_25L_rsrvwiz_hide_unavail_sp')"/>
+</s:if>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lSelectedIndex" b:select="$tIndices/div[@c:id='options']/div[@b:state='selected']/@c:index_id"/>
+<s:choose>
+<s:when b:test="$lSelectedIndex = 'search'">
+<s:task b:action="trigger" b:event="LoadSearch"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="SpaceDivisionChange"/>
+</s:otherwise>
+</s:choose>
+<s:if b:test="not(id('Pref_25L_rsrvwiz_hide_unavail_sp') = 'false') and string(id('WSSessionMgr')/@c:contact-id) ne string(id('WSSessionMgr')/@c:viewer-seat)">
+<s:task b:action="settext" b:target="id('Pref_25L_rsrvwiz_hide_unavail_sp')" b:value="false"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_25L_rsrvwiz_hide_unavail_sp')"/>
+</s:if>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="SpaceSelect">
+<s:sequential><s:lock>
+<s:if b:test="not(string-length($lSpaceID)=0) and not(string-length($lSpaceName)=0) and not($tContentOptions/div[@c:id='txt']//div[@c:purpose='Space'][@c:space_id=$lSpaceID])">
+<s:with b:target="ancestor::s25:rsrv_wiz_space[1]/$tEvWiz/$tAvailabilityControl">
+<s:task b:action="assign" b:target="$tCreatePendingRsrvs" b:scope="tag" b:select="'T'"/>
+</s:with>
+<s:task b:action="remove" b:target="$tContentOptions//div[@c:id='nospace']"/>
+<s:render b:test="not($tContentOptions//div[@c:purpose='Space']//span[@c:obj_id = $lSpaceID])" b:destination="$tContentOptions/div[@c:id='txt']" b:mode="aslastchild">
+<div c:purpose="Space" class="currentSelection_Space" c:space_id="{$lSpaceID}" c:space_name="{$lSpaceName}" c:valid="U" b:behavior="SpaceContainer">
+<div class="currentSelection_Icons">
+<span c:purpose="availability"><img c:id="checking" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif" b:tooltiptext="Checking for conflicts..."/><img c:id="available" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/checkmark.png" style="display:none" b:tooltiptext="This Location has no conflicts for all of the currently selected Dates and Times."/><img c:id="unavailable" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/warning.png" style="display:none" b:tooltiptext="This Location has conflicts for some or all of the currently selected Dates and Times."/><img c:id="unknown" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/caution.png" style="cursor:pointer; display:none" b:tooltiptext="Until you select a Date and Time, we cannot determine if this Location has conflicts." b:behavior="TriggerAvailabilityCheck"/></span>
+<span c:purpose="FavToggle"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_NotFavorite" style="display:none;" c:purpose="NotFavorite" b:behavior="AddFav" b:tooltiptext="Add this to Your Starred Locations">
+<s:event b:on="click">
+<s:task b:action="assign" b:scope="tag" b:target="ancestor::*[@c:editor='true'][1]/$tCurrentObject" b:select="ancestor::div[@c:purpose='Space']/div[@c:id='currentSpace']/span[@b:behavior='S25Object']"/>
+<s:super/>
+</s:event>
+</img><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_IsFavorite" style="display:none;" c:purpose="Favorite" b:behavior="RemoveFav" b:tooltiptext="Remove this from Your Starred Locations">
+<s:event b:on="click">
+<s:task b:action="assign" b:scope="tag" b:target="ancestor::*[@c:editor='true'][1]/$tCurrentObject" b:select="ancestor::div[@c:purpose='Space']/div[@c:id='currentSpace']/span[@b:behavior='S25Object']"/>
+<s:super/>
+</s:event>
+</img></span>
+<input type="image" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close.gif" b:behavior="RemoveSpace" c:space_id="{$lSpaceID}"/>
+</div>
+<div c:id="currentSpace" class="currentSelectionValue icon-space">
+<span c:quantity="1" b:behavior="S25Object" c:obj_type="space" c:obj_id="{$lSpaceID}" c:obj_name="{$lSpaceName}" b:tooltiptext="Click to view location details and availability.">
+<s:textnode b:label="{$lSpaceName}"/>
+</span>
+</div>
+<span c:purpose="attributes"/>
+<span c:purpose="customizations"/>
+<span c:purpose="occurrences"/>
+<span c:purpose="conflicts"/>
+<div c:purpose="location_customization" class="currentSelection_OccurrenceEditing">
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/bullet.gif"/><a href="javascript:void(0)" onclick="return false" b:action="select" b:target="../b:infobox[@c:purpose='location_customization']"><s:textnode b:label="{concat('Modify Selected Occurrences','...')}"/></a>
+<b:infobox b:behavior="OccurrenceCustomizationInfobox" c:purpose="location_customization"/>
+</div>
+<div class="divider"/>
+</div>
+</s:render>
+</s:if>
+</s:lock></s:sequential>
+</s:event>
+</s:behavior>
+<s:behavior b:name="SpaceIndexOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:task b:action="trigger" b:event="SpaceIndexChange" b:target="ancestor::*[@c:editor='true' or @c:purpose='attributeContainer'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="SpaceDivisionOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:task b:action="trigger" b:event="SpaceDivisionChange" b:target="ancestor::*[@c:editor='true' or @c:purpose='attributeContainer'][1]"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="SpaceOption" b:behavior="ObjectOption">
+<s:event b:on="select">
+<s:super/>
+<s:variable b:name="lSpaceID" b:scope="local" b:select="string(@c:obj_id)"/>
+<s:variable b:name="lSpaceName" b:scope="local" b:select="string(@c:obj_name)"/>
+<s:with b:target="ancestor::*[@c:editor='true' or @c:purpose='attributeContainer'][1]">
+<s:task b:action="trigger" b:event="SpaceSelect"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="SpaceContainer">
+<s:event b:on="construct">
+<s:super/>
+<s:variable b:name="lSpaceID" b:select="string(@c:space_id)"/>
+<s:variable b:name="lSpaceName" b:select="string(@c:space_name)"/>
+
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'space.xml?space_id=',$lSpaceID, '&amp;scope=extended','&amp;include=features+layouts+text+relationships')"/>
+<s:variable b:name="tSpaceXml" b:scope="tag" b:select=""/>
+<s:task b:action="load" b:url="{$lUrl}" b:destination="$tSpaceXml" b:showloading="false">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$tSpaceXml"/>
+<s:task b:action="remove" b:target="$tSpaceXml//r25:layout[r25:layout_defn_state = '0']"/>
+<s:if b:test="not($tSpaceMasterListFLS = 'F' or $tSpaceMasterListFLS = 'C')">
+<s:variable b:name="lPrefLayouts" b:scope="local" b:select="tokenize(id('Pref_config_sp_layouts'),',')"/>
+<s:if b:test="string-length($lPrefLayouts) &gt; 0">
+<s:for-each b:target="$tSpaceXml//r25:layout">
+<s:sequential><s:lock>
+<s:if b:test="not($_target/r25:layout_id = $lPrefLayouts)">
+<s:task b:action="remove" b:target="$_target"/>
+</s:if>
+</s:lock></s:sequential>
+</s:for-each>				
+</s:if>
+</s:if>
+<s:if b:test="not(id('WSSessionMgr')/@c:user-type = 'web')">
+<s:choose>
+<s:when b:test="$tSpaceXml/r25:spaces/r25:space/r25:favorite = 'T'">
+<s:task b:action="show" b:target=".//span[@c:purpose='FavToggle'][1]/img[@c:purpose = 'Favorite']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="show" b:target=".//span[@c:purpose='FavToggle'][1]/img[@c:purpose = 'NotFavorite']"/>
+</s:otherwise>
+</s:choose>
+</s:if>
+<s:if b:test="not(string-length($tSpaceXml/r25:spaces/r25:space/r25:formal_name) = 0)">
+<s:render b:destination="div[@c:id='currentSpace']" b:mode="aslastchild">
+<div style="font-weight:normal;font-size:80%;padding-top:3px;color:#444">
+<s:textnode b:label="{$tSpaceXml/r25:spaces/r25:space/r25:formal_name}"/>
+</div>
+</s:render>
+</s:if>
+<s:if b:test="not(string-length($tSpaceXml/r25:spaces/r25:space/r25:max_capacity) = 0)">
+<s:render b:destination="span[@c:purpose='attributes']" b:mode="aslastchild">
+<div class="currentSelection_Attribute">
+<b>Max Capacity: </b> <s:textnode b:label="{$tSpaceXml/r25:spaces/r25:space/r25:max_capacity}"/>
+</div>
+</s:render>
+</s:if>
+<s:task b:action="remove" b:target="$tSpaceXml//r25:feature[r25:feature_defn_state = '0']"/>
+<s:if b:test="not(count($tSpaceXml/r25:spaces/r25:space/r25:feature) = 0)">
+<s:variable b:name="lFeatureList" b:select="string-join($tSpaceXml/r25:spaces/r25:space/r25:feature/r25:feature_name, '||')"/>
+<s:if b:test="not($tSpaceMasterListFLS = 'F' or $tSpaceMasterListFLS = 'C')">
+<s:variable b:name="lFeaturePref" b:scope="local" b:select="tokenize(id('Pref_config_sp_features'),',')"/>
+<s:if b:test="string-length($lFeaturePref) &gt; 0">
+<s:task b:action="assign" b:target="lFeatureList" b:select="string-join($tSpaceXml/r25:spaces/r25:space/r25:feature[r25:feature_id = $lFeaturePref]/r25:feature_name, '||')"/>
+</s:if>
+</s:if>
+<s:variable b:name="lFeaturesLabel" b:select="'Features:'"/>
+<s:script><![CDATA[
+
+var sFeatures = _vars['lFeatureList'][0];
+sFeatures = sFeatures.replace(/</g, '&lt;')
+sFeatures = sFeatures.replace(/>/g, '&gt;')
+sFeatures = sFeatures.replace(/\//g, '&#47;')
+var aFeatures = sFeatures.split('||');
+aFeatures.sort();
+sFeatures = aFeatures.join(', ');
+var destination = "span[@c:purpose='attributes']";
+bpc.render('<div class="currentSelection_Attribute"><b>' + _vars['lFeaturesLabel'][0] + '</b> ' + sFeatures + '</div>', 'aslastchild', destination, _current);
+
+]]></s:script>
+</s:if>
+<s:if b:test="$tSpaceXml/r25:spaces/r25:space/r25:relationship/r25:relationship_id = '4'">
+<s:render b:destination="span[@c:purpose='attributes']" b:mode="aslastchild">
+<div class="currentSelection_Attribute">
+<b>Also Assign:</b> <s:textnode b:label="{$tSpaceXml/r25:spaces/r25:space/r25:relationship[r25:relationship_id='4']/r25:related_space_name}"/>
+</div>
+</s:render>
+</s:if>
+<s:task b:action="trigger" b:event="PaintCustomizationInfobox"/>
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz_space[1]/$tEvWiz/$tHasDates = 'T'">
+<s:task b:action="trigger" b:event="CreatePendingSpaceRsrv" b:target="ancestor::s25:rsrv_wiz_space[1]/$tEvWiz/$tAvailabilityControl"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="ValidityUpdate" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="PaintCustomizationInfobox">
+
+<s:variable b:name="lMaxCapacityLabel" b:select="'Max Capacity:'"/>
+<s:variable b:name="lNoneValue" b:select="'(none)'"/>
+<s:variable b:name="lEditPrompt" b:select="'edit'"/>
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tHasRepeats = 'T'">
+<s:task b:action="trigger" b:event="PaintOptions_MultipleOccurrences"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="PaintOptions_SingleOccurrence"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="PaintOptions_SingleOccurrence">
+<s:task b:action="hide" b:target="div[@c:purpose='location_customization']"/>
+
+<s:render b:destination="span[@c:purpose='customizations']" b:mode="replacechildren">
+<div class="currentSelection_Attribute" c:id="layout_select">
+<b>Layout: </b> 
+</div>
+</s:render>
+<s:task b:action="transform" b:datasource="$tSpaceXml" b:stylesheet="$SpaceLayouts" b:destination="span[@c:purpose='customizations']/div[@c:id='layout_select']" b:mode="aslastchild"/>
+<s:task b:action="enable" b:target="span[@c:purpose='customizations']/div[@c:id='layout_select']/select[@c:purpose='layout']"/>
+<s:render b:destination="span[@c:purpose='customizations']" b:mode="aslastchild">
+<div class="currentSelection_Attribute" c:id="instructions">
+<b>Setup Instructions: </b> 
+</div>
+</s:render>
+<s:task b:action="transform" b:datasource="$tSpaceXml" b:stylesheet="$SpaceInstructions" b:destination="span[@c:purpose='customizations']/div[@c:id='instructions']" b:mode="aslastchild"/>
+<s:task b:action="show" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/a[@class='EditInline']"/>
+<s:if b:test="id('FLS_EVENT_SHARE') = 'F'">
+<s:render b:destination="span[@c:purpose='customizations']" b:mode="aslastchild">
+<div class="currentSelection_Attribute" c:id="share">
+<b>Share Location? </b> <input type="checkbox" c:purpose="share"/>
+</div>
+</s:render>
+</s:if>
+<s:variable b:name="lSpId" b:select="string(@c:space_id)"/>
+<s:variable b:name="lRelatedSpRsrv" b:select="ancestor::s25:rsrv_wiz_space/$tEvWiz/$tProfile//r25:space_reservation[r25:space_id = $lSpId]"/>
+<s:if b:test="$lRelatedSpRsrv">
+<s:with b:target="span[@c:purpose='customizations']/div[@c:id='layout_select']/select/option[@value = $lRelatedSpRsrv/r25:layout_id]">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:choose>
+<s:when b:test="string-length($lRelatedSpRsrv/r25:space_instructions) = 0 or $lRelatedSpRsrv/r25:space_instructions = ' '">
+<s:task b:action="settext" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="{$lRelatedSpRsrv/r25:space_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/textarea/@value" b:value="{$lRelatedSpRsrv/r25:space_instructions}"/>
+<s:if b:test="$lRelatedSpRsrv/r25:share = 'T'">
+<s:with b:target="span[@c:purpose='customizations']/div[@c:id='share']/input[@type='checkbox' and @c:purpose='share']">
+<s:setatt b:state="selected"/>
+<s:setatt b:disabled="true"/>
+</s:with>
+</s:if>
+</s:if>
+<s:variable b:name="lRelatedSpObj" b:select="ancestor::s25:rsrv_wiz/$tInbox/reserve/obj[@obj_type='space' and @obj_id=$lSpId]"/>
+<s:if b:test="$lRelatedSpObj">
+<s:with b:target="span[@c:purpose='customizations']/div[@c:id='layout_select']/select/option[@value = $lRelatedSpObj/@obj_layout]">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:choose>
+<s:when b:test="string-length($lRelatedSpObj/@obj_instructions) = 0 or $lRelatedSpObj/@obj_instructions = ' '">
+<s:task b:action="settext" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="{$lRelatedSpObj/@obj_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="span[@c:purpose='customizations']/div[@c:id='instructions']/span[@c:id='instructions']/textarea/@value" b:value="{$lRelatedSpObj/@obj_instructions}"/>
+<s:if b:test="$lRelatedSpObj/@obj_share = 'T'">
+<s:with b:target="span[@c:purpose='customizations']/div[@c:id='share']/input[@type='checkbox' and @c:purpose='share']">
+<s:setatt b:state="selected"/>
+</s:with>
+</s:if>
+</s:if>	
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz_space[1]/$tEvWiz/$tHasDates = 'T'">
+<s:render b:destination="span[@c:purpose='conflicts']" b:mode="replacechildren">
+<div class="currentSelection_Attribute" c:id="conflicts">
+<b>Conflicts:</b> <span><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/></span>
+</div>
+</s:render>
+</s:when>
+<s:otherwise>
+<s:render b:destination="span[@c:purpose='conflicts']" b:mode="replacechildren">
+<div class="currentSelection_Attribute" c:id="conflicts">
+<b>Conflicts:</b> <i>Date selection pending...</i>
+</div>
+</s:render>
+</s:otherwise>
+</s:choose>
+<s:task b:action="show" b:target="span[@c:purpose='customizations']"/>
+</s:event>
+<s:event b:on="PaintOptions_MultipleOccurrences">
+<s:task b:action="hide" b:target="span[@c:purpose='customizations']"/>
+<s:task b:action="hide" b:target="span[@c:purpose='conflicts']"/>
+<s:variable b:name="lInfobox" b:select="div[@c:purpose='location_customization']/b:infobox"/>
+<s:render b:destination="$lInfobox" b:mode="replacechildren">
+<div class="head">
+<s:textnode b:label="{concat($tSpaceXml//r25:space_name, ': ', 'Modify Selected Occurrences')}"/>
+</div>
+<div class="body">
+<table border="0" cellspacing="0">
+<thead>
+<tr>
+<th width="90">
+<input type="checkbox" style="margin:3px 0">
+<s:event b:on="change">
+<s:choose>
+<s:when b:test="@b:state = 'selected'">
+<s:with b:target="ancestor::table[1]/tbody/tr/td[1]/input[@type='checkbox']">
+<s:task b:action="select"/>
+<s:task b:action="trigger" b:event="command"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="ancestor::table[1]/tbody/tr/td[1]/input[@type='checkbox']">
+<s:task b:action="deselect"/>
+<s:task b:action="trigger" b:event="command"/>
+</s:with>
+</s:otherwise>
+</s:choose>
+</s:event>
+</input>
+Assign?
+</th>
+<th width="100">Conflicts?</th>
+<th width="100">Date</th>
+<th width="150">Layout [Max Capacity]</th>
+<th width="150">Setup Instructions</th>
+<th style="display:none" c:id="share_header">Share?</th>
+</tr>
+</thead>
+<tbody>
+<tr c:sortdate="99999999">
+<td colspan="5" style="height:100%;border:none;padding:0"/>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="foot">
+<div class="currentSelection_AvailDetails" c:purpose="AvailDetails">
+<div c:purpose="prompt" class="currentSelection_AvailDetails_Prompt">
+Hover over conflict icons for more information.
+</div>
+<div c:purpose="space_available" style="display:none">
+This occurrence has no conflicts!
+</div>
+<div c:purpose="space_conflict_reservation" style="display:none">
+Conflict with existing event:
+</div>
+<div c:purpose="space_conflict_pending" style="display:none">
+Conflict with pending reservation:
+</div>
+<div c:purpose="space_conflict_hours" style="display:none">
+Conflict with location office hours:
+</div>
+<div c:purpose="space_conflict_blackout" style="display:none">
+Conflict with location blackout period:
+</div>
+<div c:purpose="space_conflict_details" class="currentSelection_AvailDetails_Info" style="display:none"/>
+</div>
+<b:button b:action="deselect" b:target="ancestor::b:infobox[1]"><s:textnode b:label="Done"/></b:button>
+</div>
+</s:render>
+<s:variable b:name="lTableBody" b:select="$lInfobox/div/table/tbody"/>
+<s:variable b:name="lInboxReserve" b:select="ancestor::s25:rsrv_wiz/$tInbox/reserve"/>
+<s:variable b:name="lSpId" b:select="string(@c:space_id)"/>
+<s:variable b:name="lInitStartDt" b:select="substring(ancestor::s25:rsrv_wiz/$tProfile/r25:init_start_dt, 1, 10)"/>
+
+<s:variable b:name="lOccurrenceDt" b:select=""/>
+<s:for-each b:target="ancestor::s25:rsrv_wiz/$tInbox/occurrences/occurrence[@state = '1']">
+<s:task b:action="assign" b:target="$lOccurrenceDt" b:select="substring($_target/@event_start_dt, 1, 10)"/>
+<s:render b:destination="$lTableBody" b:mode="aslastchild">
+<tr align="center" valign="top" c:valid="T" c:occurrence="{$lOccurrenceDt}" c:sortdate="{replace($lOccurrenceDt,'-','')}">
+<td width="90">
+<input type="checkbox" c:purpose="assign" b:behavior="SpaceOccurrenceCustomizationCheckbox" c:space_id="{$lSpId}" c:occurrence="{$lOccurrenceDt}"/>
+</td>
+<td width="100" class="conflicts" c:id="conflicts"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/></td>
+<td width="100" style="white-space:nowrap" c:id="formatted_date"><s:textnode b:label="{s25_format_date($lOccurrenceDt, id('Prefs')/$tDatePattern)}"/></td>
+<td width="150" style="white-space:nowrap">
+<s:execute>
+<s:task b:action="transform" b:datasource="$tSpaceXml" b:stylesheet="$SpaceLayouts" b:destination="."/>
+</s:execute>
+</td>
+<td width="150" align="left" style="padding-right:16px">
+<s:execute>
+<s:task b:action="transform" b:datasource="$tSpaceXml" b:stylesheet="$SpaceInstructions" b:destination="."/>
+</s:execute>
+</td>
+<td width="30" style="display:none;" c:id="share_td"><input type="checkbox" c:purpose="share" b:disabled="true"/></td>
+</tr>
+</s:render>
+</s:for-each>
+<s:if b:test="1 = 2">
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tProfile/r25:rec_type_id = '1'">
+<s:task b:action="trigger" b:event="BuildPendingRsrvDates" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:variable b:name="lOccurrences" b:select=""/>
+<s:task b:action="string2xml" b:variable="$lOccurrences" b:source="$tEvWiz/$tAvailabilityControl/$tPendingRsrvDates"/>
+<s:task b:action="remove" b:target="$lOccurrences/r25:date_collection/r25:date_list[1]"/>
+<s:variable b:name="lStartDate" b:select=""/>
+<s:for-each b:target="$lOccurrences//r25:date_list">
+<s:task b:action="assign" b:target="$lStartDate" b:select="concat(substring($_target/r25:start_date,1,4), '-', substring($_target/r25:start_date,5,2), '-', substring($_target/r25:start_date,7,2))"/>
+<s:render b:destination="$lTableBody" b:mode="aslastchild">
+<tr align="center" valign="top" c:valid="T" c:occurrence="{$lStartDate}" c:sortdate="{replace($lStartDate,'-','')}">
+<td width="90">
+<input type="checkbox" c:purpose="assign" b:behavior="SpaceOccurrenceCustomizationCheckbox" c:space_id="{$lSpId}" c:occurrence="{$lStartDate}"/>
+</td>
+<td width="100" class="conflicts" c:id="conflicts"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/></td>
+<td width="100" style="white-space:nowrap" c:id="formatted_date"><s:textnode b:label="{s25_format_date($lStartDate, id('Prefs')/$tDatePattern)}"/></td>
+<td width="150" style="white-space:nowrap">
+<s:execute>
+<s:task b:action="transform" b:datasource="$tSpaceXml" b:stylesheet="$SpaceLayouts" b:destination="."/>
+</s:execute>
+</td>
+<td width="150" align="left" style="padding-right:16px">
+<s:execute>
+<s:task b:action="transform" b:datasource="$tSpaceXml" b:stylesheet="$SpaceInstructions" b:destination="."/>
+</s:execute>
+</td>
+<td width="30" style="display:none;" c:id="share_td"><input type="checkbox" c:purpose="share" b:disabled="true"/></td>
+</tr>
+</s:render>
+</s:for-each>
+</s:when>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tProfile/r25:rec_type_id = '2'">
+<s:variable b:name="lOccurrenceDt" b:select=""/>
+
+<s:for-each b:target="ancestor::s25:rsrv_wiz/$tInbox/r25:ad_hoc_datelist[not(@status='del')]">
+<s:task b:action="assign" b:target="$lOccurrenceDt" b:select="substring($_target/r25:ad_hoc_start_dt, 1, 10)"/>
+<s:render b:test="not($lOccurrenceDt = $lInitStartDt)" b:destination="$lTableBody" b:mode="aslastchild">
+<tr align="center" valign="top" c:valid="T" c:occurrence="{$lOccurrenceDt}" c:sortdate="{replace($lOccurrenceDt,'-','')}">
+<td width="90">
+<input type="checkbox" c:purpose="assign" b:behavior="SpaceOccurrenceCustomizationCheckbox" c:space_id="{$lSpId}" c:occurrence="{$lOccurrenceDt}"/>
+</td>
+<td width="100" class="conflicts" c:id="conflicts"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/></td>
+<td width="100" style="white-space:nowrap" c:id="formatted_date"><s:textnode b:label="{s25_format_date($lOccurrenceDt, id('Prefs')/$tDatePattern)}"/></td>
+<td width="150" style="white-space:nowrap">
+<s:execute>
+<s:task b:action="transform" b:datasource="$tSpaceXml" b:stylesheet="$SpaceLayouts" b:destination="."/>
+</s:execute>
+</td>
+<td width="150" align="left" style="padding-right:16px">
+<s:execute>
+<s:task b:action="transform" b:datasource="$tSpaceXml" b:stylesheet="$SpaceInstructions" b:destination="."/>
+</s:execute>
+</td>
+<td width="30" style="display:none;" c:id="share_td"><input type="checkbox" c:purpose="share" b:disabled="true"/></td>
+</tr>
+</s:render>
+</s:for-each>
+</s:when>
+</s:choose>
+</s:if>
+<s:task b:action="sort" b:source="$lTableBody/tr" b:target="$lTableBody" b:attribute="c:sortdate" b:type="number"/>
+<s:if b:test="id('FLS_EVENT_SHARE') = 'F'">
+<s:with b:target="div[@c:purpose='location_customization']/b:infobox/div/table/tbody/tr/td[@c:id='share_td']">
+<s:task b:action="show" b:target="."/>
+</s:with>
+<s:with b:target="div[@c:purpose='location_customization']/b:infobox/div/table//th[@c:id = 'share_header']">
+<s:task b:action="show" b:target="."/>
+</s:with>		
+</s:if>
+<s:if b:test="count($lInboxReserve/obj[@obj_type='space' and @obj_id=$lSpId]/*) gt 0">
+<s:task b:action="deselect" b:target="$lTableBody//input[@type='checkbox']"/>
+<s:for-each b:target="$lInboxReserve/obj[@obj_type='space' and @obj_id=$lSpId]/occurrence">
+<s:sequential><s:lock>
+<s:with b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/input[@type = 'checkbox' and @c:purpose='assign']">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:with b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/select/option[@value = $_target/@obj_layout]">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:if b:test="$_target/@obj_share = 'T' and id('FLS_EVENT_SHARE') = 'F'">
+<s:with b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/input[@type = 'checkbox' and @c:purpose='share']">
+<s:setatt b:state="selected"/>
+<s:setatt b:disabled="true"/>
+</s:with>
+</s:if>
+
+<s:choose>
+<s:when b:test="string-length(replace($_target/@obj_instructions,' ','')) = 0">
+<s:task b:action="settext" b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="{$_target/@obj_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/span/textarea/@value" b:value="{$_target/@obj_instructions}"/>
+<s:task b:action="show" b:target="$lTableBody/tr[@c:occurrence = $_target/@date]/td/span[@c:id='instructions']/a"/>
+
+</s:lock></s:sequential>
+</s:for-each>
+</s:if>
+<s:if b:test="count(ancestor::s25:rsrv_wiz/$tProfile//r25:space_reservation[r25:space_id = $lSpId]) gt 0">
+<s:variable b:name="lRelevantTableRows" b:select="$lTableBody/tr"/>
+<s:if b:test="count($lInboxReserve/obj[@obj_type='space']/child::*) gt 0">
+<s:task b:action="assign" b:target="$lRelevantTableRows" b:select="$lTableBody/tr[not(@c:occurrence = $lInboxReserve/obj/*/@date)]"/>
+</s:if>
+<s:task b:action="deselect" b:target="$lRelevantTableRows//input[@type='checkbox']"/>
+<s:for-each b:target="ancestor::s25:rsrv_wiz/$tProfile//r25:space_reservation[r25:space_id = $lSpId]">
+<s:with b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/td/input[@type = 'checkbox' and @c:purpose='assign']">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:with b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/ td/select[@c:space_id = $_target/r25:space_id]/option[@value = $_target/r25:layout_id]">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:if b:test="$_target/r25:share = 'T' and id('FLS_EVENT_SHARE') = 'F'">
+<s:with b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/td/input[@type = 'checkbox' and @c:purpose='share']">
+<s:setatt b:state="selected"/>
+<s:setatt b:disabled="true"/>
+</s:with>
+</s:if>
+
+<s:choose>
+<s:when b:test="string-length(replace($_target/r25:space_instructions,' ','')) = 0">
+<s:task b:action="settext" b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/td/ span[@c:id='instructions' and @c:space_id = $_target/r25:space_id]/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/td/ span[@c:id='instructions' and @c:space_id = $_target/r25:space_id]/span[@c:id='instructions-text']" b:value="{$_target/r25:space_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/td/ span[@c:id='instructions' and @c:space_id = $_target/r25:space_id]/textarea/@value" b:value="{$_target/r25:space_instructions}"/>
+<s:task b:action="show" b:target="$lRelevantTableRows[@c:occurrence = substring($_target/../r25:reservation_start_dt, 1, 10)]/td/ span[@c:id='instructions' and @c:space_id = $_target/r25:space_id]/a"/>
+
+</s:for-each>
+</s:if>
+<s:variable b:name="lCurrentInitDate" b:select="substring-before(ancestor::s25:rsrv_wiz/$tProfile/r25:init_start_dt,'T')"/>
+<s:variable b:name="lFirstRsrvDate" b:select="substring-before(ancestor::s25:rsrv_wiz/$tProfile/r25:reservation[1]/r25:reservation_start_dt, 'T')"/>
+<s:if b:test="not($lCurrentInitDate = $lFirstRsrvDate)">
+<s:if b:test="not($lInboxReserve/obj[@obj_type='space' and @obj_id=$lSpId]/*[1]/name() = 'exemption')">
+<s:choose>
+<s:when b:test="$lInboxReserve/obj[@obj_type='space' and @obj_id=$lSpId]/occurrence">
+<s:variable b:name="lCurrentSpaceOccurrence" b:select="$lInboxReserve/obj[@obj_type='space' and @obj_id=$lSpId]/occurrence[1]"/>
+<s:with b:target="$lTableBody/tr[1]/td/input[@type = 'checkbox' and @c:purpose='assign']">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:with b:target="$lTableBody/tr[1]/td/select/option[@value = string($lCurrentSpaceOccurrence/@obj_layout)]">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:if b:test="ancestor::s25:rsrv_wiz/@c:mode = 'edit'">
+<s:choose>
+<s:when b:test="string-length($lCurrentSpaceOccurrence/@obj_instructions) = 0">
+<s:task b:action="settext" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="{$lCurrentSpaceOccurrence/@obj_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/textarea/@value" b:value="{$lCurrentSpaceOccurrence/@obj_instructions}"/>
+<s:task b:action="show" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/a"/>
+</s:if>
+<s:if b:test="$lCurrentSpaceOccurrence/@obj_share = 'T' and id('FLS_EVENT_SHARE') = 'F'">
+<s:with b:target="$lTableBody/tr[1]/td/input[@type = 'checkbox' and @c:purpose='share']">
+<s:setatt b:state="selected"/>
+<s:setatt b:disabled="true"/>
+</s:with>
+</s:if>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lCurrentSpaceRsrv" b:select="ancestor::s25:rsrv_wiz/$tProfile/r25:reservation[1]/r25:space_reservation[r25:space_id = $lSpId]"/>
+<s:if b:test="exists($lCurrentSpaceRsrv)">
+<s:with b:target="$lTableBody/tr[1]/td/input[@type = 'checkbox' and @c:purpose='assign']">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:with b:target="$lTableBody/tr[1]/td/select/option[@value = string($lCurrentSpaceRsrv/r25:layout_id)]">
+<s:setatt b:state="selected"/>
+</s:with>
+<s:if b:test="ancestor::s25:rsrv_wiz/@c:mode = 'edit'">
+<s:choose>
+<s:when b:test="string-length($lCurrentSpaceRsrv/r25:space_instructions) = 0">
+<s:task b:action="settext" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="(none)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/span[@c:id='instructions-text']" b:value="{$lCurrentSpaceRsrv/r25:space_instructions}"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="set" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/textarea/@value" b:value="{$lCurrentSpaceRsrv/r25:space_instructions}"/>
+<s:task b:action="show" b:target="$lTableBody/tr[1]/td/span[@c:id='instructions']/a"/>
+</s:if>
+<s:if b:test="$lCurrentSpaceRsrv/r25:share = 'T' and id('FLS_EVENT_SHARE') = 'F'">
+<s:with b:target="$lTableBody/tr[1]/td/input[@type = 'checkbox' and @c:purpose='share']">
+<s:setatt b:state="selected"/>
+<s:setatt b:disabled="true"/>
+</s:with>
+</s:if>
+</s:if>
+</s:otherwise>
+</s:choose>
+</s:if>
+</s:if>
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tProfile/r25:rec_type_id = '1'">
+<s:task b:action="trigger" b:event="BuildPendingRsrvDates" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:variable b:name="lOccurrences" b:select=""/>
+<s:task b:action="string2xml" b:variable="$lOccurrences" b:source="$tEvWiz/$tAvailabilityControl/$tPendingRsrvDates"/>
+<s:task b:action="remove" b:target="$lOccurrences/r25:date_collection/r25:date_list[1]"/>
+<s:variable b:name="lStartDate" b:select=""/>
+<s:for-each b:target="$lOccurrences//r25:date_list">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lOccurrence" b:select="concat(substring($_target/r25:start_date,1,4), '-', substring($_target/r25:start_date,5,2), '-', substring($_target/r25:start_date,7,2))"/>
+<s:if b:test="count(ancestor::s25:rsrv_wiz/$tProfile/r25:reservation[substring(r25:reservation_start_dt, 1, 10) = $lOccurrence]) = 0">
+<s:if b:test="count($lInboxReserve/obj[@obj_type='space' and @obj_id = $lSpId]/*[@date = $lOccurrence]) = 0">
+<s:with b:target="$lTableBody/tr[@c:occurrence = $lOccurrence]/td/input[@type = 'checkbox' and @c:purpose='assign']">
+<s:setatt b:state="selected"/>
+</s:with>
+</s:if>
+</s:if>
+</s:lock></s:sequential>
+</s:for-each>
+</s:when>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tProfile/r25:rec_type_id = '2'">
+<s:for-each b:target="ancestor::s25:rsrv_wiz/$tProfile//r25:ad_hoc_datelist[@status='new']">
+<s:sequential><s:lock>
+<s:variable b:name="lNewAdHocDate" b:select="substring($_target/r25:ad_hoc_start_dt, 1, 10)"/>
+<s:if b:test="count(ancestor::s25:rsrv_wiz/$tProfile/r25:reservation[substring(r25:reservation_start_dt, 1, 10) = $lNewAdHocDate]) = 0">
+<s:if b:test="count($lInboxReserve/obj[@obj_type='space' and @obj_id = $lSpId]/*[@date = $lNewAdHocDate]) = 0">
+<s:with b:target="$lTableBody/tr[@c:occurrence = $lNewAdHocDate]/td/input[@type = 'checkbox' and @c:purpose='assign']">
+<s:setatt b:state="selected"/>
+</s:with>
+</s:if>
+</s:if>
+</s:lock></s:sequential>
+</s:for-each>
+</s:when>
+</s:choose>
+<s:task b:action="show" b:target="$lTableBody/tr[not(contains(@class,'disabled'))]/td/span[@c:id='instructions']/a[@class='EditInline']"/>
+<s:task b:action="enable" b:target="$lTableBody/tr[not(contains(@class,'disabled'))]/td/select[@c:purpose='layout']"/>
+<s:task b:action="enable" b:target="$lTableBody/tr[not(contains(@class,'disabled'))]/td/input[@c:purpose='share'][not(@checked = 'checked')]"/>
+<s:with b:target="$lTableBody/tr/td/input[@type='checkbox' and @c:purpose='assign' and not(@b:state='selected')]">
+<s:task b:action="trigger" b:event="Deselect"/>
+</s:with>
+<s:task b:action="trigger" b:event="MultipleOccurrenceStatusUpdate"/>
+<s:task b:action="show" b:target="div[@c:purpose='location_customization']"/>
+</s:event>
+<s:event b:on="MultipleOccurrenceStatusUpdate">
+<s:variable b:name="lInfobox" b:select="div[@c:purpose='location_customization']/b:infobox"/>
+<s:variable b:name="lTableBody" b:select="$lInfobox/div/table/tbody"/>
+
+<s:choose>
+<s:when b:test="not(count($lTableBody/tr/td/input[@type = 'checkbox' and @c:purpose='assign' and not(@b:state = 'selected')]) = 0)">
+<s:variable b:name="lDateList" b:select="string-join($lTableBody/tr[td/input[@type='checkbox' and @c:purpose='assign' and @b:state='selected']]/td[@c:id='formatted_date']/text(), ', ')"/>
+<s:render b:destination="span[@c:purpose='occurrences']" b:mode="replacechildren">
+<div class="currentSelection_Attribute"><b>Selected Occurrences: </b> <s:textnode b:label="{$lDateList}"/></div>
+</s:render>
+</s:when>
+<s:otherwise>
+<s:render b:destination="span[@c:purpose='occurrences']" b:mode="replacechildren">
+<div class="currentSelection_Attribute"><b>Selected Occurrences: </b> All Occurrences</div>
+</s:render>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ConflictUpdate">
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tHasRepeats = 'T'">
+<s:task b:action="trigger" b:event="MultipleOccurrenceConflictUpdate"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="SingleOccurrenceConflictUpdate"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="SingleOccurrenceConflictUpdate">
+
+<s:variable b:name="lStartDate" b:select="ancestor::s25:rsrv_wiz_space/$tEvWiz/$tAvailabilityControl/$tStartDate"/>
+<s:variable b:name="lEndDate" b:select="ancestor::s25:rsrv_wiz_space/$tEvWiz/$tAvailabilityControl/$tEndDate"/>
+<s:variable b:name="lStartTime" b:select="ancestor::s25:rsrv_wiz_space/$tEvWiz/$tAvailabilityControl/$tStartTime"/>
+<s:if b:test="string-length($lStartTime) lt 4">
+<s:task b:action="assign" b:target="$lStartTime" b:select="zero_pad($lStartTime, 4)"/>
+</s:if>
+<s:variable b:name="lEndTime" b:select="ancestor::s25:rsrv_wiz_space/$tEvWiz/$tAvailabilityControl/$tEndTime"/>
+<s:if b:test="string-length($lEndTime) lt 4">
+<s:task b:action="assign" b:target="$lEndTime" b:select="zero_pad($lEndTime, 4)"/>
+</s:if>
+<s:variable b:name="lAvailDateList" b:select="concat('&lt;r25:dates&gt;', '&lt;r25:start_dt&gt;', $lStartDate,'T',$lStartTime,'00', '&lt;/r25:start_dt&gt;', '&lt;r25:end_dt&gt;', $lEndDate,'T',$lEndTime,'00', '&lt;/r25:end_dt&gt;', '&lt;/r25:dates&gt;')"/>
+<s:variable b:name="lCheckSpacesXml" b:select=""/>
+<s:variable b:name="lXmlEventID" b:select="string(ancestor::s25:rsrv_wiz[1]/$tEvent/r25:event_id)"/>
+<s:variable b:name="lXmlSpaceID" b:select="string(@c:space_id)"/>
+<s:script><![CDATA[
+
+var sEventID = _vars['lXmlEventID'][0];
+var sSpaceID = _vars['lXmlSpaceID'][0];
+var sAvailDateList = _vars['lAvailDateList'][0];
+var sSpaceXml =	'<r25:space_availability xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event_id>' + sEventID + '</r25:event_id> ' + 
+'</r25:event> ' + 
+'<r25:requirements> ' + 
+'<r25:space>' + 
+'<r25:space_id>' + sSpaceID + '</r25:space_id>' + 
+'</r25:space>' + 
+'<r25:hide_conflicts>F</r25:hide_conflicts>' + 
+'<r25:allow_sharing>T</r25:allow_sharing>' + 
+'</r25:requirements> ' + 
+sAvailDateList + 
+'</r25:space_availability>';
+bpc.setVariable('lCheckSpacesXml',[sSpaceXml]);
+
+]]></s:script>
+<s:variable b:name="lConflictDetails" b:select=""/>
+<s:task b:action="assign" b:target="$lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'space_avail.xml')"/>
+<s:task b:action="load" b:method="POST" b:url="{$lUrl}" b:data="{$lCheckSpacesXml}" b:destination="$lConflictDetails" b:mode="replacechildren" b:showloading="false">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lConflictDetails"/>
+<s:variable b:name="lConflicts" b:select="span[@c:purpose='conflicts']/div[@c:id='conflicts']"/>
+<s:task b:action="remove" b:target="$lConflicts/*"/>
+<s:choose>
+<s:when b:test="$lConflictDetails//r25:dates[number(r25:conflicts) gt 0]">
+<s:task b:action="addclass" b:target="span[@c:purpose='conflicts']/div[@c:id='conflicts']" b:value="currentSelection_Conflicts"/>
+<s:variable b:name="lDatePattern" b:select="string(id('Prefs')/$tDatePattern)"/>
+<s:variable b:name="lTimePattern" b:select="string(id('Prefs')/$tTimePattern)"/>
+<s:task b:test="id('Prefs')/$tTimeDisplay = '12'" b:action="assign" b:target="$lTimePattern" b:select="concat($lTimePattern, 'a')"/>
+<s:variable b:name="lConflictStartEnd" b:select="''"/>
+<s:variable b:name="lConflictShareable" b:select="''"/>
+<s:if b:test="count($lConflictDetails//r25:conflict[r25:conflict_type = 'rsrv']) gt 0">
+<s:render b:destination="$lConflicts" b:mode="aslastchild">
+<div class="currentSelection_Conflict" c:id="rsrv_conflicts">
+<div class="currentSelection_ConflictLabel">Existing Reservation Conflicts:</div>
+</div>
+</s:render>
+</s:if>
+<s:for-each b:target="$lConflictDetails//r25:conflict[r25:conflict_type = 'rsrv']">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="s25_format_date(string($_target/r25:conflict_start), $lDatePattern)"/>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' ', s25_format_date(string($_target/r25:conflict_start), $lTimePattern))"/>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' - ')"/>
+<s:if b:test="not(substring-before($_target/r25:conflict_start,'T') = substring-before($_target/r25:conflict_end,'T'))">
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' ', s25_format_date(string($_target/r25:conflict_end), $lDatePattern))"/>
+</s:if>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' ', s25_format_date(string($_target/r25:conflict_end), $lTimePattern))"/>
+<s:choose>
+<s:when b:test="string($_target/r25:conflict_share) = 'T'">
+<s:task b:action="assign" b:target="$lConflictShareable" b:select="'This reservation allows for sharing of this location.'"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$lConflictShareable" b:select="''"/>
+</s:otherwise>
+</s:choose>
+<s:render b:destination="$lConflicts/div[@c:id='rsrv_conflicts']" b:mode="aslastchild">
+<div class="currentSelection_ConflictDetail icon-event">
+<b b:behavior="S25Object" c:obj_type="event" c:obj_id="{string($_target/r25:conflict_id)}"><s:textnode b:label="{$_target/r25:conflict_name}"/></b>
+<div><s:textnode b:label="{$lConflictStartEnd}"/></div>
+<div style="font-size:90%; font-style:italic"><s:textnode b:label="{$lConflictShareable}"/></div>
+</div>
+</s:render>
+</s:lock></s:sequential>
+</s:for-each>
+<s:if b:test="count($lConflictDetails//r25:conflict[r25:conflict_type = 'pending']) gt 0">
+<s:render b:destination="$lConflicts" b:mode="aslastchild">
+<div class="currentSelection_Conflict" c:id="pending_conflicts">
+<div class="currentSelection_ConflictLabel">Pending Reservation Conflicts:</div>
+</div>
+</s:render>
+</s:if>
+<s:for-each b:target="$lConflictDetails//r25:conflict[r25:conflict_type = 'pending']">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="s25_format_date(string($_target/r25:conflict_start), $lDatePattern)"/>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' ', s25_format_date(string($_target/r25:conflict_start), $lTimePattern))"/>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' - ')"/>
+<s:if b:test="not(substring-before($_target/r25:conflict_start,'T') = substring-before($_target/r25:conflict_end,'T'))">
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' ', s25_format_date(string($_target/r25:conflict_end), $lDatePattern))"/>
+</s:if>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' ', s25_format_date(string($_target/r25:conflict_end), $lTimePattern))"/>
+<s:render b:destination="$lConflicts/div[@c:id='pending_conflicts']" b:mode="aslastchild">
+<div class="currentSelection_ConflictDetail icon-event-pending">
+<b><i><s:textnode b:label="{$_target/r25:conflict_name}"/></i></b>
+<div><s:textnode b:label="{$lConflictStartEnd}"/></div>
+</div>
+</s:render>
+</s:lock></s:sequential>
+</s:for-each>
+<s:if b:test="count($lConflictDetails//r25:conflict[r25:conflict_type = 'blackout']) gt 0">
+<s:render b:destination="$lConflicts" b:mode="aslastchild">
+<div class="currentSelection_Conflict" c:id="blackout_conflicts">
+<div class="currentSelection_ConflictLabel">Location Blackout Conflicts:</div>
+</div>
+</s:render>
+</s:if>
+<s:for-each b:target="$lConflictDetails//r25:conflict[r25:conflict_type = 'blackout']">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="s25_format_date(string($_target/r25:conflict_start), $lDatePattern)"/>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' ', s25_format_date(string($_target/r25:conflict_start), $lTimePattern))"/>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' - ')"/>
+<s:if b:test="not(substring-before($_target/r25:conflict_start,'T') = substring-before($_target/r25:conflict_end,'T'))">
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' ', s25_format_date(string($_target/r25:conflict_end), $lDatePattern))"/>
+</s:if>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' ', s25_format_date(string($_target/r25:conflict_end), $lTimePattern))"/>
+<s:render b:destination="$lConflicts/div[@c:id='blackout_conflicts']" b:mode="aslastchild">
+<div class="currentSelection_ConflictDetail icon-blackout">
+<b><s:textnode b:label="{$_target/r25:conflict_name}"/></b>
+<div><s:textnode b:label="{$lConflictStartEnd}"/></div>
+</div>
+</s:render>
+</s:lock></s:sequential>
+</s:for-each>
+<s:if b:test="count($lConflictDetails//r25:conflict[r25:conflict_type = 'hours']) gt 0">
+<s:render b:destination="$lConflicts" b:mode="aslastchild">
+<div class="currentSelection_Conflict" c:id="hours_conflicts">
+<div class="currentSelection_ConflictLabel">Location Office Hours Conflicts:</div>
+</div>
+</s:render>
+</s:if>
+<s:for-each b:target="$lConflictDetails//r25:conflict[r25:conflict_type = 'hours']">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="s25_format_date(string($_target/r25:conflict_start), $lTimePattern)"/>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' - ')"/>
+<s:task b:action="assign" b:target="$lConflictStartEnd" b:select="concat($lConflictStartEnd, ' ', s25_format_date(string($_target/r25:conflict_end), $lTimePattern))"/>
+<s:render b:destination="$lConflicts/div[@c:id='hours_conflicts']" b:mode="aslastchild">
+<div class="currentSelection_ConflictDetail icon-hours">
+<div>Open Hours: <s:textnode b:label="{$lConflictStartEnd}"/></div>
+</div>
+</s:render>
+</s:lock></s:sequential>
+</s:for-each>
+</s:when>
+<s:otherwise>
+<s:task b:action="removeclass" b:target="span[@c:purpose='conflicts']/div[@c:id='conflicts']" b:value="currentSelection_Conflicts"/>
+<s:render b:destination="$lConflicts" b:mode="aslastchild">
+<b>Conflicts: </b> <span> (none)</span>
+</s:render>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="MultipleOccurrenceConflictUpdate">
+<s:variable b:name="lInfobox" b:select="div[@c:purpose='location_customization']/b:infobox"/>
+<s:variable b:name="lTableBody" b:select="$lInfobox/div/table/tbody"/>
+
+<s:variable b:name="lStartTime" b:select="ancestor::s25:rsrv_wiz_space/$tEvWiz/$tAvailabilityControl/$tStartTime"/>
+<s:if b:test="string-length($lStartTime) lt 4">
+<s:task b:action="assign" b:target="$lStartTime" b:select="zero_pad($lStartTime, 4)"/>
+</s:if>
+<s:variable b:name="lEndTime" b:select="ancestor::s25:rsrv_wiz_space/$tEvWiz/$tAvailabilityControl/$tEndTime"/>
+<s:if b:test="string-length($lEndTime) lt 4">
+<s:task b:action="assign" b:target="$lEndTime" b:select="zero_pad($lEndTime, 4)"/>
+</s:if>
+<s:variable b:name="lAvailDateList" b:select="''"/>
+
+<s:for-each b:target="$lTableBody/tr[not(@c:sortdate='99999999')]">
+<s:sequential><s:lock>
+<s:render b:destination="$_target/td[@c:id='conflicts']" b:mode="replacechildren"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/></s:render>
+<s:variable b:name="lSortDate" b:select="string($_target/@c:sortdate)"/>
+<s:task b:action="assign" b:target="$lAvailDateList" b:select="concat($lAvailDateList, ' ', '&lt;r25:dates&gt;', '&lt;r25:start_dt&gt;', $lSortDate,'T',$lStartTime,'00', '&lt;/r25:start_dt&gt;', '&lt;r25:end_dt&gt;', $lSortDate,'T',$lEndTime,'00', '&lt;/r25:end_dt&gt;', '&lt;/r25:dates&gt;')"/>
+</s:lock></s:sequential>
+</s:for-each>
+<s:variable b:name="lCheckSpacesXml" b:select=""/>
+<s:variable b:name="lXmlEventID" b:select="string(ancestor::s25:rsrv_wiz[1]/$tEvent/r25:event_id)"/>
+<s:variable b:name="lXmlSpaceID" b:select="string(@c:space_id)"/>
+<s:script><![CDATA[
+
+var sEventID = _vars['lXmlEventID'][0];
+var sSpaceID = _vars['lXmlSpaceID'][0];
+var sAvailDateList = _vars['lAvailDateList'][0];
+var sSpaceXml =	'<r25:space_availability xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event_id>' + sEventID + '</r25:event_id> ' + 
+'</r25:event> ' + 
+'<r25:requirements> ' + 
+'<r25:space>' + 
+'<r25:space_id>' + sSpaceID + '</r25:space_id>' + 
+'</r25:space>' + 
+'<r25:hide_conflicts>F</r25:hide_conflicts>' + 
+'<r25:allow_sharing>T</r25:allow_sharing>' + 
+'</r25:requirements> ' + 
+sAvailDateList + 
+'</r25:space_availability>';
+bpc.setVariable('lCheckSpacesXml',[sSpaceXml]);
+
+]]></s:script>
+<s:variable b:name="lConflictDetails" b:select=""/>
+<s:task b:action="assign" b:target="$lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'space_avail.xml')"/>
+<s:task b:action="load" b:method="POST" b:url="{$lUrl}" b:data="{$lCheckSpacesXml}" b:destination="$lConflictDetails" b:mode="replacechildren" b:showloading="false">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lConflictDetails"/>
+<s:for-each b:target="$lConflictDetails//r25:dates">
+<s:sequential><s:lock>
+<s:variable b:name="lOccurrence" b:select="substring-before($_target/r25:start_dt, 'T')"/>
+<s:variable b:name="tdConflicts" b:select="$lTableBody/tr[@c:occurrence = $lOccurrence]/td[@c:id='conflicts']"/>
+<s:task b:action="remove" b:target="$tdConflicts/*"/>
+<s:choose>
+<s:when b:test="number($_target/r25:conflicts) gt 0">
+<s:task b:action="addclass" b:target="span[@c:purpose='conflicts']/div[@c:id='conflicts']" b:value="currentSelection_Conflicts"/>
+<s:variable b:name="lConflictStartEnd" b:select=""/>
+<s:for-each b:target="$_target//r25:conflict[r25:conflict_type = 'rsrv']">
+<s:sequential><s:lock>
+<s:render b:destination="$tdConflicts" b:mode="aslastchild">
+<span b:behavior="AvailTooltipIcon" c:scope="customize" c:purpose="space_conflict_reservation" c:conflict_id="{string($_target/r25:conflict_id)}" c:conflict_name="{string($_target/r25:conflict_name)}" c:conflict_start="{string($_target/r25:conflict_start)}" c:conflict_end="{string($_target/r25:conflict_end)}">
+<span b:behavior="S25Object" c:obj_type="event" c:obj_id="{string($_target/r25:conflict_id)}"><s:event b:on="command"><s:task b:action="deselect" b:target="ancestor::b:infobox[1]"/><s:super/></s:event><img src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/event.png"/></span>
+</span>
+</s:render>
+</s:lock></s:sequential>
+</s:for-each>
+<s:for-each b:target="$_target//r25:conflict[r25:conflict_type = 'pending']">
+<s:sequential><s:lock>
+<s:render b:destination="$tdConflicts" b:mode="aslastchild">
+<span b:behavior="AvailTooltipIcon" c:scope="customize" c:purpose="space_conflict_pending" c:conflict_name="{string($_target/r25:conflict_name)}" c:conflict_start="{string($_target/r25:conflict_start)}" c:conflict_end="{string($_target/r25:conflict_end)}">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/event_pending.png"/>
+</span>
+</s:render>
+</s:lock></s:sequential>
+</s:for-each>
+<s:for-each b:target="$_target//r25:conflict[r25:conflict_type = 'blackout']">
+<s:sequential><s:lock>
+<s:render b:destination="$tdConflicts" b:mode="aslastchild">
+<span b:behavior="AvailTooltipIcon" c:scope="customize" c:purpose="space_conflict_blackout" c:conflict_name="{string($_target/r25:conflict_name)}" c:conflict_start="{string($_target/r25:conflict_start)}" c:conflict_end="{string($_target/r25:conflict_end)}">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_blackout.gif"/>
+</span>
+</s:render>
+</s:lock></s:sequential>
+</s:for-each>
+<s:for-each b:target="$_target//r25:conflict[r25:conflict_type = 'hours']">
+<s:sequential><s:lock>
+<s:render b:destination="$tdConflicts" b:mode="aslastchild">
+<span b:behavior="AvailTooltipIcon" c:scope="customize" c:purpose="space_conflict_hours" c:conflict_start="{string($_target/r25:conflict_start)}" c:conflict_end="{string($_target/r25:conflict_end)}">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_clock.gif"/>
+</span>
+</s:render>
+</s:lock></s:sequential>
+</s:for-each>
+</s:when>
+<s:otherwise>
+<s:render b:destination="$tdConflicts" b:mode="replacechildren">
+(none)
+</s:render>
+</s:otherwise>
+</s:choose>
+</s:lock></s:sequential>
+</s:for-each>
+</s:event>
+<s:event b:on="ValidityUpdate">
+<s:choose>
+<s:when b:test="@c:valid = 'C'">
+<s:with b:target=".//span[@c:purpose='availability']">
+<s:task b:action="hide" b:target="img"/>
+<s:task b:action="show" b:target="img[@c:id='checking']"/>
+</s:with>
+</s:when>
+<s:when b:test="@c:valid = 'T'">
+<s:with b:target=".//span[@c:purpose='availability']">
+<s:task b:action="hide" b:target="img"/>
+<s:task b:action="show" b:target="img[@c:id='available']"/>
+</s:with>
+<s:with b:target=".//*[@b:behavior = 'S25Object'][1]">
+<s:task b:action="remove" b:target="@style"/>
+</s:with>
+</s:when>
+<s:when b:test="@c:valid = 'F'">
+<s:with b:target=".//span[@c:purpose='availability']">
+<s:task b:action="hide" b:target="img"/>
+<s:task b:action="show" b:target="img[@c:id='unavailable']"/>
+</s:with>
+<s:with b:target=".//*[@b:behavior = 'S25Object'][1]">
+<s:setstyle b:color="RED"/>
+</s:with>
+</s:when>
+<s:when b:test="@c:valid = 'U'">
+<s:with b:target=".//span[@c:purpose='availability']">
+<s:task b:action="hide" b:target="img"/>
+<s:task b:action="show" b:target="img[@c:id='unknown']"/>
+</s:with>
+<s:with b:target=".//*[@b:behavior = 'S25Object'][1]">
+<s:task b:action="remove" b:target="@style"/>
+</s:with>
+</s:when>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RemoveSpace" b:behavior="RsrvWizInput">
+<s:initatt class="RsrvWiz_space_remove" b:tooltiptext="Click to remove this location from the event." alt=""/>
+<s:event b:on="command">
+<s:task b:action="focus" b:target="ancestor::s25:rsrv_wiz_space[1]/$tContentOptions/div[@b:state='selected']//*[name() = 'select' or name() = 'input']"/>
+<s:fxstyle b:time="5"/>
+<s:variable b:name="lSpaceID" b:select="string(@c:space_id)"/>
+<s:variable b:name="lSpaceName" b:select="string(@c:space_name)"/>
+<s:task b:action="remove" b:target="ancestor::s25:rsrv_wiz/$tInbox/reserve//obj[@obj_id = $lSpaceID and @obj_type = 'space']"/>
+<s:task b:action="trigger" b:event="DeletePendingSpaceRsrv" b:target="ancestor::s25:rsrv_wiz_space/$tEvWiz/$tAvailabilityControl"/>
+<s:sequential>
+<s:render b:test="count(ancestor::s25:rsrv_wiz_space[1]/$tContentOptions/div[@c:id='txt']//div[@c:id='currentSpace']) = 1" b:destination="ancestor::s25:rsrv_wiz_space[1]/$tContentOptions/div[@c:id='txt']" b:mode="aslastchild">
+<div class="currentSelectionBlank" c:id="nospace">none selected</div>
+</s:render>
+<s:task b:action="set" b:target="ancestor::s25:rsrv_wiz/$tRsrv/r25:space_reservation[r25:space_id = $lSpaceID]/@status" b:value="del"/>
+<s:task b:action="remove" b:target="ancestor::div[@c:purpose='Space'][1]"/>
+</s:sequential>
+</s:event>
+</s:behavior>
+<s:behavior b:name="SpaceText" b:behavior="RsrvWizInput">
+<s:initatt style="height:50px;display:none;"/>
+
+</s:behavior>
+<s:stylesheet b:name="Spaces">
+<s:template b:match="/">
+<s:apply-templates b:select="distinct-values(.//r25:space_reservation/r25:space_id)"/>
+<s:apply-templates b:select="obj[@obj_type='space']"/>
+</s:template>
+<s:template b:match="r25:space_id">
+<s:apply-templates b:select=".."/>
+</s:template>
+<s:template b:match="r25:space_reservation">
+<s:variable b:name="xslSpaceID" b:select="r25:space_id"/>
+<s:variable b:name="xslSpaceName" b:select="r25:space/r25:space_name"/>
+<s:call-template b:name="SpaceContainer"/>
+</s:template>
+<s:template b:match="obj">
+<s:variable b:name="xslSpaceID" b:select="@obj_id"/>
+<s:variable b:name="xslSpaceName" b:select="@obj_name"/>
+<s:call-template b:name="SpaceContainer"/>
+</s:template>
+<s:template b:name="SpaceContainer">
+<div c:purpose="Space" class="currentSelection_Space" c:valid="U" b:behavior="SpaceContainer">
+<s:attribute b:name="c:space_id">
+<s:value-of b:select="$xslSpaceID"/>
+</s:attribute>
+<s:attribute b:name="c:space_name">
+<s:value-of b:select="$xslSpaceName"/>
+</s:attribute>
+<s:choose>
+<s:when b:test="not(string($xslSpaceName) = '(Private)')">
+<div class="currentSelection_Icons">
+<span c:purpose="availability"><img c:id="checking" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif" b:tooltiptext="Checking for conflicts..."/><img c:id="available" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/checkmark.png" style="display:none" b:tooltiptext="This Location has no conflicts for all of the currently selected Dates and Times."/><img c:id="unavailable" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/warning.png" style="display:none" b:tooltiptext="This Location has conflicts for some or all of the currently selected Dates and Times."/><img c:id="unknown" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/caution.png" style="cursor:pointer; display:none" b:tooltiptext="Until you select a Date and Time, we cannot determine if this Location has conflicts." b:behavior="TriggerAvailabilityCheck"/> </span>
+<span c:purpose="FavToggle">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_NotFavorite" style="display:none;" c:purpose="NotFavorite" b:behavior="AddFav" b:tooltiptext="Add this to Your Starred Locations">
+<s:event b:on="click">
+<s:task b:action="assign" b:scope="tag" b:target="ancestor::*[@c:editor='true'][1]/$tCurrentObject" b:select="ancestor::div[@c:purpose='Space']/div[@c:id='currentSpace']/span[@b:behavior='S25Object']"/>
+<s:super/>
+</s:event>
+</img><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="actionIcon_IsFavorite" style="display:none;" c:purpose="Favorite" b:behavior="RemoveFav" b:tooltiptext="Remove this from Your Starred Locations">
+<s:event b:on="click">
+<s:task b:action="assign" b:scope="tag" b:target="ancestor::*[@c:editor='true'][1]/$tCurrentObject" b:select="ancestor::div[@c:purpose='Space']/div[@c:id='currentSpace']/span[@b:behavior='S25Object']"/>
+<s:super/>
+</s:event>
+</img>
+</span>
+<input type="image" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/icon_close.gif" b:behavior="RemoveSpace" style="display:none">
+<s:attribute b:name="c:space_id">
+<s:value-of b:select="$xslSpaceID"/>
+</s:attribute>
+</input>
+</div>
+<div c:id="currentSpace" class="currentSelectionValue icon-space">
+<span b:behavior="S25Object" c:obj_type="space" b:tooltiptext="Click to view location details and availability.">
+<s:attribute b:name="c:obj_id">
+<s:value-of b:select="$xslSpaceID"/>
+</s:attribute>
+<s:attribute b:name="c:obj_name">
+<s:value-of b:select="$xslSpaceName"/>
+</s:attribute>
+<s:value-of b:select="$xslSpaceName"/>
+</span>
+</div>
+<span c:purpose="attributes"/>
+<span c:purpose="customizations"/>
+<span c:purpose="occurrences"/>
+<span c:purpose="conflicts"/>
+<div c:purpose="location_customization" class="currentSelection_OccurrenceEditing">
+<img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/bullet.gif"/><a href="javascript:void(0)" onclick="return false" b:action="select" b:target="../b:infobox[@c:purpose='location_customization']">
+<s:execute><s:render><s:textnode b:label="{concat('Modify Selected Occurrences','...')}"/></s:render></s:execute>
+</a>
+<b:infobox b:behavior="OccurrenceCustomizationInfobox" c:purpose="location_customization"/>
+</div>
+</s:when>
+<s:otherwise>
+<div c:id="currentSpace" class="currentSelectionValue icon-space">
+<span>
+<s:value-of b:select="$xslSpaceName"/>
+</span>
+</div>
+</s:otherwise>
+</s:choose>
+<div class="divider"/>
+</div>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="Spaces_text">
+<s:template b:match="/">
+<s:apply-templates b:select="distinct-values(.//r25:space_reservation/r25:space_id)"/>
+</s:template>
+<s:template b:match="r25:space_id">
+<s:apply-templates b:select=".."/>
+</s:template>
+<s:template b:match="r25:space_reservation" b:preserve-whitespace="true">
+<div c:purpose="Space" class="currentSelection_Space" c:valid="U"> 
+<s:attribute b:name="c:space_id">
+<s:value-of b:select="r25:space_id"/>
+</s:attribute>
+<s:attribute b:name="c:space_name">
+<s:value-of b:select="r25:space/r25:space_name"/>
+</s:attribute>
+<s:choose>
+<s:when b:test="not(string(r25:space/r25:space_name) = '(Private)')">
+<div c:id="currentSpace" class="currentSelectionValue icon-space">
+<span b:behavior="S25Object" c:obj_type="space" b:tooltiptext="Click to view location details and availability.">
+<s:attribute b:name="c:obj_id">
+<s:value-of b:select="r25:space_id"/>
+</s:attribute>
+<s:attribute b:name="c:obj_name">
+<s:value-of b:select="r25:space/r25:space_name"/>
+</s:attribute>
+<s:value-of b:select="r25:space/r25:space_name"/>
+</span>
+</div>
+<s:variable b:name="lSpaceID" b:select="string(r25:space_id)"/>
+<s:choose>
+<s:when b:test="not(count(.//r25:reservation) = count(.//r25:space_reservation[r25:space_id = $lSpaceID])) or  count(distinct-values(.//r25:space_reservation[r25:space_id = $lSpaceID]/r25:layout_id)) gt 1 or  count(distinct-values(.//r25:space_reservation[r25:space_id = $lSpaceID]/r25:space_instructions)) gt 1">
+<div class="currentSelection_Attribute">
+<s:for-each b:select=".//r25:space_reservation[r25:space_id = $lSpaceID]">
+<div style="padding-bottom:15px;">
+<div class="currentSelection_Attribute">
+
+<b style="font-size:110%"><s:value-of b:select="s25_format_date(string(../r25:reservation_start_dt), $lDatePattern)"/></b>
+</div>
+<s:if b:test="not(string-length(r25:layout_name) = 0)">
+<div class="currentSelection_Attribute" style="padding-left:10px">
+<b><s:value-of b:select="$lLabelLayout"/> </b> 
+<s:value-of b:select="r25:layout_name"/>
+</div>
+</s:if>
+<div class="currentSelection_Attribute" style="padding-left:10px">
+<b><s:value-of b:select="$lLabelInstructions"/> </b> 
+<s:choose>
+<s:when b:test="string-length(r25:space_instructions) = 0">
+<s:value-of b:select="$lNone"/>
+</s:when>
+<s:otherwise>
+<s:value-of b:select="r25:space_instructions"/>
+</s:otherwise>
+</s:choose>
+</div>
+</div>
+</s:for-each>
+</div>
+</s:when>
+<s:otherwise>
+<s:if b:test="not(string-length(r25:layout_name) = 0)">
+<div class="currentSelection_Attribute">
+<b><s:value-of b:select="$lLabelLayout"/> </b> 
+<span> <s:value-of b:select="r25:layout_name"/></span>
+</div>
+</s:if>
+<div c:id="instructions" class="currentSelection_Attribute">
+<b><s:value-of b:select="$lLabelInstructions"/> </b> 
+<span c:id="instructions-text"> 
+<s:choose>
+<s:when b:test="string-length(r25:space_instructions) = 0">
+<s:value-of b:select="$lNone"/>
+</s:when>
+<s:otherwise>
+<s:value-of b:select="r25:space_instructions"/>
+</s:otherwise>
+</s:choose>
+</span>
+</div>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<div c:id="currentSpace" class="currentSelectionValue icon-space">
+<span><s:value-of b:select="r25:space/r25:space_name"/></span>
+</div>
+</s:otherwise>
+</s:choose>
+<div class="divider"/>
+</div>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="SpaceIndexSelect">
+<s:template b:match="/">
+<s:if b:test="$tHasPrefs = 'true'">
+<div b:behavior="SpaceIndexOption" c:index_id="prefs">
+<div class="icon-space">Matching Location Requests</div>
+</div>
+</s:if>
+<div b:behavior="SpaceIndexOption" c:index_id="fav">
+<div class="icon-favorite"><s:value-of b:select="$lFavText"/></div>
+</div>
+<div b:behavior="SpaceIndexOption" c:index_id="search" c:query="null.xml" c:xsl="search.xsl">
+<div class="icon-search">Search</div>
+</div>
+<s:apply-templates b:select="index[@section_id='collection'][not(@visible='false')]"/>
+<s:apply-templates b:select="index[not(@section_id='collection')][not(@visible='false')]"/>
+</s:template>
+<s:template b:match="index">
+<div b:behavior="SpaceIndexOption">
+<s:attribute b:name="c:index_id">
+<s:value-of b:select="@section_id"/>
+</s:attribute>
+<s:attribute b:name="c:query">
+<s:choose>
+<s:when b:test="@section_id = 'keyword'">
+<s:value-of b:select="'null.xml'"/>
+</s:when>
+<s:when b:test="@section_id = 'category'">
+<s:value-of b:select="'rmcat.xml'"/>
+</s:when>
+<s:when b:test="@section_id = 'feature'">
+<s:value-of b:select="'rmfeat.xml'"/>
+</s:when>
+<s:when b:test="@section_id = 'layout'">
+<s:value-of b:select="'rmconf.xml'"/>
+</s:when>
+<s:when b:test="@section_id = 'capacity'">
+<s:value-of b:select="'null.xml'"/>
+</s:when>
+<s:when b:test="contains(@section_id,'collection')">
+<s:value-of b:select="'space_searches.xml'"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<s:attribute b:name="c:xsl">
+<s:choose>
+<s:when b:test="@section_id = 'keyword'">
+<s:value-of b:select="'names.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'category'">
+<s:value-of b:select="'categories.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'feature'">
+<s:value-of b:select="'features.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'layout'">
+<s:value-of b:select="'layouts.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'capacity'">
+<s:value-of b:select="'capacities.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'collection'">
+<s:value-of b:select="concat('searches.xsl', '&amp;favorites=T')"/>
+</s:when>
+<s:when b:test="@section_id = 'all_collection'">
+<s:value-of b:select="'searches.xsl'"/>
+</s:when>
+<s:when b:test="@section_id = 'default_collection'">
+<s:value-of b:select="concat('searches.xsl', '&amp;user=',$lDefaultUser)"/>
+</s:when>
+</s:choose>
+</s:attribute>
+<s:value-of b:select="@name"/>
+</div>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="SpaceLayouts">
+<s:template b:match="/">
+<s:apply-templates b:select=".//r25:space"/>
+</s:template>
+<s:template b:match="r25:space">
+<s:if b:test="count(r25:layout) = 0">
+<s:value-of b:select="$lNoneValue"/>
+</s:if>
+<s:if b:test="count(r25:layout) = 1">
+<s:value-of b:select="r25:layout/r25:layout_name"/>
+<span style="white-space:nowrap; margin-left:3px;">[<s:value-of b:select="r25:layout/r25:layout_capacity"/>]</span>
+</s:if>
+<select c:purpose="layout" b:disabled="true" style="width:150px">
+<s:attribute b:name="c:space_id">
+<s:value-of b:select="r25:space_id"/>
+</s:attribute>
+<s:if b:test="count(r25:layout) lt 2">
+<s:attribute b:name="style">
+<s:value-of b:select="'display:none'"/>
+</s:attribute>
+</s:if>
+<s:apply-templates b:select="r25:layout"/>
+</select>
+</s:template>
+<s:template b:match="r25:layout">
+<option>
+<s:attribute b:name="value">
+<s:value-of b:select="r25:layout_id"/>
+</s:attribute>
+<s:attribute b:name="c:layout_name">
+<s:value-of b:select="r25:layout_name"/>
+</s:attribute>
+<s:if b:test="r25:default_layout = 'T'">
+<s:attribute b:name="b:state" b:select="'selected'"/>
+</s:if>
+<s:value-of b:select="r25:layout_name"/>
+[<s:value-of b:select="r25:layout_capacity"/>]
+</option>
+</s:template>
+</s:stylesheet>
+<s:stylesheet b:name="SpaceInstructions">
+<s:template b:match="/">
+<s:apply-templates b:select=".//r25:space"/>
+</s:template>
+<s:template b:match="r25:space">
+<span c:id="instructions">
+<s:attribute b:name="c:space_id">
+<s:value-of b:select="r25:space_id"/>
+</s:attribute>
+<span c:id="instructions-text">
+<s:choose>
+<s:when b:test="string-length(replace(r25:instructions,' ','')) = 0">
+<s:value-of b:select="$lNoneValue"/>
+</s:when>
+<s:otherwise>
+<s:value-of b:select="r25:instructions"/>
+</s:otherwise>
+</s:choose>
+</span>
+<a href="javascript:void(0)" onclick="return false" class="EditInline" b:behavior="RsrvWizInput" style="display:none">
+<s:event b:on="command">
+<s:task b:action="hide" b:target="../span[@c:id='instructions-text']"/>
+<s:task b:action="hide" b:target="."/>
+<s:task b:action="show" b:target="../textarea"/>
+<s:task b:action="focus" b:target="../textarea"/>
+</s:event>
+<s:value-of b:select="$lEditPrompt"/>
+</a>
+<textarea b:behavior="SpaceText">
+<s:value-of b:select="r25:instructions"/>
+</textarea>
+</span>
+</s:template>
+</s:stylesheet>
+<s:behavior b:name="OccurrenceCustomizationInfobox">
+<s:initatt class="currentSelection_OccurrenceEditingInfobox"/>
+<s:event b:on="select">
+<s:super/>
+<s:script><![CDATA[
+
+document.getElementsByTagName('body')[0].lastChild.style.display = 'none';
+window.setTimeout("document.getElementsByTagName('body')[0].lastChild.style.display = 'block';", 100);
+
+]]></s:script>
+
+</s:event>
+</s:behavior>
+<s:behavior b:name="SpaceOccurrenceCustomizationCheckbox">
+<s:initatt b:state="selected"/>
+<s:event b:on="command">
+<s:choose>
+<s:when b:test="@b:state = 'selected'">
+<s:task b:action="trigger" b:event="Select"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="Deselect"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="MultipleOccurrenceStatusUpdate" b:target="ancestor::div[@c:purpose='Space'][1]"/>
+</s:event>
+<s:event b:on="Select">
+<s:task b:action="removeclass" b:target="ancestor::tr[1]" b:value="disabled"/>
+<s:if b:test="ancestor::s25:rsrv_wiz/@c:mode = 'edit'">
+<s:task b:action="enable" b:target="ancestor::tr[1]//select"/>
+<s:task b:action="enable" b:target="ancestor::tr[1]//b:spinner"/>
+<s:task b:action="show" b:target="ancestor::tr[1]//a"/>
+<s:task b:action="enable" b:target="ancestor::tr[1]//textarea"/>
+</s:if>
+<s:task b:action="trigger" b:event="UpdatePendingRsrvs"/>
+</s:event>
+<s:event b:on="Deselect">
+<s:task b:action="addclass" b:target="ancestor::tr[1]" b:value="disabled"/>
+<s:task b:action="disable" b:target="ancestor::tr[1]//select"/>
+<s:task b:action="disable" b:target="ancestor::tr[1]//b:spinner"/>
+<s:task b:action="hide" b:target="ancestor::tr[1]//a"/>
+<s:task b:action="hide" b:target="ancestor::tr[1]//textarea"/>
+<s:task b:action="disable" b:target="ancestor::tr[1]//textarea"/>
+<s:task b:action="show" b:target="ancestor::tr[1]//span[@c:id='instructions-text']"/>
+<s:variable b:name="lSpaceID" b:select="string(@c:space_id)"/>
+<s:variable b:name="lSortDate" b:select="replace(@c:occurrence, '-', '')"/>
+<s:with b:target="ancestor::s25:rsrv_wiz[1]/$tAvailabilityControl">
+<s:task b:action="remove" b:target="div[@c:id = 'space_conflicts']/div[@c:space_id = $lSpaceID]//div[@c:sortdate = $lSortDate]"/>
+<s:if b:test="count(div[@c:id = 'space_conflicts']/div[@c:space_id = $lSpaceID]//div[@c:sortdate]) = 0">
+<s:task b:action="remove" b:target="div[@c:id = 'space_conflicts']/div[@c:space_id = $lSpaceID]"/>
+<s:if b:test="count(div[@c:id = 'space_conflicts']/div[@c:space_id]) = 0">
+<s:task b:action="hide" b:target="div[@c:id = 'space_conflicts']"/>
+<s:if b:test="count(div[@c:id = 'resource_conflicts']/div[@c:resource_id]) = 0">
+<s:task b:action="show" b:target="div[@c:id = 'no_conflicts']"/>
+</s:if>
+</s:if>
+</s:if>
+</s:with>
+<s:if b:test="count(ancestor::tbody[1]/tr[@c:valid='F']//input[@type='checkbox' and @c:purpose='assign' and @b:state='selected']) = 0">
+<s:choose>
+<s:when b:test="count(ancestor::tbody[1]/tr//input[@type='checkbox' and @c:purpose='assign' and @b:state='selected']) = 0">
+<s:with b:target="ancestor::div[@c:purpose='Space'][1]">
+<s:setatt c:valid="U"/>
+<s:task b:action="trigger" b:event="ValidityUpdate"/>
+</s:with>
+</s:when>
+<s:otherwise>
+<s:with b:target="ancestor::div[@c:purpose='Space'][1]">
+<s:setatt c:valid="T"/>
+<s:task b:action="trigger" b:event="ValidityUpdate"/>
+</s:with>
+</s:otherwise>
+</s:choose>
+</s:if>
+</s:event>
+<s:event b:on="UpdatePendingRsrvs">
+<s:variable b:name="lSpaceID" b:select="string(@c:space_id)"/>
+<s:variable b:name="lSpaceName" b:select="string(ancestor::div[@c:purpose='Space'][1]/@c:space_name)"/>
+<s:with b:target="ancestor::s25:rsrv_wiz_space[1]/$tEvWiz/$tAvailabilityControl">
+<s:task b:action="assign" b:target="$tCreatePendingRsrvs" b:scope="tag" b:select="'T'"/>
+<!-- <s:task b:action="trigger" b:event="DeletePendingSpaceRsrv"/> -->
+<s:task b:action="trigger" b:event="CreatePendingSpaceRsrv"/>
+</s:with>
+</s:event>
+</s:behavior>
+<s:behavior b:name="SpaceAvailTooltip" b:behavior="bxTooltip">
+<s:initatt b:delay="100"/>
+<s:event b:on="LoadSummary">
+<s:variable b:name="lSpaceID" b:select="string(@c:space_id)"/>
+<s:if b:test="not(@c:loaded)">
+<s:variable b:name="lCheckSpacesXml" b:select=""/>
+<s:variable b:name="lEventID" b:select="string(ancestor::s25:rsrv_wiz[1]/$tEvent/r25:event_id)"/>
+<s:task b:action="trigger" b:event="BuildAvailabilityDates" b:target="ancestor::s25:rsrv_wiz[1]/$tAvailabilityControl"/>
+<s:variable b:name="lCurrentDates" b:select="ancestor::s25:rsrv_wiz[1]/$tAvailabilityControl/$tAvailabilityDates"/>
+<s:script><![CDATA[
+
+var sEventID = _vars['lEventID'][0];
+var sSpaceID = _vars['lSpaceID'][0];
+var sDateList = _vars['lCurrentDates'][0];
+var sSpaceXml =	'<r25:space_availability xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event xmlns:r25="http://www.collegenet.com/r25" xmlns:xl="http://www.w3.org/1999/xlink"> ' + 
+'<r25:event_id>' + sEventID + '</r25:event_id> ' + 
+'</r25:event> ' + 
+'<r25:requirements> ' + 
+'<r25:space>' + 
+'<r25:space_id>' + sSpaceID + '</r25:space_id>' + 
+'</r25:space>' + 
+'<r25:hide_conflicts>F</r25:hide_conflicts>' + 
+'<r25:allow_sharing>T</r25:allow_sharing>' + 
+'</r25:requirements> ' + 
+sDateList + 
+'</r25:space_availability>';
+bpc.setVariable('lCheckSpacesXml',[sSpaceXml]);
+
+]]></s:script>
+<s:task b:action="assign" b:target="$lUrl" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'space_avail.xml', '?otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/space_precheck_details.xsl', '&amp;date_params=',escape(string(id('Prefs')/$tDateTimeParam)) )"/>
+<s:task b:action="load" b:method="POST" b:url="{$lUrl}" b:data="{$lCheckSpacesXml}" b:destination="." b:mode="replacechildren" b:showloading="false">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:setatt c:loaded="true" class="bxInfoboxAvailDetails"/>
+<s:super/>
+</s:if>
+</s:event>
+
+</s:behavior>
+<s:behavior b:name="AvailTooltipIcon">
+<s:event b:on="construct">
+<s:variable b:name="tAvailDetailsInfo" b:scope="tag" b:select=""/>
+<s:choose>
+<s:when b:test="@c:scope='precheck'">
+<s:task b:action="assign" b:target="$tAvailDetailsInfo" b:scope="tag" b:select="ancestor::span[@c:purpose='AvailDetails'][1]/div[@c:purpose='AvailDetails_Info']"/>
+</s:when>
+<s:when b:test="@c:scope='customize'">
+<s:task b:action="assign" b:target="$tAvailDetailsInfo" b:scope="tag" b:select="ancestor::b:infobox[@c:purpose='location_customization'][1]//div[@c:purpose='AvailDetails']"/>
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="mouseenter">
+<s:variable b:name="lConflictType" b:select="string(@c:purpose)"/>
+<s:variable b:name="lDatePattern" b:select="string(id('Prefs')/$tDatePattern)"/>
+<s:variable b:name="lTimePattern" b:select="string(id('Prefs')/$tTimePattern)"/>
+<s:task b:test="id('Prefs')/$tTimeDisplay = '12'" b:action="assign" b:target="$lTimePattern" b:select="concat($lTimePattern, 'a')"/>
+<s:choose>
+<s:when b:test="$lConflictType = 'space_conflict_reservation'">
+<s:variable b:name="lConflictName" b:select="string(@c:conflict_name)"/>
+<s:variable b:name="lConflictTimes" b:select="concat(s25_format_date(string(@c:conflict_start), $lDatePattern), ' ', s25_format_date(string(@c:conflict_start), $lTimePattern), ' - ')"/>
+<s:if b:test="not(substring-before(@c:conflict_start,'T') = substring-before(@c:conflict_end,'T'))">
+<s:task b:action="assign" b:target="$lConflictTimes" b:select="concat($lConflictTimes, s25_format_date(string(@c:conflict_end), $lDatePattern))"/>
+</s:if>
+<s:task b:action="assign" b:target="$lConflictTimes" b:select="concat($lConflictTimes, s25_format_date(string(@c:conflict_end), $lTimePattern))"/>
+<s:render b:destination="$tAvailDetailsInfo/div[@c:purpose = 'space_conflict_details']" b:mode="replacechildren">
+<div class="icon-event">
+<b><s:textnode b:label="{$lConflictName}"/></b><br/><s:textnode b:label="{$lConflictTimes}"/>
+</div>
+</s:render>
+</s:when>
+<s:when b:test="$lConflictType = 'space_conflict_pending'">
+<s:variable b:name="lConflictName" b:select="string(@c:conflict_name)"/>
+<s:variable b:name="lConflictTimes" b:select="concat(s25_format_date(string(@c:conflict_start), $lDatePattern), ' ', s25_format_date(string(@c:conflict_start), $lTimePattern), ' - ')"/>
+<s:if b:test="not(substring-before(@c:conflict_start,'T') = substring-before(@c:conflict_end,'T'))">
+<s:task b:action="assign" b:target="$lConflictTimes" b:select="concat($lConflictTimes, s25_format_date(string(@c:conflict_end), $lDatePattern))"/>
+</s:if>
+<s:task b:action="assign" b:target="$lConflictTimes" b:select="concat($lConflictTimes, s25_format_date(string(@c:conflict_end), $lTimePattern))"/>
+<s:render b:destination="$tAvailDetailsInfo/div[@c:purpose = 'space_conflict_details']" b:mode="replacechildren">
+<div class="icon-event-pending">
+<b><i><s:textnode b:label="{$lConflictName}"/></i></b><br/><s:textnode b:label="{$lConflictTimes}"/>
+</div>
+</s:render>
+</s:when>
+<s:when b:test="$lConflictType = 'space_conflict_blackout'">
+<s:variable b:name="lConflictName" b:select="string(@c:conflict_name)"/>
+<s:variable b:name="lConflictTimes" b:select="concat(s25_format_date(string(@c:conflict_start), $lDatePattern), ' ', s25_format_date(string(@c:conflict_start), $lTimePattern), ' - ')"/>
+<s:if b:test="not(substring-before(@c:conflict_start,'T') = substring-before(@c:conflict_end,'T'))">
+<s:task b:action="assign" b:target="$lConflictTimes" b:select="concat($lConflictTimes, s25_format_date(string(@c:conflict_end), $lDatePattern))"/>
+</s:if>
+<s:task b:action="assign" b:target="$lConflictTimes" b:select="concat($lConflictTimes, s25_format_date(string(@c:conflict_end), $lTimePattern))"/>
+<s:render b:destination="$tAvailDetailsInfo/div[@c:purpose = 'space_conflict_details']" b:mode="replacechildren">
+<div class="icon-blackout">
+<b><s:textnode b:label="{$lConflictName}"/></b><br/><s:textnode b:label="{$lConflictTimes}"/>
+</div>
+</s:render>
+</s:when>
+<s:when b:test="$lConflictType = 'space_conflict_hours'">
+<s:variable b:name="lConflictTimes" b:select="concat(s25_format_date(string(@c:conflict_start), $lTimePattern), ' - ', s25_format_date(string(@c:conflict_end), $lTimePattern))"/>
+<s:render b:destination="$tAvailDetailsInfo/div[@c:purpose = 'space_conflict_details']" b:mode="replacechildren">
+<div class="icon-hours">
+Location Hours: <s:textnode b:label="{$lConflictTimes}"/>
+</div>
+</s:render>
+</s:when>
+</s:choose>
+<s:task b:action="hide" b:target="$tAvailDetailsInfo/div"/>
+<s:task b:action="show" b:target="$tAvailDetailsInfo/div[@c:purpose = $lConflictType]"/>
+<s:task b:action="show" b:target="$tAvailDetailsInfo/div[@c:purpose = 'space_conflict_details']"/>
+</s:event>
+<s:event b:on="mouseleave">
+<s:task b:action="hide" b:target="$tAvailDetailsInfo/div"/>
+<s:task b:action="show" b:target="$tAvailDetailsInfo/div[@c:purpose = 'prompt']"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="RefreshAvailableLocations">
+<s:event b:on="click">
+<s:choose>
+<s:when b:test="ancestor::s25:rsrv_wiz/$tAvailabilityControl/$tDateTimeEditor/@c:status = 'pending'">
+<s:task b:action="trigger" b:event="Save" b:target="ancestor::s25:rsrv_wiz/$tAvailabilityControl/$tDateTimeEditor"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="PreCheckSpaces" b:async="true" b:target="ancestor::s25:rsrv_wiz_space[1]"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+</div>

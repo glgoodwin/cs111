@@ -1,0 +1,57 @@
+
+.wrapper {
+background-color: blue;
+width: 600px;
+}
+
+
+.forms {
+background-color: green;
+width: 300px;
+float: left;
+}
+
+
+
+body {
+background-color: red; 
+color: FFCCCC;
+}
+
+
+/* 
+
+
+.right {
+background-color: 9999CC;
+color: FFCCCC;
+width: 400px;
+float: right;
+}
+
+
+.header {
+background-color: #660033;
+height: 100px;
+color: CC33CC;
+}
+
+
+.page {
+width: 700
+}
+
+
+.left {
+background-color: CC33CC;
+width: 300px;
+height: 400px;
+float: left;
+}
+.infos{
+background-color: BB3399;
+width: 300px;
+float: right;
+}
+
+ */

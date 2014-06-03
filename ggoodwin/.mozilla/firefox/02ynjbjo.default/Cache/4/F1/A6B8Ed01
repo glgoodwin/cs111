@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:x="http://www.collegenet.com/x">
+<script type="text/javascript" language="JavaScript"><![CDATA[
+
+var daterangepicker_alertMsg = '';
+
+var daterangepicker_alerts = { 
+unselectableMonth: 		'This month could not be selected because the dates conflicted with the Earliest Allowed Start and/or the Latest Allowed End.',
+unselectableFullMonth:	'The End Date was adjusted based on existing Date Range constrictions.',
+startDateViolation:		'Your selected dates were modified because the selected Start Date must be on or after the Earliest Start Date.',
+endDateViolation:		'Your selected dates were modified because the selected End Date must be on or before the Latest End Date.',
+dateRangeRestrictions:	'Your selected dates were modified based on the existing Date Range constrictions.'
+};
+function debug_daterangepicker(s) {
+}
+function triggerDaterangepickerAlerts()
+{
+if (daterangepicker_alertMsg == "") return;
+window.setTimeout('alert("' + daterangepicker_alertMsg + '");', 250);
+daterangepicker_alertMsg = '';
+}
+function daterangepicker_formatDateString(oDate) 
+{ 
+if (oDate == false || oDate == "false") return false;
+if (typeof(oDate) != 'object') return oDate;
+var controlRoot = bpc.xpath("bxml()/ancestor::bx:daterangepicker", _current)[0];
+var sDatePattern = bpc.getVariable('datePattern', 'tag', controlRoot)[0];
+debug_daterangepicker("AAA (input): daterangepicker_formatDateString: " + "\n" + 
+"oDate = " + oDate + "\n" + 
+"sDatePattern (" + sDatePattern + ") = " + sDatePattern + "\n" + 
+"");
+return s25_format_date(oDate, sDatePattern, 'input');
+}
+function daterangepicker_determineDateInterval(oStart, oEnd)
+{
+debug_daterangepicker('BBB: daterangepicker_determineDateInterval(' + oStart + ' / ' + oEnd + ') [1]')
+if (typeof(oStart) != 'object') oStart = new Date(s25_format_date(oStart, 'M/d/yyyy', 'internal'));
+if (typeof(oEnd) != 'object') oEnd = new Date(s25_format_date(oEnd, 'M/d/yyyy', 'internal'));
+debug_daterangepicker('CCC: daterangepicker_determineDateInterval(' + oStart + ', ' + oEnd + ') [should be objects]')
+var msOneDay = 1 * 24 * 60 * 60 * 1000;
+return Math.round((oEnd.getTime() - oStart.getTime()) / msOneDay) + 1;
+}
+function daterangepicker_prep_selectFullMonth(context)
+{
+var startMonthName = bpc.xpath(".//b:datepicker[@x:id='datepickerStart']/html()//div[@class='b-datepicker-button-month']", context)[0];
+startMonthName.onclick = function() { daterangepicker_selectFullMonth(this) }; 
+var endMonthName = bpc.xpath(".//b:datepicker[@x:id='datepickerEnd']/html()//div[@class='b-datepicker-button-month']", context)[0];
+endMonthName.onclick = function() { daterangepicker_selectFullMonth(this) }; 
+}
+function daterangepicker_selectFullMonth(monthNameContainer)
+{
+debug_daterangepicker('QQQ: daterangepicker_selectFullMonth(' + monthNameContainer + ')')
+var monthIndex;
+for (m=0; m < 12; m++) { if (_aLocaleDate.Months[m] == monthNameContainer.innerHTML) monthIndex = m; }
+var controlRoot = bpc.xpath("bxml()/ancestor::bx:daterangepicker", monthNameContainer)[0];
+var yearValue = monthNameContainer.nextSibling.innerHTML;
+var sDatePattern = bpc.getVariable('datePattern', 'tag', controlRoot)[0];
+var monthFirstDay = s25_format_date(new Date((monthIndex + 1) + "/1/" + yearValue), sDatePattern, 'input');
+var monthLastDay;
+for (d=31; d > 27; d=d-1)
+{
+var dateTest = new Date();
+dateTest.setFullYear(yearValue, monthIndex, d);
+if (dateTest.getMonth() == monthIndex) 
+{
+var oDate = new Date((monthIndex + 1) + "/" + d + "/" + yearValue)
+var monthLastDay = s25_format_date(oDate, sDatePattern, 'input');
+break;
+}
+}
+var ref_earliestDate = bpc.getVariable('dateEarliest', 'tag', controlRoot)[0];
+var ref_latestDate = bpc.getVariable('dateLatest', 'tag', controlRoot)[0];
+var failure = false;
+debug_daterangepicker("daterangepicker_selectFullMonth: " + "\n" + 
+"\n" + 
+"monthFirstDay = " + monthFirstDay + "\n" + 
+"monthLastDay = " + monthLastDay + "\n" + 
+"\n" + 
+"ref_earliestDate = " + ref_earliestDate + "\n" + 
+"ref_latestDate = " + ref_latestDate + "\n" + 
+"");
+if (ref_earliestDate || ref_latestDate)
+{
+if (ref_earliestDate)
+{
+var monthFirstDayObj	= new Date(monthFirstDay);
+ref_earliestDate		= new Date(ref_earliestDate);
+if (monthFirstDayObj < ref_earliestDate) failure = true;
+}
+if (ref_latestDate)
+{
+var monthLastDayObj		= new Date(monthLastDay);
+ref_latestDate			= new Date(ref_latestDate);
+if (monthLastDayObj > ref_latestDate) failure = true;
+}
+if (failure)
+{
+daterangepicker_alertMsg += daterangepicker_alerts.unselectableMonth;
+var currentStartDay = bpc.getBXMLAttribute('b:start-date', controlRoot);
+monthFirstDay = currentStartDay;
+var currentEndDay = bpc.getBXMLAttribute('b:end-date', controlRoot);
+monthLastDay = currentEndDay;
+}
+}
+if (!failure)
+{
+var ref_MaxRange = bpc.getVariable('dateMaxRange', 'tag', controlRoot)[0];
+if (ref_MaxRange != false) daterangepicker_alertMsg += daterangepicker_alerts.unselectableFullMonth;
+}
+var ref_inputStart = bpc.xpath(".//input[@x:id='inputStart']", controlRoot)[0];
+ref_inputStart.value = monthFirstDay;
+var ref_datepickerStart = bpc.xpath(".//b:datepicker[@x:id='datepickerStart']", controlRoot)[0];
+bpc.setBXMLAttribute('b:value', monthFirstDay, ref_datepickerStart);
+var ref_inputEnd = bpc.xpath(".//input[@x:id='inputEnd']", controlRoot)[0];
+ref_inputEnd.value = monthLastDay;
+var ref_datepickerEnd = bpc.xpath(".//b:datepicker[@x:id='datepickerEnd']", controlRoot)[0];
+bpc.setBXMLAttribute('b:value', monthLastDay, ref_datepickerEnd);
+if (!failure) daterangepicker_hideDateRange(controlRoot)
+bpc.trigger('set', ref_datepickerStart);
+bpc.trigger('change', ref_datepickerStart);
+bpc.trigger('set', ref_datepickerEnd);
+bpc.trigger('change', ref_datepickerEnd);
+}
+function daterangepicker_hideDateRange(refDaterangepicker)
+{
+if (refDaterangepicker == null) refDaterangepicker = _current;
+var ref_fixedRange = bpc.xpath(".//input[@x:id='fixedRange']", refDaterangepicker)[0];
+bpc.setBXMLAttribute('b:state', 'deselected', ref_fixedRange);
+bpc.trigger('change', ref_fixedRange);
+}
+function daterangepicker_hideFixedRangeOptions(refDaterangepicker)
+{
+if (refDaterangepicker == null) refDaterangepicker = _current;
+daterangepicker_hideDateRange();
+var ref_fixedRangeContainer = bpc.xpath(".//div[@x:id='dateRangeContainer']", refDaterangepicker)[0];
+ref_fixedRangeContainer.style.display = 'none';
+}
+function daterangepicker_setDatepickers(startDateValue, endDateValue, lastModifiedDate, refDaterangepicker)
+{
+if (refDaterangepicker == null) refDaterangepicker = _current;
+if (startDateValue == null) startDateValue = bpc.getBXMLAttribute('b:start-date', refDaterangepicker);
+if (endDateValue == null) endDateValue = bpc.getBXMLAttribute('b:end-date', refDaterangepicker);
+if (lastModifiedDate == null) lastModifiedDate = 'start';
+debug_daterangepicker("daterangepicker_setDatepickers: " + "\n" + 
+"\n" + 
+"startDateValue = " + startDateValue + "\n" + 
+"endDateValue = " + endDateValue + "\n" + 
+"\n" + 
+"lastModifiedDate = " + lastModifiedDate + "\n" + 
+"");
+var fixedRangeValue			= bpc.getVariable('dateFixedRange', 'tag', refDaterangepicker)[0];
+if (fixedRangeValue == "false" || fixedRangeValue == false)
+fixedRangeValue = false;
+else
+fixedRangeValue = parseInt(fixedRangeValue);
+var controlledRange			= bpc.getVariable('dateControlledRange', 'tag', refDaterangepicker)[0];
+if (controlledRange == "true" || controlledRange == true) 
+controlledRange = true;
+else 
+controlledRange = false;
+var earliestDateValue		= bpc.getVariable('dateEarliest', 'tag', refDaterangepicker)[0];	// _vars['dateEarliest'][0];
+if (earliestDateValue == false) earliestDateValue = false;
+var latestDateValue		= bpc.getVariable('dateLatest', 'tag', refDaterangepicker)[0];	// _vars['dateEarliest'][0];
+if (latestDateValue == false) latestDateValue = false;			// _vars['dateLatest'][0];
+var absoluteMaxDateRange	= bpc.getVariable('dateMaxRange', 'tag', refDaterangepicker)[0];	//_vars['dateMaxRange'][0];
+if (absoluteMaxDateRange == false) absoluteMaxDateRange = false;			// _vars['dateLatest'][0];
+if (controlledRange == false)
+{
+var rangeCheckboxState = bpc.getBXMLAttribute('b:state', bpc.xpath("bxml()/$ref_fixedRange", refDaterangepicker)[0]);
+if (rangeCheckboxState == "selected")
+{
+fixedRangeValue = bpc.getBXMLAttribute('b:value', bpc.xpath("bxml()/$ref_dateRange", refDaterangepicker)[0]);
+if (fixedRangeValue == 'false' || fixedRangeValue == false) 
+fixedRangeValue = false;
+else
+fixedRangeValue = parseInt(fixedRangeValue);
+}
+else
+{
+fixedRangeValue = false;
+}
+}
+if (fixedRangeValue && absoluteMaxDateRange && fixedRangeValue > absoluteMaxDateRange) 
+fixedRangeValue = absoluteMaxDateRange;
+if (lastModifiedDate == 'start' || lastModifiedDate == 'range' || lastModifiedDate == 'load')
+{
+if (earliestDateValue && daterangepicker_determineDateInterval(earliestDateValue, startDateValue) <= 0) 
+{
+if (lastModifiedDate != 'load') daterangepicker_alertMsg += daterangepicker_alerts.startDateViolation;
+startDateValue = earliestDateValue;
+}
+if (fixedRangeValue)
+{
+debug_daterangepicker('DDD (input): daterangepicker_setDatepickers: temp (1) startDateValue = ' + startDateValue);
+var temp = new Date(s25_format_date(startDateValue, 'M/d/yyyy', 'input'));
+debug_daterangepicker('daterangepicker_setDatepickers: temp (1) = ' + temp);
+endDateValue = new Date(temp.setDate(temp.getDate() + fixedRangeValue - 1));
+debug_daterangepicker('daterangepicker_setDatepickers: endDateValue (1) = ' + endDateValue);
+if (latestDateValue && latestDateValue < endDateValue) 
+{
+endDateValue = latestDateValue;
+temp = new Date(endDateValue);
+debug_daterangepicker('daterangepicker_setDatepickers: temp (2) = ' + temp);
+startDateValue = new Date(temp.setDate(temp.getDate() - fixedRangeValue + 1));
+debug_daterangepicker('daterangepicker_setDatepickers: startDateValue (1) = ' + startDateValue);
+if (earliestDateValue && earliestDateValue > startDateValue) startDateValue = earliestDateValue;
+if (lastModifiedDate != 'load') daterangepicker_alertMsg += daterangepicker_alerts.dateRangeRestrictions;
+}
+}
+else if (daterangepicker_determineDateInterval(startDateValue, endDateValue) <= 0)
+{
+endDateValue = startDateValue;
+if (latestDateValue && latestDateValue < endDateValue) 
+{
+startDateValue = endDateValue = latestDateValue;
+if (lastModifiedDate != 'load') daterangepicker_alertMsg += daterangepicker_alerts.dateRangeRestrictions;
+}
+}
+else if (absoluteMaxDateRange && daterangepicker_determineDateInterval(startDateValue, endDateValue) > absoluteMaxDateRange)
+{
+debug_daterangepicker('EEE (internal): daterangepicker_setDatepickers: temp (3): startDateValue = ' + startDateValue);
+temp = new Date(s25_format_date(startDateValue, 'M/d/yyyy'));
+debug_daterangepicker('daterangepicker_setDatepickers: temp (3) = ' + temp);
+endDateValue = new Date(temp.setDate(temp.getDate() + absoluteMaxDateRange - 1));
+debug_daterangepicker('daterangepicker_setDatepickers: endDateValue (2) = ' + endDateValue);
+}
+}
+else if (lastModifiedDate == 'end')
+{
+if (latestDateValue && daterangepicker_determineDateInterval(endDateValue, latestDateValue) <= 0) 
+{
+daterangepicker_alertMsg += daterangepicker_alerts.endDateViolation;
+endDateValue = latestDateValue;
+}
+if (fixedRangeValue)
+{
+var temp = new Date(endDateValue);
+debug_daterangepicker('daterangepicker_setDatepickers: temp (4) = ' + temp);
+startDateValue = new Date(temp.setDate(temp.getDate() - fixedRangeValue + 1));
+debug_daterangepicker('daterangepicker_setDatepickers: startDateValue (2) = ' + startDateValue);
+if (earliestDateValue && earliestDateValue > startDateValue) 
+{
+startDateValue = earliestDateValue;
+temp = new Date(startDateValue);
+debug_daterangepicker('daterangepicker_setDatepickers: temp (5) = ' + temp);
+endDateValue = new Date(temp.setDate(temp.getDate() + fixedRangeValue - 1));
+debug_daterangepicker('daterangepicker_setDatepickers: endDateValue (3) = ' + endDateValue);
+if (latestDateValue && latestDateValue < endDateValue) endDateValue = latestDateValue;
+daterangepicker_alertMsg += daterangepicker_alerts.dateRangeRestrictions;
+}
+}
+else if (daterangepicker_determineDateInterval(startDateValue, endDateValue) <= 0)
+{
+startDateValue = endDateValue;
+if (earliestDateValue && earliestDateValue > startDateValue) 
+{
+endDateValue = startDateValue = earliestDateValue;
+daterangepicker_alertMsg += daterangepicker_alerts.dateRangeRestrictions;
+}
+}
+else if (absoluteMaxDateRange && daterangepicker_determineDateInterval(startDateValue, endDateValue) > absoluteMaxDateRange)
+{
+temp = new Date(endDateValue);
+debug_daterangepicker('daterangepicker_setDatepickers: temp (6) = ' + temp);
+startDateValue = new Date(temp.setDate(temp.getDate() - absoluteMaxDateRange + 1));
+debug_daterangepicker('daterangepicker_setDatepickers: startDateValue (3) = ' + startDateValue);
+}
+}
+debug_daterangepicker("daterangepicker_setDatepickers: setBXMLAttribute: " + "\n" + 
+"startDateValue = " + startDateValue + "\n" + 
+"endDateValue = " + endDateValue + "\n" + 
+"");
+bpc.setBXMLAttribute('value', [daterangepicker_formatDateString(startDateValue)], bpc.xpath("bxml()/$ref_inputStart", refDaterangepicker)[0]);
+bpc.setBXMLAttribute('b:value', [daterangepicker_formatDateString(startDateValue)], bpc.xpath("bxml()/$ref_datepickerStart", refDaterangepicker)[0]);
+bpc.setBXMLAttribute('value', [daterangepicker_formatDateString(endDateValue)], bpc.xpath("bxml()/$ref_inputEnd", refDaterangepicker)[0]);
+bpc.setBXMLAttribute('b:value', [daterangepicker_formatDateString(endDateValue)], bpc.xpath("bxml()/$ref_datepickerEnd", refDaterangepicker)[0]);
+bpc.setVariable('dateStart', [daterangepicker_formatDateString(startDateValue)], 'tag', refDaterangepicker);
+bpc.setVariable('dateEnd', [daterangepicker_formatDateString(endDateValue)], 'tag', refDaterangepicker);
+bpc.setVariable('dateControlledRange', [controlledRange], 'tag', refDaterangepicker);
+bpc.setVariable('dateFixedRange', [fixedRangeValue], 'tag', refDaterangepicker);
+bpc.setVariable('dateMaxRange', [absoluteMaxDateRange], 'tag', refDaterangepicker);
+bpc.setBXMLAttribute('b:start-date', [daterangepicker_formatDateString(startDateValue)], refDaterangepicker);
+if ( startDateValue instanceof Date ) {
+bpc.setBXMLAttribute('b:start-date-ms', [startDateValue.getTime()], refDaterangepicker);
+}
+bpc.setBXMLAttribute('b:end-date', [daterangepicker_formatDateString(endDateValue)], refDaterangepicker);
+if ( endDateValue instanceof Date ) {
+bpc.setBXMLAttribute('b:end-date-ms', [endDateValue.getTime()], refDaterangepicker);
+}
+daterangepicker_prep_selectFullMonth(refDaterangepicker);
+triggerDaterangepickerAlerts();
+}
+
+]]></script>
+<s:htmlstructure b:name="bx:daterangepicker" b:behavior="DateRangePicker">
+<span><s:innercontent/></span>
+</s:htmlstructure>
+<s:behavior b:name="DateRangePicker">
+<s:initatt b:default-range="7"/>
+<s:event b:on="construct">
+<s:variable b:name="lDatePattern" b:select="'M/d/yyyy'"/>
+<s:if b:test="not(string-length(id('Prefs')/$tDatePattern) = 0)">
+<s:task b:action="assign" b:target="$lDatePattern" b:select="string(id('Prefs')/$tDatePattern)"/>
+</s:if>
+<s:render b:destination="." b:mode="replacechildren">
+<div class="daterangepickerContainer">
+<div class="datePicker">
+<strong>Start Date:</strong>
+<div class="datepickerInputContainer">
+<input type="text" class="datepickerInput" x:id="inputStart" name="inputStart" b:behavior="datepickerInputFormat" b:observe="../../b:datepicker">
+<s:event b:on="change">
+<s:super/>
+<s:task b:action="trigger" b:event="change" b:target="../../b:datepicker"/>
+</s:event>
+</input>
+</div>
+<b:datepicker b:type="inline" b:input="." b:format="{$lDatePattern}" x:id="datepickerStart"/>
+<div b:behavior="TodayLink">Select Today</div>
+</div>
+<div class="datePicker">
+<strong>End Date:</strong>
+<div class="datepickerInputContainer">
+<input type="text" class="datepickerInput" x:id="inputEnd" name="inputEnd" b:behavior="datepickerInputFormat" b:observe="../../b:datepicker">
+<s:event b:on="change">
+<s:super/>
+<s:task b:action="trigger" b:event="change" b:target="../../b:datepicker"/>
+</s:event>
+</input>
+</div>
+<b:datepicker b:type="inline" b:input="." b:format="{$lDatePattern}" x:id="datepickerEnd" b:observe="ancestor::bx:daterangepicker//b:datepicker[@x:id='datepickerStart']" b:behavior="datepickerEnd_Behavior">
+<s:event b:on="change">
+<s:super/>
+</s:event>
+<s:event b:on="observe-change">
+<s:super/>
+</s:event>
+</b:datepicker>
+<div b:behavior="TodayLink">Select Today</div>
+</div>
+<div class="dateRangeContainer" x:id="dateRangeContainer">
+<div x:id="fixedRangeContainer" class="fixedRangeContainer">
+<input type="checkbox" name="fixedRange" x:id="fixedRange" class="fixedRangeCheckbox" b:state="selected">
+<s:event b:on="change">
+<s:choose>
+<s:when b:test="@checked">
+<s:task b:action="trigger" b:event="change" b:target="ancestor::bx:daterangepicker//b:select"/>									
+<s:task b:action="enable" b:target="ancestor::bx:daterangepicker//b:select[@x:id='dateRange']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="disable" b:target="ancestor::bx:daterangepicker//b:select[@x:id='dateRange']"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+</input>
+<strong b:behavior="ToggleInput">Enforce a Date Range Interval of</strong> 
+<b:select class="fixedRangeSelect" b:name="dateRange" x:id="dateRange" b:value="{@b:default-range}" b:width="120px">
+<s:event b:on="change">
+<s:task b:action="hide" b:target="./b:option[@b:value='false']"/>
+<s:variable b:scope="tag" b:name="ref_top" b:select="ancestor::bx:daterangepicker"/>
+<s:script><![CDATA[
+
+daterangepicker_setDatepickers(null, null, 'range', _vars['ref_top'][0]);
+
+]]></s:script>
+<s:task b:action="trigger" b:event="set" b:target="$ref_top/$ref_datepickerStart"/>
+<s:task b:action="trigger" b:event="set" b:target="$ref_top/$ref_datepickerEnd"/>
+<s:task b:action="trigger" b:event="change" b:target="$ref_top"/>
+</s:event>
+<b:option b:value="false" style="display:none">Select a Range...</b:option>
+<b:option b:value="1">1 Day</b:option>
+<b:option b:value="7">1 Week</b:option>
+<b:option b:value="14">2 Weeks</b:option>
+<b:option b:value="30">30 Days</b:option>
+<b:option b:value="60">60 Days</b:option>
+<b:option b:value="90">90 Days <em>(max)</em></b:option>
+</b:select>.
+</div><div x:id="dateRangeNotifier" class="dateRangeNotifier"/>
+</div>
+</div>
+</s:render>
+<s:behavior b:name="datepickerEnd_Behavior">
+<s:event b:on="observe-change">
+<s:variable b:name="clickedCalendar" b:scope="local" b:value="start"/>
+<s:task b:action="trigger" b:event="CalendarSync" b:target="."/>
+</s:event>
+<s:event b:on="change">
+<s:variable b:name="clickedCalendar" b:scope="local" b:value="end"/>
+<s:task b:action="trigger" b:event="CalendarSync" b:target="."/>
+</s:event>
+<s:event b:on="CalendarSync">
+<s:variable b:scope="tag" b:name="ref_top" b:select="ancestor::bx:daterangepicker"/>
+<s:variable b:scope="tag" b:name="refLocal_datepickerStart" b:select="$ref_top/$ref_datepickerStart"/>
+<s:variable b:scope="tag" b:name="refLocal_inputStart" b:select="$ref_top/$ref_inputStart"/>
+<s:variable b:scope="tag" b:name="refLocal_inputEnd" b:select="$ref_top/$ref_inputEnd"/>
+<s:variable b:scope="tag" b:name="refLocal_dateRange" b:select="$ref_top/$ref_dateRange"/>
+<s:variable b:scope="tag" b:name="refLocal_dateRangeValue" b:select="$ref_top/$ref_dateRangeValue"/>
+<s:variable b:scope="tag" b:name="refLocal_fixedRange" b:select="$ref_top/$ref_fixedRange"/>
+<s:script><![CDATA[
+
+var readStartDate = bpc.getBXMLAttribute('b:value', _vars['refLocal_datepickerStart'][0] );
+debug_daterangepicker('FFF (input): CalendarSync: readStartDate = ' + readStartDate);
+var readStartDateObj = new Date(s25_format_date(readStartDate, 'M/d/yyyy', 'input'));
+debug_daterangepicker('CalendarSync: readStartDateObj = ' + readStartDateObj);
+var readEndDate = bpc.getBXMLAttribute('b:value', _current);
+debug_daterangepicker('GGG (input): CalendarSync: readEndDate = ' + readEndDate);
+var readEndDateObj = new Date(s25_format_date(readEndDate, 'M/d/yyyy', 'input'));
+debug_daterangepicker('CalendarSync: readEndDateObj = ' + readEndDateObj);
+debug_daterangepicker("CalenderSync: " + "\n" + 
+"\n" + 
+"readStartDate = " + readStartDate + "\n" + 
+"readStartDateObj = " + readStartDateObj + "\n" + 
+"\n" + 
+"readEndDate = " + readEndDate + "\n" + 
+"readEndDateObj = " + readEndDateObj + "\n" + 
+"");
+daterangepicker_setDatepickers(readStartDateObj, readEndDateObj, bpc.getVariable('clickedCalendar')[0], _vars['ref_top'][0]);
+
+]]></s:script>
+<s:task b:action="trigger" b:event="set" b:target="$refLocal_datepickerStart"/>
+<s:task b:action="trigger" b:event="set" b:target="."/>
+<s:task b:action="trigger" b:event="change" b:target="$ref_top"/>
+</s:event>
+</s:behavior>
+<s:choose>
+<s:when b:test="./@b:input-display='false'">
+<s:task b:action="hide" b:target=".//div[@class='datepickerInputContainer']"/>
+</s:when>
+</s:choose>
+<s:variable b:scope="tag" b:name="ref_datepickerStart" b:select=".//b:datepicker[@x:id='datepickerStart']"/>
+<s:variable b:scope="tag" b:name="ref_inputStart" b:select=".//input[@x:id='inputStart']"/>
+<s:variable b:scope="tag" b:name="ref_datepickerEnd" b:select=".//b:datepicker[@x:id='datepickerEnd']"/>
+<s:variable b:scope="tag" b:name="ref_inputEnd" b:select=".//input[@x:id='inputEnd']"/>
+<s:variable b:scope="tag" b:name="ref_fixedRange" b:select=".//input[@x:id='fixedRange']"/>
+<s:variable b:scope="tag" b:name="ref_dateRange" b:select=".//b:select[@x:id='dateRange']"/>
+<s:variable b:scope="tag" b:name="ref_dateRangeValue" b:select="number(.//b:select[@x:id='dateRange']/@b:value)"/>
+<s:variable b:scope="tag" b:name="datePattern" b:select="string(id('Prefs')/$tDatePattern)"/>
+<s:variable b:scope="tag" b:name="dateStart" b:select="string(./@b:start-date)"/>
+<s:variable b:scope="tag" b:name="dateEnd" b:select="string(./@b:end-date)"/>
+<s:variable b:scope="tag" b:name="dateEarliest" b:select="string(./@b:earliest-date)"/>
+<s:variable b:scope="tag" b:name="dateLatest" b:select="string(./@b:latest-date)"/>
+<s:variable b:scope="tag" b:name="dateFixedRange" b:select="string(./@b:fixed-range)"/>
+<s:variable b:scope="tag" b:name="dateControlledRange" b:select="false()"/>
+<s:variable b:scope="tag" b:name="dateMaxRange" b:select="string(./@b:max-range)"/>
+<s:script><![CDATA[
+
+var fixedRangeValue		= _vars['dateFixedRange'][0];			// grabs b:fixed-range from the daterangepicker control
+var defaultRangeValue	= _vars['ref_dateRangeValue'][0];		// grabs the default range from the Date Range selector
+var controlledRange		= _vars['dateControlledRange'][0];		// false (set above)
+if (fixedRangeValue == '' || parseInt(fixedRangeValue) == 0)		
+{
+if (_vars['dateStart'][0] != '' && _vars['dateEnd'][0] != '')	// RANGE NOT AVAILABLE (options turned off)
+{
+if (daterangepicker_determineDateInterval(_vars['dateStart'][0], _vars['dateEnd'][0]) == defaultRangeValue)
+{
+fixedRangeValue = defaultRangeValue;				// NO ENFORCED RANGE (options visible, user-controlled, intiial range is default)
+}
+else
+{
+fixedRangeValue = false;
+daterangepicker_hideDateRange();
+}
+}
+else
+{
+fixedRangeValue = defaultRangeValue;					// NO ENFORCED RANGE (options visible, user-controlled, intiial range is default)
+}
+}
+else if (parseInt(fixedRangeValue) > 0)							// ENFORCED RANGE (options hidden)
+{
+fixedRangeValue = parseInt(fixedRangeValue);
+daterangepicker_hideFixedRangeOptions();
+controlledRange = true;
+}
+else if (fixedRangeValue == 'hidden' || parseInt(fixedRangeValue) <= 0)		// NO ENFORCED RANGE (options hidden, initial range is default)
+{
+fixedRangeValue = false;
+daterangepicker_hideFixedRangeOptions();
+}
+else
+{
+fixedRangeValue = defaultRangeValue;
+}
+var earliestDateValue = latestDateValue = false;
+debug_daterangepicker("HHH: _vars['dateEarliest'][0] = " + _vars['dateEarliest'][0]);
+if (_vars['dateEarliest'][0] != '') earliestDateValue = new Date(_vars['dateEarliest'][0]);
+debug_daterangepicker('III: earliestDateValue (a) = ' + earliestDateValue);
+debug_daterangepicker("JJJ: _vars['dateLatest'][0] = " + _vars['dateLatest'][0]);
+if (_vars['dateLatest'][0] != '') latestDateValue = new Date(_vars['dateLatest'][0]);
+debug_daterangepicker('KKK: latestDateValue (a) = ' + latestDateValue);
+var absoluteMaxDateRange = ( _vars['dateMaxRange'][0] != '' ? parseInt( _vars['dateMaxRange'][0] ) : false );
+if (latestDateValue && earliestDateValue)
+{
+if (!absoluteMaxDateRange || daterangepicker_determineDateInterval(earliestDateValue, latestDateValue) < absoluteMaxDateRange)
+absoluteMaxDateRange = daterangepicker_determineDateInterval(earliestDateValue, latestDateValue);
+}
+else if (absoluteMaxDateRange)
+{
+if (earliestDateValue)
+{
+debug_daterangepicker('LLL: earliestDateValue = ' + earliestDateValue);
+var temp = new Date(earliestDateValue);
+debug_daterangepicker('temp (a) = ' + temp);
+debug_daterangepicker('MMM: latestDateValue = ' + latestDateValue);
+latestDateValue = new Date(temp.setDate(temp.getDate() + absoluteMaxDateRange - 1));
+debug_daterangepicker('latestDateValue (b) = ' + latestDateValue);
+}
+if (latestDateValue)
+{
+debug_daterangepicker('NNN: latestDateValue = ' + latestDateValue);
+var temp = new Date(latestDateValue);
+debug_daterangepicker('temp (b) = ' + temp);
+earliestDateValue = new Date(temp.setDate(temp.getDate() - absoluteMaxDateRange - 1));
+debug_daterangepicker('earliestDateValue (b) = ' + earliestDateValue);
+}
+}
+if (controlledRange)
+{
+if (absoluteMaxDateRange && fixedRangeValue > absoluteMaxDateRange)
+fixedRangeValue = absoluteMaxDateRange;
+else
+absoluteMaxDateRange = fixedRangeValue;
+}
+if (absoluteMaxDateRange)
+{
+bpc.trigger("hide", bpc.xpath(".//b:select[@x:id='dateRange']")[0] );
+}
+var initialStartDate, initialEndDate;
+if (_vars['dateStart'][0] != '')
+{
+debug_daterangepicker('OOO (internal): _vars[\'dateStart\'][0] (a) = ' + _vars['dateStart'][0]);
+initialStartDate = new Date(s25_format_date(_vars['dateStart'][0], 'M/d/yyyy', 'internal'));	// preset start date
+debug_daterangepicker('initialStartDate (a) = ' + initialStartDate);
+if (_vars['dateEnd'][0] != '')
+{
+debug_daterangepicker('PPP (internal): _vars[\'dateEnd\'][0] (a) = ' + _vars['dateEnd'][0]);
+initialEndDate = new Date(s25_format_date(_vars['dateEnd'][0], 'M/d/yyyy', 'internal'));	// preset end date
+debug_daterangepicker('initialEndDate (a) = ' + initialEndDate);
+if (initialEndDate < initialStartDate) 
+initialEndDate = null;
+else
+fixedRangeValue = false;
+}
+}
+else
+{
+initialStartDate = new Date();														// default start date
+}
+if (initialEndDate == null)
+{
+debug_daterangepicker('QQQ: initialStartDate = ' + initialStartDate);
+var temp = new Date(initialStartDate);
+debug_daterangepicker('temp (c) = ' + temp);
+initialEndDate = new Date(temp.setDate(temp.getDate() + 6));						// default end date
+debug_daterangepicker('initialEndDate (b) = ' + initialEndDate);
+}
+bpc.setVariable('dateFixedRange', [fixedRangeValue], 'tag', _current);
+bpc.setVariable('dateControlledRange', [controlledRange], 'tag', _current);
+bpc.setVariable('dateEarliest', [earliestDateValue], 'tag', _current);
+bpc.setVariable('dateLatest', [latestDateValue], 'tag', _current);
+bpc.setVariable('dateMaxRange', [absoluteMaxDateRange], 'tag', _current);
+daterangepicker_setDatepickers(initialStartDate, initialEndDate, 'load');
+var ref_dateRangeNotifier = bpc.xpath(".//div[@x:id='dateRangeNotifier']", _current)[0];
+if (_vars['dateFixedRange'][0] && controlledRange)
+ref_dateRangeNotifier.innerHTML += "<div><strong>Enforced Date Range:</strong> " + _vars['dateFixedRange'][0] + " days</div>";
+if (absoluteMaxDateRange && !controlledRange)
+ref_dateRangeNotifier.innerHTML += "<div><strong>Maximum Date Range:</strong> " + absoluteMaxDateRange + " days</div>";
+if (earliestDateValue)
+ref_dateRangeNotifier.innerHTML += "<div><strong>Earliest Allowed Start:</strong> " + daterangepicker_formatDateString(earliestDateValue) + "</div>";
+if (latestDateValue)
+ref_dateRangeNotifier.innerHTML += "<div><strong>Latest Allowed End:</strong> " + daterangepicker_formatDateString(latestDateValue) + "</div>";
+
+]]></s:script>
+<s:task b:action="trigger" b:event="set" b:target="$ref_datepickerStart"/>
+<s:task b:action="trigger" b:event="set" b:target="$ref_datepickerEnd"/>
+<s:if b:test="$dateMaxRange">
+<s:task b:action="remove" b:target="$ref_dateRange/b:option[@b:value &gt; $dateMaxRange]"/>
+<s:task b:action="trigger" b:event="set" b:target="$ref_dateRange"/>
+<s:task b:action="trigger" b:event="change" b:target="$ref_dateRange"/>
+</s:if>
+<s:choose>
+<s:when b:test="$ref_dateRange/b:option[@b:value = 7]">
+</s:when>
+<s:otherwise>
+<s:task b:action="select" b:target="$ref_dateRange/b:option[@b:value = 1]"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+</div>

@@ -1,0 +1,15 @@
+{variables}
+S, X, Y, Z, A, B, C, D, E, F
+
+{start variable}
+S
+
+{productions}
+S -> % | a | XF | XZ | BZ | YC | c;
+X -> % | a | XF | XZ | BZ | YC | c;
+Y -> % | BZ | YC | c;
+Z -> d | YE | e;
+B -> b;
+C -> c;
+E -> e;
+F -> YZ

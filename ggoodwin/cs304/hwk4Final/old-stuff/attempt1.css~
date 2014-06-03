@@ -1,0 +1,35 @@
+
+body {
+background-color: 333366; 
+color: FFCCCC;
+}
+
+
+.header {
+background-color: #660033;
+height: 100px;
+color: CC33CC;
+}
+
+
+.page {
+width: 700
+}
+
+
+.left {
+background-color: CC33CC;
+width: 300px;
+height: 400px;
+float: left;
+}
+
+
+
+
+.right {
+background-color: 9999CC;
+color: FFCCCC;
+width: 400px;
+float: right;
+}

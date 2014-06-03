@@ -1,0 +1,3022 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:s25="http://www.collegenet.com/s25" xmlns:r25="http://www.collegenet.com/r25" xmlns:xhtml="http://www.w3.org/1999/xhtml" id="Modals" style="display:none;">
+<s:variable b:name="tDataStr" b:scope="tag" b:select=""/>
+<s:variable b:name="tDataXml" b:scope="tag" b:select=""/>
+<s:variable b:name="tRespXml" b:scope="tag" b:select=""/>
+<s:behavior b:name="ModalHacks">
+<s:event b:on="open">
+<s:task b:action="scrollto" b:target="/body[1]" b:animate="false"/>
+<s:variable b:name="lLeft" b:scope="local" b:select="'0'"/>
+<s:variable b:name="lTop" b:scope="local" b:select="'64'"/>
+<s:variable b:name="lWindowW" b:scope="local" b:select="number($bpc_windowWidth)"/>
+<s:variable b:name="lModalW" b:scope="local" b:select="substring-before(style::width,'px')"/>
+<s:variable b:name="lWindowH" b:scope="local" b:select="number($bpc_windowHeight)"/>
+<s:variable b:name="lModalH" b:scope="local" b:select="substring-before(style::height,'px')"/>
+<s:script><![CDATA[
+
+var iWinW = Number(_vars['lWindowW'][0]);
+var iModalW = Number(_vars['lModalW'][0]);
+var iLeft = 0;
+if ( iModalW < iWinW )  iLeft = Math.floor(iWinW / 2 - iModalW / 2);
+bpc.setVariable('lLeft',[iLeft + 'px'],'local');
+var iWinH = Number(_vars['lWindowH'][0]);
+var iModalH = Number(_vars['lModalH'][0]);
+var iTop = 0;
+if ( iModalH < iWinH )  iTop = Math.floor(iWinH / 2 - iModalH / 2);
+bpc.setVariable('lTop',[iTop + 'px'],'local');
+
+]]></s:script>
+<s:task b:action="trigger" b:event="ShowShade" b:target="id('LayoutMgr')"/>
+<s:super/>
+<s:setstyle b:top="{$lTop}" b:left="{$lLeft}"/>
+</s:event>
+<s:event b:on="close">
+<s:super/>
+<s:task b:action="trigger" b:event="CloseModal" b:target="id('LayoutMgr')"/>
+<s:task b:action="trigger" b:event="HideShade" b:target="id('LayoutMgr')"/>
+</s:event>
+</s:behavior>
+<s:event b:on="RenderIconLegendModal">
+<s:render b:mode="aslastchild" b:destination="id('Modals')">
+<b:modal id="IconLegendModal" c:purpose="IconLegend" b:behavior="ModalHacks">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-25live"/>
+<div c:purpose="text" class="modal-header-text">Icon Legend</div>
+</b:modalhead>
+<b:modalbody>
+<table>
+<tr>
+<td style="width:33%">
+<div class="icon-event">Event</div>
+<div class="icon-event-fav">Starred Event</div>
+</td>
+<td style="width:34%">
+<div class="icon-reserve">Create an Event</div>
+<div class="icon-edit">Edit an Event</div>
+</td>
+<td style="width:33%">
+<div class="icon-locked"><span>Locked Event </span> <span class="description">(cannot be edited)</span></div>
+<div class="icon-occurrence">Event Occurrence</div>
+</td>
+</tr>
+<tr valign="top">
+<td>
+<div class="icon-space">Location</div>
+<div class="icon-space-fav">Starred Location</div>
+<div class="icon-space-layout">Location Layout Diagram</div>
+<div class="icon-space-image">Location Image</div>
+</td>
+<td>
+<div class="icon-resource">Resource</div>
+<div class="icon-resource-fav">Starred Resource</div>
+</td>
+<td>
+<div class="icon-org">Organization</div>
+<div class="icon-org-fav">Starred Organization</div>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<div class="icon-favorite"><span>Item is Starred </span> <span class="description">(click to remove from Starred)</span></div>
+<div class="icon-favorite-off"><span>Item is not Starred </span> <span class="description">(click to add to Starred)</span></div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="icon-checkmark">Location has no Conflicts</div>
+<div class="icon-warning">Location has Conflicts</div>
+</td>
+<td>
+<div class="icon-pending">Conflict check is Pending</div>
+<div class="icon-share">Location can be Shared</div>
+</td>
+<td>
+<div class="icon-noperms">No Permissions for this Location</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="icon-task-active">Task (Active/Pending)</div>
+<div class="icon-task-affirmative">Task (Approved/Completed)</div>
+</td>
+<td>
+<div class="icon-task-negative">Task (Denied/Declined)</div>
+<div class="icon-task-cancelled">Task (Cancelled)</div>
+</td>
+</tr>
+<tr>
+<td>
+<div><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_flagged"/>Flagged Task</div>
+<div><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_unflagged"/>Unflagged Task</div>
+</td>
+<td colspan="2">
+<div><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_flagged_disabled"/><span>Flagged Task </span> <span class="description">(user cannot unflag this task)</span></div>
+<div><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="sprite_unflagged_disabled"/><span>Unflagged Task </span> <span class="description">(user cannot flag this task)</span></div>
+</td>
+</tr>
+<tr valign="top">
+<td align="center"><div style="padding:0px"><b><u>Special Cursors</u></b></div><img src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/legend_cursors.gif"/></td>
+<td colspan="2" id="IconLegendModal_SpecialCursors"/>
+</tr>
+</table>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:render b:destination="id('IconLegendModal_SpecialCursors')" b:mode="replacechildren"><span xmlns="">These cursors appear whenever your mouse hovers above the name of a clickable <i>event</i>, <i>location</i> or <i>resource</i>. <b>Clicking</b> on the name will load the default view for that item (usually the Detail view). <b>Right-clicking</b> the item will reveal a menu displaying all available views for the item (Detail, List, Calendar, etc.); choosing a view from this list will load that item using the selected view.</span></s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+
+<s:event b:on="RenderChangePasswordModal">
+<s:render b:mode="asfirstchild" b:destination="id('Modals')">
+<b:modal c:purpose="ChangePasswordModal" id="ChangePasswordModal" b:behavior="ChangePassword">
+<s:variable b:name="tLoginMsg" b:scope="tag" b:select="b:modalbody//div[@c:purpose = 'msg']"/>
+<s:variable b:name="tUsername" b:scope="tag" b:select="b:modalbody//input[@name eq 'UserName'][1]"/>
+<s:variable b:name="tPassword" b:scope="tag" b:select="b:modalbody//input[@name eq 'Password'][1]"/>
+<s:variable b:name="tNewPassword" b:scope="tag" b:select="b:modalbody//input[@name eq 'NewPassword'][1]"/>
+<s:variable b:name="tChangeButton" b:scope="tag" b:select="b:modalbody//b:button[@c:purpose='PasswordChange']"/>
+<s:event b:on="open">
+<s:with b:target="$tUsername">
+<s:task b:action="enable"/>
+<s:setatt value="" b:value=""/>
+</s:with>
+<s:with b:target="$tPassword">
+<s:task b:action="enable"/>
+<s:setatt value="" b:value=""/>
+</s:with>
+<s:render b:destination=".//div[@c:purpose='msg']" b:mode="replacechildren">
+
+</s:render>
+<s:super/>
+<s:task b:action="enable" b:target="$tChangeButton"/>
+<s:task b:action="focus" b:target="$tPassword"/>
+</s:event>
+<s:event b:on="close">
+<s:super/>
+<s:task b:action="trigger" b:event="CloseModal" b:target="id('LayoutMgr')"/>
+</s:event>
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-prefs"/>
+<div c:purpose="text" class="modal-header-text">Change Your Password</div>
+</b:modalhead>
+<b:modalbody>
+<div>
+<table cellspacing="10">
+<tr>
+<td>Username:</td>
+<td>
+<input type="text" name="UserName" value="" class="input-text" onfocus="this.select()">
+<s:event b:on="construct"/>
+<s:event b:on="focus"/>
+<s:event b:on="blur"/>
+</input>
+</td>
+</tr>
+
+<tr>
+<td>New Password:</td>
+<td>
+<input type="password" name="NewPassword" value="" class="input-text" onfocus="this.select()">
+<s:event b:on="construct"/>
+<s:event b:on="focus"/>
+<s:event b:on="blur"/>
+</input>
+</td>
+</tr>
+</table>
+<div style="text-align:center; padding:5px">
+<b:button b:action="trigger" c:purpose="PasswordChange" b:event="OnClickPasswordChange" b:target="ancestor::b:modal">
+Change Password
+</b:button>
+</div>
+</div>
+<div c:purpose="msg" style="text-align:center; padding:10px; font-weight:bold;"/>
+</b:modalbody>
+</b:modal>
+</s:render>
+</s:event>
+<s:event b:on="RenderDatePrefsModal">
+<s:render b:mode="asfirstchild" b:destination="id('Modals')">
+<b:modal c:purpose="DatePrefsModal" id="DatePrefsModal" b:behavior="DatePreferences">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-prefs"/>
+<div c:purpose="text" class="modal-header-text">Date/Time Preferences</div>
+</b:modalhead>
+<b:modalbody>
+<div c:purpose="options">
+<div class="UserPreferenceHeader">Date and Time Display</div>
+<div class="UserPreferenceContent" style="text-align:center">
+<span style="font-style:italic; color:#444">Example Date and Time Display:</span>  <span id="DateDisplayExample">...</span>
+</div>
+<div class="UserPreferenceContent">
+<div class="UserPreferenceSubHeader">Date Order:</div>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="date_order" value="MDY"/> 
+<span b:behavior="ToggleInput">
+Month
+Day
+Year
+</span>
+</span>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="date_order" value="DMY"/> 
+<span b:behavior="ToggleInput">
+Day
+Month
+Year
+</span>
+</span>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="date_order" value="YMD"/> 
+<span b:behavior="ToggleInput">
+Year
+Month
+Day
+</span>
+</span>
+<br style="clear:both"/>
+</div>
+<div class="UserPreferenceContent">
+<div class="UserPreferenceSubHeader">Display Month as:</div>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="month_display" value="N"/> 
+<span b:behavior="ToggleInput">Number</span>
+</span>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="month_display" value="I"/> 
+<span b:behavior="ToggleInput">Name (Initial Caps)</span>
+</span>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="month_display" value="U"/> 
+<span b:behavior="ToggleInput">Name (All Caps)</span>
+</span>
+<br style="clear:both"/>
+</div>
+<div class="UserPreferenceContent">
+<div class="UserPreferenceSubHeader">Display Day as:</div>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="day_display" value="I"/> 
+<span b:behavior="ToggleInput">Name (Initial Caps)</span>
+</span>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="day_display" value="U"/> 
+<span b:behavior="ToggleInput">Name (All Caps)</span>
+</span>
+<br style="clear:both"/>
+</div>
+<div class="UserPreferenceContent">
+<div class="UserPreferenceSubHeader">Date Separator:</div>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="date_separator" value="S"/> 
+<span b:behavior="ToggleInput">Space</span>
+</span>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="date_separator" value="-"/> 
+<span b:behavior="ToggleInput">Hyphen</span>
+</span>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="date_separator" value="/"/> 
+<span b:behavior="ToggleInput">Forward Slash</span>
+</span>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="date_separator" value="\"/> 
+<span b:behavior="ToggleInput">Backward Slash</span>
+</span>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="date_separator" value=","/> 
+<span b:behavior="ToggleInput">Comma</span>
+</span>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="date_separator" value="."/> 
+<span b:behavior="ToggleInput">Period</span>
+</span>
+<br style="clear:both"/>
+</div>
+<div class="UserPreferenceContent">
+<div class="UserPreferenceSubHeader">Time Display:</div>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="time_display" value="12"/> 
+<span b:behavior="ToggleInput">12 hour clock</span>
+</span>
+<span class="option">
+<input type="radio" b:behavior="DateParam" name="time_display" value="24"/> 
+<span b:behavior="ToggleInput">24 hour clock</span>
+</span>
+<br style="clear:both"/>
+</div>
+<div class="UserPreferenceHeader">Availability View Display Hours</div>
+<div class="UserPreferenceContent">
+<span class="option">
+<span>First Hour:</span> 
+<select name="display_start"/>
+</span>
+<span class="option">
+<span>Last Hour:</span> 
+<select name="display_end"/>
+</span>
+<br style="clear:both"/>
+</div>
+</div>
+<div c:purpose="msg" style="text-align:center; padding:10px; font-weight:bold; display:none">
+Preferences Saved.
+<br/><br/>
+Note: You must reload your browser for changes to take effect.
+</div>
+<div c:purpose="buttons" style="text-align:center; padding:20px 5px 5px">
+<b:button c:id="Btn_SavePrefs" b:action="trigger" b:event="SaveDatePrefs" b:target="id('DatePrefsModal')">
+Update Preferences
+</b:button>
+<b:button c:id="Btn_Cancel">
+<s:event b:on="command">
+<s:task b:action="remove" b:target="id('DatePrefsModal')/@c:init"/>
+<s:task b:action="trigger" b:event="close" b:target="id('DatePrefsModal')"/>
+</s:event>
+Cancel
+</b:button>
+<b:button c:id="Btn_ReloadNow" style="display:none">
+<s:event b:on="command">
+<s:script><![CDATA[
+location.reload();
+]]></s:script>
+</s:event>
+Reload Now
+</b:button>
+<b:button c:id="Btn_ReloadLater" b:action="trigger" b:event="close" b:target="id('DatePrefsModal')" style="display:none">
+Reload Later
+</b:button>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+</s:event>
+<s:behavior b:name="DatePreferences" b:behavior="ModalHacks">
+<s:event b:on="open">
+<s:task b:action="hide" b:target=".//div[@c:purpose='msg']"/>
+<s:task b:action="hide" b:target=".//b:button[@c:id='Btn_ReloadNow']"/>
+<s:task b:action="hide" b:target=".//b:button[@c:id='Btn_ReloadLater']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_SavePrefs']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_SavePrefs']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:if b:test="not(@c:init = '1')">
+<s:variable b:name="lDatePreferences" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'preference.xml?name=DateOrder+Month+Day+DateSep+TimeDisplay+OfficeHours')}" b:destination="$lDatePreferences">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lDatePreferences"/>
+<s:choose>
+<s:when b:test="string($lDatePreferences//r25:preference[r25:preference_name='TimeDisplay']/r25:preference_value) = '24'">
+<s:render b:destination=".//select[@name='display_start']" b:mode="replace">
+<select name="display_start">
+<option value="0000"> 0000 </option>
+<option value="0100"> 0100 </option>
+<option value="0200"> 0200 </option>
+<option value="0300"> 0300 </option>
+<option value="0400"> 0400 </option>
+<option value="0500"> 0500 </option>
+<option value="0600"> 0600 </option>
+<option value="0700"> 0700 </option>
+<option value="0800"> 0800 </option>
+<option value="0900"> 0900 </option>
+<option value="1000"> 1000 </option>
+<option value="1100"> 1100 </option>
+<option value="1200"> 1200 </option>
+<option value="1300"> 1300 </option>
+<option value="1400"> 1400 </option>
+<option value="1500"> 1500 </option>
+<option value="1600"> 1600 </option>
+<option value="1700"> 1700 </option>
+<option value="1800"> 1800 </option>
+<option value="1900"> 1900 </option>
+<option value="2000"> 2000 </option>
+<option value="2100"> 2100 </option>
+<option value="2200"> 2200 </option>
+<option value="2300"> 2300 </option>
+</select>
+</s:render>
+</s:when>
+<s:otherwise>
+<s:render b:destination=".//select[@name='display_start']" b:mode="replace">
+<select name="display_start">
+<option value="0000"> 12:00am </option>
+<option value="0100"> 1:00am </option>
+<option value="0200"> 2:00am </option>
+<option value="0300"> 3:00am </option>
+<option value="0400"> 4:00am </option>
+<option value="0500"> 5:00am </option>
+<option value="0600"> 6:00am </option>
+<option value="0700"> 7:00am </option>
+<option value="0800"> 8:00am </option>
+<option value="0900"> 9:00am </option>
+<option value="1000"> 10:00am </option>
+<option value="1100"> 11:00am </option>
+<option value="1200"> 12:00pm </option>
+<option value="1300"> 1:00pm </option>
+<option value="1400"> 2:00pm </option>
+<option value="1500"> 3:00pm </option>
+<option value="1600"> 4:00pm </option>
+<option value="1700"> 5:00pm </option>
+<option value="1800"> 6:00pm </option>
+<option value="1900"> 7:00pm </option>
+<option value="2000"> 8:00pm </option>
+<option value="2100"> 9:00pm </option>
+<option value="2200"> 10:00pm </option>
+<option value="2300"> 11:00pm </option>
+</select>
+</s:render>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lSelectDisplayStart" b:select=".//select[@name='display_start']"/>
+<s:variable b:name="lSelectDisplayEnd" b:select=".//select[@name='display_end']"/>
+<s:for-each b:target="$lSelectDisplayStart/option">
+<s:task b:action="copy" b:source="$_target" b:destination="$lSelectDisplayEnd" b:mode="aslastchild"/>
+</s:for-each>
+<s:variable b:name="lDisplayHours" b:select="string($lDatePreferences//r25:preference[r25:preference_name='OfficeHours']/r25:preference_value)"/>
+<s:variable b:name="lDisplayStart" b:select="concat(substring($lDisplayHours,1,4))"/>
+<s:task b:test="starts-with($lDisplayHours,'00000000')" b:action="assign" b:target="$lDisplayStart" b:select="concat(substring($lDisplayHours,9,4))"/>
+<s:variable b:name="lDisplayEnd" b:select="concat(substring($lDisplayHours,8,4))"/>
+<s:task b:test="starts-with($lDisplayHours,'00000000')" b:action="assign" b:target="$lDisplayEnd" b:select="concat(substring($lDisplayHours,27,4))"/>
+<s:task b:action="select" b:target="$lSelectDisplayStart/option[@value = $lDisplayStart]"/>
+<s:task b:action="select" b:target="$lSelectDisplayEnd/option[@value = $lDisplayEnd]"/>
+<s:with b:target=".//input[@name='date_order' and @value = string($lDatePreferences//r25:preference[r25:preference_name='DateOrder']/r25:preference_value)]">
+<s:setatt checked="checked" b:state="selected"/>
+</s:with>
+<s:with b:target=".//input[@name='month_display' and @value = string($lDatePreferences//r25:preference[r25:preference_name='Month']/r25:preference_value)]">
+<s:setatt checked="checked" b:state="selected"/>
+</s:with>
+<s:with b:target=".//input[@name='day_display' and @value = string($lDatePreferences//r25:preference[r25:preference_name='Day']/r25:preference_value)]">
+<s:setatt checked="checked" b:state="selected"/>
+</s:with>
+<s:variable b:name="lDateSep" b:select="string($lDatePreferences//r25:preference[r25:preference_name='DateSep']/r25:preference_value)"/>
+<s:task b:test="$lDateSep = ''" b:action="assign" b:target="$lDateSep" b:select="'S'"/>
+<s:with b:target=".//input[@name='date_separator' and @value = $lDateSep]">
+<s:setatt checked="checked" b:state="selected"/>
+</s:with>
+<s:with b:target=".//input[@name='time_display' and @value = string($lDatePreferences//r25:preference[r25:preference_name='TimeDisplay']/r25:preference_value)]">
+<s:setatt checked="checked" b:state="selected"/>
+</s:with>
+<s:task b:action="trigger" b:event="UpdateDateDisplayExample"/>
+<s:setatt c:init="1"/>
+</s:if>
+<s:super/>
+</s:event>
+<s:event b:on="UpdateDateDisplayExample">
+<s:variable b:name="lDateOrder" b:select="string(.//input[@name='date_order' and @b:state='selected']/@value)"/>
+<s:variable b:name="lMonth" b:select="string(.//input[@name='month_display' and @b:state='selected']/@value)"/>
+<s:variable b:name="lDay" b:select="string(.//input[@name='day_display' and @b:state='selected']/@value)"/>
+<s:variable b:name="lDateSep" b:select="string(.//input[@name='date_separator' and @b:state='selected']/@value)"/>
+<s:variable b:name="lTimeDisplay" b:select="string(.//input[@name='time_display' and @b:state='selected']/@value)"/>
+<s:variable b:name="lCurrentDate" b:select="substring(replace(current-date(),'-',''),1,8)"/>
+<s:variable b:name="lCurrentTime" b:select="substring(current-time(),1,5)"/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'null.xml', '?otransform=',id('Config')/$tXslPrefix,'date_display.xsl', '&amp;current_date=',$lCurrentDate, '&amp;current_time=',$lCurrentTime, '&amp;date_params=', 'date_order: ', $lDateOrder, ';', 'month_display: ', $lMonth, ';', 'day_display: ', $lDay, ';', 'date_sep: ', $lDateSep, ';', 'time_display: ', $lTimeDisplay )}" b:destination="id('DateDisplayExample')" b:mode="replacechildren"/>
+</s:event>
+<s:event b:on="SaveDatePrefs">
+<s:choose>
+<s:when b:test="number(.//select[@name='display_start']/option[@b:state='selected']/@value) gt number(.//select[@name='display_end']/option[@b:state='selected']/@value)">
+<s:task b:action="alert" b:value="End Hour must be after Start Hour."/>
+<s:task b:action="focus" b:target=".//select[@name='display_start']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="disable" b:target=".//b:button[@c:id='Btn_SavePrefs']"/>
+<s:task b:action="disable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:variable b:name="lDisplayStart" b:select="concat('00000000', string(.//select[@name='display_start']/option[@b:state='selected']/@value), '0000')"/>
+<s:variable b:name="lDisplayEnd" b:select="concat('00000000', string(.//select[@name='display_end']/option[@b:state='selected']/@value), '0000')"/>
+<s:variable b:name="lDisplayHours" b:select="string(id('Pref_OfficeHours'))"/>
+<s:choose>
+<s:when b:test="string-length($lDisplayHours) = 0">
+<s:task b:action="assign" b:target="$lDisplayHours" b:select="concat($lDisplayStart, '\;', $lDisplayEnd, '\;1\!\;2\!\;3\!\;4\!\;5\!\;6\!\;7')"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lDaysOfWeek" b:select="substring-after(substring-after($lDisplayHours,'\;'),'\;')"/>
+<s:task b:action="assign" b:target="$lDisplayHours" b:select="concat($lDisplayStart, '\;', $lDisplayEnd, '\;', $lDaysOfWeek)"/>
+</s:otherwise>
+</s:choose>
+<s:if b:test="not($lDisplayHours = string(id('Pref_OfficeHours')))">
+<s:task b:action="settext" b:target="id('Pref_OfficeHours')" b:value="{$lDisplayHours}"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_OfficeHours')"/>
+</s:if>
+<s:variable b:name="lDateOrder" b:select="string(.//input[@name='date_order' and @b:state='selected']/@value)"/>
+<s:if b:test="not($lDateOrder = string(id('Pref_DateOrder')))">
+<s:task b:action="settext" b:target="id('Pref_DateOrder')" b:value="{$lDateOrder}"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_DateOrder')"/>
+</s:if>
+<s:variable b:name="lMonth" b:select="string(.//input[@name='month_display' and @b:state='selected']/@value)"/>
+<s:if b:test="not($lMonth = string(id('Pref_Month')))">
+<s:task b:action="settext" b:target="id('Pref_Month')" b:value="{$lMonth}"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_Month')"/>
+</s:if>
+<s:variable b:name="lDay" b:select="string(.//input[@name='day_display' and @b:state='selected']/@value)"/>
+<s:if b:test="not($lDay = string(id('Pref_Day')))">
+<s:task b:action="settext" b:target="id('Pref_Day')" b:value="{$lDay}"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_Day')"/>
+</s:if>
+<s:variable b:name="lDateSep" b:select="string(.//input[@name='date_separator' and @b:state='selected']/@value)"/>
+<s:if b:test="not($lDateSep = string(id('Pref_DateSep')))">
+<s:task b:action="settext" b:target="id('Pref_DateSep')" b:value="{$lDateSep}"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_DateSep')"/>
+</s:if>
+<s:variable b:name="lTimeDisplay" b:select="string(.//input[@name='time_display' and @b:state='selected']/@value)"/>
+<s:if b:test="not($lTimeDisplay = string(id('Pref_TimeDisplay')))">
+<s:task b:action="settext" b:target="id('Pref_TimeDisplay')" b:value="{$lTimeDisplay}"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_TimeDisplay')"/>
+</s:if>
+<s:task b:action="hide" b:target=".//b:button[@c:id='Btn_SavePrefs']"/>
+<s:task b:action="hide" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:task b:action="show" b:target=".//div[@c:purpose='msg']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_ReloadNow']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_ReloadLater']"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:behavior b:name="DateParam">
+<s:event b:on="command">
+<s:if b:test="@b:state = 'selected'">
+<s:task b:action="hide" b:target="id('DatePrefsModal')//b:button[@c:id='Btn_ReloadNow']"/>
+<s:task b:action="hide" b:target="id('DatePrefsModal')//b:button[@c:id='Btn_ReloadLater']"/>
+<s:task b:action="hide" b:target="id('DatePrefsModal')//div[@c:purpose='msg']"/>
+<s:task b:action="enable" b:target="id('DatePrefsModal')//b:button[@c:id='Btn_SavePrefs']"/>
+<s:task b:action="enable" b:target="id('DatePrefsModal')//b:button[@c:id='Btn_Cancel']"/>
+<s:task b:action="show" b:target="id('DatePrefsModal')//b:button[@c:id='Btn_SavePrefs']"/>
+<s:task b:action="show" b:target="id('DatePrefsModal')//b:button[@c:id='Btn_Cancel']"/>
+<s:if b:test="not(@name = 'week_start_day')">
+<s:task b:action="trigger" b:event="UpdateDateDisplayExample" b:target="id('DatePrefsModal')"/>
+</s:if>
+</s:if>
+</s:event>
+</s:behavior>
+<s:event b:on="RenderCalendarPrefsModal">
+<s:render b:mode="asfirstchild" b:destination="id('Modals')">
+<b:modal c:purpose="CalendarPrefsModal" id="CalendarPrefsModal" b:behavior="CalendarPreferences">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-prefs"/>
+<div c:purpose="text" class="modal-header-text">Date/Time Preferences</div>
+</b:modalhead>
+<b:modalbody>
+<div c:purpose="options">
+<div class="UserPreferenceHeader">Start Day of Week</div>
+<div class="UserPreferenceContent">
+<span class="option weekday">
+<input type="radio" b:behavior="DateParam" name="week_start_day" value="0"/> 
+<span b:behavior="ToggleInput">Sunday</span>
+</span>
+<span class="option weekday">
+<input type="radio" b:behavior="DateParam" name="week_start_day" value="1"/> 
+<span b:behavior="ToggleInput">Monday</span>
+</span>
+<span class="option weekday">
+<input type="radio" b:behavior="DateParam" name="week_start_day" value="2"/> 
+<span b:behavior="ToggleInput">Tuesday</span>
+</span>
+<span class="option weekday">
+<input type="radio" b:behavior="DateParam" name="week_start_day" value="3"/> 
+<span b:behavior="ToggleInput">Wednesday</span>
+</span>
+<span class="option weekday">
+<input type="radio" b:behavior="DateParam" name="week_start_day" value="4"/> 
+<span b:behavior="ToggleInput">Thursday</span>
+</span>
+<span class="option weekday">
+<input type="radio" b:behavior="DateParam" name="week_start_day" value="5"/> 
+<span b:behavior="ToggleInput">Friday</span>
+</span>
+<span class="option weekday">
+<input type="radio" b:behavior="DateParam" name="week_start_day" value="6"/> 
+<span b:behavior="ToggleInput">Saturday</span>
+</span>
+<br style="clear:both"/>
+</div>
+</div>
+<div c:purpose="msg" style="text-align:center; padding:10px; font-weight:bold; display:none">
+Preferences Saved.
+<br/><br/>
+Note: You must reload your browser for changes to take effect.
+</div>
+<div c:purpose="buttons" style="text-align:center; padding:20px 5px 5px">
+<b:button c:id="Btn_SavePrefs" b:action="trigger" b:event="SaveCalendarPrefs" b:target="id('CalendarPrefsModal')">
+Update Preferences
+</b:button>
+<b:button c:id="Btn_Cancel">
+<s:event b:on="command">
+<s:task b:action="remove" b:target="id('CalendarPrefsModal')/@c:init"/>
+<s:task b:action="trigger" b:event="close" b:target="id('CalendarPrefsModal')"/>
+</s:event>
+Cancel
+</b:button>
+<b:button c:id="Btn_ReloadNow" style="display:none">
+<s:event b:on="command">
+<s:script><![CDATA[
+location.reload();
+]]></s:script>
+</s:event>
+Reload Now
+</b:button>
+<b:button c:id="Btn_ReloadLater" b:action="trigger" b:event="close" b:target="id('CalendarPrefsModal')" style="display:none">
+Reload Later
+</b:button>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+</s:event>
+<s:behavior b:name="CalendarPreferences" b:behavior="ModalHacks">
+<s:event b:on="open">
+<s:task b:action="hide" b:target=".//div[@c:purpose='msg']"/>
+<s:task b:action="hide" b:target=".//b:button[@c:id='Btn_ReloadNow']"/>
+<s:task b:action="hide" b:target=".//b:button[@c:id='Btn_ReloadLater']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_SavePrefs']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_SavePrefs']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:if b:test="not(@c:init = '1')">
+<s:variable b:name="lCalendarPreferences" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'preference.xml?name=CalendarView')}" b:destination="$lCalendarPreferences">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lCalendarPreferences"/>
+<s:with b:target=".//input[@name='week_start_day' and @value = id('Prefs')/$tWeekStartDay]">
+<s:setatt checked="checked" b:state="selected"/>
+</s:with>
+<s:setatt c:init="1"/>
+</s:if>
+<s:super/>
+</s:event>
+<s:event b:on="SaveCalendarPrefs">
+<s:task b:action="disable" b:target=".//b:button[@c:id='Btn_SavePrefs']"/>
+<s:task b:action="disable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:variable b:name="lWeekStartDay" b:select="string(.//input[@name='week_start_day' and @b:state='selected']/@value)"/>
+<s:if b:test="not($lWeekStartDay = substring(id('Pref_CalendarView'),1,1))">
+<s:task b:action="settext" b:target="id('Pref_CalendarView')" b:value="{concat($lWeekStartDay, substring(id('Pref_CalendarView'),2))}"/>
+<s:task b:action="trigger" b:event="Save" b:target="id('Pref_CalendarView')"/>
+</s:if>
+<s:task b:action="hide" b:target=".//b:button[@c:id='Btn_SavePrefs']"/>
+<s:task b:action="hide" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:task b:action="show" b:target=".//div[@c:purpose='msg']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_ReloadNow']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_ReloadLater']"/>
+</s:event>
+</s:behavior>
+<s:event b:on="RenderContactInfoModal">
+<s:render b:mode="asfirstchild" b:destination="id('Modals')">
+<b:modal c:purpose="ContactInfoModal" id="ContactInfoModal" b:behavior="ContactInfo">
+<s:variable b:name="lContactInfo" b:scope="global" b:select=""/>
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-prefs"/>
+<div c:purpose="text" class="modal-header-text">Edit Your Contact Information</div>
+</b:modalhead>
+<b:modalbody>
+<div c:purpose="contact_info">
+<b:accordeon style="width:100%">
+<b:accordeonhead class="contains_required">Basic Information</b:accordeonhead>
+<b:accordeonbody>
+<div class="UserPreferenceContent">
+<div>
+<table cellspacing="10">
+<tr>
+<td>Name Prefix:</td>
+<td>
+<input type="text" name="ContactNamePrefix" maxlength="20" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>First Name:</td>
+<td>
+<input type="text" name="ContactFirstName" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Middle Name:</td>
+<td>
+<input type="text" name="ContactMiddleName" maxlength="80" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Last Name:</td>
+<td>
+<input type="text" name="ContactLastName" maxlength="40" value="" class="input-text" b:required="true" onfocus="this.select()"/> <span class="required">*</span>
+</td>
+</tr>
+<tr>
+<td>Name Suffix:</td>
+<td>
+<input type="text" name="ContactNameSuffix" maxlength="20" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Title:</td>
+<td>
+<input type="text" name="ContactTitle" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Internal ID:</td>
+<td>
+<input type="text" name="ContactInternalId" maxlength="30" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</b:accordeonbody>
+<b:accordeonhead class="contains_required">Work Address</b:accordeonhead>
+<b:accordeonbody>
+<div class="UserPreferenceContent">
+<div>
+<table cellspacing="10">
+<tr>
+<td>Street Address:</td>
+<td>
+<input type="text" name="ContactWorkStreetAddress" maxlength="150" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>City:</td>
+<td>
+<input type="text" name="ContactWorkCity" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>State / Province:</td>
+<td>
+<input type="text" name="ContactWorkState" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Zip / Postal Code:</td>
+<td>
+<input type="text" name="ContactWorkZip" maxlength="20" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Country:</td>
+<td>
+<input type="text" name="ContactWorkCountry" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Phone:</td>
+<td>
+<input type="text" name="ContactWorkPhone" maxlength="24" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>FAX:</td>
+<td>
+<input type="text" name="ContactWorkFax" maxlength="24" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Email:</td>
+<td>
+<input type="text" name="ContactWorkEmail" maxlength="80" value="" class="input-text" b:required="true" onfocus="this.select()" b:behavior="ValidEmail"/> <span class="required">*</span>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</b:accordeonbody>
+<b:accordeonhead>Home Address</b:accordeonhead>
+<b:accordeonbody>
+<div class="UserPreferenceContent">
+<div>
+<table cellspacing="10">
+<tr>
+<td>Street Address:</td>
+<td>
+<input type="text" name="ContactHomeStreetAddress" maxlength="150" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>City:</td>
+<td>
+<input type="text" name="ContactHomeCity" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>State / Province:</td>
+<td>
+<input type="text" name="ContactHomeState" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Zip / Postal Code:</td>
+<td>
+<input type="text" name="ContactHomeZip" maxlength="20" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Country:</td>
+<td>
+<input type="text" name="ContactHomeCountry" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Phone:</td>
+<td>
+<input type="text" name="ContactHomePhone" maxlength="24" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>FAX:</td>
+<td>
+<input type="text" name="ContactHomeFax" maxlength="24" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Email:</td>
+<td>
+<input type="text" name="ContactHomeEmail" maxlength="80" value="" class="input-text" onfocus="this.select()" b:behavior="ValidEmail"/>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</b:accordeonbody>
+</b:accordeon>
+</div>
+<div c:purpose="msg" style="text-align:center; padding:10px; font-weight:bold; display:none">
+Preferences Saved.
+<br/><br/>
+Note: You must reload your browser for changes to take effect.
+</div>
+<div c:purpose="buttons" style="text-align:center; padding:20px 5px 5px">
+<b:button c:id="Btn_SaveContactInfo" b:action="trigger" b:event="SaveContactInfo" b:target="id('ContactInfoModal')">
+Save Contact Information
+</b:button>
+<b:button c:id="Btn_Cancel">
+<s:event b:on="command">
+<s:task b:action="remove" b:target="id('ContactInfoModal')/@c:init"/>
+<s:task b:action="trigger" b:event="close" b:target="id('ContactInfoModal')"/>
+</s:event>
+Cancel
+</b:button>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+</s:event>
+<s:behavior b:name="ContactInfo" b:behavior="ModalHacks">
+<s:event b:on="open">
+<s:task b:action="hide" b:target=".//div[@c:purpose='msg']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_SaveContactInfo']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_SaveContactInfo']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:if b:test="not(@c:init = '1')">
+<s:variable b:name="lContactID" b:scope="local" b:select="id('WSSessionMgr')/@c:contact-id"/>
+<s:variable b:name="lLockUserXml" b:scope="local">
+<r25:locks>
+<r25:lock>
+<r25:lock_item_id/>
+<r25:lock_item_type>3</r25:lock_item_type>
+</r25:lock>
+</r25:locks>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lLockUserXml"/>
+<s:task b:action="settext" b:target="$lLockUserXml/r25:locks/r25:lock/r25:lock_item_id" b:value="{$lContactID}"/>
+<s:variable b:name="lLockUserResultXML" b:scope="local" b:select=""/>
+<s:task b:action="xml2string" b:variable="$lLockUserXml"/>
+<s:task b:action="load" b:method="POST" b:url="{concat(id('Config')/$tWsPrefix,'locks.xml?lock_item_id=',$lContactID)}" b:data="{$lLockUserXml}" b:destination="$lLockUserResultXML">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lLockUserResultXML"/>
+<s:choose>
+<s:when b:test="$lLockUserResultXML//r25:results/r25:info/r25:msg_id = 'SY_I_SUCCESS'">
+<s:render b:destination="id('LockedContacts')" b:mode="aslastchild">
+<lock contact_id="{$lContactID}"/>
+</s:render>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'contact.xml','?contact_id=',$lContactID)}" b:destination="$lContactInfo">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:variable b:name="lContactInfoXML" b:select="$lContactInfo"/>
+<s:task b:action="string2xml" b:variable="$lContactInfoXML"/>
+<s:with b:target=".//input[@name='ContactNamePrefix']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:name_prefix}"/></s:with>			
+<s:with b:target=".//input[@name='ContactFirstName']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:first_name}"/></s:with>
+<s:with b:target=".//input[@name='ContactMiddleName']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:middle_name}"/></s:with>
+<s:with b:target=".//input[@name='ContactLastName']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:last_name}"/></s:with>
+<s:with b:target=".//input[@name='ContactNameSuffix']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:name_suffix}"/></s:with>
+<s:with b:target=".//input[@name='ContactTitle']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:title}"/></s:with>
+<s:with b:target=".//input[@name='ContactInternalId']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:internal_id}"/></s:with>
+<s:with b:target=".//input[@name='ContactWorkStreetAddress']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:street_address}"/></s:with>			
+<s:with b:target=".//input[@name='ContactWorkCity']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:city}"/></s:with>
+<s:with b:target=".//input[@name='ContactWorkState']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:state_prov}"/></s:with>
+<s:with b:target=".//input[@name='ContactWorkZip']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:zip_post}"/></s:with>
+<s:with b:target=".//input[@name='ContactWorkCountry']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:country}"/></s:with>
+<s:with b:target=".//input[@name='ContactWorkPhone']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:phone}"/></s:with>
+<s:with b:target=".//input[@name='ContactWorkFax']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:fax}"/></s:with>
+<s:with b:target=".//input[@name='ContactWorkEmail']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:email}"/></s:with>
+<s:with b:target=".//input[@name='ContactHomeStreetAddress']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:street_address}"/></s:with>			
+<s:with b:target=".//input[@name='ContactHomeCity']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:city}"/></s:with>
+<s:with b:target=".//input[@name='ContactHomeState']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:state_prov}"/></s:with>
+<s:with b:target=".//input[@name='ContactHomeZip']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:zip_post}"/></s:with>
+<s:with b:target=".//input[@name='ContactHomeCountry']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:country}"/></s:with>
+<s:with b:target=".//input[@name='ContactHomePhone']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:phone}"/></s:with>
+<s:with b:target=".//input[@name='ContactHomeFax']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:fax}"/></s:with>
+<s:with b:target=".//input[@name='ContactHomeEmail']"><s:setatt value="{$lContactInfoXML//r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:email}"/></s:with>			
+<s:setatt c:init="1"/>
+</s:when>
+<s:otherwise>
+<s:setatt c:init="0"/>
+<s:task b:action="remove" b:target="id('LockedContacts')/lock[@contact_id = $lContactID]"/>
+<s:task b:action="disable" b:target=".//b:button[@c:id='Btn_SaveContactInfo']"/>
+<s:task b:action="alert" b:value="Your contact information cannot edited at this time. It may be locked by an administrator or process."/>
+</s:otherwise>
+</s:choose>
+</s:if>
+<s:super/>
+<s:if b:test="@c:init = '0'">
+<s:task b:action="trigger" b:event="close" b:target="id('ContactInfoModal')"/>
+</s:if>
+</s:event>
+<s:event b:on="close">
+<s:task b:action="remove" b:target="id('ContactInfoModal')/@c:init"/>
+<s:task b:action="trigger" b:event="CleanupContactInfoLock" b:usebehavior="ContactInfo"/>
+<s:super/>
+</s:event>
+<s:event b:on="SaveContactInfo">
+<s:choose>
+<s:when b:test=".//input/@b:valid = 'required'">
+<s:task b:action="alert" b:value="Last Name and Work Email are required fields. Please make sure both fields have valid information."/>
+<s:task b:action="focus" b:target="//input[@b:valid = 'required'][1]"/>
+</s:when>
+<s:when b:test=".//input/@valid = 'false'">
+<s:task b:action="alert" b:value="One or more of your email addresses is invalid. Please recheck and try again."/>			
+</s:when>
+<s:otherwise>
+<s:task b:action="disable" b:target=".//b:button[@c:id='Btn_SaveContactInfo']"/>
+<s:task b:action="disable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:variable b:name="lContactInfoXML" b:select="$lContactInfo"/>
+<s:task b:action="string2xml" b:variable="$lContactInfoXML"/>
+<s:task b:action="set" b:target="$lContactInfoXML/r25:contacts/r25:contact/@status" b:value="mod"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:name_prefix" b:value="{b:modalbody//input[@name='ContactNamePrefix']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:first_name" b:value="{b:modalbody//input[@name='ContactFirstName']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:middle_name" b:value="{b:modalbody//input[@name='ContactMiddleName']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:last_name" b:value="{b:modalbody//input[@name='ContactLastName']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:name_suffix" b:value="{b:modalbody//input[@name='ContactNameSuffix']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:title" b:value="{b:modalbody//input[@name='ContactTitle']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:internal_id" b:value="{b:modalbody//input[@name='ContactInternalId']/@value}"/>
+<s:task b:action="set" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/@status" b:value="mod"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:street_address" b:value="{b:modalbody//input[@name='ContactWorkStreetAddress']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:city" b:value="{b:modalbody//input[@name='ContactWorkCity']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:state_prov" b:value="{b:modalbody//input[@name='ContactWorkState']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:zip_post" b:value="{b:modalbody//input[@name='ContactWorkZip']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:country" b:value="{b:modalbody//input[@name='ContactWorkCountry']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:phone" b:value="{b:modalbody//input[@name='ContactWorkPhone']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:fax" b:value="{b:modalbody//input[@name='ContactWorkFax']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:email" b:value="{b:modalbody//input[@name='ContactWorkEmail']/@value}"/>
+<s:task b:action="set" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/@status" b:value="mod"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:street_address" b:value="{b:modalbody//input[@name='ContactHomeStreetAddress']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:city" b:value="{b:modalbody//input[@name='ContactHomeCity']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:state_prov" b:value="{b:modalbody//input[@name='ContactHomeState']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:zip_post" b:value="{b:modalbody//input[@name='ContactHomeZip']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:country" b:value="{b:modalbody//input[@name='ContactHomeCountry']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:phone" b:value="{b:modalbody//input[@name='ContactHomePhone']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:fax" b:value="{b:modalbody//input[@name='ContactHomeFax']/@value}"/>
+<s:task b:action="settext" b:target="$lContactInfoXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:email" b:value="{b:modalbody//input[@name='ContactHomeEmail']/@value}"/>
+<s:variable b:name="lContactInfoXMLResult" b:scope="local" select=""/>
+<s:variable b:name="lWSPrefix" b:scope="local" b:select="id('Config')/$tWsPrefix"/>
+<s:variable b:name="lContactID" b:scope="local" b:select="id('WSSessionMgr')/@c:contact-id"/>
+<s:task b:action="xml2string" b:variable="$lContactInfoXML"/>
+<s:task b:action="load" b:method="PUT" b:url="{concat($lWSPrefix,'contact.xml?contact_id=',$lContactID)}" b:data="{$lContactInfoXML}" b:destination="$lContactInfoXMLResult">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="trigger" b:event="CleanupContactInfoLock" b:usebehavior="ContactInfo"/>
+<s:task b:action="string2xml" b:variable="$lContactInfoXMLResult"/>
+<s:choose>
+<s:when b:test="$lContactInfoXMLResult/r25:results/r25:info/r25:msg_id = 'CO_I_SAVE'">
+<s:task b:action="alert" b:value="Contact information updated successfully!"/>
+<s:task b:action="trigger" b:event="close" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="alert" b:value="Contact information was not updated."/>
+</s:otherwise>
+</s:choose>			
+<s:task b:action="remove" b:target="id('ContactInfoModal')/@c:init"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="CleanupContactInfoLock">
+<s:variable b:name="lContactID" b:scope="local" b:select="id('WSSessionMgr')/@c:contact-id"/>
+<s:choose>
+<s:when b:test="exists(id('LockedContacts')/lock[@contact_id = $lContactID])">
+<s:variable b:name="lUnlockUserResultXML" b:scope="local"/>
+<s:task b:action="load" b:method="DELETE" b:url="{concat(id('Config')/$tWsPrefix,'lock.xml?lock_item_id=',$lContactID,'&amp;lock_item_type=3')}" b:destination="$lUnlockUserResultXML">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lUnlockUserResultXML"/>
+<s:choose>
+<s:when b:test="$lUnlockUserResultXML/r25:results/r25:info/r25:msg_id = 'SY_I_UPDATED'">
+<s:task b:action="remove" b:target="id('LockedContacts')/lock[@contact_id = $lContactID]"/>
+</s:when>
+<s:otherwise>
+</s:otherwise>
+</s:choose>
+<s:task b:action="remove" b:target="id('ContactInfoModal')/@c:init"/>
+</s:when>
+<s:otherwise>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:event b:on="RenderContactNewModal">
+<s:render b:mode="asfirstchild" b:destination="id('Modals')">
+<b:modal c:purpose="ContactNewModal" id="ContactNewModal" b:behavior="ContactNew">
+<s:variable b:name="lContactNew" b:scope="global" b:select=""/>
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-prefs"/>
+<div c:purpose="text" class="modal-header-text">Add Contact</div>
+</b:modalhead>
+<b:modalbody>
+<div c:purpose="contact_new">
+<b:accordeon style="width:100%">
+<b:accordeonhead class="contains_required">Basic Information</b:accordeonhead>
+<b:accordeonbody>
+<div class="UserPreferenceContent">
+<div>
+<table cellspacing="10">
+<tr>
+<td>Name Prefix:</td>
+<td>
+<input type="text" name="ContactNamePrefix" maxlength="20" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>First Name:</td>
+<td>
+<input type="text" name="ContactFirstName" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Middle Name:</td>
+<td>
+<input type="text" name="ContactMiddleName" maxlength="80" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Last Name:</td>
+<td>
+<input type="text" name="ContactLastName" maxlength="40" value="" class="input-text" b:required="true" onfocus="this.select()"/> <span class="required">*</span>
+</td>
+</tr>
+<tr>
+<td>Name Suffix:</td>
+<td>
+<input type="text" name="ContactNameSuffix" maxlength="20" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Title:</td>
+<td>
+<input type="text" name="ContactTitle" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Internal ID:</td>
+<td>
+<input type="text" name="ContactInternalId" maxlength="30" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</b:accordeonbody>
+<b:accordeonhead class="contains_required">Work Address</b:accordeonhead>
+<b:accordeonbody>
+<div class="UserPreferenceContent">
+<div>
+<table cellspacing="10">
+<tr>
+<td>Street Address:</td>
+<td>
+<input type="text" name="ContactWorkStreetAddress" maxlength="150" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>City:</td>
+<td>
+<input type="text" name="ContactWorkCity" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>State / Province:</td>
+<td>
+<input type="text" name="ContactWorkState" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Zip / Postal Code:</td>
+<td>
+<input type="text" name="ContactWorkZip" maxlength="20" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Country:</td>
+<td>
+<input type="text" name="ContactWorkCountry" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Phone:</td>
+<td>
+<input type="text" name="ContactWorkPhone" maxlength="24" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>FAX:</td>
+<td>
+<input type="text" name="ContactWorkFax" maxlength="24" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Email:</td>
+<td>
+<input type="text" name="ContactWorkEmail" maxlength="80" value="" class="input-text" b:required="true" onfocus="this.select()"/> <span class="required">*</span>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</b:accordeonbody>
+<b:accordeonhead>Home Address</b:accordeonhead>
+<b:accordeonbody>
+<div class="UserPreferenceContent">
+<div>
+<table cellspacing="10">
+<tr>
+<td>Street Address:</td>
+<td>
+<input type="text" name="ContactHomeStreetAddress" maxlength="150" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>City:</td>
+<td>
+<input type="text" name="ContactHomeCity" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>State / Province:</td>
+<td>
+<input type="text" name="ContactHomeState" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Zip / Postal Code:</td>
+<td>
+<input type="text" name="ContactHomeZip" maxlength="20" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Country:</td>
+<td>
+<input type="text" name="ContactHomeCountry" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Phone:</td>
+<td>
+<input type="text" name="ContactHomePhone" maxlength="24" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>FAX:</td>
+<td>
+<input type="text" name="ContactHomeFax" maxlength="24" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Email:</td>
+<td>
+<input type="text" name="ContactHomeEmail" maxlength="80" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</b:accordeonbody>
+</b:accordeon>
+</div>
+<div c:purpose="buttons" style="text-align:center; padding:20px 5px 5px">
+<b:button c:id="Btn_SaveContactNew" b:action="trigger" b:event="SaveContactNew" b:target="id('ContactNewModal')">
+Create New Contact
+</b:button>
+<b:button c:id="Btn_Cancel">
+<s:event b:on="command">
+<s:task b:action="remove" b:target="id('ContactNewModal')/@c:init"/>
+<s:task b:action="trigger" b:event="close" b:target="id('ContactNewModal')"/>
+</s:event>
+Cancel
+</b:button>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+</s:event>
+<s:behavior b:name="ContactNew" b:behavior="ModalHacks">
+<s:event b:on="open">
+<s:task b:action="hide" b:target=".//div[@c:purpose='msg']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_SaveContactNew']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_SaveContactNew']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:super/>
+<s:for-each b:target="//id('ContactNewModal')//input">
+<s:task b:action="set" b:target="$_target/@value" b:value=""/>
+</s:for-each>
+<s:task b:action="set" b:target="id('ContactNewModal')/@c:init" b:value="1"/>
+</s:event>
+<s:event b:on="close">
+<s:task b:action="remove" b:target="id('ContactNewModal')/@c:init"/>
+<s:super/>
+</s:event>
+<s:event b:on="SaveContactNew">
+<s:choose>
+<s:when b:test="id('OrgNewModal')//input[@b:valid = 'required']">
+<s:task b:action="alert" b:value="Last Name and Work Email are required fields. Please make sure both fields have valid information."/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lWSPrefix" b:scope="local" b:select="id('Config')/$tWsPrefix"/>
+<s:task b:action="disable" b:target=".//b:button[@c:id='Btn_SaveContactNew']"/>
+<s:task b:action="disable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:variable b:name="lContactNewXML" b:scope="local"/>
+<s:task b:action="load" b:method="POST" b:url="{concat($lWSPrefix,'contacts.xml')}" b:destination="$lContactNewXML">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lContactNewXML"/>
+<s:variable b:name="lContactID" b:scope="local" b:select="$lContactNewXML/r25:contacts/r25:contact/r25:contact_id"/>
+<s:variable b:name="lContactFirstName" b:scope="local" b:select="normalize-space(b:modalbody//input[@name='ContactFirstName']/@value)"/>
+<s:variable b:name="lContactMiddleName" b:scope="local" b:select="normalize-space(b:modalbody//input[@name='ContactMiddleName']/@value)"/>
+<s:variable b:name="lContactLastName" b:scope="local" b:select="normalize-space(b:modalbody//input[@name='ContactLastName']/@value)"/>
+<s:variable b:name="lContactName" b:scope="local" b:select="concat($lContactFirstName, ' ', $lContactLastName)"/>
+<s:task b:test="not(string-length($lContactMiddleName) = 0)" b:action="assign" b:target="$lContactName" b:select="concat($lContactFirstName, ' ', substring($lContactMiddleName,1,1), '. ', $lContactLastName)"/>
+<s:variable b:name="lContactEmail" b:scope="local" b:select="normalize-space(b:modalbody//input[@name='ContactWorkEmail']/@value)"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:name_prefix" b:value="{b:modalbody//input[@name='ContactNamePrefix']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:first_name" b:value="{$lContactFirstName}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:middle_name" b:value="{$lContactMiddleName}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:last_name" b:value="{$lContactLastName}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:name_suffix" b:value="{b:modalbody//input[@name='ContactNameSuffix']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:title" b:value="{b:modalbody//input[@name='ContactTitle']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:internal_id" b:value="{b:modalbody//input[@name='ContactInternalId']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:street_address" b:value="{b:modalbody//input[@name='ContactWorkStreetAddress']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:city" b:value="{b:modalbody//input[@name='ContactWorkCity']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:state_prov" b:value="{b:modalbody//input[@name='ContactWorkState']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:zip_post" b:value="{b:modalbody//input[@name='ContactWorkZip']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:country" b:value="{b:modalbody//input[@name='ContactWorkCountry']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:phone" b:value="{b:modalbody//input[@name='ContactWorkPhone']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:fax" b:value="{b:modalbody//input[@name='ContactWorkFax']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='3']/r25:email" b:value="{$lContactEmail}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:street_address" b:value="{b:modalbody//input[@name='ContactHomeStreetAddress']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:city" b:value="{b:modalbody//input[@name='ContactHomeCity']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:state_prov" b:value="{b:modalbody//input[@name='ContactHomeState']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:zip_post" b:value="{b:modalbody//input[@name='ContactHomeZip']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:country" b:value="{b:modalbody//input[@name='ContactHomeCountry']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:phone" b:value="{b:modalbody//input[@name='ContactHomePhone']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:fax" b:value="{b:modalbody//input[@name='ContactHomeFax']/@value}"/>
+<s:task b:action="settext" b:target="$lContactNewXML/r25:contacts/r25:contact/r25:address[r25:address_type='4']/r25:email" b:value="{b:modalbody//input[@name='ContactHomeEmail']/@value}"/>
+<s:variable b:name="lContactNewXMLResult" b:scope="local"/>
+<s:task b:action="xml2string" b:variable="$lContactNewXML"/>
+<s:task b:action="load" b:method="PUT" b:url="{concat($lWSPrefix,'contact.xml?contact_id=',$lContactID)}" b:data="{$lContactNewXML}" b:destination="$lContactNewXMLResult">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lContactNewXMLResult"/>
+<s:choose>
+<s:when b:test="$lContactNewXMLResult/r25:results/r25:info/r25:msg_id = 'CO_I_SAVE'">
+<s:task b:action="alert" b:value="Contact added successfully!"/>
+<s:sequential>
+<s:with b:target="//s25:rsrv_wiz//s25:rsrv_wiz_contacts//div[@c:purpose='roleContainer'][@c:new_contact_target='true']">
+<s:task b:action="trigger" b:event="ContactSelect"/>
+</s:with>
+<s:task b:action="trigger" b:event="close" b:target="."/>
+</s:sequential>
+</s:when>
+<s:otherwise>
+<s:task b:action="alert" b:value="Contact was not added."/>
+</s:otherwise>
+</s:choose>			
+<s:task b:action="remove" b:target="id('ContactNewModal')/@c:init"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_SaveContactNew']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:event b:on="RenderOrgNewModal">
+<s:render b:mode="asfirstchild" b:destination="id('Modals')">
+<b:modal c:purpose="OrgNewModal" id="OrgNewModal" b:behavior="OrgNew">
+<s:variable b:name="lOrgNew" b:scope="global" b:select=""/>
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-prefs"/>
+<div c:purpose="text" class="modal-header-text">Add Organization</div>
+</b:modalhead>
+<b:modalbody>
+<div c:purpose="org_new">
+<b:accordeon style="width:100%">
+<b:accordeonhead>Basic Information</b:accordeonhead>
+<b:accordeonbody>
+<table cellspacing="10">
+<tr>
+<td>Organization Name<span class="required">*</span>:</td>
+<td>
+<input type="text" name="NewOrgName" maxlength="20" value="" class="input-text" onfocus="this.select()" b:required="true"/>
+</td>
+</tr>
+<tr>
+<td>Organization Title:</td>
+<td>
+<input type="text" name="NewOrgTitle" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Type:</td>
+<td id="NewOrgTypeContainer">
+<select name="NewOrgType">
+<option value="000">Loading Types...</option>
+</select>
+</td>
+</tr>
+</table>
+</b:accordeonbody>
+<b:accordeonhead>Billing Address</b:accordeonhead>
+<b:accordeonbody>
+<table cellspacing="10">
+<tr>
+<td>Street Address:</td>
+<td>
+<input type="text" name="OrgBillingStreetAddress" maxlength="150" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>City:</td>
+<td>
+<input type="text" name="OrgBillingCity" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>State / Province:</td>
+<td>
+<input type="text" name="OrgBillingState" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Zip / Postal Code:</td>
+<td>
+<input type="text" name="OrgBillingZip" maxlength="20" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Country:</td>
+<td>
+<input type="text" name="OrgBillingCountry" maxlength="40" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>Phone:</td>
+<td>
+<input type="text" name="OrgBillingPhone" maxlength="24" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+<tr>
+<td>FAX:</td>
+<td>
+<input type="text" name="OrgBillingFax" maxlength="24" value="" class="input-text" onfocus="this.select()"/>
+</td>
+</tr>
+</table>
+</b:accordeonbody>
+<b:accordeonhead>Custom Attributes</b:accordeonhead>
+<b:accordeonbody>
+<div id="NewOrgTypeAttributes">
+Loading Custom Attributes...
+</div>
+</b:accordeonbody>
+</b:accordeon>
+</div>
+<div c:purpose="buttons" style="text-align:center; padding:20px 5px 5px">
+<b:button c:id="Btn_SaveOrgNew" b:action="trigger" b:event="SaveOrgNew" b:target="id('OrgNewModal')">
+Create New Organization
+</b:button>
+<b:button c:id="Btn_Cancel">
+<s:event b:on="command">
+<s:task b:action="remove" b:target="id('OrgNewModal')/@c:init"/>
+<s:task b:action="trigger" b:event="close" b:target="id('OrgNewModal')"/>
+</s:event>
+Cancel
+</b:button>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+</s:event>
+<s:behavior b:name="OrgNew" b:behavior="ModalHacks">
+<s:event b:on="open">
+<s:variable b:name="lWSPrefix" b:scope="local" b:select="id('Config')/$tWsPrefix"/>
+<s:task b:action="hide" b:target=".//div[@c:purpose='msg']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_SaveOrgNew']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_SaveOrgNew']"/>
+<s:task b:action="show" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:super/>
+<s:with b:target="id('OrgNewModal')">
+<s:setstyle b:top="10px"/>
+</s:with>
+<s:for-each b:target="id('OrgNewModal')//input">
+<s:task b:action="set" b:target="$_target/@value" b:value=""/>
+</s:for-each>
+<s:task b:action="load" b:method="GET" b:url="{concat($lWSPrefix,'orgtypes.xml?otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/options_org_types.xsl')}" b:destination="id('NewOrgTypeContainer')">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:variable b:name="lContactDirFLS" b:scope="local" b:select="id('FLS_CU_CONTACT')"/>
+<s:variable b:name="lOrgDirFLS" b:scope="local" b:select="id('FLS_CU_ACCOUNT')"/>
+<s:variable b:name="lSpaceDirFLS" b:scope="local" b:select="id('FLS_SPACE_LIST')"/>
+<s:variable b:name="lResourceDirFLS" b:scope="local" b:select="id('FLS_RESOURCE_LIST')"/>
+<s:task b:action="load" b:method="GET" b:mode="replacechildren" b:url="{concat($lWSPrefix,'orgat.xml?otransform=',id('Config')/$tXslPrefix,'s25-event-wiz/organization_attributes.xsl', '&amp;contact_fls=',$lContactDirFLS, '&amp;organization_fls=',$lOrgDirFLS, '&amp;space_fls=',$lSpaceDirFLS, '&amp;resource_fls=',$lResourceDirFLS)}" b:destination="id('NewOrgTypeAttributes')">
+</s:task>
+<s:task b:action="select" b:target="id('OrgNewModal')//input[@name='NewOrgTitle']"/>
+<s:task b:action="focus" b:target="id('OrgNewModal')//input[@name='NewOrgTitle']"/>
+<s:task b:action="select" b:target="id('OrgNewModal')//input[@name='NewOrgName']"/>
+<s:task b:action="focus" b:target="id('OrgNewModal')//input[@name='NewOrgName']"/> 
+<s:task b:action="set" b:target="id('OrgNewModal')/@c:init" b:value="1"/>
+</s:event>
+<s:event b:on="close">
+<s:task b:action="remove" b:target="id('OrgNewModal')/@c:init"/>
+<s:super/>
+</s:event>
+<s:event b:on="SaveOrgNew">
+<s:choose>
+<s:when b:test="id('OrgNewModal')//input[@b:valid='required'] or id('OrgNewModal')//input[@name='NewOrgName']/@value = ''">
+<s:task b:action="alert" b:value="Organization Name is required."/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lWSPrefix" b:scope="local" b:select="id('Config')/$tWsPrefix"/>
+<s:task b:action="disable" b:target=".//b:button[@c:id='Btn_SaveOrgNew']"/>
+<s:task b:action="disable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+<s:variable b:name="lOrgNewXML" b:scope="local">
+<r25:organizations>
+<r25:organization status="new">
+<r25:organization_name/>
+<r25:organization_title/>
+<r25:comments/>
+<r25:rating_id/>
+<r25:s25_name/>
+<r25:organization_type>
+<r25:type_id/>
+</r25:organization_type>
+<r25:address status="new">
+<r25:address_type>1</r25:address_type>
+<r25:street_address/>
+<r25:city/>
+<r25:state_prov/>
+<r25:zip_post/>
+<r25:country/>
+<r25:phone/>
+<r25:fax/>
+</r25:address>
+<r25:address status="new">
+<r25:address_type>2</r25:address_type>
+<r25:street_address/>
+<r25:city/>
+<r25:state_prov/>
+<r25:zip_post/>
+<r25:country/>
+<r25:phone/>
+<r25:fax/>
+</r25:address>
+<r25:instructions/>
+</r25:organization>
+</r25:organizations>				
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lOrgNewXML"/>
+<s:variable b:name="lOrgID" b:scope="local" b:select="$lOrgNewXML/r25:organizations/r25:organization/r25:organization_id"/>
+<s:variable b:name="lOrgName" b:scope="local" b:select="normalize-space(b:modalbody//input[@name='NewOrgName']/@value)"/>
+<s:task b:action="settext" b:target="$lOrgNewXML/r25:organizations/r25:organization/r25:organization_name" b:value="{$lOrgName}"/>
+<s:task b:action="settext" b:target="$lOrgNewXML/r25:organizations/r25:organization/r25:organization_title" b:value="{normalize-space(b:modalbody//input[@name='NewOrgTitle']/@value)}"/>
+<s:task b:action="settext" b:target="$lOrgNewXML/r25:organizations/r25:organization/r25:organization_type/r25:type_id" b:value="{id('OrgNewModal')//select[@name='NewOrgType']/option[@b:state='selected']/@value}"/>
+<s:task b:action="settext" b:target="$lOrgNewXML/r25:organizations/r25:organization/r25:organization_type/r25:type_name" b:value="{normalize-space(id('OrgNewModal')//select[@name='NewOrgType']/option[@b:state='selected'])}"/>
+<s:task b:action="settext" b:target="$lOrgNewXML/r25:organizations/r25:organization/r25:address[r25:address_type='2']/r25:street_address" b:value="{normalize-space(b:modalbody//input[@name='OrgBillingStreetAddress']/@value)}"/>
+<s:task b:action="settext" b:target="$lOrgNewXML/r25:organizations/r25:organization/r25:address[r25:address_type='2']/r25:city" b:value="{normalize-space(b:modalbody//input[@name='OrgBillingCity']/@value)}"/>
+<s:task b:action="settext" b:target="$lOrgNewXML/r25:organizations/r25:organization/r25:address[r25:address_type='2']/r25:state_prov" b:value="{normalize-space(b:modalbody//input[@name='OrgBillingState']/@value)}"/>
+<s:task b:action="settext" b:target="$lOrgNewXML/r25:organizations/r25:organization/r25:address[r25:address_type='2']/r25:zip_post" b:value="{normalize-space(b:modalbody//input[@name='OrgBillingZip']/@value)}"/>
+<s:task b:action="settext" b:target="$lOrgNewXML/r25:organizations/r25:organization/r25:address[r25:address_type='2']/r25:country" b:value="{normalize-space(b:modalbody//input[@name='OrgBillingCountry']/@value)}"/>
+<s:task b:action="settext" b:target="$lOrgNewXML/r25:organizations/r25:organization/r25:address[r25:address_type='2']/r25:phone" b:value="{normalize-space(b:modalbody//input[@name='OrgBillingPhone']/@value)}"/>
+<s:task b:action="settext" b:target="$lOrgNewXML/r25:organizations/r25:organization/r25:address[r25:address_type='2']/r25:fax" b:value="{normalize-space(b:modalbody//input[@name='OrgBillingFax']/@value)}"/>				
+<s:variable b:name="lOrgCustomAttribute" b:scope="local">
+<r25:custom_attribute status="new">
+<r25:attribute_id/>
+<r25:attribute_name/>
+<r25:attribute_type/>
+<r25:attribute_value/>
+</r25:custom_attribute>
+</s:variable>					
+<s:task b:action="string2xml" b:variable="$lOrgCustomAttribute"/>
+<s:for-each b:target="id('NewOrgTypeAttributes')/div/div[@class='subTabColumn']/div">
+<s:sequential>
+<s:variable b:name="lTargetAttributeId" b:scope="local" b:select="string($_target/div[@class='organization_attribute']/@attribute_id)"/>
+<s:variable b:name="lTargetAttributeType" b:scope="local" b:select="string($_target/div[@class='organization_attribute']/@attribute_type)"/>
+<s:variable b:name="lTargetAttributeName" b:scope="local" b:select="string($_target/div[@class='organization_attribute']/@attribute_name)"/>
+<s:choose>
+<s:when b:test="$lTargetAttributeType = 'S'">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/input/@value"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = 'F'">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/input/@value"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = 'N'">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/input/@value"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = '2' and not($_target//select/@value = '000')">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/select/@value"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = '3' and not($_target//select/@value = '000')">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/select/@value"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = '4' and not($_target//select/@value = '000')">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/select/@value"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = '6' and not($_target//select/@value = '000')">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/select/@value"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = 'R'">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/input/@value"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = 'T' and not($_target//select/@value = '000')">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/s25:time_spinner/@b:stored-value"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = 'D'">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/input/@value"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = 'E'">
+<s:variable b:name="lTargetAttributeDate" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/input/@value"/>
+<s:variable b:name="lTargetAttributeTime" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/select/@value"/>
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="concat($lTargetAttributeDate,'T',$lTargetAttributeTime)"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = 'L'">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']//b:spinner/@b:stored-value"/>
+</s:when>
+<s:when b:test="$lTargetAttributeType = 'B'">
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']//input[@checked='checked']/@value"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lTargetAttributeValue" b:scope="local" b:select="$_target//div[@class='subTabValueSelection']/input/@value"/>
+</s:otherwise>
+</s:choose>				
+<s:if b:test="$_target/div/input[@checked='checked']">
+<s:task b:action="settext" b:target="$lOrgCustomAttribute/r25:custom_attribute/r25:attribute_id" b:value="{$lTargetAttributeId}"/>
+<s:task b:action="settext" b:target="$lOrgCustomAttribute/r25:custom_attribute/r25:attribute_value" b:value="{$lTargetAttributeValue}"/>
+<s:task b:action="settext" b:target="$lOrgCustomAttribute/r25:custom_attribute/r25:attribute_name" b:value="{$lTargetAttributeName}"/>
+<s:task b:action="settext" b:target="$lOrgCustomAttribute/r25:custom_attribute/r25:attribute_type" b:value="{$lTargetAttributeType}"/>
+<s:task b:action="copy" b:source="$lOrgCustomAttribute/r25:custom_attribute" b:destination="$lOrgNewXML/r25:organizations/r25:organization" b:mode="aslastchild"/>	
+</s:if>
+</s:sequential>
+</s:for-each>		
+<s:variable b:name="lOrgNewXMLResult" b:scope="local"/>
+<s:task b:action="xml2string" b:variable="$lOrgNewXML"/>
+<s:task b:action="load" b:method="POST" b:url="{concat($lWSPrefix,'organizations.xml')}" b:data="{$lOrgNewXML}" b:destination="$lOrgNewXMLResult">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lOrgNewXMLResult"/>
+<s:choose>
+<s:when b:test="$lOrgNewXMLResult/r25:results/r25:info/r25:msg_id = 'AC_I_CREATED'">
+<s:task b:action="alert" b:value="Organization added successfully!"/>
+<s:sequential>
+<s:with b:target="//s25:rsrv_wiz//*[name() = 's25:rsrv_wiz_sponsor' or name() = 's25:rsrv_wiz_addl_sponsor'][@c:new_org_target='true']">
+<s:task b:action="trigger" b:event="OrgSelect"/>
+</s:with>
+<s:task b:action="trigger" b:event="close" b:target="."/>
+</s:sequential>
+</s:when>
+<s:otherwise>
+<s:task b:action="alert" b:value="Organization was not added."/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="remove" b:target="id('OrgNewModal')/@c:init"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_SaveOrgNew']"/>
+<s:task b:action="enable" b:target=".//b:button[@c:id='Btn_Cancel']"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:event b:on="RenderImageNewModal">
+<s:render b:mode="asfirstchild" b:destination="id('Modals')">
+<b:modal c:purpose="ImageNewModal" id="ImageNewModal" b:behavior="ImageNew" style="width:400px; height:290px">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-image"/>
+<div c:purpose="text" class="modal-header-text">Upload New Image</div>
+</b:modalhead>
+<b:modalbody>
+<iframe id="ImageNewModalIframe" src="about:blank" width="100%" height="250" style="border:0"/>
+</b:modalbody>
+</b:modal>
+</s:render>
+</s:event>
+<s:behavior b:name="ImageNew" b:behavior="ModalHacks">
+<s:event b:on="open">
+<s:variable b:name="lWsPrefix" b:scope="local" b:select="string(id('Config')/$tWsPrefix)"/>
+<s:variable b:name="lXslPrefix" b:scope="local" b:select="string(id('Config')/$tXslPrefix)"/>
+<s:super/>
+<s:with b:target="id('ImageNewModal')">
+<s:setstyle b:top="10px"/>
+</s:with>
+<s:script><![CDATA[
+
+var historyURL = 'controls/image_upload.html';
+var pathname = location.pathname;
+if (instance_type == 'hybrid') {
+historyURL = s25live_version + '/' + historyURL;
+pathname = location.pathname + 'local/';
+}
+document.getElementById('ImageNewModalIframe').src = historyURL + '?pathname=' + pathname + '&ws_prefix=' + _vars['lWsPrefix'][0] + '&xsl_prefix=' + _vars['lXslPrefix'][0];
+
+]]></s:script>
+<s:task b:action="set" b:target="id('OrgNewModal')/@c:init" b:value="1"/>
+</s:event>
+<s:event b:on="close">
+<s:task b:action="trigger" b:event="25Live_ImageNew_Refresh" b:target="id('Controller')"/>
+<s:task b:action="remove" b:target="id('ImageNewModal')/@c:init"/>
+<s:super/>
+</s:event>
+</s:behavior>
+<s:event b:on="RenderLoginModal">
+<s:render b:mode="aslastchild" b:destination="id('Modals')">
+<b:modal c:purpose="LoginModal" id="LoginModal" b:behavior="LoginModal">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-login"/>
+<div c:purpose="text" class="modal-header-text">Sign In</div>
+</b:modalhead>
+<b:modalbody>
+<div>
+<script type="text/javascript"><![CDATA[
+
+function handleSignInEnter(e) {
+if (!e) e = window.event;
+if (e.keyCode == 13 || e.keyCode == 3) {
+bpc.trigger('OnClickLogin', document.getElementById('LoginModal'));
+return false;
+} else {
+return true;
+}
+}
+
+]]></script>
+<table c:purpose="SignIn">
+<tr>
+<td>Username:</td>
+<td>
+<input type="text" name="UserName" id="LoginUserName" value="" class="input-text" onkeydown="handleSignInEnter(event)" onfocus="this.select()">
+<s:event b:on="construct"/>
+<s:event b:on="focus"/>
+<s:event b:on="click">
+<s:super/>
+</s:event>
+<s:event b:on="blur">
+<s:fxstyle b:time="1"/>
+<s:task b:action="focus" b:target="id('LoginPassword')"/>
+</s:event>
+<s:event b:on="rmbclick">
+<s:task b:action="focus" b:target="id('LoginUserName')"/>
+</s:event>
+</input>
+</td>
+<td class="reset">
+<div style="font-size:90%; opacity:0.8; filter:alpha(opacity=80);">
+<a href="javascript:void(0)" onclick="return false" b:action="trigger" c:purpose="PasswordRemind" b:event="OnClickPasswordRemind" b:target="ancestor::b:modal" id="PasswordRemind" style="display:none;">
+Forgot your Password?
+</a>
+</div>
+</td>								
+</tr>
+<tr>
+<td>Password:</td>
+<td>
+<input type="password" name="Password" id="LoginPassword" value="" class="input-text" onkeydown="handleSignInEnter(event)" onfocus="this.select()">
+<s:event b:on="construct"/>
+<s:event b:on="focus"/>
+<s:event b:on="blur"/>
+</input>
+</td>
+<td/>
+</tr>
+</table>
+<div align="center"><div c:purpose="msg" style="margin:10px; display:none;"/></div>
+<div align="center">
+<div style="text-align:center; margin-bottom:10px" c:purpose="submit">
+<b:button id="LoginBtn" b:action="trigger" c:purpose="Login" b:event="OnClickLogin" b:target="ancestor::b:modal" style="font-size:110%;">
+Sign In
+</b:button>
+</div>
+<div c:purpose="signin_note" style="margin:15px 5px 10px; font-size:90%; opacity:0.8; filter:alpha(opacity=80); display:none;"/>
+</div>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+<s:variable b:name="lRemindPrefValue" b:scope="local" b:select="string(id('Pref_config_email_password'))"/>
+<s:if b:test="$lRemindPrefValue = 'show'">
+<s:task b:action="show" b:target="id('PasswordRemind')"/>
+</s:if>
+</s:event>
+<s:behavior b:name="LoginModal" b:behavior="ModalHacks">
+<s:event b:on="construct">
+<s:variable b:name="tUsername" b:scope="tag" b:select="b:modalbody//input[@name eq 'UserName'][1]"/>
+<s:variable b:name="tPassword" b:scope="tag" b:select="b:modalbody//input[@name eq 'Password'][1]"/>
+<s:variable b:name="tSubmitButton" b:scope="tag" b:select="b:modalbody//b:button[@c:purpose='Login']"/>
+<s:variable b:name="tResetButton" b:scope="tag" b:select="b:modalbody//b:button[@c:purpose='PasswordReset']"/>
+<s:variable b:name="tChangeButton" b:scope="tag" b:select="b:modalbody//b:button[@c:purpose='PasswordChange']"/>
+<s:variable b:name="tLoginMsg" b:scope="tag" b:select="b:modalbody//div[@c:purpose = 'msg']"/>
+<s:variable b:name="tSignInNote" b:scope="tag" b:select="b:modalbody//div[@c:purpose='signin_note']"/>
+</s:event>
+<s:event b:on="open">
+<s:task b:action="trigger" b:event="ShowShade" b:target="id('LayoutMgr')"/>
+<s:task b:action="hide" b:target="$tLoginMsg"/>
+<s:task b:action="show" b:target="$tSubmitButton"/>
+<s:with b:target="$tUsername">
+<s:task b:action="enable"/>
+<s:setatt value="" b:value=""/>
+</s:with>
+<s:with b:target="$tPassword">
+<s:task b:action="enable"/>
+<s:setatt value="" b:value=""/>
+</s:with>
+<s:script><![CDATA[
+
+var lText = document.getElementById('Pref_config_login_msg').innerHTML;
+if (lText.charAt(0) == '@') lText = lText.substring(1);
+lText = lText.replace(/&lt;/g,'<')
+lText = lText.replace(/&gt;/g,'>')
+var destination = "b:modalbody//div[@c:purpose='signin_note']";
+bpc.render(lText, 'replacechildren', destination, _current);
+
+]]></s:script>
+<s:task b:action="show" b:target="$tSignInNote"/>
+<s:super/>
+<s:task b:action="enable" b:target="$tSubmitButton"/>
+<s:task b:action="focus" b:target="$tUsername"/>
+</s:event>
+<s:event b:on="close">
+<s:task b:action="hide" b:target=".//div[@c:purpose='change_password']"/>
+<s:task b:action="show" b:target="id('PasswordReveal')"/>
+<s:super/>
+<s:task b:action="trigger" b:event="CloseModal" b:target="id('LayoutMgr')"/>
+</s:event>
+<s:event b:on="OnClickLogin">
+<s:choose>
+<s:when b:test=".//input/@b:valid = 'required'">
+<s:task b:action="focus" b:target=".//input[@b:valid = 'required'][1]"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="disable" b:target="$tSubmitButton"/>
+<s:task b:action="disable" b:target="$tUsername"/>
+<s:task b:action="disable" b:target="$tPassword"/>
+<s:variable b:name="pUsername" b:scope="local" b:select="$tUsername/@value"/>
+<s:variable b:name="pPassword" b:scope="local" b:select="$tPassword/@value"/>
+<s:task b:action="trigger" b:event="Login" b:target="id('WSSessionMgr')"/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="OnClickPasswordRemind">
+<s:variable b:name="lUsername" b:scope="local" b:select="$tUsername/@value"/>
+<s:choose>
+<s:when b:test="string-length($lUsername) = 0">
+<s:task b:action="alert" b:value="You must enter your username to retrieve your password."/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lSuccess" b:scope="local" b:select="'false'"/>
+<s:variable b:name="lHttpStatus" b:scope="local" b:select=""/>
+<s:variable b:name="lRespStr" b:scope="local" b:select=""/>
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:variable b:name="lWSPrefix" b:scope="local" b:select="id('Config')/$tWsPrefix"/>
+<s:task b:action="load" b:method="POST" b:url="{concat($lWSPrefix,'r25user.remind?r25_username=',$lUsername)}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="assign" b:target="$lHttpStatus" b:scope="tag" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:choose>
+<s:when b:test="$lHttpStatus = 200">
+<s:task b:action="assign" b:target="$lSuccess" b:scope="local" b:select="'true'"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lWSPrefix" b:scope="local" b:select="id('Config')/$tWsPrefix"/>
+<s:task b:action="load" b:method="POST" b:url="{concat($lWSPrefix,'webuser.remind?web_username=',$lUsername)}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="assign" b:target="$lHttpStatus" b:scope="tag" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:if b:test="$lHttpStatus = 200">
+<s:task b:action="assign" b:target="$lSuccess" b:scope="local" b:select="'true'"/>
+</s:if>
+</s:otherwise>
+</s:choose>
+<s:choose>
+<s:when b:test="$lSuccess = 'true'">
+<s:render b:destination="$tLoginMsg" b:mode="replacechildren">
+<div>Your password has been sent to the email address on record.</div>
+<br/>
+</s:render>
+<s:task b:action="show" b:target="$tLoginMsg"/>
+</s:when>
+<s:otherwise>
+<s:render b:destination="$tLoginMsg" b:mode="replacechildren">
+<div>
+There was a problem emailing you your password.
+<br/><br/>
+Please contact your system administrator.
+<br/><br/>
+</div>
+</s:render>
+<s:task b:action="show" b:target="$tLoginMsg"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:behavior b:name="PasswordReset" b:behavior="ModalHacks">
+<s:event b:on="OnClickPasswordReset">
+<s:variable b:name="lUsername" b:scope="local" b:select="$tUsername/@value"/>
+<s:variable b:name="lWSPrefix" b:scope="local" b:select="id('Config')/$tWsPrefix"/>
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:choose>
+<s:when b:test="string-length($lUsername) &gt; 0">
+<s:variable b:name="lHttpStatus" b:scope="local" b:select=""/>
+<s:variable b:name="lRespStr" b:scope="local" b:select=""/>
+<s:variable b:name="lMessage" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{concat($lWSPrefix,'r25user.xml?r25_username=',$lUsername)}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="assign" b:target="$lHttpStatus" b:scope="tag" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:choose>
+<s:when b:test="not($lHttpStatus = 200)">
+<s:task b:action="trigger" b:event="ResetFail"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$lRespStr" b:scope="tag" b:select="id('HttpMgr')/$tResponseText"/>
+<s:variable b:name="lResponse" b:scope="local" b:select=""/>
+<s:task b:action="string2xml" b:source="$lRespStr" b:variable="$lResponse"/>
+<s:variable b:name="lQuery" b:scope="local" b:select=""/>          
+<s:choose>
+<s:when b:test="$lResponse/r25:r25users/r25:r25_user/r25:active = '1'">
+<s:task b:action="assign" b:target="$lQuery" b:select="concat('r25user.reset?r25_username=',$lUsername)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$lQuery" b:select="concat('webuser.reset?web_username=',$lUsername)"/>
+</s:otherwise>
+</s:choose>
+<s:task b:action="load" b:method="POST" b:url="{concat($lWSPrefix,$lQuery)}" b:data="{$lData}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="assign" b:target="$lHttpStatus" b:scope="tag" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:task b:action="assign" b:target="$lRespStr" b:scope="tag" b:select="id('HttpMgr')/$tResponseText"/>
+<s:variable b:name="lRespMsg" b:scope="local" b:select=""/>
+<s:task b:action="string2xml" b:source="$lRespStr" b:variable="$lRespMsg"/>
+<s:choose>
+<s:when b:test="$lRespMsg/r25:results//r25:msg_id = 'SY_I_PWDCHG'">
+<s:render b:destination="$tLoginMsg" b:mode="replacechildren">
+<div><s:textnode b:label="{concat($lRespMsg/r25:results//r25:msg,' ','with a new password.')}"/></div>
+<br/>
+<div>
+<a href="javascript:void(0)" onclick="return false">
+<s:event b:on="command">
+<s:task b:action="trigger" b:event="close" b:target="id('LoginModal')"/>
+<s:task b:action="trigger" b:event="open" b:target="id('LoginModal')"/>
+</s:event>
+Sign in with your new password.
+</a>
+</div>
+</s:render>
+<s:task b:action="show" b:target="$tLoginMsg"/>
+<s:task b:action="hide" b:target=".//b:button"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="ResetFail"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:task b:action="alert" b:value="You must enter your username to retrieve your password."/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ResetFail">
+<s:render b:destination=".//div[@c:purpose='msg']" b:mode="replacechildren">
+<div>
+There was a problem resetting your password.
+<br/>
+Please contact your system administrator.
+<br/><br/>
+</div>
+</s:render>
+<s:task b:action="show" b:target="$tLoginMsg"/>
+</s:event>
+</s:behavior>
+<s:behavior b:name="ChangePassword" b:behavior="ModalHacks">
+<s:event b:on="OnClickPasswordChange">
+<s:variable b:name="lPasswordUpdated" b:scope="local" b:select="'F'"/>
+<s:variable b:name="lUsername" b:scope="local" b:select="$tUsername/@value"/>
+<s:variable b:name="lPassword" b:scope="local" b:select="$tPassword/@value"/>
+<s:variable b:name="lNewPassword" b:scope="local" b:select="string(.//input[@name='NewPassword']/@value)"/>
+<s:variable b:name="lPasswordValid" b:scope="local" b:select="'true'"/>
+<s:script><![CDATA[
+
+var password = _vars['lNewPassword'][0];
+var validPattern = /^[A-Z0-9_]+$/i;
+if (validPattern.test(password) != true) { 
+bpc.setVariable('lPasswordValid', ['false'], 'local');
+}
+
+]]></s:script>
+<s:choose>
+<s:when b:test="string-length($lUsername) = 0">
+<s:task b:action="alert" b:value="You must enter your username to change your password."/>
+<s:task b:action="focus" b:target="$tUsername"/>
+</s:when>
+
+<s:when b:test="string-length($lNewPassword) = 0">
+<s:task b:action="alert" b:value="Please enter your new password."/>
+<s:task b:action="focus" b:target=".//input[@name='NewPassword']"/>
+</s:when>
+<s:when b:test="$lPasswordValid = 'false'">
+<s:task b:action="alert" b:value="Passwords may only contain letters, numbers and underscore characters."/>
+<s:task b:action="focus" b:target=".//input[@name='NewPassword']"/>
+</s:when>
+<s:when b:test="string-length($lNewPassword) lt 5">
+<s:task b:action="alert" b:value="Passwords must be at least 5 characters in length."/>
+<s:task b:action="focus" b:target=".//input[@name='NewPassword']"/>
+</s:when>
+
+<s:when b:test="string-length($lUsername) &gt; 0 and string-length($lNewPassword) &gt; 0">
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:variable b:name="lWSPrefix" b:scope="local" b:select="id('Config')/$tWsPrefix"/>
+<s:variable b:name="lData" b:scope="local" b:select="'&lt;?xml version=&#34;1.0&#34;?&gt;'"/>
+<s:variable b:name="lContactID" b:scope="local" b:select="id('WSSessionMgr')/@c:contact-id"/>
+<s:variable b:name="lUserType" b:scope="local" b:select="id('WSSessionMgr')/@c:user-type"/>
+<s:choose>
+<s:when b:test="string-length($lContactID) = 0">
+<s:task b:action="alert" b:value="There was a problem retrieving your contact information. Please contact your system administrator to change your password."/>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="string($lUserType) = 'r25'">
+<s:variable b:name="lUserXml">
+<r25:r25users>
+<r25:r25_user status="mod">
+<r25:contact_id/>
+<r25:r25_username/>
+<r25:r25_password/>
+<r25:active>1</r25:active>
+</r25:r25_user>
+</r25:r25users>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lUserXml"/>
+<s:task b:action="settext" b:target="$lUserXml/r25:r25users/r25:r25_user/r25:r25_username" b:value="{$lUsername}"/>
+<s:task b:action="settext" b:target="$lUserXml/r25:r25users/r25:r25_user/r25:r25_password" b:value="{$lNewPassword}"/>
+<s:task b:action="settext" b:target="$lUserXml/r25:r25users/r25:r25_user/r25:contact_id" b:value="{$lContactID}"/>
+<s:variable b:name="lData" b:scope="local" b:select="$lUserXml"/>
+<s:task b:action="xml2string" b:variable="$lData"/>
+<s:task b:action="load" b:method="PUT" b:url="{concat($lWSPrefix,'r25user.xml?r25_username=',$lUsername)}" b:data="{$lData}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lUserXml">
+<r25:webusers>
+<r25:web_user status="mod">
+<r25:contact_id/>
+<r25:web_username/>
+<r25:web_password/>
+<r25:active>1</r25:active>
+</r25:web_user>
+</r25:webusers>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lUserXml"/>
+<s:task b:action="settext" b:target="$lUserXml/r25:webusers/r25:web_user/r25:web_username" b:value="{$lUsername}"/>
+<s:task b:action="settext" b:target="$lUserXml/r25:webusers/r25:web_user/r25:web_password" b:value="{$lNewPassword}"/>
+<s:task b:action="settext" b:target="$lUserXml/r25:webusers/r25:web_user/r25:contact_id" b:value="{$lContactID}"/>
+<s:variable b:name="lData" b:scope="local" b:select="$lUserXml"/>
+<s:task b:action="xml2string" b:variable="$lData"/>
+<s:task b:action="load" b:method="PUT" b:url="{concat($lWSPrefix,'webuser.xml?web_username=',$lUsername)}" b:data="{$lData}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+</s:otherwise>
+</s:choose>
+<s:task b:action="assign" b:target="$lHttpStatus" b:scope="tag" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:task b:action="assign" b:target="$lRespStr" b:scope="tag" b:select="id('HttpMgr')/$tResponseText"/>
+<s:variable b:name="lRespMsg" b:scope="local" b:select=""/>
+<s:task b:action="string2xml" b:source="$lRespStr" b:variable="$lRespMsg"/>
+<s:if b:test="$lRespMsg/r25:results//r25:msg_id = 'CO_I_SAVE'">
+<s:task b:action="assign" b:target="$lPasswordUpdated" b:select="'T'"/>
+</s:if>
+<s:variable b:name="lMessage" b:scope="local" b:select=""/>
+<s:choose>
+<s:when b:test="$lPasswordUpdated = 'T'">
+<s:task b:action="disable" b:target="$tChangeButton"/>          
+<s:with b:target="$tPassword">
+<s:setatt value=""/>
+</s:with>
+<s:with b:target="$tNewPassword">
+<s:setatt value=""/>
+</s:with>
+<s:task b:action="assign" b:target="$lMessage" b:select="'Your password was successfully updated.'"/>
+</s:when>     
+<s:otherwise>
+<s:task b:action="assign" b:target="$lMessage" b:select="'Your password was not updated. Please contact your system administrator.'"/>
+</s:otherwise>
+</s:choose>
+<s:render b:destination="$tLoginMsg" b:mode="replacechildren">
+<s:textnode b:label="{$lMessage}"/>
+</s:render>
+</s:otherwise>
+</s:choose>
+</s:when>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:behavior b:name="SubscribeModalBehavior" b:behavior="ModalHacks">
+<s:event b:on="construct">
+<s:super/>
+<s:variable b:scope="tag" b:name="tOldUrl" b:select="'##'"/>
+</s:event>
+<s:event b:on="CloneSession">
+<s:variable b:name="lClone" b:scope="local" b:select="'session=clone:service=null.xml'"/>
+<s:choose>
+<s:when b:test="@c:obj_type='space'">
+<s:task b:action="assign" b:target="$lClone" b:scope="local" b:select="concat($lClone,';reservations.xml',';rm_reservations.ics')"/>
+</s:when>
+<s:when b:test="@c:obj_type='resource'">
+<s:task b:action="assign" b:target="$lClone" b:scope="local" b:select="concat($lClone,';reservations.xml',';rs_reservations.ics')"/>
+</s:when>
+<s:when b:test="@c:obj_type='event'">
+<s:task b:action="assign" b:target="$lClone" b:scope="local" b:select="concat($lClone,';event.xml;event.ics;reservations.xml;reservations.ics')"/>
+</s:when>
+</s:choose>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'null.xml', '?otransform=',id('Config')/$tXslPrefix,'session_id.xsl')}" b:data="" b:destination="." b:mode="aslastchild">
+<s:httpheader b:name="pragma" b:value="{$lClone}"/>
+</s:task>
+</s:event>
+<s:event b:on="SetFeedLinks">
+<s:variable b:name="lWsPrefix" b:select="string(id('Config')/$tWsPrefix)"/>
+<s:variable b:name="LiveUrl" b:select="''"/>
+<s:script><![CDATA[
+var live = publisher_get_url() + location.pathname;
+bpc.setVariable('LiveUrl',[live]);
+]]></s:script>
+<s:variable b:name="lService" b:scope="local" b:select="''"/>
+<s:variable b:name="lXsl" b:scope="local" b:select="'25live_atom.xsl'"/>
+<s:choose>
+<s:when b:test="string(@c:obj_type)='space'">
+<s:task b:action="assign" b:target="$lService" b:scope="local" b:select="concat('reservations.xml?space_id=',@c:obj_id)"/>
+<s:task b:action="assign" b:target="$lXsl" b:scope="local" b:select="'25live_atom_rsrv.xsl'"/>
+</s:when>
+<s:when b:test="string(@c:obj_type)='resource'">
+<s:task b:action="assign" b:target="$lService" b:scope="local" b:select="concat('reservations.xml?resource_id=',@c:obj_id)"/>
+<s:task b:action="assign" b:target="$lXsl" b:scope="local" b:select="'25live_atom_rsrv.xsl'"/>
+</s:when>
+<s:when b:test="string(@c:obj_type)='event'">
+<s:task b:action="assign" b:target="$lService" b:scope="local" b:select="concat('event.xml?event_id=',@c:obj_id)"/>
+</s:when>
+</s:choose>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(publisher_get_url(), $lWsPrefix, $lService, '&amp;live_url=',escape-uri($LiveUrl), '&amp;otransform=','publish/',$lXsl, '&amp;session_id=',$tSessionID)"/>
+<s:with b:target="b:modalbody//div[@c:id='rss']">
+<s:for-each b:target="./a">
+<s:with b:target="$_target">
+<s:variable b:name="lHref" b:select="string(@href)"/>
+<s:variable b:name="newHref" b:select="replace($lHref, $tOldUrl, escape-uri($lUrl, true()))"/>
+<s:setatt href="{$newHref}"/>
+</s:with>
+</s:for-each>
+</s:with>
+<s:task b:action="assign" b:scope="tag" b:target="$tOldUrl" b:select="escape-uri($lUrl, true())"/>
+<s:with b:target="b:modalbody//div[@c:id='rss']//*[@c:atom='true']">
+<s:setatt href="{$lUrl}"/>
+</s:with>
+<s:choose>
+<s:when b:test="@c:obj_type='space'">
+<s:task b:action="assign" b:target="$lService" b:scope="local" b:select="concat('rm_reservations.ics?space_id=',@c:obj_id,'&amp;start_dt=-30','&amp;end_dt=+180')"/>
+</s:when>
+<s:when b:test="@c:obj_type='resource'">
+<s:task b:action="assign" b:target="$lService" b:scope="local" b:select="concat('rs_reservations.ics?resource_id=',@c:obj_id,'&amp;start_dt=-30','&amp;end_dt=+180')"/>
+</s:when>
+<s:when b:test="@c:obj_type='event'">
+<s:task b:action="assign" b:target="$lService" b:scope="local" b:select="concat('reservations.ics?event_id=',@c:obj_id,'&amp;start_dt=',@c:start_dt,'&amp;end_dt=',@c:end_dt)"/>
+</s:when>
+</s:choose>
+<s:task b:action="assign" b:target="$lUrl" b:scope="local" b:select="concat(publisher_get_url(), $lWsPrefix, $lService, '&amp;session_id=',$tSessionID,'&amp;options=standard')"/>
+<s:with b:target="b:modalbody//div[@c:id='ical']">
+<s:for-each b:target="./a">
+<s:with b:target="$_target">
+<s:setatt href="{$lUrl}"/>
+</s:with>
+</s:for-each>
+</s:with>
+<s:script><![CDATA[
+
+var url = _vars['lUrl'][0];
+url = url.replace(/^http:/,'webcal:');
+bpc.setVariable('lUrl',[url],'local');
+
+]]></s:script>
+<s:with b:target="b:modalbody//a[@c:id='webcal']">
+<s:setatt href="{$lUrl}"/>
+</s:with>
+</s:event>
+<s:event b:on="open">
+<s:task b:action="trigger" b:event="ShowShade" b:target="id('LayoutMgr')"/>
+<s:super/>
+<s:variable b:name="lMsg" b:select="@c:obj_name"/>
+<s:task b:test="not(string-length(@c:obj_formal_name)=0)" b:action="assign" b:target="$lMsg" b:scope="local" b:select="@c:obj_formal_name"/>
+<s:task b:action="settext" b:target="b:modalhead/div[@c:id='text']/span[@c:id='event_name']" b:value="{$lMsg}"/>
+<s:sequential>
+<s:task b:action="trigger" b:event="CloneSession" b:target="."/>
+<s:task b:action="trigger" b:event="SetFeedLinks" b:target="."/>
+</s:sequential>
+</s:event>
+<s:event b:on="close">
+<s:super/>
+<s:task b:action="trigger" b:event="CloseModal" b:target="id('SubscribeModal')"/>
+<s:task b:action="trigger" b:event="HideShade" b:target="id('LayoutMgr')"/>
+</s:event>
+</s:behavior>
+<s:event b:on="RenderSubscribeModal">
+<s:render b:test="not(exists(id('SubscribeModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="SubscribeModal" style="width:550px; height:auto;" b:behavior="SubscribeModalBehavior">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-subscribe"/>
+<div c:id="text" class="modal-header-text"><span>Subscription Options: </span> <span c:id="event_name"/></div>
+</b:modalhead>
+<b:modalbody>
+<script type="text/javascript"><![CDATA[
+
+function publisher_get_url() {
+var proto = String(window.location).match(/^.*?:\/\//)[0];
+var host = window.location.hostname;
+return proto+host;
+}
+
+]]></script>
+<div>
+<div class="s25subscription-feeds" c:id="rss">
+<p style="font-weight:bold">Subscribe with a web-based news reader:</p>
+<a href="http://fusion.google.com/add?feedurl=##" target="_blank"><img border="0" alt="Add to Google" src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/atom_google.gif"/></a>
+<a href="http://add.my.yahoo.com/rss?url=##" target="_blank"><img border="0" alt="Add to My Yahoo" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/atom_yahoo.gif"/></a>
+<a href="http://www.newsgator.com/ngs/subscriber/subext.aspx?url=##" target="_blank"><img border="0" alt="Subscribe in NewsGator Online" src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/atom_newsgator.gif"/></a>
+<a href="http://www.netvibes.com/subscribe.php?url=##" target="_blank"><img border="0" alt="Add to netvibes" src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/atom_netvibes.gif"/></a>
+<br/>
+<a href="http://feeds.my.aol.com/add.jsp?url=##" target="_blank"><img border="0" alt="Add to My AOL" src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/atom_aol.gif"/></a>
+<a href="http://www.bloglines.com/sub/##" target="_blank"><img border="0" alt="Subscribe with Bloglines" src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/atom_bloglines.gif"/></a>
+<a href="##" target="_blank" c:atom="true"><img border="0" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/publish_atom.gif"/></a> <a href="##" target="_blank" c:atom="true" style="vertical-align:7px">View Atom feed</a>
+</div>
+<div class="s25subscription-feeds" c:id="ical">
+<p style="font-weight:bold">Subscribe with a web-based calendar:</p>
+<a href="##" target="_blank" c:id="webcal"><img border="0" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/publish_ical.gif"/></a> <a href="##" target="_blank" style="vertical-align:7px">View iCal feed</a>
+<p style="color:#666; font-size:90%;">Note: By default, Microsoft Outlook may create a new calendar instead of adding these events to your primary calendar. To avoid this, use Outlook&apos;s File &gt; Import option instead.</p>
+</div>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:behavior b:name="SubscribeAgendaModalBehavior" b:behavior="ModalHacks">
+<s:event b:on="construct">
+<s:super/>
+<s:variable b:scope="tag" b:name="tOldUrl" b:select="'##'"/>
+</s:event>
+<s:event b:on="CloneSession">
+<s:variable b:name="lClone" b:scope="local" b:select="'session=clone:service=reservations.ics'"/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix,'null.xml', '?otransform=',id('Config')/$tXslPrefix,'session_id.xsl')}" b:data="" b:destination="." b:mode="aslastchild">
+<s:httpheader b:name="pragma" b:value="{$lClone}"/>
+</s:task>
+</s:event>
+<s:event b:on="SetFeedLinks">
+<s:variable b:name="lXslPrefix" b:select="string(id('Config')/$tXslPrefix)"/>
+<s:variable b:name="lWsPrefix" b:select="string(id('Config')/$tWsPrefix)"/>
+<s:variable b:name="lService" b:scope="local" b:select="''"/>
+<s:variable b:name="lXsl" b:scope="local" b:select="'25live_atom.xsl'"/>
+<s:choose>
+<s:when b:test="string(@c:obj_type)='space'">
+<s:task b:action="assign" b:target="$lService" b:scope="local" b:select="concat('reservations.xml?space_id=',@c:obj_id)"/>
+<s:task b:action="assign" b:target="$lXsl" b:scope="local" b:select="'25live_atom_rsrv.xsl'"/>
+</s:when>
+<s:when b:test="string(@c:obj_type)='resource'">
+<s:task b:action="assign" b:target="$lService" b:scope="local" b:select="concat('reservations.xml?resource_id=',@c:obj_id)"/>
+<s:task b:action="assign" b:target="$lXsl" b:scope="local" b:select="'25live_atom_rsrv.xsl'"/>
+</s:when>
+<s:when b:test="string(@c:obj_type)='event'">
+<s:task b:action="assign" b:target="$lService" b:scope="local" b:select="concat('event.xml?event_id=',@c:obj_id)"/>
+</s:when>
+</s:choose>
+<s:variable b:name="lUrl" b:scope="local" b:select="concat(publisher_get_url(), $lWsPrefix, 'reservations.ics', '?tasks=T', '&amp;end_dt=+7', '&amp;options=standard+task_agenda', '&amp;session_id=',$tSessionID)"/>
+<s:with b:target="b:modalbody//div[@c:id='ical']">
+<s:for-each b:target="./a">
+<s:with b:target="$_target">
+<s:setatt href="{$lUrl}"/>
+</s:with>
+</s:for-each>
+</s:with>
+<s:script><![CDATA[
+
+var url = _vars['lUrl'][0];
+url = url.replace(/^http:/,'webcal:');
+bpc.setVariable('lUrl',[url],'local');
+
+]]></s:script>
+<s:with b:target="b:modalbody//a[@c:id='webcal']">
+<s:setatt href="{$lUrl}"/>
+</s:with>
+</s:event>
+<s:event b:on="open">
+<s:task b:action="trigger" b:event="ShowShade" b:target="id('LayoutMgr')"/>
+<s:super/>
+<s:sequential>
+<s:task b:action="trigger" b:event="CloneSession" b:target="."/>
+<s:task b:action="trigger" b:event="SetFeedLinks" b:target="."/>
+</s:sequential>
+</s:event>
+<s:event b:on="close">
+<s:super/>
+<s:task b:action="trigger" b:event="CloseModal" b:target="id('SubscribeModal')"/>
+<s:task b:action="trigger" b:event="HideShade" b:target="id('LayoutMgr')"/>
+</s:event>
+</s:behavior>
+<s:event b:on="RenderConfirmVcalModal">
+<s:render b:test="not(exists(id('ConfirmVcalModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="ConfirmVcalModal" style="width:400px; height:275px;">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-vcal"/>
+<div c:purpose="text" class="modal-header-text">Confirm vCal Reply/Counter</div>
+</b:modalhead>
+<b:modalbody>
+<div style="margin:10px;text-align:center;">
+This event has incomplete vCalendar To Do tasks. To send a vCalendar Reply/Counter for this event anyway, click the Send Reply/Counter button.
+<div c:id="EventName" style="font-weight:bold;margin-top:20px;"/>
+<br/>
+<b:button b:action="trigger" b:event="sendVcal">Send Reply/Counter</b:button>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>	
+<s:event b:on="RenderConfirmDeleteModal">
+<s:render b:test="not(exists(id('ConfirmDeleteModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="ConfirmDeleteModal" style="width:400px; height:275px;" b:behavior="ConfirmDeleteModalBehavior">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-calendar"/>
+<div c:purpose="text" class="modal-header-text">Confirm Search Deletion</div>
+</b:modalhead>
+<b:modalbody>
+<div style="margin:10px;text-align:center;">
+Are you sure you want to delete this search?
+<div c:id="SearchName" style="font-weight:bold;margin-top:20px;"/>
+<br/>
+<b:button b:action="trigger" b:event="DeleteSearch">Delete Search</b:button>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>	
+<s:event b:on="RenderSubscribeAgendaModal">
+<s:render b:test="not(exists(id('SubscribeAgendaModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="SubscribeAgendaModal" style="width:550px; height:275px;" b:behavior="SubscribeAgendaModalBehavior">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-calendar"/>
+<div c:purpose="text" class="modal-header-text">Subscribe to Tasks Agenda</div>
+</b:modalhead>
+<b:modalbody>
+<script type="text/javascript"><![CDATA[
+
+function publisher_get_url() {
+var proto = String(window.location).match(/^.*?:\/\//)[0];
+var host = window.location.hostname;
+return proto+host;
+}
+
+]]></script>
+<div>
+<div class="s25subscription-feeds" c:id="ical">
+<p style="font-weight:bold">Subscribe with a web-based calendar:</p>
+<a href="##" target="_blank" c:id="webcal"><img border="0" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/publish_ical.gif"/></a> <a href="##" target="_blank" style="vertical-align:7px">View iCal Feed</a>
+</div>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:event b:on="RenderPublishModal">
+<s:render b:test="not(exists(id('PublishModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="PublishModal" c:purpose="PublishModal" b:behavior="ModalHacks" b:observe="b:modalbody/s25:publisher" c:obj_id="" c:obj_type="" c:obj_name="" style="width:790px; height:500px; z-index:901;">
+<s:event b:on="open">
+<s:super/>
+<s:task b:action="focus" b:target="id('Publisher')/$tTrumbaUser"/>
+</s:event>
+<s:event b:on="observe-close">
+<s:task b:action="trigger" b:event="close" b:target="."/>
+</s:event>
+<b:modalhead>
+<div c:id="icon" class="modal-header-icon modal-header-icon-publish"/>
+<div class="modal-header-actions">
+<a href="javascript:void(0)" class="sentenceNav_QuickSearchHelp" b:help="publishing" b:behavior="DirectHelpLink">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="iconHelp" b:tooltiptext="Help with publishing"/>
+</a>
+</div>
+<div c:id="text" class="modal-header-text">Send Events to 25Live Publisher</div>
+</b:modalhead>
+<b:modalbody><s25:publisher id="Publisher"/></b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:event b:on="RenderEventTweetModal">
+<s:render b:test="not(exists(id('EventTweetModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="EventTweetModal" c:purpose="EventTweetModal" b:behavior="ModalHacks" b:observe="b:modalbody/s25:event_tweet" c:obj_id="" c:obj_type="" c:obj_name="" style="width:640px; height:480px; z-index:901;">
+<s:event b:on="open">
+<s:super/>
+</s:event>
+<s:event b:on="observe-close">
+<s:task b:action="trigger" b:event="close" b:target="."/>
+</s:event>
+<b:modalhead>
+<div c:id="icon" class="modal-header-icon modal-header-icon-tweet"/>
+<div class="modal-header-actions">
+
+</div>
+<div c:id="text" class="modal-header-text">Tweet this Event</div>
+</b:modalhead>
+<b:modalbody><s25:event_tweet id="S25EventTweet"/></b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:event b:on="RenderInvoiceModal">
+<s:render b:test="not(exists(id('InvoiceModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="InvoiceModal" c:purpose="InvoiceModal" b:behavior="ModalHacks" style="width:790px; height:500px; z-index:901;">
+<s:event b:on="observe-close">
+<s:task b:action="trigger" b:event="close" b:target="."/>
+</s:event>
+<b:modalhead>
+<div c:id="icon" class="modal-header-icon modal-header-icon-invoice"/>
+<div class="modal-header-actions">
+<a href="javascript:void(0)" class="sentenceNav_QuickSearchHelp" b:help="invoicing" b:behavior="DirectHelpLink">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="iconHelp" b:tooltiptext="Help with invoicing"/>
+</a>
+</div>
+<div c:id="text" class="modal-header-text">Create Invoice</div>
+</b:modalhead>
+<b:modalbody><s25:invoice_org/></b:modalbody>
+</b:modal>
+</s:render>
+</s:event>
+<s:event b:on="RenderCreateToDoModal">
+<s:render b:test="not(exists(id('CreateToDoModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="CreateToDoModal" b:behavior="ModalHacks" b:observe="b:modalbody/s25:todo_create" style="width:500px; height:475px; z-index:901;">
+<b:modalhead>
+<div c:id="icon" class="modal-header-icon modal-header-icon-tasks"/>
+<div class="modal-header-actions">
+<a href="javascript:void(0)" class="sentenceNav_QuickSearchHelp" b:help="event_todo_create" b:behavior="DirectHelpLink">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="iconHelp" b:tooltiptext="Help with creating a &quot;To Do&quot;"/>
+</a>
+</div>
+<div c:id="text" class="modal-header-text">Create &quot;To Do&quot; Task</div>
+</b:modalhead>
+<b:modalbody style="height:inherit"><s25:todo_create id="CreateToDo"/></b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:event b:on="RenderRelatedModal">
+<s:render b:test="not(exists(id('RelatedModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="RelatedModal" b:behavior="ModalHacks" b:observe="b:modalbody/s25:todo_create" style="width:500px; height:500px; z-index:901;">
+<b:modalhead>
+<div c:id="icon" class="modal-header-icon modal-header-icon-related"/>
+<div class="modal-header-actions">
+<a href="javascript:void(0)" class="sentenceNav_QuickSearchHelp" b:help="event_relations" b:behavior="DirectHelpLink">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="iconHelp" b:tooltiptext="Help with Related Events"/>
+</a>
+</div>
+<div c:id="text" class="modal-header-text">Establish Relationships</div>
+</b:modalhead>
+<b:modalbody style="height:inherit"><s25:related/></b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:event b:on="RenderCabinetSelectModal">
+<s:render b:test="not(exists(id('CabinetSelectModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="CabinetSelectModal" b:behavior="CabinetSelectModalBehavior">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-event"/>
+<div c:id="text" class="modal-header-text"><s:textnode b:label="Choose Event Heading"/></div>
+</b:modalhead>
+<b:modalbody>
+<p align="center"><i>Under which heading would you like to save this event?</i></p>
+<table id="CabinetSelectOptions" align="center">
+</table>
+<p align="center">
+<b:button b:action="trigger" b:event="UpdateCabinet" b:target="id('CabinetSelectModal')" style="width:75px; margin:0 10px;">
+Save
+</b:button>
+<b:button b:action="trigger" b:event="close" b:target="id('CabinetSelectModal')" style="width:75px; margin:0 10px;">
+Cancel
+</b:button>
+</p>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:behavior b:name="CabinetSelectModalBehavior" b:behavior="ModalHacks">
+<s:event b:on="open">
+<s:task b:action="trigger" b:event="ShowShade" b:target="id('LayoutMgr')"/>
+<s:super/>
+<s:task b:action="string2xml" b:variable="$lResponse"/>
+<s:variable b:name="lParentID" b:select=""/>
+<s:variable b:name="lParentName" b:select=""/>
+<s:variable b:name="lParentDescription" b:select=""/>
+<s:task b:action="remove" b:target="id('CabinetSelectOptions')/*"/>
+<s:for-each b:target="$lResponse//r25:parent">
+<s:sequential><s:lock>
+<s:task b:action="assign" b:target="$lParentID" b:select="string($_target/r25:parent_id)"/>
+<s:task b:action="assign" b:target="$lParentName" b:select="string($_target/r25:parent_name)"/>
+<s:task b:action="assign" b:target="$lParentDescription" b:select="string($_target/r25:parent_description)"/>
+<s:render b:destination="id('CabinetSelectOptions')" b:mode="aslastchild">
+<tr>
+<td width="20" align="center"><input name="parent_id" type="radio" value="{$lParentID}"/></td>
+<td>
+<span style="cursor:default">
+<s:event b:on="click">
+<s:task b:action="select" b:target="ancestor::tr/td[1]/input[@type='radio']"/>
+</s:event>
+<div><b><s:textnode b:label="{$lParentName}"/></b></div>
+<div><s:textnode b:label="{$lParentDescription}"/></div>
+</span>
+</td>
+</tr>
+</s:render>
+</s:lock></s:sequential>
+</s:for-each>
+</s:event>
+<s:event b:on="close">
+<s:super/>
+<s:task b:action="trigger" b:event="CloseModal" b:target="id('SubscribeModal')"/>
+<s:task b:action="trigger" b:event="HideShade" b:target="id('LayoutMgr')"/>
+</s:event>
+<s:event b:on="UpdateCabinet">
+<s:variable b:name="lParentID" b:select="string(.//input[@b:state='selected']/@value)"/>
+<s:variable b:name="lEventID" b:select="string(@c:event_id)"/>
+<s:choose>
+<s:when b:test="string-length($lParentID) = 0">
+<s:task b:action="alert" b:value="You must select a heading."/>
+</s:when>
+<s:otherwise>
+<s:with b:target="//s25:event_details[@c:obj_id = $lEventID]">
+<s:setatt c:new_parent="{$lParentID}"/>
+<s:variable b:name="lNewStateID" b:select="string($tPutXml/r25:events/r25:event/r25:state)"/>
+<s:task b:action="trigger" b:event="ChangeState"/>
+</s:with>
+<s:task b:action="trigger" b:event="close" b:target="."/>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:event b:on="RenderEvDetailsEmailModal">
+<s:render b:test="not(exists(id('EvDetailsEmailModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="EvDetailsEmailModal" b:behavior="ModalHacks" b:observe="b:modalbody/s25:evdetails_email" c:event_id="" c:event_name="">
+<s:event b:on="observe-close">
+<s:task b:action="trigger" b:event="close" b:target="."/>
+</s:event>
+<b:modalhead>
+<div c:id="icon" class="modal-header-icon modal-header-icon-email"/>
+<div class="modal-header-actions">
+<a href="javascript:void(0)" class="sentenceNav_QuickSearchHelp" b:help="email" b:behavior="DirectHelpLink">
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="iconHelp" b:tooltiptext="Help with emailing event details"/>
+</a>
+</div>
+<div c:id="text" class="modal-header-text"><span>Email Event Details: </span> <span c:id="event_name"/></div>
+</b:modalhead>
+<b:modalbody><s25:evdetails_email id="EvDetailsEmail"/></b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:event b:on="RenderPricingModal">
+<s:render b:test="not(exists(id('PricingModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="PricingModal" b:behavior="ModalHacks" b:observe="b:modalbody/s25:pricing" c:updated="F">
+<s:event b:on="observe-close">
+<s:task b:action="trigger" b:event="close" b:target="."/>
+</s:event>
+<s:event b:on="close">
+<s:variable b:name="lEventID" b:scope="local" b:select="string(@c:event_id)"/>
+<s:if b:test="@c:updated = 'T'">
+<s:task b:action="trigger" b:event="ExecuteView" b:target="id('LayoutMgr')//s25:event_details[@c:obj_id=$lEventID]"/>		
+</s:if>
+<s:super/>
+</s:event>
+<b:modalhead>
+<div c:id="icon" class="modal-header-icon modal-header-icon-pricing"/>
+<div c:id="text" class="modal-header-text"><span>Add an Adjustment </span> <span c:id="event_name"/></div>
+</b:modalhead>
+<b:modalbody><s25:evdetails_pricing id="Pricing"/></b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:event b:on="RenderRsrvWizShortcutsModal">
+
+<s:render b:mode="aslastchild" b:destination="id('Modals')">
+<b:modal id="RsrvWizShortcutsModal" c:purpose="RsrvWizShortcuts">
+<s:event b:on="open">
+<s:task b:action="trigger" b:event="ShowShade" b:target="id('LayoutMgr')"/>
+<s:super/>
+</s:event>
+<s:event b:on="close">
+<s:super/>
+<s:task b:action="trigger" b:event="CloseModal" b:target="id('RsrvWizShortcutsModal')"/>
+<s:task b:action="trigger" b:event="HideShade" b:target="id('LayoutMgr')"/>
+</s:event>
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-shortcuts"/>
+<div c:purpose="text" class="modal-header-text">Event Scheduler Keyboard Shortcuts</div>
+</b:modalhead>
+<b:modalbody>
+<table border="0">
+<thead>
+<tr>
+<td width="50%">Target</td>
+<td width="50%">Key</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Next Element</td>
+<td><b>Tab</b></td>
+</tr>
+<tr>
+<td>Next Section</td>
+<td><b>Ctrl + .</b></td>
+</tr>
+<tr>
+<td>Previous Section</td>
+<td><b>Ctrl + ,</b></td>
+</tr>
+<tr>
+<td>Save</td>
+<td><b>Ctrl + Enter</b></td>
+</tr>
+<tr>
+<td>Cancel / Close</td>
+<td><b>Esc</b></td>
+</tr>
+<tr>
+<td colspan="2" align="center" id="RsrvWizShortcutsModal_DropdownNote"/>
+</tr>
+<tr>
+<td colspan="2" align="center"><br/><b>Time-Spinner Shortcuts</b></td>
+</tr>
+<tr>
+<td id="RsrvWizShortcutsModal_Increment"/>
+<td><b>UP</b> arrow / <b>DOWN</b> arrow</td>
+</tr>
+<tr>
+<td>Adjust Time in increments of 1 Hour</td>
+<td><b>Shift + UP</b> arrow /<br/><b>Shift + DOWN</b> arrow</td>
+</tr>
+<tr>
+<td><b>Try it out:</b></td>
+<td>
+<s25:time_spinner b:step="15" b:format="12" b:value="3:00 pm" b:style="width:64px">
+<s:whenactive><s:keys b:keys="enter" b:bubble="false"/><s:keys b:keys="tab" b:bubble="false"/></s:whenactive>
+</s25:time_spinner>
+</td>
+</tr>
+</tbody>
+</table>
+<div style="padding:10px 10px 0px; font-style:italic; color:#666;">Note: Keyboard shortcuts only work when a form field or link in the Event Scheduler has focus.</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:variable b:name="lIncrement" b:select="id('Prefs')/$tMinuteInc"/>
+<s:with b:target="id('RsrvWizShortcutsModal')//s25:time_spinner[1]">
+<s:task b:action="set" b:target="@b:step" b:value="{$lIncrement}"/>
+<s:task b:action="set" b:target="@b:value" b:value="3:00 pm"/>
+<s:task b:action="trigger" b:event="input-change" b:target="."/>
+</s:with>
+<s:task b:action="settext" b:target="id('RsrvWizShortcutsModal_Increment')" b:value="{replace('Adjust Time in increments of INCREMENT_VALUE Minutes', 'INCREMENT_VALUE', $lIncrement)}"/>
+<s:render b:destination="id('RsrvWizShortcutsModal_DropdownNote')" b:mode="replacechildren"><b xmlns="">dropdown fields</b></s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:event b:on="RenderOverdueTasksModal">
+<s:render b:mode="aslastchild" b:destination="id('Modals')">
+<b:modal id="OverdueTasksModal" c:purpose="OverdueTasks" b:behavior="ModalHacks" style="z-index:999">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-tasks"/>
+<div c:purpose="text" class="modal-header-text">Overdue Tasks</div>
+</b:modalhead>
+<b:modalbody>
+<div align="center" style="padding:10px">
+<div id="OverdueTasksModalText"/>
+<div style="margin: 10px 0 20px">
+<a href="javascript:void(0)" onclick="return false" style="color:#0B61D6; font-weight:bold;">
+<s:event b:on="click">
+<s:task b:action="trigger" b:event="close" b:target="id('OverdueTasksModal')"/>
+<s:with b:target="id('s25-tabitem-tasks')">
+<s:setatt c:forceview="Overdue"/>
+</s:with>
+<s:with b:target="id('layout-tabbox-groups')//b:deck/div[@c:purpose = 'task_overview']">
+<s:setatt c:dirty="true"/>
+<s:task b:action="trigger" b:event="Select"/>
+</s:with>
+</s:event>
+Click to View Your Overdue Tasks
+</a>
+</div>
+<div>
+<b:button b:action="trigger" b:event="close" b:target="id('OverdueTasksModal')">Close</b:button>
+</div>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:event b:on="RenderCreateUserModal">
+<s:render b:mode="aslastchild" b:destination="id('Modals')">
+<b:modal c:purpose="CreateUserModal" id="CreateUserModal" b:behavior="CreateUserModalActions">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-login"/>
+<div c:purpose="text" class="modal-header-text">Create a 25Live Account</div>
+</b:modalhead>
+<b:modalbody>
+<div style="padding:10px 0">
+<div align="center" style="color:RED; margin-bottom: 10px; display:none" c:purpose="msg"/>
+<table align="center" cellspacing="10">
+<tr>
+<td>First Name:</td>
+<td>
+<input type="text" name="FirstName" value="" class="input-text" onfocus="this.select()"/>
+</td>
+<td style="color:#999">optional</td>
+</tr>
+<tr>
+<td>Middle Name:</td>
+<td>
+<input type="text" name="MiddleName" value="" class="input-text" onfocus="this.select()"/>
+</td>
+<td style="color:#999">optional</td>
+</tr>
+<tr>
+<td>Last Name:</td>
+<td>
+<input type="text" name="LastName" value="" class="input-text" b:required="true" onfocus="this.select()"/>
+</td>
+<td> </td>
+</tr>
+<tr>
+<td>Phone:</td>
+<td>
+<input type="text" name="Phone" value="" class="input-text" onfocus="this.select()"/>
+</td>
+<td style="color:#999">optional</td>
+</tr>
+<tr>
+<td>Email:</td>
+<td>
+<input type="text" name="Email" value="" class="input-text" b:required="true" b:validation="email" onfocus="this.select()"/>
+</td>
+<td> </td>
+</tr>
+<tr>
+<td>Username:</td>
+<td>
+<input type="text" name="Username" value="" class="input-text" b:required="true" onfocus="this.select()"/>
+</td>
+<td> </td>
+</tr>
+<tr>
+<td>Password:</td>
+<td>
+<input type="password" name="Password" value="" class="input-text" b:required="true" onfocus="this.select()"/>
+</td>
+<td> </td>
+</tr>
+</table>
+<div align="center">
+<div c:purpose="submit">
+<b:button id="btnCreateUser" b:action="trigger" b:event="OnClickCreate" b:target="ancestor::b:modal[1]">
+Create
+</b:button>
+<b:button id="btnCreateUserCancel" b:action="trigger" b:event="close" b:target="ancestor::b:modal[1]">
+Cancel
+</b:button>
+</div>
+</div>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:behavior b:name="CreateUserModalActions" b:behavior="ModalHacks">
+<s:event b:on="open">
+<s:super/>
+<s:task b:action="focus" b:target="b:modalbody//input[@name eq 'FirstName'][1]"/>
+</s:event>
+<s:event b:on="close">
+<s:super/>
+<s:with b:target=".//input">
+<s:setatt value=""/>
+</s:with>
+<s:task b:action="trigger" b:event="CloseModal" b:target="id('LayoutMgr')"/>
+</s:event>
+<s:event b:on="OnClickCreate">
+<s:variable b:name="invalid_fields" b:select=".//input[@b:required='true' and not(@b:valid='true')]"/>
+<s:choose>
+<s:when b:test="count($invalid_fields) gt 0">
+<s:with b:target=".//div[@c:purpose='msg']">
+<s:task b:action="settext" b:value="Some required fields are missing."/>
+<s:task b:action="show"/>
+</s:with>
+<s:task b:action="trigger" b:event="invalid" b:target="$invalid_fields"/>
+<s:task b:action="focus" b:target="$invalid_fields[1]"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lQuery" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'contacts.xml?email=', .//input[@name='Email']/@value,'&amp;scope=count')"/>
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{$lQuery}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lTxt"/>
+<s:variable b:name="lEmailCount" b:scope="local" b:select="number($lTxt/r25:results/r25:contacts)"/>
+<s:choose>
+<s:when b:test="$lEmailCount gt 0">
+<s:with b:target=".//div[@c:purpose='msg']">
+<s:task b:action="settext" b:value="An account with this email address already exists. Please enter another email address, or contact your administrator to reset your password."/>
+<s:task b:action="show"/>
+</s:with>
+<s:task b:action="focus" b:target=".//input[@name='Email']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$lQuery" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'contacts.xml?wv_username=', .//input[@name='Username']/@value,'&amp;scope=count')"/>
+<s:variable b:name="lTxt2" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="GET" b:url="{$lQuery}" b:destination="$lTxt2">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lTxt2"/>
+<s:variable b:name="lUsernameCount" b:scope="local" b:select="number($lTxt2/r25:results/r25:contacts)"/>
+<s:choose>
+<s:when b:test="$lUsernameCount gt 0">
+<s:with b:target=".//div[@c:purpose='msg']">
+<s:task b:action="settext" b:value="An account with this Username already exists. Please enter another Username, or contact your administrator to reset your password."/>
+<s:task b:action="show"/>
+</s:with>
+<s:task b:action="focus" b:target=".//input[@name='Username']"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="disable" b:target=".//input"/>
+<s:variable b:name="lUsername" b:scope="local" b:select="string(b:modalbody//input[@name eq 'Username'][1]/@value)"/>
+<s:variable b:name="lPassword" b:scope="local" b:select="string(b:modalbody//input[@name eq 'Password'][1]/@value)"/>
+<s:variable b:name="lFirstName" b:scope="local" b:select="string(b:modalbody//input[@name eq 'FirstName'][1]/@value)"/>
+<s:variable b:name="lMiddle" b:scope="local" b:select="string(b:modalbody//input[@name eq 'MiddleName'][1]/@value)"/>
+<s:variable b:name="lLastName" b:scope="local" b:select="string(b:modalbody//input[@name eq 'LastName'][1]/@value)"/>
+<s:variable b:name="lPhone" b:scope="local" b:select="string(b:modalbody//input[@name eq 'Phone'][1]/@value)"/>
+<s:variable b:name="lEmail" b:scope="local" b:select="string(b:modalbody//input[@name eq 'Email'][1]/@value)"/>
+<s:variable b:name="lContactXml" b:scope="local">
+<r25:contacts>
+<r25:contact status="new">
+<r25:contact_name/>
+<r25:first_name/>
+<r25:middle_name/>
+<r25:last_name/>
+<r25:address status="new">
+<r25:address_type>3</r25:address_type>
+<r25:email/>
+<r25:phone/>
+</r25:address>
+</r25:contact>
+</r25:contacts>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lContactXml"/>
+<s:task b:action="settext" b:target="$lContactXml/r25:contacts/r25:contact/r25:first_name" b:value="{$lFirstName}"/>
+<s:task b:action="settext" b:target="$lContactXml/r25:contacts/r25:contact/r25:last_name" b:value="{$lLastName}"/>
+<s:task b:action="settext" b:target="$lContactXml/r25:contacts/r25:contact/r25:middle_name" b:value="{$lMiddle}"/>
+<s:task b:action="settext" b:target="$lContactXml/r25:contacts/r25:contact/r25:address/r25:email" b:value="{$lEmail}"/>
+<s:task b:action="settext" b:target="$lContactXml/r25:contacts/r25:contact/r25:address/r25:phone" b:value="{$lPhone}"/>
+<s:task b:action="xml2string" b:variable="$lContactXml"/>
+<s:variable b:name="lQuery" b:scope="local" b:select="concat(id('Config')/$tWsPrefix,'contacts.xml')"/>
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="POST" b:url="{$lQuery}" b:data="{$lContactXml}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:variable b:name="lHttpStatus" b:scope="local" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:variable b:name="lRespStr" b:scope="local" b:select="id('HttpMgr')/$tResponseText"/>
+<s:variable b:name="lRespXml" b:scope="local" b:select=""/>
+<s:if b:test="starts-with($lRespStr,'&lt;?')">
+<s:script><![CDATA[
+
+var s = String(_vars['lRespStr'][0]);
+s = s.replace(/\s*<\?.*?\?>/,'');
+s = s.replace(/\s+&\s+/g,' &amp; ');
+s = s.replace(/\s+%\s+/g,' &#37; ');
+bpc.setVariable('lRespStr',[s],'local');
+
+]]></s:script>
+<s:task b:action="string2xml" b:source="$lRespStr" b:variable="$lRespXml"/>
+</s:if>
+<s:variable b:name="pEvent" b:scope="local" b:select="'CreateFailure'"/>
+<s:if b:test="$lHttpStatus = 201">
+<s:task b:test="exists($lRespXml//r25:id)" b:action="assign" b:target="$pEvent" b:scope="tag" b:select="'CreateSuccess'"/>
+</s:if>
+<s:if b:test="$pEvent = 'CreateSuccess'">
+<s:variable b:name="lContactID" b:scope="local" b:select="$lRespXml/r25:results/r25:info/r25:id"/>
+<s:variable b:name="lAccountXml" b:scope="local">
+<r25:webusers>
+<r25:web_user status="new">
+<r25:contact_id/>
+<r25:web_username/>
+<r25:web_password/>
+<r25:proxy_user/>
+<r25:active>1</r25:active>
+</r25:web_user>
+</r25:webusers>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lAccountXml"/>
+<s:task b:action="settext" b:target="$lAccountXml/r25:webusers/r25:web_user/r25:web_username" b:value="{$lUsername}"/>
+<s:task b:action="settext" b:target="$lAccountXml/r25:webusers/r25:web_user/r25:web_password" b:value="{$lPassword}"/>
+<s:task b:action="settext" b:target="$lAccountXml/r25:webusers/r25:web_user/r25:contact_id" b:value="{$lContactID}"/>
+<s:task b:action="xml2string" b:variable="$lAccountXml"/>
+<s:variable b:name="lQuery" b:scope="local" b:select="concat(id('Config')/$tWsPrefix, 'webuser.xml?web_username=',$lUsername)"/>
+<s:variable b:name="lTxt" b:scope="local" b:select=""/>
+<s:task b:action="load" b:method="PUT" b:url="{$lQuery}" b:data="{$lAccountXml}" b:destination="$lTxt">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="assign" b:target="$lHttpStatus" b:scope="tag" b:select="number(id('HttpMgr')/$tStatus)"/>
+<s:task b:action="assign" b:target="$lRespStr" b:scope="tag" b:select="id('HttpMgr')/$tResponseText"/>
+<s:if b:test="starts-with($lRespStr,'&lt;?')">
+<s:script><![CDATA[
+
+var s = String(_vars['lRespStr'][0]);
+s = s.replace(/\s*<\?.*?\?>/,'');
+s = s.replace(/\s+&\s+/g,' &amp; ');
+s = s.replace(/\s+%\s+/g,' &#37; ');
+bpc.setVariable('lRespStr',[s],'local');
+
+]]></s:script>
+<s:task b:action="string2xml" b:source="$lRespStr" b:variable="$lRespXml"/>
+</s:if>
+<s:variable b:name="pEvent" b:scope="local" b:select="'AccountFailure'"/>
+<s:if b:test="$lHttpStatus = 200">
+<s:task b:action="assign" b:target="$pEvent" b:scope="tag" b:select="'AccountSuccess'"/>
+</s:if>
+<s:if b:test="$pEvent = 'AccountSuccess'">
+<s:task b:action="trigger" b:event="close" b:target="."/>
+<s:task b:action="alert" b:value="Account successfully created! You will now automatically be signed-in."/>
+<s:with b:target="id('bxLoading')">
+<s:task b:action="settext" b:target="$tMain" b:value="Signing you in to 25Live..."/>
+<s:task b:action="trigger" b:event="ShowLoading" b:target="."/>
+</s:with>
+<s:variable b:name="pUsername" b:scope="local" b:select="$lUsername"/>
+<s:variable b:name="pPassword" b:scope="local" b:select="$lPassword"/>
+<s:task b:action="trigger" b:event="Login" b:target="id('WSSessionMgr')"/>
+</s:if>
+<s:if b:test="$pEvent = 'AccountFailure'">
+<s:task b:action="trigger" b:event="close" b:target="."/>
+<s:task b:action="alert" b:value="Account creation failed. Please try again later."/>
+<s:task b:action="enable" b:target=".//input"/>
+</s:if>
+</s:if>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+<s:event b:on="RenderBrowserRecommendationsModal">
+<s:render b:mode="aslastchild" b:destination="id('Modals')">
+<b:modal id="BrowserRecommendationsModal" b:behavior="ModalHacks">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-25live"/>
+<div c:purpose="text" class="modal-header-text">Browser Recommendations</div>
+</b:modalhead>
+<b:modalbody>
+<p c:id="best_browsers"/>
+<p>
+<a href="http://www.mozilla.com/firefox/" target="firefox"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/browser_firefox.jpg"/></a>
+<a href="http://www.google.com/chrome/" target="chrome"><img src="https://25live-a.collegenet.com/hybridssl/v21.0/gfx/browser_chrome.jpg"/></a>
+</p>
+<p c:id="upgrade_ie"/>
+<p><a href="http://www.microsoft.com/windows/internet-explorer/" target="ie"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/browser_ie.jpg"/></a></p>
+<p c:id="chrome_frame">
+<a href="http://www.google.com/chromeframe" target="frame"><img src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/chrome_frame.jpg" style="float:left; margin-left:0"/></a>
+</p>
+<p style="clear:both"><b:button b:action="trigger" b:event="close" b:target="id('BrowserRecommendationsModal')">Close</b:button></p>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:render b:destination="id('BrowserRecommendationsModal')//p[@c:id='best_browsers']" b:mode="aslastchild"><span xmlns="">25Live works best and fastest in <a href="http://www.mozilla.com/firefox/" target="firefox">
+                <b>Mozilla Firefox</b>
+              </a> and <a href="http://www.google.com/chrome/" target="chrome">
+                <b>Google Chrome</b>
+              </a>.</span></s:render>
+<s:render b:destination="id('BrowserRecommendationsModal')//p[@c:id='upgrade_ie']" b:mode="aslastchild"><span xmlns="">If you are using <a href="http://www.microsoft.com/windows/internet-explorer/" target="ie">
+                <b>Internet Explorer</b>
+              </a>, please upgrade to the latest version.</span></s:render>
+<s:render b:destination="id('BrowserRecommendationsModal')//p[@c:id='chrome_frame']" b:mode="aslastchild"><span xmlns="">Also, there is a plug-in for Internet Explorer that can help it run 25Live  <i>faster</i> called <a href="http://www.google.com/chromeframe" target="frame">
+                <b>Google Chrome Frame</b>
+              </a>. Try it!</span></s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:event b:on="RenderSaveSearchModal">
+<s:render b:mode="aslastchild" b:destination="id('Modals')">
+<b:modal id="SearchModal" b:behavior="ModalHacks" style="width:675px; height:500px; z-index:901;">
+<b:modalhead>
+<div/>
+</b:modalhead>
+<b:modalbody style="height:inherit"><s25:search_create/></b:modalbody>
+</b:modal>
+</s:render>
+</s:event>
+<s:event b:on="RenderEditSearchModal">
+<s:render b:mode="aslastchild" b:destination="id('Modals')">
+<b:modal id="EditSearchModal" b:behavior="ModalHacks" style="width:500px; height:400px; z-index:901;">
+<b:modalhead>
+<div c:id="Header"/>
+</b:modalhead>
+<b:modalbody style="height:inherit"><s25:search_edit/></b:modalbody>
+</b:modal>
+</s:render>
+</s:event>
+<s:event b:on="RenderEmailLookupModal">
+<s:render b:mode="aslastchild" b:destination="id('Modals')">
+<b:modal id="EmailLookup" b:behavior="ModalHacks" style="width:500px; z-index:901; background-color:#ddd;">
+<b:modalhead>
+<div/>
+</b:modalhead>
+<b:modalbody style="">
+<div id="contactEmail">
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+</s:event>
+<s:event b:on="RenderProfileSelectionModal">
+<s:render b:test="not(exists(id('ProfileSelectionModal')))" b:destination="id('Modals')" b:mode="aslastchild">
+<b:modal id="ProfileSelectionModal" b:behavior="ModalHacks" b:observe="b:modalbody/s25:profile_selection" style="width:500px; height:475px; z-index:901;">
+<s:event b:on="close">
+<s:super/>
+<s:if b:test="string-length(id('Controller')/$tInbox/selected_obj/@profile_id) = 0">
+<s:variable b:name="lEventID" b:select=".//s25:profile_selection/@c:event_id"/>
+<s:task b:action="trigger" b:event="UnlockEvent" b:target="id('Controller')"/>
+</s:if>
+</s:event>
+<b:modalhead>
+<div c:id="icon" class="modal-header-icon modal-header-icon-event"/>
+<div class="modal-header-actions">
+
+</div>
+<div c:id="text" class="modal-header-text">Choose a Reservation to Edit</div>
+</b:modalhead>
+<b:modalbody style="height:inherit"><s25:profile_selection id="ProfileSelection"/></b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:event b:on="RenderDateRestrictionModal">
+<s:render b:mode="aslastchild" b:destination="id('Modals')">
+<b:modal id="DateRestrictionModal" c:purpose="IconLegend" b:behavior="ModalHacks" style="width:500px; z-index:901;">
+<b:modalhead>
+<div c:purpose="icon" class="modal-header-icon modal-header-icon-event"/>
+<div c:purpose="text" class="modal-header-text">Alert: Date Restriction</div>
+</b:modalhead>
+<b:modalbody>
+<div align="center" style="padding:20px">
+<span>The earliest that you can schedule a new event is</span> <b><s:textnode b:label="{s25_format_date(id('Prefs')/$tEarliestEventCreationDate, id('Prefs')/$tDatePattern)}"/></b>.
+</div>
+<div align="center" style="padding:20px">
+<b:button b:action="trigger" b:event="close" b:target="id('DateRestrictionModal')">Close</b:button>
+</div>
+</b:modalbody>
+</b:modal>
+</s:render>
+<s:fxstyle b:test="starts-with($bpc_browser,'ie')" b:time="1"/>
+</s:event>
+<s:behavior b:name="ValidEmail">
+<s:event b:on="change">
+<s:variable b:name="initValue" b:select="normalize-space(string(@value))" b:scope="local"/>
+<s:variable b:name="validEmail" select="''" b:scope="local"/>
+<s:script type="text/javascript"><![CDATA[
+
+bpc.setVariable('validEmail',["^[A-Z0-9\~\!\`\|\$\%\*\/\=\?\^\{\}\#\&\'\.\_\%\+\-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$"],'local');
+
+]]></s:script>
+<s:choose>
+<s:when b:test="matches($initValue, $validEmail, 'i')">
+<s:setatt valid="true"/>
+</s:when>
+<s:otherwise>
+<s:setatt valid="false"/>
+<s:task b:action="alert" b:value="Please enter a valid email address."/>
+</s:otherwise>
+</s:choose>
+</s:event>
+</s:behavior>
+</div>

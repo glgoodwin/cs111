@@ -1,0 +1,12 @@
+/AST.sml/1.1/Wed Dec  8 11:35:26 2010//
+/Scanner.sml/1.1/Wed Dec  8 11:35:26 2010//
+/Token.sml/1.1/Wed Dec  8 11:35:26 2010//
+/TypeParserRecursiveDescent.sml/1.1/Wed Dec  8 11:35:26 2010//
+/TypeParserRecursiveDescentTester.sml/1.1/Wed Dec  8 11:35:26 2010//
+/TypeParserShiftReduce.sml/1.1/Wed Dec  8 11:35:27 2010//
+/TypeParserShiftReduceTester.sml/1.1/Wed Dec  8 11:35:27 2010//
+/Types.lex/1.1/Wed Dec  8 11:35:27 2010//
+/Types.lex.sml/1.1/Wed Dec  8 11:35:27 2010//
+/load-type-parser-recursive-descent.sml/1.1/Wed Dec  8 11:35:27 2010//
+/load-type-parser-shift-reduce.sml/1.1/Wed Dec  8 11:35:27 2010//
+D

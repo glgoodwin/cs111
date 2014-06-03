@@ -1,0 +1,1 @@
+select * from names inner join address using (id)\G

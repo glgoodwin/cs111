@@ -1,0 +1,15 @@
+GNOME_KEYRING_SOCKET=/tmp/keyring-Uf3Btz/socket
+SSH_AUTH_SOCK=/tmp/keyring-Uf3Btz/socket.ssh
+An instance of nm-applet is already running.
+Traceback (most recent call last):
+  File "/usr/share/system-config-printer/applet.py", line 20, in <module>
+    import cups
+ImportError: No module named cups
+
+(polkit-gnome-authentication-agent-1:17172): GLib-GObject-WARNING **: cannot register existing type `_PolkitError'
+
+(polkit-gnome-authentication-agent-1:17172): GLib-CRITICAL **: g_once_init_leave: assertion `initialization_value != 0' failed
+Failed to play sound: File or data not found
+
+** (gnome-panel:17117): WARNING **: panel-applet-frame.c:1288: failed to load applet OAFIID:GnoteApplet:
+(null)

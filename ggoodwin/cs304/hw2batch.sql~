@@ -1,0 +1,11 @@
+create table phone(
+	id int auto_increment not null primary key'
+	areacode int,
+	number int,
+	type enum('Home','Cell', 'Work', 'School'));
+
+create
+
+
+	
+ 

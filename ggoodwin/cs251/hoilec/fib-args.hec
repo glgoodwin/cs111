@@ -1,0 +1,7 @@
+(hoilec (x) (list (fib x) (^ args))
+  (def args (cell #e)) ;; collects args to fib (in reverse) 
+  (def (fib n)
+    (seq (:= args (prep n (^ args)))
+         (if (<= n 1)
+             n
+             (+ (fib (- n 1)) (fib (- n 2)))))))

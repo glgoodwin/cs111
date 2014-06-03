@@ -1,0 +1,3483 @@
+[ggoodwin@lark ps4-group] ocaml
+        Objective Caml version 3.11.2
+
+# #use "load-optree-set.ml";; 
+module type FUN_UTILS =
+  sig
+    val cons : 'a -> 'a list -> 'a list
+    val curry : ('a * 'b -> 'c) -> 'a -> 'b -> 'c
+    val pair : 'a -> 'b -> 'a * 'b
+    val triple : 'a -> 'b -> 'c -> 'a * 'b * 'c
+    val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+    val id : 'a -> 'a
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val o : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+    val uncurry : ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+    val valOf : 'a option -> 'a
+  end
+module FunUtils : FUN_UTILS
+module type LIST_UTILS =
+  sig
+    val ana : ('a -> ('b * 'a) option) -> 'a -> 'b list
+    val app : ('a -> unit) -> 'a list -> unit
+    val drop : int -> 'a list -> 'a list
+    val exists : ('a -> bool) -> 'a list -> bool
+    val exists2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val filter : ('a -> bool) -> 'a list -> 'a list
+    val flatten : 'a list list -> 'a list
+    val foldr : ('a -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr' : ('a -> 'a list -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr2 : ('a -> 'b -> 'c -> 'c) -> 'c -> 'a list -> 'b list -> 'c
+    val foldl : 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
+    val foldl2 : 'a -> ('a -> 'b -> 'c -> 'a) -> 'b list -> 'c list -> 'a
+    val for_all : ('a -> bool) -> 'a list -> bool
+    val for_all2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val for_each : ('a -> 'b) -> 'a list -> unit
+    val for_each2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> unit
+    val gen : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a list
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val last : 'a list -> 'a
+    val map : ('a -> 'b) -> 'a list -> 'b list
+    val map_iter : ('a -> 'b) -> 'a list -> 'b list
+    val map2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list
+    val map3 :
+      ('a -> 'b -> 'c -> 'd) -> 'a list -> 'b list -> 'c list -> 'd list
+    val range : int -> int -> int list
+    val rev : 'a list -> 'a list
+    val some : ('a -> bool) -> 'a list -> 'a option
+    val some2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> ('a * 'b) option
+    val take : int -> 'a list -> 'a list
+    val zip : 'a list * 'b list -> ('a * 'b) list
+    val zip3 : 'a list * 'b list * 'c list -> ('a * 'b * 'c) list
+    val unzip : ('a * 'b) list -> 'a list * 'b list
+    val unzip3 : ('a * 'b * 'c) list -> 'a list * 'b list * 'c list
+  end
+module ListUtils : LIST_UTILS
+module type ENV =
+  sig
+    type 'a env
+    val empty : 'a env
+    val bind : string -> 'a -> 'a env -> 'a env
+    val bindAll : string list -> 'a list -> 'a env -> 'a env
+    val make : string list -> 'a list -> 'a env
+    val lookup : string -> 'a env -> 'a option
+    val remove : string -> 'a env -> 'a env
+    val removeAll : string list -> 'a env -> 'a env
+    val merge : 'a env -> 'a env -> 'a env
+  end
+module Env : ENV
+module type LIST_SET_UTILS =
+  sig
+    val member : 'a -> 'a list -> bool
+    val insert : 'a -> 'a list -> 'a list
+    val delete : 'a -> 'a list -> 'a list
+    val union : 'a list -> 'a list -> 'a list
+    val intersection : 'a list -> 'a list -> 'a list
+    val difference : 'a list -> 'a list -> 'a list
+  end
+module ListSetUtils : LIST_SET_UTILS
+module type STRING_UTILS =
+  sig
+    val print : string -> unit
+    val println : string -> unit
+    val intToString : int -> string
+    val floatToString : float -> string
+    val boolToString : bool -> string
+    val charToString : char -> string
+    val pairToString : ('a -> string) -> ('b -> string) -> 'a * 'b -> string
+    val tripleToString :
+      ('a -> string) ->
+      ('b -> string) -> ('c -> string) -> 'a * 'b * 'c -> string
+    val listToString : ('a -> string) -> 'a list -> string
+    val optionToString : ('a -> string) -> 'a option -> string
+    val explode : string -> char list
+    val implode : char list -> string
+    val stringToWords : string -> string list
+    val fresh : string -> string
+  end
+module StringUtils : STRING_UTILS
+module type FILE =
+  sig
+    val fileToString : string -> string
+    val fileToLines : string -> string list
+    val fileToWords : string -> string list
+    val stringToFile : string -> string -> unit
+    val linesToFile : string list -> string -> unit
+    val fileToLineArray : string -> string array
+    val lineArrayToFile : string array -> string -> unit
+    val randomizeLines : string -> string -> unit
+    val filterLines : (string -> bool) -> string -> string -> unit
+    val mapLines : (string -> string) -> string -> string -> unit
+  end
+module File : FILE
+module type SEXP =
+  sig
+    type sexp =
+        Int of int
+      | Flt of float
+      | Str of string
+      | Chr of char
+      | Sym of string
+      | Seq of sexp list
+    exception IllFormedSexp of string
+    val stringToSexp : string -> sexp
+    val stringToSexps : string -> sexp list
+    val fileToSexp : string -> sexp
+    val fileToSexps : string -> sexp list
+    val sexpToString : sexp -> string
+    val sexpToString' : int -> sexp -> string
+    val sexpsToString : sexp list -> string
+    val sexpToFile : sexp -> string -> unit
+    val readSexp : unit -> sexp
+  end
+module Sexp : SEXP
+module type BINTREE =
+  sig
+    type 'a bintree = Leaf | Node of 'a bintree * 'a * 'a bintree
+    val int_tree : int bintree
+    val string_tree : string bintree
+    val map : ('a -> 'b) -> 'a bintree -> 'b bintree
+    val fold : ('a -> 'b -> 'a -> 'a) -> 'a -> 'b bintree -> 'a
+    val nodes : 'a bintree -> int
+    val height : 'a bintree -> int
+    val sum : int bintree -> int
+    val prelist : 'a bintree -> 'a list
+    val inlist : 'a bintree -> 'a list
+    val postlist : 'a bintree -> 'a list
+    val toString : ('a -> string) -> 'a bintree -> string
+    val toVerboseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toCompactSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toDenseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val fromVerboseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromCompactSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromDenseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+  end
+module Bintree : BINTREE
+module type TEST =
+  sig
+    type prog
+    type arg
+    type res
+    val trial : prog -> arg list -> res
+    val argToString : arg -> string
+    val resEqual : res -> res -> bool
+    val resToString : res -> string
+  end
+module MakeTester :
+  functor (T : TEST) ->
+    sig
+      val print : string -> unit
+      val testEntries :
+        (string * T.prog * (T.arg list * T.res) list) list -> unit
+      val entriesToTrials :
+        (string * T.prog * (T.arg list * T.res) list) list ->
+        (string * T.prog * T.arg list * T.res) list
+      val testTrials : (string * T.prog * T.arg list * T.res) list -> unit
+      val testTrial : string * T.prog * T.arg list * T.res -> T.res * bool
+      val printTrialPrefix : string -> T.arg list -> unit
+      val printMismatch : T.res -> T.res -> unit
+    end
+module type TEST_TYPES = sig type args type res end
+module type TEST =
+  functor (TestTypes : TEST_TYPES) ->
+    sig
+      val trial : TestTypes.args -> TestTypes.res
+      val callToString : TestTypes.args -> string
+      val resEqual : TestTypes.res -> TestTypes.res -> bool
+      val resToString : TestTypes.res -> string
+    end
+module MakeFunTester :
+  functor (TT : TEST_TYPES) ->
+    functor
+      (TestFuns : sig
+                    val trial : TT.args -> TT.res
+                    val callToString : TT.args -> string
+                    val resEqual : TT.res -> TT.res -> bool
+                    val resToString : TT.res -> string
+                  end) ->
+      sig
+        val testEntry : TT.args * TT.res -> unit
+        val testEntries : (TT.args * TT.res) list -> unit
+      end
+module type SET =
+  sig
+    type 'a set
+    val empty : 'a set
+    val singleton : 'a -> 'a set
+    val insert : 'a -> 'a set -> 'a set
+    val delete : 'a -> 'a set -> 'a set
+    val isEmpty : 'a set -> bool
+    val size : 'a set -> int
+    val member : 'a -> 'a set -> bool
+    val union : 'a set -> 'a set -> 'a set
+    val intersection : 'a set -> 'a set -> 'a set
+    val difference : 'a set -> 'a set -> 'a set
+    val fromList : 'a list -> 'a set
+    val toList : 'a set -> 'a list
+    val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+    val toString : ('a -> string) -> 'a set -> string
+  end
+module StandardSet :
+  functor (Ord : Set.OrderedType) ->
+    sig
+      type set = Set.Make(Ord).t
+      val empty : set
+      val singleton : Ord.t -> set
+      val insert : Ord.t -> set -> set
+      val delete : Ord.t -> set -> set
+      val member : Ord.t -> set -> bool
+      val isEmpty : set -> bool
+      val size : set -> int
+      val union : set -> set -> set
+      val intersection : set -> set -> set
+      val difference : set -> set -> set
+      val toList : set -> Ord.t list
+      val fromList : Ord.t list -> set
+      val fromSexp : (Sexp.sexp -> Ord.t) -> Sexp.sexp -> set
+      val toSexp : (Ord.t -> Sexp.sexp) -> set -> Sexp.sexp
+      val toString : (Ord.t -> string) -> set -> string
+    end
+module SetTest :
+  functor (Set : SET) ->
+    sig
+      val setPrintFlag : bool -> unit
+      val setFromFile : string -> string Set.set
+      val testFile : string -> unit
+      val testTiny : unit -> unit
+      val testSmall : unit -> unit
+      val testMedium : unit -> unit
+      val testLarge : unit -> unit
+      val testSomeSmall : unit -> unit
+      val testAll : unit -> unit
+    end
+module SortedListSet : SET
+module OperationTreeSet : SET
+module OperationTreeSetTest :
+  sig
+    val setPrintFlag : bool -> unit
+    val setFromFile : string -> string OperationTreeSet.set
+    val testFile : string -> unit
+    val testTiny : unit -> unit
+    val testSmall : unit -> unit
+    val testMedium : unit -> unit
+    val testLarge : unit -> unit
+    val testSomeSmall : unit -> unit
+    val testAll : unit -> unit
+  end
+val setFromFile : string -> string OperationTreeSet.set = <fun>
+val testTiny : unit -> unit = <fun>
+val testSmall : unit -> unit = <fun>
+val testMedium : unit -> unit = <fun>
+val testLarge : unit -> unit = <fun>
+# testTiny();;
+Reading ../text/tiny-unsorted.txt into list ...done
+List has 16 elements
+Creating test set1 from first 2/3 of list ...
+Stack overflow during evaluation (looping recursion?).
+# splithalf [1;2;3;4] 2 0 ([],[1;2;3;4]);;
+Characters 1-10:
+  splithalf [1;2;3;4] 2 0 ([],[1;2;3;4]);;
+  ^^^^^^^^^
+Error: Unbound value splithalf
+# #use "OperationTreeSet.ml";;
+module OperationTreeSet : SET
+# splithalf [1;2;3;4] 2 0 ([],[1;2;3;4]);;
+Characters 0-9:
+  splithalf [1;2;3;4] 2 0 ([],[1;2;3;4]);;
+  ^^^^^^^^^
+Error: Unbound value splithalf
+# fromList [1;2;3;4];;
+Characters 0-8:
+  fromList [1;2;3;4];;
+  ^^^^^^^^
+Error: Unbound value fromList
+# open OperationTreeSet;;
+# splithalf [1;2;3;4] 2 0 ([],[1;2;3;4]);;
+Characters 0-9:
+  splithalf [1;2;3;4] 2 0 ([],[1;2;3;4]);;
+  ^^^^^^^^^
+Error: Unbound value splithalf
+# fromList [1;2;3;4];;
+
+
+Stack overflow during evaluation (looping recursion?).
+# fromList [1;2;3;4];;
+
+Stack overflow during evaluation (looping recursion?).
+#   
+  ;;
+Characters 2-4:
+  ;;
+  ^^
+Error: Syntax error
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 46, characters 25-26:
+Error: Unbound value x
+# #use "OperationTreeSet.ml";;
+module OperationTreeSet : SET
+# open OperationTreeSet;;
+# fromList [1;2;3;4];;
+Stack overflow during evaluation (looping recursion?).
+# fromList [];;
+- : '_a OperationTreeSet.set = <abstr>
+# fromList [1];;
+Stack overflow during evaluation (looping recursion?).
+# splithalf;;
+Characters 0-9:
+  splithalf;;
+  ^^^^^^^^^
+Error: Unbound value splithalf
+# #use "OperationTreeSet.ml";;
+module OperationTreeSet : SET
+# open OperationTreeSet;;
+# fromList [1];;
+Stack overflow during evaluation (looping recursion?).
+# splithalf;;
+Characters 0-9:
+  splithalf;;
+  ^^^^^^^^^
+Error: Unbound value splithalf
+# #use "OperationTreeSet.ml";;
+module OperationTreeSet : SET
+# open OperationTreeSet;;
+# fromList [1];;
+Stack overflow during evaluation (looping recursion?).
+# #use "OperationTreeSet.ml";;
+module OperationTreeSet : SET
+# open OperationTreeSet;;
+# fromList [1];;
+- : int OperationTreeSet.set = <abstr>
+# fromList [1;2];;
+- : int OperationTreeSet.set = <abstr>
+# fromList [1;2;3;4];;
+- : int OperationTreeSet.set = <abstr>
+# testTiny();;
+Reading ../text/tiny-unsorted.txt into list ...done
+List has 16 elements
+Creating test set1 from first 2/3 of list ...
+Stack overflow during evaluation (looping recursion?).
+# #use "load-optree-set.ml";;
+module type FUN_UTILS =
+  sig
+    val cons : 'a -> 'a list -> 'a list
+    val curry : ('a * 'b -> 'c) -> 'a -> 'b -> 'c
+    val pair : 'a -> 'b -> 'a * 'b
+    val triple : 'a -> 'b -> 'c -> 'a * 'b * 'c
+    val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+    val id : 'a -> 'a
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val o : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+    val uncurry : ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+    val valOf : 'a option -> 'a
+  end
+module FunUtils : FUN_UTILS
+module type LIST_UTILS =
+  sig
+    val ana : ('a -> ('b * 'a) option) -> 'a -> 'b list
+    val app : ('a -> unit) -> 'a list -> unit
+    val drop : int -> 'a list -> 'a list
+    val exists : ('a -> bool) -> 'a list -> bool
+    val exists2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val filter : ('a -> bool) -> 'a list -> 'a list
+    val flatten : 'a list list -> 'a list
+    val foldr : ('a -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr' : ('a -> 'a list -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr2 : ('a -> 'b -> 'c -> 'c) -> 'c -> 'a list -> 'b list -> 'c
+    val foldl : 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
+    val foldl2 : 'a -> ('a -> 'b -> 'c -> 'a) -> 'b list -> 'c list -> 'a
+    val for_all : ('a -> bool) -> 'a list -> bool
+    val for_all2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val for_each : ('a -> 'b) -> 'a list -> unit
+    val for_each2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> unit
+    val gen : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a list
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val last : 'a list -> 'a
+    val map : ('a -> 'b) -> 'a list -> 'b list
+    val map_iter : ('a -> 'b) -> 'a list -> 'b list
+    val map2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list
+    val map3 :
+      ('a -> 'b -> 'c -> 'd) -> 'a list -> 'b list -> 'c list -> 'd list
+    val range : int -> int -> int list
+    val rev : 'a list -> 'a list
+    val some : ('a -> bool) -> 'a list -> 'a option
+    val some2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> ('a * 'b) option
+    val take : int -> 'a list -> 'a list
+    val zip : 'a list * 'b list -> ('a * 'b) list
+    val zip3 : 'a list * 'b list * 'c list -> ('a * 'b * 'c) list
+    val unzip : ('a * 'b) list -> 'a list * 'b list
+    val unzip3 : ('a * 'b * 'c) list -> 'a list * 'b list * 'c list
+  end
+module ListUtils : LIST_UTILS
+module type ENV =
+  sig
+    type 'a env
+    val empty : 'a env
+    val bind : string -> 'a -> 'a env -> 'a env
+    val bindAll : string list -> 'a list -> 'a env -> 'a env
+    val make : string list -> 'a list -> 'a env
+    val lookup : string -> 'a env -> 'a option
+    val remove : string -> 'a env -> 'a env
+    val removeAll : string list -> 'a env -> 'a env
+    val merge : 'a env -> 'a env -> 'a env
+  end
+module Env : ENV
+module type LIST_SET_UTILS =
+  sig
+    val member : 'a -> 'a list -> bool
+    val insert : 'a -> 'a list -> 'a list
+    val delete : 'a -> 'a list -> 'a list
+    val union : 'a list -> 'a list -> 'a list
+    val intersection : 'a list -> 'a list -> 'a list
+    val difference : 'a list -> 'a list -> 'a list
+  end
+module ListSetUtils : LIST_SET_UTILS
+module type STRING_UTILS =
+  sig
+    val print : string -> unit
+    val println : string -> unit
+    val intToString : int -> string
+    val floatToString : float -> string
+    val boolToString : bool -> string
+    val charToString : char -> string
+    val pairToString : ('a -> string) -> ('b -> string) -> 'a * 'b -> string
+    val tripleToString :
+      ('a -> string) ->
+      ('b -> string) -> ('c -> string) -> 'a * 'b * 'c -> string
+    val listToString : ('a -> string) -> 'a list -> string
+    val optionToString : ('a -> string) -> 'a option -> string
+    val explode : string -> char list
+    val implode : char list -> string
+    val stringToWords : string -> string list
+    val fresh : string -> string
+  end
+module StringUtils : STRING_UTILS
+module type FILE =
+  sig
+    val fileToString : string -> string
+    val fileToLines : string -> string list
+    val fileToWords : string -> string list
+    val stringToFile : string -> string -> unit
+    val linesToFile : string list -> string -> unit
+    val fileToLineArray : string -> string array
+    val lineArrayToFile : string array -> string -> unit
+    val randomizeLines : string -> string -> unit
+    val filterLines : (string -> bool) -> string -> string -> unit
+    val mapLines : (string -> string) -> string -> string -> unit
+  end
+module File : FILE
+module type SEXP =
+  sig
+    type sexp =
+        Int of int
+      | Flt of float
+      | Str of string
+      | Chr of char
+      | Sym of string
+      | Seq of sexp list
+    exception IllFormedSexp of string
+    val stringToSexp : string -> sexp
+    val stringToSexps : string -> sexp list
+    val fileToSexp : string -> sexp
+    val fileToSexps : string -> sexp list
+    val sexpToString : sexp -> string
+    val sexpToString' : int -> sexp -> string
+    val sexpsToString : sexp list -> string
+    val sexpToFile : sexp -> string -> unit
+    val readSexp : unit -> sexp
+  end
+module Sexp : SEXP
+module type BINTREE =
+  sig
+    type 'a bintree = Leaf | Node of 'a bintree * 'a * 'a bintree
+    val int_tree : int bintree
+    val string_tree : string bintree
+    val map : ('a -> 'b) -> 'a bintree -> 'b bintree
+    val fold : ('a -> 'b -> 'a -> 'a) -> 'a -> 'b bintree -> 'a
+    val nodes : 'a bintree -> int
+    val height : 'a bintree -> int
+    val sum : int bintree -> int
+    val prelist : 'a bintree -> 'a list
+    val inlist : 'a bintree -> 'a list
+    val postlist : 'a bintree -> 'a list
+    val toString : ('a -> string) -> 'a bintree -> string
+    val toVerboseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toCompactSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toDenseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val fromVerboseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromCompactSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromDenseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+  end
+module Bintree : BINTREE
+module type TEST =
+  sig
+    type prog
+    type arg
+    type res
+    val trial : prog -> arg list -> res
+    val argToString : arg -> string
+    val resEqual : res -> res -> bool
+    val resToString : res -> string
+  end
+module MakeTester :
+  functor (T : TEST) ->
+    sig
+      val print : string -> unit
+      val testEntries :
+        (string * T.prog * (T.arg list * T.res) list) list -> unit
+      val entriesToTrials :
+        (string * T.prog * (T.arg list * T.res) list) list ->
+        (string * T.prog * T.arg list * T.res) list
+      val testTrials : (string * T.prog * T.arg list * T.res) list -> unit
+      val testTrial : string * T.prog * T.arg list * T.res -> T.res * bool
+      val printTrialPrefix : string -> T.arg list -> unit
+      val printMismatch : T.res -> T.res -> unit
+    end
+module type TEST_TYPES = sig type args type res end
+module type TEST =
+  functor (TestTypes : TEST_TYPES) ->
+    sig
+      val trial : TestTypes.args -> TestTypes.res
+      val callToString : TestTypes.args -> string
+      val resEqual : TestTypes.res -> TestTypes.res -> bool
+      val resToString : TestTypes.res -> string
+    end
+module MakeFunTester :
+  functor (TT : TEST_TYPES) ->
+    functor
+      (TestFuns : sig
+                    val trial : TT.args -> TT.res
+                    val callToString : TT.args -> string
+                    val resEqual : TT.res -> TT.res -> bool
+                    val resToString : TT.res -> string
+                  end) ->
+      sig
+        val testEntry : TT.args * TT.res -> unit
+        val testEntries : (TT.args * TT.res) list -> unit
+      end
+module type SET =
+  sig
+    type 'a set
+    val empty : 'a set
+    val singleton : 'a -> 'a set
+    val insert : 'a -> 'a set -> 'a set
+    val delete : 'a -> 'a set -> 'a set
+    val isEmpty : 'a set -> bool
+    val size : 'a set -> int
+    val member : 'a -> 'a set -> bool
+    val union : 'a set -> 'a set -> 'a set
+    val intersection : 'a set -> 'a set -> 'a set
+    val difference : 'a set -> 'a set -> 'a set
+    val fromList : 'a list -> 'a set
+    val toList : 'a set -> 'a list
+    val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+    val toString : ('a -> string) -> 'a set -> string
+  end
+module StandardSet :
+  functor (Ord : Set.OrderedType) ->
+    sig
+      type set = Set.Make(Ord).t
+      val empty : set
+      val singleton : Ord.t -> set
+      val insert : Ord.t -> set -> set
+      val delete : Ord.t -> set -> set
+      val member : Ord.t -> set -> bool
+      val isEmpty : set -> bool
+      val size : set -> int
+      val union : set -> set -> set
+      val intersection : set -> set -> set
+      val difference : set -> set -> set
+      val toList : set -> Ord.t list
+      val fromList : Ord.t list -> set
+      val fromSexp : (Sexp.sexp -> Ord.t) -> Sexp.sexp -> set
+      val toSexp : (Ord.t -> Sexp.sexp) -> set -> Sexp.sexp
+      val toString : (Ord.t -> string) -> set -> string
+    end
+module SetTest :
+  functor (Set : SET) ->
+    sig
+      val setPrintFlag : bool -> unit
+      val setFromFile : string -> string Set.set
+      val testFile : string -> unit
+      val testTiny : unit -> unit
+      val testSmall : unit -> unit
+      val testMedium : unit -> unit
+      val testLarge : unit -> unit
+      val testSomeSmall : unit -> unit
+      val testAll : unit -> unit
+    end
+module SortedListSet : SET
+module OperationTreeSet : SET
+module OperationTreeSetTest :
+  sig
+    val setPrintFlag : bool -> unit
+    val setFromFile : string -> string OperationTreeSet.set
+    val testFile : string -> unit
+    val testTiny : unit -> unit
+    val testSmall : unit -> unit
+    val testMedium : unit -> unit
+    val testLarge : unit -> unit
+    val testSomeSmall : unit -> unit
+    val testAll : unit -> unit
+  end
+val setFromFile : string -> string OperationTreeSet.set = <fun>
+val testTiny : unit -> unit = <fun>
+val testSmall : unit -> unit = <fun>
+val testMedium : unit -> unit = <fun>
+val testLarge : unit -> unit = <fun>
+# testTiny();;
+Reading ../text/tiny-unsorted.txt into list ...done
+List has 16 elements
+Creating test set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0. seconds)
+done
+List has 16 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0. seconds)
+Testing toList ...(time = 0. seconds) 
+***ERROR***: First set exhausted when second begins with aback
+
+Your set:
+[]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+[]
+
+Standard result:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Testing insert ...(time = 0. seconds) 
+***ERROR***: First set exhausted when second begins with aaa
+
+Your set:
+[]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+[]
+
+Standard result:
+[aaa; aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace; mmm; zzz]
+
+Testing delete ...(time = 0. seconds) 
+***ERROR***: First set exhausted when second begins with aback
+
+Your set:
+[]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+[]
+
+Standard result:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Testing member ...(time = 0. seconds) 
+***ERROR***: First set exhausted when second begins with fable
+
+Your set:
+[]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+[]
+
+Standard result:
+[fable; gab; ha; ibex; lab]
+
+Testing size (nonEmpty) ...(time = 0. seconds) The integers 17 and 10 are not the same.
+Your set:
+[]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+17
+
+Standard result:
+10
+
+Testing size (empty) ...(time = 0. seconds) The integers 17 and 0 are not the same.
+Your set:
+[]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+17
+
+Standard result:
+0
+
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) The booleans false and true are not the same.
+Your set:
+[]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+false
+
+Standard result:
+true
+
+Testing union ...(time = 0. seconds) 
+***ERROR***: First set exhausted when second begins with aback
+
+Your set 1:
+[]
+
+Standard set 1:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your set 2:
+[]
+
+Standard set 2:
+[babe; cab; fable; gab; ha; ibex; jab; lab; nab; oaf; pace]
+
+Your result:
+[]
+
+Standard result:
+[aback; babe; cab; dad; each; fable; gab; ha; ibex; jab; kanji; lab; mace; nab; oaf; pace]
+
+Testing intersection ...(time = 0. seconds) 
+***ERROR***: First set exhausted when second begins with fable
+
+Your set 1:
+[]
+
+Standard set 1:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your set 2:
+[]
+
+Standard set 2:
+[babe; cab; fable; gab; ha; ibex; jab; lab; nab; oaf; pace]
+
+Your result:
+[]
+
+Standard result:
+[fable; gab; ha; ibex; lab]
+
+Testing difference ...(time = 0. seconds) 
+***ERROR***: First set exhausted when second begins with aback
+
+Your set 1:
+[]
+
+Standard set 1:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your set 2:
+[]
+
+Standard set 2:
+[babe; cab; fable; gab; ha; ibex; jab; lab; nab; oaf; pace]
+
+Your result:
+[]
+
+Standard result:
+[aback; dad; each; kanji; mace]
+
+Testing toSexp/fromSexp ...(time = 0. seconds) 
+***ERROR***: First set exhausted when second begins with "aback"
+
+Your set:
+[]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+[]
+
+Standard result:
+["aback"; "dad"; "each"; "fable"; "gab"; "ha"; "ibex"; "kanji"; "lab"; "mace"]
+
+Testing toString ...(time = 0. seconds) 
+***ERROR***: Unequal strings.
+Your set:
+[]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+[]
+
+Standard result:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+- : unit = ()
+#  #use "load-optree-set.ml";;
+module type FUN_UTILS =
+  sig
+    val cons : 'a -> 'a list -> 'a list
+    val curry : ('a * 'b -> 'c) -> 'a -> 'b -> 'c
+    val pair : 'a -> 'b -> 'a * 'b
+    val triple : 'a -> 'b -> 'c -> 'a * 'b * 'c
+    val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+    val id : 'a -> 'a
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val o : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+    val uncurry : ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+    val valOf : 'a option -> 'a
+  end
+module FunUtils : FUN_UTILS
+module type LIST_UTILS =
+  sig
+    val ana : ('a -> ('b * 'a) option) -> 'a -> 'b list
+    val app : ('a -> unit) -> 'a list -> unit
+    val drop : int -> 'a list -> 'a list
+    val exists : ('a -> bool) -> 'a list -> bool
+    val exists2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val filter : ('a -> bool) -> 'a list -> 'a list
+    val flatten : 'a list list -> 'a list
+    val foldr : ('a -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr' : ('a -> 'a list -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr2 : ('a -> 'b -> 'c -> 'c) -> 'c -> 'a list -> 'b list -> 'c
+    val foldl : 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
+    val foldl2 : 'a -> ('a -> 'b -> 'c -> 'a) -> 'b list -> 'c list -> 'a
+    val for_all : ('a -> bool) -> 'a list -> bool
+    val for_all2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val for_each : ('a -> 'b) -> 'a list -> unit
+    val for_each2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> unit
+    val gen : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a list
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val last : 'a list -> 'a
+    val map : ('a -> 'b) -> 'a list -> 'b list
+    val map_iter : ('a -> 'b) -> 'a list -> 'b list
+    val map2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list
+    val map3 :
+      ('a -> 'b -> 'c -> 'd) -> 'a list -> 'b list -> 'c list -> 'd list
+    val range : int -> int -> int list
+    val rev : 'a list -> 'a list
+    val some : ('a -> bool) -> 'a list -> 'a option
+    val some2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> ('a * 'b) option
+    val take : int -> 'a list -> 'a list
+    val zip : 'a list * 'b list -> ('a * 'b) list
+    val zip3 : 'a list * 'b list * 'c list -> ('a * 'b * 'c) list
+    val unzip : ('a * 'b) list -> 'a list * 'b list
+    val unzip3 : ('a * 'b * 'c) list -> 'a list * 'b list * 'c list
+  end
+module ListUtils : LIST_UTILS
+module type ENV =
+  sig
+    type 'a env
+    val empty : 'a env
+    val bind : string -> 'a -> 'a env -> 'a env
+    val bindAll : string list -> 'a list -> 'a env -> 'a env
+    val make : string list -> 'a list -> 'a env
+    val lookup : string -> 'a env -> 'a option
+    val remove : string -> 'a env -> 'a env
+    val removeAll : string list -> 'a env -> 'a env
+    val merge : 'a env -> 'a env -> 'a env
+  end
+module Env : ENV
+module type LIST_SET_UTILS =
+  sig
+    val member : 'a -> 'a list -> bool
+    val insert : 'a -> 'a list -> 'a list
+    val delete : 'a -> 'a list -> 'a list
+    val union : 'a list -> 'a list -> 'a list
+    val intersection : 'a list -> 'a list -> 'a list
+    val difference : 'a list -> 'a list -> 'a list
+  end
+module ListSetUtils : LIST_SET_UTILS
+module type STRING_UTILS =
+  sig
+    val print : string -> unit
+    val println : string -> unit
+    val intToString : int -> string
+    val floatToString : float -> string
+    val boolToString : bool -> string
+    val charToString : char -> string
+    val pairToString : ('a -> string) -> ('b -> string) -> 'a * 'b -> string
+    val tripleToString :
+      ('a -> string) ->
+      ('b -> string) -> ('c -> string) -> 'a * 'b * 'c -> string
+    val listToString : ('a -> string) -> 'a list -> string
+    val optionToString : ('a -> string) -> 'a option -> string
+    val explode : string -> char list
+    val implode : char list -> string
+    val stringToWords : string -> string list
+    val fresh : string -> string
+  end
+module StringUtils : STRING_UTILS
+module type FILE =
+  sig
+    val fileToString : string -> string
+    val fileToLines : string -> string list
+    val fileToWords : string -> string list
+    val stringToFile : string -> string -> unit
+    val linesToFile : string list -> string -> unit
+    val fileToLineArray : string -> string array
+    val lineArrayToFile : string array -> string -> unit
+    val randomizeLines : string -> string -> unit
+    val filterLines : (string -> bool) -> string -> string -> unit
+    val mapLines : (string -> string) -> string -> string -> unit
+  end
+module File : FILE
+module type SEXP =
+  sig
+    type sexp =
+        Int of int
+      | Flt of float
+      | Str of string
+      | Chr of char
+      | Sym of string
+      | Seq of sexp list
+    exception IllFormedSexp of string
+    val stringToSexp : string -> sexp
+    val stringToSexps : string -> sexp list
+    val fileToSexp : string -> sexp
+    val fileToSexps : string -> sexp list
+    val sexpToString : sexp -> string
+    val sexpToString' : int -> sexp -> string
+    val sexpsToString : sexp list -> string
+    val sexpToFile : sexp -> string -> unit
+    val readSexp : unit -> sexp
+  end
+module Sexp : SEXP
+module type BINTREE =
+  sig
+    type 'a bintree = Leaf | Node of 'a bintree * 'a * 'a bintree
+    val int_tree : int bintree
+    val string_tree : string bintree
+    val map : ('a -> 'b) -> 'a bintree -> 'b bintree
+    val fold : ('a -> 'b -> 'a -> 'a) -> 'a -> 'b bintree -> 'a
+    val nodes : 'a bintree -> int
+    val height : 'a bintree -> int
+    val sum : int bintree -> int
+    val prelist : 'a bintree -> 'a list
+    val inlist : 'a bintree -> 'a list
+    val postlist : 'a bintree -> 'a list
+    val toString : ('a -> string) -> 'a bintree -> string
+    val toVerboseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toCompactSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toDenseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val fromVerboseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromCompactSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromDenseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+  end
+module Bintree : BINTREE
+module type TEST =
+  sig
+    type prog
+    type arg
+    type res
+    val trial : prog -> arg list -> res
+    val argToString : arg -> string
+    val resEqual : res -> res -> bool
+    val resToString : res -> string
+  end
+module MakeTester :
+  functor (T : TEST) ->
+    sig
+      val print : string -> unit
+      val testEntries :
+        (string * T.prog * (T.arg list * T.res) list) list -> unit
+      val entriesToTrials :
+        (string * T.prog * (T.arg list * T.res) list) list ->
+        (string * T.prog * T.arg list * T.res) list
+      val testTrials : (string * T.prog * T.arg list * T.res) list -> unit
+      val testTrial : string * T.prog * T.arg list * T.res -> T.res * bool
+      val printTrialPrefix : string -> T.arg list -> unit
+      val printMismatch : T.res -> T.res -> unit
+    end
+module type TEST_TYPES = sig type args type res end
+module type TEST =
+  functor (TestTypes : TEST_TYPES) ->
+    sig
+      val trial : TestTypes.args -> TestTypes.res
+      val callToString : TestTypes.args -> string
+      val resEqual : TestTypes.res -> TestTypes.res -> bool
+      val resToString : TestTypes.res -> string
+    end
+module MakeFunTester :
+  functor (TT : TEST_TYPES) ->
+    functor
+      (TestFuns : sig
+                    val trial : TT.args -> TT.res
+                    val callToString : TT.args -> string
+                    val resEqual : TT.res -> TT.res -> bool
+                    val resToString : TT.res -> string
+                  end) ->
+      sig
+        val testEntry : TT.args * TT.res -> unit
+        val testEntries : (TT.args * TT.res) list -> unit
+      end
+module type SET =
+  sig
+    type 'a set
+    val empty : 'a set
+    val singleton : 'a -> 'a set
+    val insert : 'a -> 'a set -> 'a set
+    val delete : 'a -> 'a set -> 'a set
+    val isEmpty : 'a set -> bool
+    val size : 'a set -> int
+    val member : 'a -> 'a set -> bool
+    val union : 'a set -> 'a set -> 'a set
+    val intersection : 'a set -> 'a set -> 'a set
+    val difference : 'a set -> 'a set -> 'a set
+    val fromList : 'a list -> 'a set
+    val toList : 'a set -> 'a list
+    val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+    val toString : ('a -> string) -> 'a set -> string
+  end
+module StandardSet :
+  functor (Ord : Set.OrderedType) ->
+    sig
+      type set = Set.Make(Ord).t
+      val empty : set
+      val singleton : Ord.t -> set
+      val insert : Ord.t -> set -> set
+      val delete : Ord.t -> set -> set
+      val member : Ord.t -> set -> bool
+      val isEmpty : set -> bool
+      val size : set -> int
+      val union : set -> set -> set
+      val intersection : set -> set -> set
+      val difference : set -> set -> set
+      val toList : set -> Ord.t list
+      val fromList : Ord.t list -> set
+      val fromSexp : (Sexp.sexp -> Ord.t) -> Sexp.sexp -> set
+      val toSexp : (Ord.t -> Sexp.sexp) -> set -> Sexp.sexp
+      val toString : (Ord.t -> string) -> set -> string
+    end
+module SetTest :
+  functor (Set : SET) ->
+    sig
+      val setPrintFlag : bool -> unit
+      val setFromFile : string -> string Set.set
+      val testFile : string -> unit
+      val testTiny : unit -> unit
+      val testSmall : unit -> unit
+      val testMedium : unit -> unit
+      val testLarge : unit -> unit
+      val testSomeSmall : unit -> unit
+      val testAll : unit -> unit
+    end
+module SortedListSet : SET
+module OperationTreeSet : SET
+module OperationTreeSetTest :
+  sig
+    val setPrintFlag : bool -> unit
+    val setFromFile : string -> string OperationTreeSet.set
+    val testFile : string -> unit
+    val testTiny : unit -> unit
+    val testSmall : unit -> unit
+    val testMedium : unit -> unit
+    val testLarge : unit -> unit
+    val testSomeSmall : unit -> unit
+    val testAll : unit -> unit
+  end
+val setFromFile : string -> string OperationTreeSet.set = <fun>
+val testTiny : unit -> unit = <fun>
+val testSmall : unit -> unit = <fun>
+val testMedium : unit -> unit = <fun>
+val testLarge : unit -> unit = <fun>
+# testTiny();;
+Reading ../text/tiny-unsorted.txt into list ...done
+List has 16 elements
+Creating test set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0. seconds)
+done
+List has 16 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0. seconds)
+Testing toList ...(time = 0. seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0. seconds) 
+***ERROR***: First set begins with babe but second set begins with fable
+
+Your set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+[babe; cab; fable; gab; ha; ibex; jab; lab; nab; oaf; pace]
+
+Standard result:
+[fable; gab; ha; ibex; lab]
+
+Testing size (nonEmpty) ...(time = 0. seconds) The integers 17 and 10 are not the same.
+Your set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+17
+
+Standard result:
+10
+
+Testing size (empty) ...(time = 0. seconds) The integers 17 and 0 are not the same.
+Your set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+17
+
+Standard result:
+0
+
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) The booleans false and true are not the same.
+Your set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+false
+
+Standard result:
+true
+
+Testing union ...(time = 0. seconds) OK!
+Testing intersection ...(time = 0. seconds) OK!
+Testing difference ...(time = 0. seconds) OK!
+Testing toSexp/fromSexp ...(time = 0. seconds) 
+***ERROR***: First set exhausted when second begins with "aback"
+
+Your set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+[]
+
+Standard result:
+["aback"; "dad"; "each"; "fable"; "gab"; "ha"; "ibex"; "kanji"; "lab"; "mace"]
+
+Testing toString ...(time = 0. seconds) OK!
+- : unit = ()
+#  #use "load-optree-set.ml";;
+module type FUN_UTILS =
+  sig
+    val cons : 'a -> 'a list -> 'a list
+    val curry : ('a * 'b -> 'c) -> 'a -> 'b -> 'c
+    val pair : 'a -> 'b -> 'a * 'b
+    val triple : 'a -> 'b -> 'c -> 'a * 'b * 'c
+    val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+    val id : 'a -> 'a
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val o : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+    val uncurry : ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+    val valOf : 'a option -> 'a
+  end
+module FunUtils : FUN_UTILS
+module type LIST_UTILS =
+  sig
+    val ana : ('a -> ('b * 'a) option) -> 'a -> 'b list
+    val app : ('a -> unit) -> 'a list -> unit
+    val drop : int -> 'a list -> 'a list
+    val exists : ('a -> bool) -> 'a list -> bool
+    val exists2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val filter : ('a -> bool) -> 'a list -> 'a list
+    val flatten : 'a list list -> 'a list
+    val foldr : ('a -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr' : ('a -> 'a list -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr2 : ('a -> 'b -> 'c -> 'c) -> 'c -> 'a list -> 'b list -> 'c
+    val foldl : 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
+    val foldl2 : 'a -> ('a -> 'b -> 'c -> 'a) -> 'b list -> 'c list -> 'a
+    val for_all : ('a -> bool) -> 'a list -> bool
+    val for_all2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val for_each : ('a -> 'b) -> 'a list -> unit
+    val for_each2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> unit
+    val gen : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a list
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val last : 'a list -> 'a
+    val map : ('a -> 'b) -> 'a list -> 'b list
+    val map_iter : ('a -> 'b) -> 'a list -> 'b list
+    val map2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list
+    val map3 :
+      ('a -> 'b -> 'c -> 'd) -> 'a list -> 'b list -> 'c list -> 'd list
+    val range : int -> int -> int list
+    val rev : 'a list -> 'a list
+    val some : ('a -> bool) -> 'a list -> 'a option
+    val some2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> ('a * 'b) option
+    val take : int -> 'a list -> 'a list
+    val zip : 'a list * 'b list -> ('a * 'b) list
+    val zip3 : 'a list * 'b list * 'c list -> ('a * 'b * 'c) list
+    val unzip : ('a * 'b) list -> 'a list * 'b list
+    val unzip3 : ('a * 'b * 'c) list -> 'a list * 'b list * 'c list
+  end
+module ListUtils : LIST_UTILS
+module type ENV =
+  sig
+    type 'a env
+    val empty : 'a env
+    val bind : string -> 'a -> 'a env -> 'a env
+    val bindAll : string list -> 'a list -> 'a env -> 'a env
+    val make : string list -> 'a list -> 'a env
+    val lookup : string -> 'a env -> 'a option
+    val remove : string -> 'a env -> 'a env
+    val removeAll : string list -> 'a env -> 'a env
+    val merge : 'a env -> 'a env -> 'a env
+  end
+module Env : ENV
+module type LIST_SET_UTILS =
+  sig
+    val member : 'a -> 'a list -> bool
+    val insert : 'a -> 'a list -> 'a list
+    val delete : 'a -> 'a list -> 'a list
+    val union : 'a list -> 'a list -> 'a list
+    val intersection : 'a list -> 'a list -> 'a list
+    val difference : 'a list -> 'a list -> 'a list
+  end
+module ListSetUtils : LIST_SET_UTILS
+module type STRING_UTILS =
+  sig
+    val print : string -> unit
+    val println : string -> unit
+    val intToString : int -> string
+    val floatToString : float -> string
+    val boolToString : bool -> string
+    val charToString : char -> string
+    val pairToString : ('a -> string) -> ('b -> string) -> 'a * 'b -> string
+    val tripleToString :
+      ('a -> string) ->
+      ('b -> string) -> ('c -> string) -> 'a * 'b * 'c -> string
+    val listToString : ('a -> string) -> 'a list -> string
+    val optionToString : ('a -> string) -> 'a option -> string
+    val explode : string -> char list
+    val implode : char list -> string
+    val stringToWords : string -> string list
+    val fresh : string -> string
+  end
+module StringUtils : STRING_UTILS
+module type FILE =
+  sig
+    val fileToString : string -> string
+    val fileToLines : string -> string list
+    val fileToWords : string -> string list
+    val stringToFile : string -> string -> unit
+    val linesToFile : string list -> string -> unit
+    val fileToLineArray : string -> string array
+    val lineArrayToFile : string array -> string -> unit
+    val randomizeLines : string -> string -> unit
+    val filterLines : (string -> bool) -> string -> string -> unit
+    val mapLines : (string -> string) -> string -> string -> unit
+  end
+module File : FILE
+module type SEXP =
+  sig
+    type sexp =
+        Int of int
+      | Flt of float
+      | Str of string
+      | Chr of char
+      | Sym of string
+      | Seq of sexp list
+    exception IllFormedSexp of string
+    val stringToSexp : string -> sexp
+    val stringToSexps : string -> sexp list
+    val fileToSexp : string -> sexp
+    val fileToSexps : string -> sexp list
+    val sexpToString : sexp -> string
+    val sexpToString' : int -> sexp -> string
+    val sexpsToString : sexp list -> string
+    val sexpToFile : sexp -> string -> unit
+    val readSexp : unit -> sexp
+  end
+module Sexp : SEXP
+module type BINTREE =
+  sig
+    type 'a bintree = Leaf | Node of 'a bintree * 'a * 'a bintree
+    val int_tree : int bintree
+    val string_tree : string bintree
+    val map : ('a -> 'b) -> 'a bintree -> 'b bintree
+    val fold : ('a -> 'b -> 'a -> 'a) -> 'a -> 'b bintree -> 'a
+    val nodes : 'a bintree -> int
+    val height : 'a bintree -> int
+    val sum : int bintree -> int
+    val prelist : 'a bintree -> 'a list
+    val inlist : 'a bintree -> 'a list
+    val postlist : 'a bintree -> 'a list
+    val toString : ('a -> string) -> 'a bintree -> string
+    val toVerboseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toCompactSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toDenseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val fromVerboseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromCompactSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromDenseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+  end
+module Bintree : BINTREE
+module type TEST =
+  sig
+    type prog
+    type arg
+    type res
+    val trial : prog -> arg list -> res
+    val argToString : arg -> string
+    val resEqual : res -> res -> bool
+    val resToString : res -> string
+  end
+module MakeTester :
+  functor (T : TEST) ->
+    sig
+      val print : string -> unit
+      val testEntries :
+        (string * T.prog * (T.arg list * T.res) list) list -> unit
+      val entriesToTrials :
+        (string * T.prog * (T.arg list * T.res) list) list ->
+        (string * T.prog * T.arg list * T.res) list
+      val testTrials : (string * T.prog * T.arg list * T.res) list -> unit
+      val testTrial : string * T.prog * T.arg list * T.res -> T.res * bool
+      val printTrialPrefix : string -> T.arg list -> unit
+      val printMismatch : T.res -> T.res -> unit
+    end
+module type TEST_TYPES = sig type args type res end
+module type TEST =
+  functor (TestTypes : TEST_TYPES) ->
+    sig
+      val trial : TestTypes.args -> TestTypes.res
+      val callToString : TestTypes.args -> string
+      val resEqual : TestTypes.res -> TestTypes.res -> bool
+      val resToString : TestTypes.res -> string
+    end
+module MakeFunTester :
+  functor (TT : TEST_TYPES) ->
+    functor
+      (TestFuns : sig
+                    val trial : TT.args -> TT.res
+                    val callToString : TT.args -> string
+                    val resEqual : TT.res -> TT.res -> bool
+                    val resToString : TT.res -> string
+                  end) ->
+      sig
+        val testEntry : TT.args * TT.res -> unit
+        val testEntries : (TT.args * TT.res) list -> unit
+      end
+module type SET =
+  sig
+    type 'a set
+    val empty : 'a set
+    val singleton : 'a -> 'a set
+    val insert : 'a -> 'a set -> 'a set
+    val delete : 'a -> 'a set -> 'a set
+    val isEmpty : 'a set -> bool
+    val size : 'a set -> int
+    val member : 'a -> 'a set -> bool
+    val union : 'a set -> 'a set -> 'a set
+    val intersection : 'a set -> 'a set -> 'a set
+    val difference : 'a set -> 'a set -> 'a set
+    val fromList : 'a list -> 'a set
+    val toList : 'a set -> 'a list
+    val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+    val toString : ('a -> string) -> 'a set -> string
+  end
+module StandardSet :
+  functor (Ord : Set.OrderedType) ->
+    sig
+      type set = Set.Make(Ord).t
+      val empty : set
+      val singleton : Ord.t -> set
+      val insert : Ord.t -> set -> set
+      val delete : Ord.t -> set -> set
+      val member : Ord.t -> set -> bool
+      val isEmpty : set -> bool
+      val size : set -> int
+      val union : set -> set -> set
+      val intersection : set -> set -> set
+      val difference : set -> set -> set
+      val toList : set -> Ord.t list
+      val fromList : Ord.t list -> set
+      val fromSexp : (Sexp.sexp -> Ord.t) -> Sexp.sexp -> set
+      val toSexp : (Ord.t -> Sexp.sexp) -> set -> Sexp.sexp
+      val toString : (Ord.t -> string) -> set -> string
+    end
+module SetTest :
+  functor (Set : SET) ->
+    sig
+      val setPrintFlag : bool -> unit
+      val setFromFile : string -> string Set.set
+      val testFile : string -> unit
+      val testTiny : unit -> unit
+      val testSmall : unit -> unit
+      val testMedium : unit -> unit
+      val testLarge : unit -> unit
+      val testSomeSmall : unit -> unit
+      val testAll : unit -> unit
+    end
+module SortedListSet : SET
+module OperationTreeSet : SET
+module OperationTreeSetTest :
+  sig
+    val setPrintFlag : bool -> unit
+    val setFromFile : string -> string OperationTreeSet.set
+    val testFile : string -> unit
+    val testTiny : unit -> unit
+    val testSmall : unit -> unit
+    val testMedium : unit -> unit
+    val testLarge : unit -> unit
+    val testSomeSmall : unit -> unit
+    val testAll : unit -> unit
+  end
+val setFromFile : string -> string OperationTreeSet.set = <fun>
+val testTiny : unit -> unit = <fun>
+val testSmall : unit -> unit = <fun>
+val testMedium : unit -> unit = <fun>
+val testLarge : unit -> unit = <fun>
+# testTiny();;
+Reading ../text/tiny-unsorted.txt into list ...done
+List has 16 elements
+Creating test set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0. seconds)
+done
+List has 16 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0. seconds)
+Testing toList ...(time = 0. seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0. seconds) OK!
+Testing size (nonEmpty) ...(time = 0. seconds) The integers 17 and 10 are not the same.
+Your set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+17
+
+Standard result:
+10
+
+Testing size (empty) ...(time = 0. seconds) The integers 17 and 0 are not the same.
+Your set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+17
+
+Standard result:
+0
+
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) The booleans false and true are not the same.
+Your set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+false
+
+Standard result:
+true
+
+Testing union ...(time = 0. seconds) OK!
+Testing intersection ...(time = 0. seconds) OK!
+Testing difference ...(time = 0. seconds) OK!
+Testing toSexp/fromSexp ...(time = 0. seconds) 
+***ERROR***: First set exhausted when second begins with "aback"
+
+Your set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+[]
+
+Standard result:
+["aback"; "dad"; "each"; "fable"; "gab"; "ha"; "ibex"; "kanji"; "lab"; "mace"]
+
+Testing toString ...(time = 0.001 seconds) OK!
+- : unit = ()
+#  #use "load-optree-set.ml";;
+module type FUN_UTILS =
+  sig
+    val cons : 'a -> 'a list -> 'a list
+    val curry : ('a * 'b -> 'c) -> 'a -> 'b -> 'c
+    val pair : 'a -> 'b -> 'a * 'b
+    val triple : 'a -> 'b -> 'c -> 'a * 'b * 'c
+    val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+    val id : 'a -> 'a
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val o : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+    val uncurry : ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+    val valOf : 'a option -> 'a
+  end
+module FunUtils : FUN_UTILS
+module type LIST_UTILS =
+  sig
+    val ana : ('a -> ('b * 'a) option) -> 'a -> 'b list
+    val app : ('a -> unit) -> 'a list -> unit
+    val drop : int -> 'a list -> 'a list
+    val exists : ('a -> bool) -> 'a list -> bool
+    val exists2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val filter : ('a -> bool) -> 'a list -> 'a list
+    val flatten : 'a list list -> 'a list
+    val foldr : ('a -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr' : ('a -> 'a list -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr2 : ('a -> 'b -> 'c -> 'c) -> 'c -> 'a list -> 'b list -> 'c
+    val foldl : 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
+    val foldl2 : 'a -> ('a -> 'b -> 'c -> 'a) -> 'b list -> 'c list -> 'a
+    val for_all : ('a -> bool) -> 'a list -> bool
+    val for_all2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val for_each : ('a -> 'b) -> 'a list -> unit
+    val for_each2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> unit
+    val gen : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a list
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val last : 'a list -> 'a
+    val map : ('a -> 'b) -> 'a list -> 'b list
+    val map_iter : ('a -> 'b) -> 'a list -> 'b list
+    val map2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list
+    val map3 :
+      ('a -> 'b -> 'c -> 'd) -> 'a list -> 'b list -> 'c list -> 'd list
+    val range : int -> int -> int list
+    val rev : 'a list -> 'a list
+    val some : ('a -> bool) -> 'a list -> 'a option
+    val some2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> ('a * 'b) option
+    val take : int -> 'a list -> 'a list
+    val zip : 'a list * 'b list -> ('a * 'b) list
+    val zip3 : 'a list * 'b list * 'c list -> ('a * 'b * 'c) list
+    val unzip : ('a * 'b) list -> 'a list * 'b list
+    val unzip3 : ('a * 'b * 'c) list -> 'a list * 'b list * 'c list
+  end
+module ListUtils : LIST_UTILS
+module type ENV =
+  sig
+    type 'a env
+    val empty : 'a env
+    val bind : string -> 'a -> 'a env -> 'a env
+    val bindAll : string list -> 'a list -> 'a env -> 'a env
+    val make : string list -> 'a list -> 'a env
+    val lookup : string -> 'a env -> 'a option
+    val remove : string -> 'a env -> 'a env
+    val removeAll : string list -> 'a env -> 'a env
+    val merge : 'a env -> 'a env -> 'a env
+  end
+module Env : ENV
+module type LIST_SET_UTILS =
+  sig
+    val member : 'a -> 'a list -> bool
+    val insert : 'a -> 'a list -> 'a list
+    val delete : 'a -> 'a list -> 'a list
+    val union : 'a list -> 'a list -> 'a list
+    val intersection : 'a list -> 'a list -> 'a list
+    val difference : 'a list -> 'a list -> 'a list
+  end
+module ListSetUtils : LIST_SET_UTILS
+module type STRING_UTILS =
+  sig
+    val print : string -> unit
+    val println : string -> unit
+    val intToString : int -> string
+    val floatToString : float -> string
+    val boolToString : bool -> string
+    val charToString : char -> string
+    val pairToString : ('a -> string) -> ('b -> string) -> 'a * 'b -> string
+    val tripleToString :
+      ('a -> string) ->
+      ('b -> string) -> ('c -> string) -> 'a * 'b * 'c -> string
+    val listToString : ('a -> string) -> 'a list -> string
+    val optionToString : ('a -> string) -> 'a option -> string
+    val explode : string -> char list
+    val implode : char list -> string
+    val stringToWords : string -> string list
+    val fresh : string -> string
+  end
+module StringUtils : STRING_UTILS
+module type FILE =
+  sig
+    val fileToString : string -> string
+    val fileToLines : string -> string list
+    val fileToWords : string -> string list
+    val stringToFile : string -> string -> unit
+    val linesToFile : string list -> string -> unit
+    val fileToLineArray : string -> string array
+    val lineArrayToFile : string array -> string -> unit
+    val randomizeLines : string -> string -> unit
+    val filterLines : (string -> bool) -> string -> string -> unit
+    val mapLines : (string -> string) -> string -> string -> unit
+  end
+module File : FILE
+module type SEXP =
+  sig
+    type sexp =
+        Int of int
+      | Flt of float
+      | Str of string
+      | Chr of char
+      | Sym of string
+      | Seq of sexp list
+    exception IllFormedSexp of string
+    val stringToSexp : string -> sexp
+    val stringToSexps : string -> sexp list
+    val fileToSexp : string -> sexp
+    val fileToSexps : string -> sexp list
+    val sexpToString : sexp -> string
+    val sexpToString' : int -> sexp -> string
+    val sexpsToString : sexp list -> string
+    val sexpToFile : sexp -> string -> unit
+    val readSexp : unit -> sexp
+  end
+module Sexp : SEXP
+module type BINTREE =
+  sig
+    type 'a bintree = Leaf | Node of 'a bintree * 'a * 'a bintree
+    val int_tree : int bintree
+    val string_tree : string bintree
+    val map : ('a -> 'b) -> 'a bintree -> 'b bintree
+    val fold : ('a -> 'b -> 'a -> 'a) -> 'a -> 'b bintree -> 'a
+    val nodes : 'a bintree -> int
+    val height : 'a bintree -> int
+    val sum : int bintree -> int
+    val prelist : 'a bintree -> 'a list
+    val inlist : 'a bintree -> 'a list
+    val postlist : 'a bintree -> 'a list
+    val toString : ('a -> string) -> 'a bintree -> string
+    val toVerboseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toCompactSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toDenseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val fromVerboseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromCompactSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromDenseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+  end
+module Bintree : BINTREE
+module type TEST =
+  sig
+    type prog
+    type arg
+    type res
+    val trial : prog -> arg list -> res
+    val argToString : arg -> string
+    val resEqual : res -> res -> bool
+    val resToString : res -> string
+  end
+module MakeTester :
+  functor (T : TEST) ->
+    sig
+      val print : string -> unit
+      val testEntries :
+        (string * T.prog * (T.arg list * T.res) list) list -> unit
+      val entriesToTrials :
+        (string * T.prog * (T.arg list * T.res) list) list ->
+        (string * T.prog * T.arg list * T.res) list
+      val testTrials : (string * T.prog * T.arg list * T.res) list -> unit
+      val testTrial : string * T.prog * T.arg list * T.res -> T.res * bool
+      val printTrialPrefix : string -> T.arg list -> unit
+      val printMismatch : T.res -> T.res -> unit
+    end
+module type TEST_TYPES = sig type args type res end
+module type TEST =
+  functor (TestTypes : TEST_TYPES) ->
+    sig
+      val trial : TestTypes.args -> TestTypes.res
+      val callToString : TestTypes.args -> string
+      val resEqual : TestTypes.res -> TestTypes.res -> bool
+      val resToString : TestTypes.res -> string
+    end
+module MakeFunTester :
+  functor (TT : TEST_TYPES) ->
+    functor
+      (TestFuns : sig
+                    val trial : TT.args -> TT.res
+                    val callToString : TT.args -> string
+                    val resEqual : TT.res -> TT.res -> bool
+                    val resToString : TT.res -> string
+                  end) ->
+      sig
+        val testEntry : TT.args * TT.res -> unit
+        val testEntries : (TT.args * TT.res) list -> unit
+      end
+module type SET =
+  sig
+    type 'a set
+    val empty : 'a set
+    val singleton : 'a -> 'a set
+    val insert : 'a -> 'a set -> 'a set
+    val delete : 'a -> 'a set -> 'a set
+    val isEmpty : 'a set -> bool
+    val size : 'a set -> int
+    val member : 'a -> 'a set -> bool
+    val union : 'a set -> 'a set -> 'a set
+    val intersection : 'a set -> 'a set -> 'a set
+    val difference : 'a set -> 'a set -> 'a set
+    val fromList : 'a list -> 'a set
+    val toList : 'a set -> 'a list
+    val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+    val toString : ('a -> string) -> 'a set -> string
+  end
+module StandardSet :
+  functor (Ord : Set.OrderedType) ->
+    sig
+      type set = Set.Make(Ord).t
+      val empty : set
+      val singleton : Ord.t -> set
+      val insert : Ord.t -> set -> set
+      val delete : Ord.t -> set -> set
+      val member : Ord.t -> set -> bool
+      val isEmpty : set -> bool
+      val size : set -> int
+      val union : set -> set -> set
+      val intersection : set -> set -> set
+      val difference : set -> set -> set
+      val toList : set -> Ord.t list
+      val fromList : Ord.t list -> set
+      val fromSexp : (Sexp.sexp -> Ord.t) -> Sexp.sexp -> set
+      val toSexp : (Ord.t -> Sexp.sexp) -> set -> Sexp.sexp
+      val toString : (Ord.t -> string) -> set -> string
+    end
+module SetTest :
+  functor (Set : SET) ->
+    sig
+      val setPrintFlag : bool -> unit
+      val setFromFile : string -> string Set.set
+      val testFile : string -> unit
+      val testTiny : unit -> unit
+      val testSmall : unit -> unit
+      val testMedium : unit -> unit
+      val testLarge : unit -> unit
+      val testSomeSmall : unit -> unit
+      val testAll : unit -> unit
+    end
+module SortedListSet : SET
+module OperationTreeSet : SET
+module OperationTreeSetTest :
+  sig
+    val setPrintFlag : bool -> unit
+    val setFromFile : string -> string OperationTreeSet.set
+    val testFile : string -> unit
+    val testTiny : unit -> unit
+    val testSmall : unit -> unit
+    val testMedium : unit -> unit
+    val testLarge : unit -> unit
+    val testSomeSmall : unit -> unit
+    val testAll : unit -> unit
+  end
+val setFromFile : string -> string OperationTreeSet.set = <fun>
+val testTiny : unit -> unit = <fun>
+val testSmall : unit -> unit = <fun>
+val testMedium : unit -> unit = <fun>
+val testLarge : unit -> unit = <fun>
+# testTiny();;
+Reading ../text/tiny-unsorted.txt into list ...done
+List has 16 elements
+Creating test set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0. seconds)
+done
+List has 16 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0. seconds)
+Testing toList ...(time = 0. seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0. seconds) OK!
+Testing size (nonEmpty) ...(time = 0. seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0. seconds) OK!
+Testing intersection ...(time = 0. seconds) OK!
+Testing difference ...(time = 0. seconds) OK!
+Testing toSexp/fromSexp ...(time = 0. seconds) 
+***ERROR***: First set exhausted when second begins with "aback"
+
+Your set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Standard set:
+[aback; dad; each; fable; gab; ha; ibex; kanji; lab; mace]
+
+Your result:
+[]
+
+Standard result:
+["aback"; "dad"; "each"; "fable"; "gab"; "ha"; "ibex"; "kanji"; "lab"; "mace"]
+
+Testing toString ...(time = 0. seconds) OK!
+- : unit = ()
+#   
+  ;;
+Characters 1-3:
+  ;;
+  ^^
+Error: Syntax error
+#  #use "load-optree-set.ml";;
+module type FUN_UTILS =
+  sig
+    val cons : 'a -> 'a list -> 'a list
+    val curry : ('a * 'b -> 'c) -> 'a -> 'b -> 'c
+    val pair : 'a -> 'b -> 'a * 'b
+    val triple : 'a -> 'b -> 'c -> 'a * 'b * 'c
+    val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+    val id : 'a -> 'a
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val o : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+    val uncurry : ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+    val valOf : 'a option -> 'a
+  end
+module FunUtils : FUN_UTILS
+module type LIST_UTILS =
+  sig
+    val ana : ('a -> ('b * 'a) option) -> 'a -> 'b list
+    val app : ('a -> unit) -> 'a list -> unit
+    val drop : int -> 'a list -> 'a list
+    val exists : ('a -> bool) -> 'a list -> bool
+    val exists2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val filter : ('a -> bool) -> 'a list -> 'a list
+    val flatten : 'a list list -> 'a list
+    val foldr : ('a -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr' : ('a -> 'a list -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr2 : ('a -> 'b -> 'c -> 'c) -> 'c -> 'a list -> 'b list -> 'c
+    val foldl : 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
+    val foldl2 : 'a -> ('a -> 'b -> 'c -> 'a) -> 'b list -> 'c list -> 'a
+    val for_all : ('a -> bool) -> 'a list -> bool
+    val for_all2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val for_each : ('a -> 'b) -> 'a list -> unit
+    val for_each2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> unit
+    val gen : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a list
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val last : 'a list -> 'a
+    val map : ('a -> 'b) -> 'a list -> 'b list
+    val map_iter : ('a -> 'b) -> 'a list -> 'b list
+    val map2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list
+    val map3 :
+      ('a -> 'b -> 'c -> 'd) -> 'a list -> 'b list -> 'c list -> 'd list
+    val range : int -> int -> int list
+    val rev : 'a list -> 'a list
+    val some : ('a -> bool) -> 'a list -> 'a option
+    val some2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> ('a * 'b) option
+    val take : int -> 'a list -> 'a list
+    val zip : 'a list * 'b list -> ('a * 'b) list
+    val zip3 : 'a list * 'b list * 'c list -> ('a * 'b * 'c) list
+    val unzip : ('a * 'b) list -> 'a list * 'b list
+    val unzip3 : ('a * 'b * 'c) list -> 'a list * 'b list * 'c list
+  end
+module ListUtils : LIST_UTILS
+module type ENV =
+  sig
+    type 'a env
+    val empty : 'a env
+    val bind : string -> 'a -> 'a env -> 'a env
+    val bindAll : string list -> 'a list -> 'a env -> 'a env
+    val make : string list -> 'a list -> 'a env
+    val lookup : string -> 'a env -> 'a option
+    val remove : string -> 'a env -> 'a env
+    val removeAll : string list -> 'a env -> 'a env
+    val merge : 'a env -> 'a env -> 'a env
+  end
+module Env : ENV
+module type LIST_SET_UTILS =
+  sig
+    val member : 'a -> 'a list -> bool
+    val insert : 'a -> 'a list -> 'a list
+    val delete : 'a -> 'a list -> 'a list
+    val union : 'a list -> 'a list -> 'a list
+    val intersection : 'a list -> 'a list -> 'a list
+    val difference : 'a list -> 'a list -> 'a list
+  end
+module ListSetUtils : LIST_SET_UTILS
+module type STRING_UTILS =
+  sig
+    val print : string -> unit
+    val println : string -> unit
+    val intToString : int -> string
+    val floatToString : float -> string
+    val boolToString : bool -> string
+    val charToString : char -> string
+    val pairToString : ('a -> string) -> ('b -> string) -> 'a * 'b -> string
+    val tripleToString :
+      ('a -> string) ->
+      ('b -> string) -> ('c -> string) -> 'a * 'b * 'c -> string
+    val listToString : ('a -> string) -> 'a list -> string
+    val optionToString : ('a -> string) -> 'a option -> string
+    val explode : string -> char list
+    val implode : char list -> string
+    val stringToWords : string -> string list
+    val fresh : string -> string
+  end
+module StringUtils : STRING_UTILS
+module type FILE =
+  sig
+    val fileToString : string -> string
+    val fileToLines : string -> string list
+    val fileToWords : string -> string list
+    val stringToFile : string -> string -> unit
+    val linesToFile : string list -> string -> unit
+    val fileToLineArray : string -> string array
+    val lineArrayToFile : string array -> string -> unit
+    val randomizeLines : string -> string -> unit
+    val filterLines : (string -> bool) -> string -> string -> unit
+    val mapLines : (string -> string) -> string -> string -> unit
+  end
+module File : FILE
+module type SEXP =
+  sig
+    type sexp =
+        Int of int
+      | Flt of float
+      | Str of string
+      | Chr of char
+      | Sym of string
+      | Seq of sexp list
+    exception IllFormedSexp of string
+    val stringToSexp : string -> sexp
+    val stringToSexps : string -> sexp list
+    val fileToSexp : string -> sexp
+    val fileToSexps : string -> sexp list
+    val sexpToString : sexp -> string
+    val sexpToString' : int -> sexp -> string
+    val sexpsToString : sexp list -> string
+    val sexpToFile : sexp -> string -> unit
+    val readSexp : unit -> sexp
+  end
+module Sexp : SEXP
+module type BINTREE =
+  sig
+    type 'a bintree = Leaf | Node of 'a bintree * 'a * 'a bintree
+    val int_tree : int bintree
+    val string_tree : string bintree
+    val map : ('a -> 'b) -> 'a bintree -> 'b bintree
+    val fold : ('a -> 'b -> 'a -> 'a) -> 'a -> 'b bintree -> 'a
+    val nodes : 'a bintree -> int
+    val height : 'a bintree -> int
+    val sum : int bintree -> int
+    val prelist : 'a bintree -> 'a list
+    val inlist : 'a bintree -> 'a list
+    val postlist : 'a bintree -> 'a list
+    val toString : ('a -> string) -> 'a bintree -> string
+    val toVerboseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toCompactSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toDenseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val fromVerboseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromCompactSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromDenseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+  end
+module Bintree : BINTREE
+module type TEST =
+  sig
+    type prog
+    type arg
+    type res
+    val trial : prog -> arg list -> res
+    val argToString : arg -> string
+    val resEqual : res -> res -> bool
+    val resToString : res -> string
+  end
+module MakeTester :
+  functor (T : TEST) ->
+    sig
+      val print : string -> unit
+      val testEntries :
+        (string * T.prog * (T.arg list * T.res) list) list -> unit
+      val entriesToTrials :
+        (string * T.prog * (T.arg list * T.res) list) list ->
+        (string * T.prog * T.arg list * T.res) list
+      val testTrials : (string * T.prog * T.arg list * T.res) list -> unit
+      val testTrial : string * T.prog * T.arg list * T.res -> T.res * bool
+      val printTrialPrefix : string -> T.arg list -> unit
+      val printMismatch : T.res -> T.res -> unit
+    end
+module type TEST_TYPES = sig type args type res end
+module type TEST =
+  functor (TestTypes : TEST_TYPES) ->
+    sig
+      val trial : TestTypes.args -> TestTypes.res
+      val callToString : TestTypes.args -> string
+      val resEqual : TestTypes.res -> TestTypes.res -> bool
+      val resToString : TestTypes.res -> string
+    end
+module MakeFunTester :
+  functor (TT : TEST_TYPES) ->
+    functor
+      (TestFuns : sig
+                    val trial : TT.args -> TT.res
+                    val callToString : TT.args -> string
+                    val resEqual : TT.res -> TT.res -> bool
+                    val resToString : TT.res -> string
+                  end) ->
+      sig
+        val testEntry : TT.args * TT.res -> unit
+        val testEntries : (TT.args * TT.res) list -> unit
+      end
+module type SET =
+  sig
+    type 'a set
+    val empty : 'a set
+    val singleton : 'a -> 'a set
+    val insert : 'a -> 'a set -> 'a set
+    val delete : 'a -> 'a set -> 'a set
+    val isEmpty : 'a set -> bool
+    val size : 'a set -> int
+    val member : 'a -> 'a set -> bool
+    val union : 'a set -> 'a set -> 'a set
+    val intersection : 'a set -> 'a set -> 'a set
+    val difference : 'a set -> 'a set -> 'a set
+    val fromList : 'a list -> 'a set
+    val toList : 'a set -> 'a list
+    val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+    val toString : ('a -> string) -> 'a set -> string
+  end
+module StandardSet :
+  functor (Ord : Set.OrderedType) ->
+    sig
+      type set = Set.Make(Ord).t
+      val empty : set
+      val singleton : Ord.t -> set
+      val insert : Ord.t -> set -> set
+      val delete : Ord.t -> set -> set
+      val member : Ord.t -> set -> bool
+      val isEmpty : set -> bool
+      val size : set -> int
+      val union : set -> set -> set
+      val intersection : set -> set -> set
+      val difference : set -> set -> set
+      val toList : set -> Ord.t list
+      val fromList : Ord.t list -> set
+      val fromSexp : (Sexp.sexp -> Ord.t) -> Sexp.sexp -> set
+      val toSexp : (Ord.t -> Sexp.sexp) -> set -> Sexp.sexp
+      val toString : (Ord.t -> string) -> set -> string
+    end
+module SetTest :
+  functor (Set : SET) ->
+    sig
+      val setPrintFlag : bool -> unit
+      val setFromFile : string -> string Set.set
+      val testFile : string -> unit
+      val testTiny : unit -> unit
+      val testSmall : unit -> unit
+      val testMedium : unit -> unit
+      val testLarge : unit -> unit
+      val testSomeSmall : unit -> unit
+      val testAll : unit -> unit
+    end
+module SortedListSet : SET
+File "../ps4-group/OperationTreeSet.ml", line 76, characters 50-59:
+Error: Syntax error: ')' expected
+File "../ps4-group/OperationTreeSet.ml", line 76, characters 42-43:
+Error: This '(' might be unmatched
+File "load-optree-set.ml", line 7, characters 38-54:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           type 'a set = 'a OperationTreeSet.set
+           val empty : 'a set
+           val singleton : 'a -> 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val isEmpty : 'a set -> bool
+           val size : 'a set -> int
+           val member : 'a -> 'a set -> bool
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val fromList : 'a list -> 'a set
+           val toList : 'a set -> 'a list
+           val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+           val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+       is not included in
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+#  #use "load-optree-set.ml";;
+module type FUN_UTILS =
+  sig
+    val cons : 'a -> 'a list -> 'a list
+    val curry : ('a * 'b -> 'c) -> 'a -> 'b -> 'c
+    val pair : 'a -> 'b -> 'a * 'b
+    val triple : 'a -> 'b -> 'c -> 'a * 'b * 'c
+    val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+    val id : 'a -> 'a
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val o : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+    val uncurry : ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+    val valOf : 'a option -> 'a
+  end
+module FunUtils : FUN_UTILS
+module type LIST_UTILS =
+  sig
+    val ana : ('a -> ('b * 'a) option) -> 'a -> 'b list
+    val app : ('a -> unit) -> 'a list -> unit
+    val drop : int -> 'a list -> 'a list
+    val exists : ('a -> bool) -> 'a list -> bool
+    val exists2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val filter : ('a -> bool) -> 'a list -> 'a list
+    val flatten : 'a list list -> 'a list
+    val foldr : ('a -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr' : ('a -> 'a list -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr2 : ('a -> 'b -> 'c -> 'c) -> 'c -> 'a list -> 'b list -> 'c
+    val foldl : 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
+    val foldl2 : 'a -> ('a -> 'b -> 'c -> 'a) -> 'b list -> 'c list -> 'a
+    val for_all : ('a -> bool) -> 'a list -> bool
+    val for_all2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val for_each : ('a -> 'b) -> 'a list -> unit
+    val for_each2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> unit
+    val gen : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a list
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val last : 'a list -> 'a
+    val map : ('a -> 'b) -> 'a list -> 'b list
+    val map_iter : ('a -> 'b) -> 'a list -> 'b list
+    val map2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list
+    val map3 :
+      ('a -> 'b -> 'c -> 'd) -> 'a list -> 'b list -> 'c list -> 'd list
+    val range : int -> int -> int list
+    val rev : 'a list -> 'a list
+    val some : ('a -> bool) -> 'a list -> 'a option
+    val some2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> ('a * 'b) option
+    val take : int -> 'a list -> 'a list
+    val zip : 'a list * 'b list -> ('a * 'b) list
+    val zip3 : 'a list * 'b list * 'c list -> ('a * 'b * 'c) list
+    val unzip : ('a * 'b) list -> 'a list * 'b list
+    val unzip3 : ('a * 'b * 'c) list -> 'a list * 'b list * 'c list
+  end
+module ListUtils : LIST_UTILS
+module type ENV =
+  sig
+    type 'a env
+    val empty : 'a env
+    val bind : string -> 'a -> 'a env -> 'a env
+    val bindAll : string list -> 'a list -> 'a env -> 'a env
+    val make : string list -> 'a list -> 'a env
+    val lookup : string -> 'a env -> 'a option
+    val remove : string -> 'a env -> 'a env
+    val removeAll : string list -> 'a env -> 'a env
+    val merge : 'a env -> 'a env -> 'a env
+  end
+module Env : ENV
+module type LIST_SET_UTILS =
+  sig
+    val member : 'a -> 'a list -> bool
+    val insert : 'a -> 'a list -> 'a list
+    val delete : 'a -> 'a list -> 'a list
+    val union : 'a list -> 'a list -> 'a list
+    val intersection : 'a list -> 'a list -> 'a list
+    val difference : 'a list -> 'a list -> 'a list
+  end
+module ListSetUtils : LIST_SET_UTILS
+module type STRING_UTILS =
+  sig
+    val print : string -> unit
+    val println : string -> unit
+    val intToString : int -> string
+    val floatToString : float -> string
+    val boolToString : bool -> string
+    val charToString : char -> string
+    val pairToString : ('a -> string) -> ('b -> string) -> 'a * 'b -> string
+    val tripleToString :
+      ('a -> string) ->
+      ('b -> string) -> ('c -> string) -> 'a * 'b * 'c -> string
+    val listToString : ('a -> string) -> 'a list -> string
+    val optionToString : ('a -> string) -> 'a option -> string
+    val explode : string -> char list
+    val implode : char list -> string
+    val stringToWords : string -> string list
+    val fresh : string -> string
+  end
+module StringUtils : STRING_UTILS
+module type FILE =
+  sig
+    val fileToString : string -> string
+    val fileToLines : string -> string list
+    val fileToWords : string -> string list
+    val stringToFile : string -> string -> unit
+    val linesToFile : string list -> string -> unit
+    val fileToLineArray : string -> string array
+    val lineArrayToFile : string array -> string -> unit
+    val randomizeLines : string -> string -> unit
+    val filterLines : (string -> bool) -> string -> string -> unit
+    val mapLines : (string -> string) -> string -> string -> unit
+  end
+module File : FILE
+module type SEXP =
+  sig
+    type sexp =
+        Int of int
+      | Flt of float
+      | Str of string
+      | Chr of char
+      | Sym of string
+      | Seq of sexp list
+    exception IllFormedSexp of string
+    val stringToSexp : string -> sexp
+    val stringToSexps : string -> sexp list
+    val fileToSexp : string -> sexp
+    val fileToSexps : string -> sexp list
+    val sexpToString : sexp -> string
+    val sexpToString' : int -> sexp -> string
+    val sexpsToString : sexp list -> string
+    val sexpToFile : sexp -> string -> unit
+    val readSexp : unit -> sexp
+  end
+module Sexp : SEXP
+module type BINTREE =
+  sig
+    type 'a bintree = Leaf | Node of 'a bintree * 'a * 'a bintree
+    val int_tree : int bintree
+    val string_tree : string bintree
+    val map : ('a -> 'b) -> 'a bintree -> 'b bintree
+    val fold : ('a -> 'b -> 'a -> 'a) -> 'a -> 'b bintree -> 'a
+    val nodes : 'a bintree -> int
+    val height : 'a bintree -> int
+    val sum : int bintree -> int
+    val prelist : 'a bintree -> 'a list
+    val inlist : 'a bintree -> 'a list
+    val postlist : 'a bintree -> 'a list
+    val toString : ('a -> string) -> 'a bintree -> string
+    val toVerboseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toCompactSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toDenseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val fromVerboseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromCompactSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromDenseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+  end
+module Bintree : BINTREE
+module type TEST =
+  sig
+    type prog
+    type arg
+    type res
+    val trial : prog -> arg list -> res
+    val argToString : arg -> string
+    val resEqual : res -> res -> bool
+    val resToString : res -> string
+  end
+module MakeTester :
+  functor (T : TEST) ->
+    sig
+      val print : string -> unit
+      val testEntries :
+        (string * T.prog * (T.arg list * T.res) list) list -> unit
+      val entriesToTrials :
+        (string * T.prog * (T.arg list * T.res) list) list ->
+        (string * T.prog * T.arg list * T.res) list
+      val testTrials : (string * T.prog * T.arg list * T.res) list -> unit
+      val testTrial : string * T.prog * T.arg list * T.res -> T.res * bool
+      val printTrialPrefix : string -> T.arg list -> unit
+      val printMismatch : T.res -> T.res -> unit
+    end
+module type TEST_TYPES = sig type args type res end
+module type TEST =
+  functor (TestTypes : TEST_TYPES) ->
+    sig
+      val trial : TestTypes.args -> TestTypes.res
+      val callToString : TestTypes.args -> string
+      val resEqual : TestTypes.res -> TestTypes.res -> bool
+      val resToString : TestTypes.res -> string
+    end
+module MakeFunTester :
+  functor (TT : TEST_TYPES) ->
+    functor
+      (TestFuns : sig
+                    val trial : TT.args -> TT.res
+                    val callToString : TT.args -> string
+                    val resEqual : TT.res -> TT.res -> bool
+                    val resToString : TT.res -> string
+                  end) ->
+      sig
+        val testEntry : TT.args * TT.res -> unit
+        val testEntries : (TT.args * TT.res) list -> unit
+      end
+module type SET =
+  sig
+    type 'a set
+    val empty : 'a set
+    val singleton : 'a -> 'a set
+    val insert : 'a -> 'a set -> 'a set
+    val delete : 'a -> 'a set -> 'a set
+    val isEmpty : 'a set -> bool
+    val size : 'a set -> int
+    val member : 'a -> 'a set -> bool
+    val union : 'a set -> 'a set -> 'a set
+    val intersection : 'a set -> 'a set -> 'a set
+    val difference : 'a set -> 'a set -> 'a set
+    val fromList : 'a list -> 'a set
+    val toList : 'a set -> 'a list
+    val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+    val toString : ('a -> string) -> 'a set -> string
+  end
+module StandardSet :
+  functor (Ord : Set.OrderedType) ->
+    sig
+      type set = Set.Make(Ord).t
+      val empty : set
+      val singleton : Ord.t -> set
+      val insert : Ord.t -> set -> set
+      val delete : Ord.t -> set -> set
+      val member : Ord.t -> set -> bool
+      val isEmpty : set -> bool
+      val size : set -> int
+      val union : set -> set -> set
+      val intersection : set -> set -> set
+      val difference : set -> set -> set
+      val toList : set -> Ord.t list
+      val fromList : Ord.t list -> set
+      val fromSexp : (Sexp.sexp -> Ord.t) -> Sexp.sexp -> set
+      val toSexp : (Ord.t -> Sexp.sexp) -> set -> Sexp.sexp
+      val toString : (Ord.t -> string) -> set -> string
+    end
+module SetTest :
+  functor (Set : SET) ->
+    sig
+      val setPrintFlag : bool -> unit
+      val setFromFile : string -> string Set.set
+      val testFile : string -> unit
+      val testTiny : unit -> unit
+      val testSmall : unit -> unit
+      val testMedium : unit -> unit
+      val testLarge : unit -> unit
+      val testSomeSmall : unit -> unit
+      val testAll : unit -> unit
+    end
+module SortedListSet : SET
+File "../ps4-group/OperationTreeSet.ml", line 76, characters 50-59:
+Error: Syntax error: ')' expected
+File "../ps4-group/OperationTreeSet.ml", line 76, characters 42-43:
+Error: This '(' might be unmatched
+File "load-optree-set.ml", line 7, characters 38-54:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           type 'a set = 'a OperationTreeSet.set
+           val empty : 'a set
+           val singleton : 'a -> 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val isEmpty : 'a set -> bool
+           val size : 'a set -> int
+           val member : 'a -> 'a set -> bool
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val fromList : 'a list -> 'a set
+           val toList : 'a set -> 'a list
+           val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+           val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+       is not included in
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 76, characters 50-59:
+Error: Syntax error: ')' expected
+File "OperationTreeSet.ml", line 76, characters 42-43:
+Error: This '(' might be unmatched
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 76, characters 52-63:
+Error: Syntax error: ')' expected
+File "OperationTreeSet.ml", line 76, characters 42-43:
+Error: This '(' might be unmatched
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 77, characters 52-63:
+Error: Syntax error: ')' expected
+File "OperationTreeSet.ml", line 77, characters 42-43:
+Error: This '(' might be unmatched
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 67, characters 51-56:
+Error: Unbound constructor Int
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 3, characters 32-3243:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           module LSU :
+             sig
+               val member : 'a -> 'a list -> bool
+               val insert : 'a -> 'a list -> 'a list
+               val delete : 'a -> 'a list -> 'a list
+               val union : 'a list -> 'a list -> 'a list
+               val intersection : 'a list -> 'a list -> 'a list
+               val difference : 'a list -> 'a list -> 'a list
+             end
+           type 'a set =
+               Empty
+             | Insert of 'a * 'a set
+             | Delete of 'a * 'a set
+             | Union of 'a set * 'a set
+             | Intersection of 'a set * 'a set
+             | Difference of 'a set * 'a set
+           val empty : 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val singleton : 'a -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val toList : 'a set -> 'a list
+           val splithalf : 'a list -> int -> int -> 'a list * 'a list
+           val fromList : 'a list -> 'a set
+           val member : 'a -> 'a set -> bool
+           val size : 'a set -> int
+           val isEmpty : 'a set -> bool
+           val toSexp : 'a -> int set -> Sexp.sexp
+           val fromSexp : 'a -> Sexp.sexp -> int set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val toSexp : 'a -> int set -> Sexp.sexp
+       is not included in
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 3, characters 32-3243:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           module LSU :
+             sig
+               val member : 'a -> 'a list -> bool
+               val insert : 'a -> 'a list -> 'a list
+               val delete : 'a -> 'a list -> 'a list
+               val union : 'a list -> 'a list -> 'a list
+               val intersection : 'a list -> 'a list -> 'a list
+               val difference : 'a list -> 'a list -> 'a list
+             end
+           type 'a set =
+               Empty
+             | Insert of 'a * 'a set
+             | Delete of 'a * 'a set
+             | Union of 'a set * 'a set
+             | Intersection of 'a set * 'a set
+             | Difference of 'a set * 'a set
+           val empty : 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val singleton : 'a -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val toList : 'a set -> 'a list
+           val splithalf : 'a list -> int -> int -> 'a list * 'a list
+           val fromList : 'a list -> 'a set
+           val member : 'a -> 'a set -> bool
+           val size : 'a set -> int
+           val isEmpty : 'a set -> bool
+           val toSexp : 'a -> int set -> Sexp.sexp
+           val fromSexp : 'a -> Sexp.sexp -> int set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val toSexp : 'a -> int set -> Sexp.sexp
+       is not included in
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+#  #use "load-optree-set.ml";;
+module type FUN_UTILS =
+  sig
+    val cons : 'a -> 'a list -> 'a list
+    val curry : ('a * 'b -> 'c) -> 'a -> 'b -> 'c
+    val pair : 'a -> 'b -> 'a * 'b
+    val triple : 'a -> 'b -> 'c -> 'a * 'b * 'c
+    val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+    val id : 'a -> 'a
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val o : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+    val uncurry : ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+    val valOf : 'a option -> 'a
+  end
+module FunUtils : FUN_UTILS
+module type LIST_UTILS =
+  sig
+    val ana : ('a -> ('b * 'a) option) -> 'a -> 'b list
+    val app : ('a -> unit) -> 'a list -> unit
+    val drop : int -> 'a list -> 'a list
+    val exists : ('a -> bool) -> 'a list -> bool
+    val exists2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val filter : ('a -> bool) -> 'a list -> 'a list
+    val flatten : 'a list list -> 'a list
+    val foldr : ('a -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr' : ('a -> 'a list -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr2 : ('a -> 'b -> 'c -> 'c) -> 'c -> 'a list -> 'b list -> 'c
+    val foldl : 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
+    val foldl2 : 'a -> ('a -> 'b -> 'c -> 'a) -> 'b list -> 'c list -> 'a
+    val for_all : ('a -> bool) -> 'a list -> bool
+    val for_all2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val for_each : ('a -> 'b) -> 'a list -> unit
+    val for_each2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> unit
+    val gen : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a list
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val last : 'a list -> 'a
+    val map : ('a -> 'b) -> 'a list -> 'b list
+    val map_iter : ('a -> 'b) -> 'a list -> 'b list
+    val map2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list
+    val map3 :
+      ('a -> 'b -> 'c -> 'd) -> 'a list -> 'b list -> 'c list -> 'd list
+    val range : int -> int -> int list
+    val rev : 'a list -> 'a list
+    val some : ('a -> bool) -> 'a list -> 'a option
+    val some2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> ('a * 'b) option
+    val take : int -> 'a list -> 'a list
+    val zip : 'a list * 'b list -> ('a * 'b) list
+    val zip3 : 'a list * 'b list * 'c list -> ('a * 'b * 'c) list
+    val unzip : ('a * 'b) list -> 'a list * 'b list
+    val unzip3 : ('a * 'b * 'c) list -> 'a list * 'b list * 'c list
+  end
+module ListUtils : LIST_UTILS
+module type ENV =
+  sig
+    type 'a env
+    val empty : 'a env
+    val bind : string -> 'a -> 'a env -> 'a env
+    val bindAll : string list -> 'a list -> 'a env -> 'a env
+    val make : string list -> 'a list -> 'a env
+    val lookup : string -> 'a env -> 'a option
+    val remove : string -> 'a env -> 'a env
+    val removeAll : string list -> 'a env -> 'a env
+    val merge : 'a env -> 'a env -> 'a env
+  end
+module Env : ENV
+module type LIST_SET_UTILS =
+  sig
+    val member : 'a -> 'a list -> bool
+    val insert : 'a -> 'a list -> 'a list
+    val delete : 'a -> 'a list -> 'a list
+    val union : 'a list -> 'a list -> 'a list
+    val intersection : 'a list -> 'a list -> 'a list
+    val difference : 'a list -> 'a list -> 'a list
+  end
+module ListSetUtils : LIST_SET_UTILS
+module type STRING_UTILS =
+  sig
+    val print : string -> unit
+    val println : string -> unit
+    val intToString : int -> string
+    val floatToString : float -> string
+    val boolToString : bool -> string
+    val charToString : char -> string
+    val pairToString : ('a -> string) -> ('b -> string) -> 'a * 'b -> string
+    val tripleToString :
+      ('a -> string) ->
+      ('b -> string) -> ('c -> string) -> 'a * 'b * 'c -> string
+    val listToString : ('a -> string) -> 'a list -> string
+    val optionToString : ('a -> string) -> 'a option -> string
+    val explode : string -> char list
+    val implode : char list -> string
+    val stringToWords : string -> string list
+    val fresh : string -> string
+  end
+module StringUtils : STRING_UTILS
+module type FILE =
+  sig
+    val fileToString : string -> string
+    val fileToLines : string -> string list
+    val fileToWords : string -> string list
+    val stringToFile : string -> string -> unit
+    val linesToFile : string list -> string -> unit
+    val fileToLineArray : string -> string array
+    val lineArrayToFile : string array -> string -> unit
+    val randomizeLines : string -> string -> unit
+    val filterLines : (string -> bool) -> string -> string -> unit
+    val mapLines : (string -> string) -> string -> string -> unit
+  end
+module File : FILE
+module type SEXP =
+  sig
+    type sexp =
+        Int of int
+      | Flt of float
+      | Str of string
+      | Chr of char
+      | Sym of string
+      | Seq of sexp list
+    exception IllFormedSexp of string
+    val stringToSexp : string -> sexp
+    val stringToSexps : string -> sexp list
+    val fileToSexp : string -> sexp
+    val fileToSexps : string -> sexp list
+    val sexpToString : sexp -> string
+    val sexpToString' : int -> sexp -> string
+    val sexpsToString : sexp list -> string
+    val sexpToFile : sexp -> string -> unit
+    val readSexp : unit -> sexp
+  end
+module Sexp : SEXP
+module type BINTREE =
+  sig
+    type 'a bintree = Leaf | Node of 'a bintree * 'a * 'a bintree
+    val int_tree : int bintree
+    val string_tree : string bintree
+    val map : ('a -> 'b) -> 'a bintree -> 'b bintree
+    val fold : ('a -> 'b -> 'a -> 'a) -> 'a -> 'b bintree -> 'a
+    val nodes : 'a bintree -> int
+    val height : 'a bintree -> int
+    val sum : int bintree -> int
+    val prelist : 'a bintree -> 'a list
+    val inlist : 'a bintree -> 'a list
+    val postlist : 'a bintree -> 'a list
+    val toString : ('a -> string) -> 'a bintree -> string
+    val toVerboseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toCompactSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toDenseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val fromVerboseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromCompactSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromDenseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+  end
+module Bintree : BINTREE
+module type TEST =
+  sig
+    type prog
+    type arg
+    type res
+    val trial : prog -> arg list -> res
+    val argToString : arg -> string
+    val resEqual : res -> res -> bool
+    val resToString : res -> string
+  end
+module MakeTester :
+  functor (T : TEST) ->
+    sig
+      val print : string -> unit
+      val testEntries :
+        (string * T.prog * (T.arg list * T.res) list) list -> unit
+      val entriesToTrials :
+        (string * T.prog * (T.arg list * T.res) list) list ->
+        (string * T.prog * T.arg list * T.res) list
+      val testTrials : (string * T.prog * T.arg list * T.res) list -> unit
+      val testTrial : string * T.prog * T.arg list * T.res -> T.res * bool
+      val printTrialPrefix : string -> T.arg list -> unit
+      val printMismatch : T.res -> T.res -> unit
+    end
+module type TEST_TYPES = sig type args type res end
+module type TEST =
+  functor (TestTypes : TEST_TYPES) ->
+    sig
+      val trial : TestTypes.args -> TestTypes.res
+      val callToString : TestTypes.args -> string
+      val resEqual : TestTypes.res -> TestTypes.res -> bool
+      val resToString : TestTypes.res -> string
+    end
+module MakeFunTester :
+  functor (TT : TEST_TYPES) ->
+    functor
+      (TestFuns : sig
+                    val trial : TT.args -> TT.res
+                    val callToString : TT.args -> string
+                    val resEqual : TT.res -> TT.res -> bool
+                    val resToString : TT.res -> string
+                  end) ->
+      sig
+        val testEntry : TT.args * TT.res -> unit
+        val testEntries : (TT.args * TT.res) list -> unit
+      end
+module type SET =
+  sig
+    type 'a set
+    val empty : 'a set
+    val singleton : 'a -> 'a set
+    val insert : 'a -> 'a set -> 'a set
+    val delete : 'a -> 'a set -> 'a set
+    val isEmpty : 'a set -> bool
+    val size : 'a set -> int
+    val member : 'a -> 'a set -> bool
+    val union : 'a set -> 'a set -> 'a set
+    val intersection : 'a set -> 'a set -> 'a set
+    val difference : 'a set -> 'a set -> 'a set
+    val fromList : 'a list -> 'a set
+    val toList : 'a set -> 'a list
+    val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+    val toString : ('a -> string) -> 'a set -> string
+  end
+module StandardSet :
+  functor (Ord : Set.OrderedType) ->
+    sig
+      type set = Set.Make(Ord).t
+      val empty : set
+      val singleton : Ord.t -> set
+      val insert : Ord.t -> set -> set
+      val delete : Ord.t -> set -> set
+      val member : Ord.t -> set -> bool
+      val isEmpty : set -> bool
+      val size : set -> int
+      val union : set -> set -> set
+      val intersection : set -> set -> set
+      val difference : set -> set -> set
+      val toList : set -> Ord.t list
+      val fromList : Ord.t list -> set
+      val fromSexp : (Sexp.sexp -> Ord.t) -> Sexp.sexp -> set
+      val toSexp : (Ord.t -> Sexp.sexp) -> set -> Sexp.sexp
+      val toString : (Ord.t -> string) -> set -> string
+    end
+module SetTest :
+  functor (Set : SET) ->
+    sig
+      val setPrintFlag : bool -> unit
+      val setFromFile : string -> string Set.set
+      val testFile : string -> unit
+      val testTiny : unit -> unit
+      val testSmall : unit -> unit
+      val testMedium : unit -> unit
+      val testLarge : unit -> unit
+      val testSomeSmall : unit -> unit
+      val testAll : unit -> unit
+    end
+module SortedListSet : SET
+File "../ps4-group/OperationTreeSet.ml", line 3, characters 32-3243:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           module LSU :
+             sig
+               val member : 'a -> 'a list -> bool
+               val insert : 'a -> 'a list -> 'a list
+               val delete : 'a -> 'a list -> 'a list
+               val union : 'a list -> 'a list -> 'a list
+               val intersection : 'a list -> 'a list -> 'a list
+               val difference : 'a list -> 'a list -> 'a list
+             end
+           type 'a set =
+               Empty
+             | Insert of 'a * 'a set
+             | Delete of 'a * 'a set
+             | Union of 'a set * 'a set
+             | Intersection of 'a set * 'a set
+             | Difference of 'a set * 'a set
+           val empty : 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val singleton : 'a -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val toList : 'a set -> 'a list
+           val splithalf : 'a list -> int -> int -> 'a list * 'a list
+           val fromList : 'a list -> 'a set
+           val member : 'a -> 'a set -> bool
+           val size : 'a set -> int
+           val isEmpty : 'a set -> bool
+           val toSexp : 'a -> int set -> Sexp.sexp
+           val fromSexp : 'a -> Sexp.sexp -> int set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val toSexp : 'a -> int set -> Sexp.sexp
+       is not included in
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+File "load-optree-set.ml", line 7, characters 38-54:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           type 'a set = 'a OperationTreeSet.set
+           val empty : 'a set
+           val singleton : 'a -> 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val isEmpty : 'a set -> bool
+           val size : 'a set -> int
+           val member : 'a -> 'a set -> bool
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val fromList : 'a list -> 'a set
+           val toList : 'a set -> 'a list
+           val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+           val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+       is not included in
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 3, characters 32-3243:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           module LSU :
+             sig
+               val member : 'a -> 'a list -> bool
+               val insert : 'a -> 'a list -> 'a list
+               val delete : 'a -> 'a list -> 'a list
+               val union : 'a list -> 'a list -> 'a list
+               val intersection : 'a list -> 'a list -> 'a list
+               val difference : 'a list -> 'a list -> 'a list
+             end
+           type 'a set =
+               Empty
+             | Insert of 'a * 'a set
+             | Delete of 'a * 'a set
+             | Union of 'a set * 'a set
+             | Intersection of 'a set * 'a set
+             | Difference of 'a set * 'a set
+           val empty : 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val singleton : 'a -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val toList : 'a set -> 'a list
+           val splithalf : 'a list -> int -> int -> 'a list * 'a list
+           val fromList : 'a list -> 'a set
+           val member : 'a -> 'a set -> bool
+           val size : 'a set -> int
+           val isEmpty : 'a set -> bool
+           val toSexp : 'a -> int set -> Sexp.sexp
+           val fromSexp : 'a -> Sexp.sexp -> int set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val toSexp : 'a -> int set -> Sexp.sexp
+       is not included in
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 3, characters 32-3242:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           module LSU :
+             sig
+               val member : 'a -> 'a list -> bool
+               val insert : 'a -> 'a list -> 'a list
+               val delete : 'a -> 'a list -> 'a list
+               val union : 'a list -> 'a list -> 'a list
+               val intersection : 'a list -> 'a list -> 'a list
+               val difference : 'a list -> 'a list -> 'a list
+             end
+           type 'a set =
+               Empty
+             | Insert of 'a * 'a set
+             | Delete of 'a * 'a set
+             | Union of 'a set * 'a set
+             | Intersection of 'a set * 'a set
+             | Difference of 'a set * 'a set
+           val empty : 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val singleton : 'a -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val toList : 'a set -> 'a list
+           val splithalf : 'a list -> int -> int -> 'a list * 'a list
+           val fromList : 'a list -> 'a set
+           val member : 'a -> 'a set -> bool
+           val size : 'a set -> int
+           val isEmpty : 'a set -> bool
+           val toSexp : 'a -> int set -> Sexp.sexp
+           val fromSexp : 'a -> Sexp.sexp -> int set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val toSexp : 'a -> int set -> Sexp.sexp
+       is not included in
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 3, characters 32-3221:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           module LSU :
+             sig
+               val member : 'a -> 'a list -> bool
+               val insert : 'a -> 'a list -> 'a list
+               val delete : 'a -> 'a list -> 'a list
+               val union : 'a list -> 'a list -> 'a list
+               val intersection : 'a list -> 'a list -> 'a list
+               val difference : 'a list -> 'a list -> 'a list
+             end
+           type 'a set =
+               Empty
+             | Insert of 'a * 'a set
+             | Delete of 'a * 'a set
+             | Union of 'a set * 'a set
+             | Intersection of 'a set * 'a set
+             | Difference of 'a set * 'a set
+           val empty : 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val singleton : 'a -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val toList : 'a set -> 'a list
+           val splithalf : 'a list -> int -> int -> 'a list * 'a list
+           val fromList : 'a list -> 'a set
+           val member : 'a -> 'a set -> bool
+           val size : 'a set -> int
+           val isEmpty : 'a set -> bool
+           val toSexp : 'a -> int set -> Sexp.sexp
+           val fromSexp : 'a -> Sexp.sexp -> int set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val toSexp : 'a -> int set -> Sexp.sexp
+       is not included in
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 3, characters 32-3221:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           module LSU :
+             sig
+               val member : 'a -> 'a list -> bool
+               val insert : 'a -> 'a list -> 'a list
+               val delete : 'a -> 'a list -> 'a list
+               val union : 'a list -> 'a list -> 'a list
+               val intersection : 'a list -> 'a list -> 'a list
+               val difference : 'a list -> 'a list -> 'a list
+             end
+           type 'a set =
+               Empty
+             | Insert of 'a * 'a set
+             | Delete of 'a * 'a set
+             | Union of 'a set * 'a set
+             | Intersection of 'a set * 'a set
+             | Difference of 'a set * 'a set
+           val empty : 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val singleton : 'a -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val toList : 'a set -> 'a list
+           val splithalf : 'a list -> int -> int -> 'a list * 'a list
+           val fromList : 'a list -> 'a set
+           val member : 'a -> 'a set -> bool
+           val size : 'a set -> int
+           val isEmpty : 'a set -> bool
+           val toSexp : 'a -> int set -> Sexp.sexp
+           val fromSexp : 'a -> Sexp.sexp -> int set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val toSexp : 'a -> int set -> Sexp.sexp
+       is not included in
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 3, characters 32-3221:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           module LSU :
+             sig
+               val member : 'a -> 'a list -> bool
+               val insert : 'a -> 'a list -> 'a list
+               val delete : 'a -> 'a list -> 'a list
+               val union : 'a list -> 'a list -> 'a list
+               val intersection : 'a list -> 'a list -> 'a list
+               val difference : 'a list -> 'a list -> 'a list
+             end
+           type 'a set =
+               Empty
+             | Insert of 'a * 'a set
+             | Delete of 'a * 'a set
+             | Union of 'a set * 'a set
+             | Intersection of 'a set * 'a set
+             | Difference of 'a set * 'a set
+           val empty : 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val singleton : 'a -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val toList : 'a set -> 'a list
+           val splithalf : 'a list -> int -> int -> 'a list * 'a list
+           val fromList : 'a list -> 'a set
+           val member : 'a -> 'a set -> bool
+           val size : 'a set -> int
+           val isEmpty : 'a set -> bool
+           val toSexp : 'a -> int set -> Sexp.sexp
+           val fromSexp : 'a -> Sexp.sexp -> int set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val toSexp : 'a -> int set -> Sexp.sexp
+       is not included in
+         val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 3, characters 32-3223:
+Error: Signature mismatch:
+       Modules do not match:
+         sig
+           module LSU :
+             sig
+               val member : 'a -> 'a list -> bool
+               val insert : 'a -> 'a list -> 'a list
+               val delete : 'a -> 'a list -> 'a list
+               val union : 'a list -> 'a list -> 'a list
+               val intersection : 'a list -> 'a list -> 'a list
+               val difference : 'a list -> 'a list -> 'a list
+             end
+           type 'a set =
+               Empty
+             | Insert of 'a * 'a set
+             | Delete of 'a * 'a set
+             | Union of 'a set * 'a set
+             | Intersection of 'a set * 'a set
+             | Difference of 'a set * 'a set
+           val empty : 'a set
+           val insert : 'a -> 'a set -> 'a set
+           val singleton : 'a -> 'a set
+           val delete : 'a -> 'a set -> 'a set
+           val union : 'a set -> 'a set -> 'a set
+           val intersection : 'a set -> 'a set -> 'a set
+           val difference : 'a set -> 'a set -> 'a set
+           val toList : 'a set -> 'a list
+           val splithalf : 'a list -> int -> int -> 'a list * 'a list
+           val fromList : 'a list -> 'a set
+           val member : 'a -> 'a set -> bool
+           val size : 'a set -> int
+           val isEmpty : 'a set -> bool
+           val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+           val fromSexp : 'a -> Sexp.sexp -> int set
+           val toString : ('a -> string) -> 'a set -> string
+         end
+       is not included in
+         SET
+       Values do not match:
+         val fromSexp : 'a -> Sexp.sexp -> int set
+       is not included in
+         val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 75, characters 47-48:
+Error: Syntax error
+# #use "OperationTreeSet.ml";;
+File "OperationTreeSet.ml", line 75, characters 47-48:
+Error: Syntax error
+# #use "OperationTreeSet.ml";;
+module OperationTreeSet : SET
+#  #use "load-optree-set.ml";;
+module type FUN_UTILS =
+  sig
+    val cons : 'a -> 'a list -> 'a list
+    val curry : ('a * 'b -> 'c) -> 'a -> 'b -> 'c
+    val pair : 'a -> 'b -> 'a * 'b
+    val triple : 'a -> 'b -> 'c -> 'a * 'b * 'c
+    val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+    val id : 'a -> 'a
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val o : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+    val uncurry : ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+    val valOf : 'a option -> 'a
+  end
+module FunUtils : FUN_UTILS
+module type LIST_UTILS =
+  sig
+    val ana : ('a -> ('b * 'a) option) -> 'a -> 'b list
+    val app : ('a -> unit) -> 'a list -> unit
+    val drop : int -> 'a list -> 'a list
+    val exists : ('a -> bool) -> 'a list -> bool
+    val exists2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val filter : ('a -> bool) -> 'a list -> 'a list
+    val flatten : 'a list list -> 'a list
+    val foldr : ('a -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr' : ('a -> 'a list -> 'b -> 'b) -> 'b -> 'a list -> 'b
+    val foldr2 : ('a -> 'b -> 'c -> 'c) -> 'c -> 'a list -> 'b list -> 'c
+    val foldl : 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
+    val foldl2 : 'a -> ('a -> 'b -> 'c -> 'a) -> 'b list -> 'c list -> 'a
+    val for_all : ('a -> bool) -> 'a list -> bool
+    val for_all2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+    val for_each : ('a -> 'b) -> 'a list -> unit
+    val for_each2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> unit
+    val gen : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a list
+    val iterate : ('a -> 'a) -> ('a -> bool) -> 'a -> 'a
+    val last : 'a list -> 'a
+    val map : ('a -> 'b) -> 'a list -> 'b list
+    val map_iter : ('a -> 'b) -> 'a list -> 'b list
+    val map2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list
+    val map3 :
+      ('a -> 'b -> 'c -> 'd) -> 'a list -> 'b list -> 'c list -> 'd list
+    val range : int -> int -> int list
+    val rev : 'a list -> 'a list
+    val some : ('a -> bool) -> 'a list -> 'a option
+    val some2 : ('a -> 'b -> bool) -> 'a list -> 'b list -> ('a * 'b) option
+    val take : int -> 'a list -> 'a list
+    val zip : 'a list * 'b list -> ('a * 'b) list
+    val zip3 : 'a list * 'b list * 'c list -> ('a * 'b * 'c) list
+    val unzip : ('a * 'b) list -> 'a list * 'b list
+    val unzip3 : ('a * 'b * 'c) list -> 'a list * 'b list * 'c list
+  end
+module ListUtils : LIST_UTILS
+module type ENV =
+  sig
+    type 'a env
+    val empty : 'a env
+    val bind : string -> 'a -> 'a env -> 'a env
+    val bindAll : string list -> 'a list -> 'a env -> 'a env
+    val make : string list -> 'a list -> 'a env
+    val lookup : string -> 'a env -> 'a option
+    val remove : string -> 'a env -> 'a env
+    val removeAll : string list -> 'a env -> 'a env
+    val merge : 'a env -> 'a env -> 'a env
+  end
+module Env : ENV
+module type LIST_SET_UTILS =
+  sig
+    val member : 'a -> 'a list -> bool
+    val insert : 'a -> 'a list -> 'a list
+    val delete : 'a -> 'a list -> 'a list
+    val union : 'a list -> 'a list -> 'a list
+    val intersection : 'a list -> 'a list -> 'a list
+    val difference : 'a list -> 'a list -> 'a list
+  end
+module ListSetUtils : LIST_SET_UTILS
+module type STRING_UTILS =
+  sig
+    val print : string -> unit
+    val println : string -> unit
+    val intToString : int -> string
+    val floatToString : float -> string
+    val boolToString : bool -> string
+    val charToString : char -> string
+    val pairToString : ('a -> string) -> ('b -> string) -> 'a * 'b -> string
+    val tripleToString :
+      ('a -> string) ->
+      ('b -> string) -> ('c -> string) -> 'a * 'b * 'c -> string
+    val listToString : ('a -> string) -> 'a list -> string
+    val optionToString : ('a -> string) -> 'a option -> string
+    val explode : string -> char list
+    val implode : char list -> string
+    val stringToWords : string -> string list
+    val fresh : string -> string
+  end
+module StringUtils : STRING_UTILS
+module type FILE =
+  sig
+    val fileToString : string -> string
+    val fileToLines : string -> string list
+    val fileToWords : string -> string list
+    val stringToFile : string -> string -> unit
+    val linesToFile : string list -> string -> unit
+    val fileToLineArray : string -> string array
+    val lineArrayToFile : string array -> string -> unit
+    val randomizeLines : string -> string -> unit
+    val filterLines : (string -> bool) -> string -> string -> unit
+    val mapLines : (string -> string) -> string -> string -> unit
+  end
+module File : FILE
+module type SEXP =
+  sig
+    type sexp =
+        Int of int
+      | Flt of float
+      | Str of string
+      | Chr of char
+      | Sym of string
+      | Seq of sexp list
+    exception IllFormedSexp of string
+    val stringToSexp : string -> sexp
+    val stringToSexps : string -> sexp list
+    val fileToSexp : string -> sexp
+    val fileToSexps : string -> sexp list
+    val sexpToString : sexp -> string
+    val sexpToString' : int -> sexp -> string
+    val sexpsToString : sexp list -> string
+    val sexpToFile : sexp -> string -> unit
+    val readSexp : unit -> sexp
+  end
+module Sexp : SEXP
+module type BINTREE =
+  sig
+    type 'a bintree = Leaf | Node of 'a bintree * 'a * 'a bintree
+    val int_tree : int bintree
+    val string_tree : string bintree
+    val map : ('a -> 'b) -> 'a bintree -> 'b bintree
+    val fold : ('a -> 'b -> 'a -> 'a) -> 'a -> 'b bintree -> 'a
+    val nodes : 'a bintree -> int
+    val height : 'a bintree -> int
+    val sum : int bintree -> int
+    val prelist : 'a bintree -> 'a list
+    val inlist : 'a bintree -> 'a list
+    val postlist : 'a bintree -> 'a list
+    val toString : ('a -> string) -> 'a bintree -> string
+    val toVerboseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toCompactSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toDenseSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val toSexp : ('a -> Sexp.sexp) -> 'a bintree -> Sexp.sexp
+    val fromVerboseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromCompactSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromDenseSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a bintree
+  end
+module Bintree : BINTREE
+module type TEST =
+  sig
+    type prog
+    type arg
+    type res
+    val trial : prog -> arg list -> res
+    val argToString : arg -> string
+    val resEqual : res -> res -> bool
+    val resToString : res -> string
+  end
+module MakeTester :
+  functor (T : TEST) ->
+    sig
+      val print : string -> unit
+      val testEntries :
+        (string * T.prog * (T.arg list * T.res) list) list -> unit
+      val entriesToTrials :
+        (string * T.prog * (T.arg list * T.res) list) list ->
+        (string * T.prog * T.arg list * T.res) list
+      val testTrials : (string * T.prog * T.arg list * T.res) list -> unit
+      val testTrial : string * T.prog * T.arg list * T.res -> T.res * bool
+      val printTrialPrefix : string -> T.arg list -> unit
+      val printMismatch : T.res -> T.res -> unit
+    end
+module type TEST_TYPES = sig type args type res end
+module type TEST =
+  functor (TestTypes : TEST_TYPES) ->
+    sig
+      val trial : TestTypes.args -> TestTypes.res
+      val callToString : TestTypes.args -> string
+      val resEqual : TestTypes.res -> TestTypes.res -> bool
+      val resToString : TestTypes.res -> string
+    end
+module MakeFunTester :
+  functor (TT : TEST_TYPES) ->
+    functor
+      (TestFuns : sig
+                    val trial : TT.args -> TT.res
+                    val callToString : TT.args -> string
+                    val resEqual : TT.res -> TT.res -> bool
+                    val resToString : TT.res -> string
+                  end) ->
+      sig
+        val testEntry : TT.args * TT.res -> unit
+        val testEntries : (TT.args * TT.res) list -> unit
+      end
+module type SET =
+  sig
+    type 'a set
+    val empty : 'a set
+    val singleton : 'a -> 'a set
+    val insert : 'a -> 'a set -> 'a set
+    val delete : 'a -> 'a set -> 'a set
+    val isEmpty : 'a set -> bool
+    val size : 'a set -> int
+    val member : 'a -> 'a set -> bool
+    val union : 'a set -> 'a set -> 'a set
+    val intersection : 'a set -> 'a set -> 'a set
+    val difference : 'a set -> 'a set -> 'a set
+    val fromList : 'a list -> 'a set
+    val toList : 'a set -> 'a list
+    val toSexp : ('a -> Sexp.sexp) -> 'a set -> Sexp.sexp
+    val fromSexp : (Sexp.sexp -> 'a) -> Sexp.sexp -> 'a set
+    val toString : ('a -> string) -> 'a set -> string
+  end
+module StandardSet :
+  functor (Ord : Set.OrderedType) ->
+    sig
+      type set = Set.Make(Ord).t
+      val empty : set
+      val singleton : Ord.t -> set
+      val insert : Ord.t -> set -> set
+      val delete : Ord.t -> set -> set
+      val member : Ord.t -> set -> bool
+      val isEmpty : set -> bool
+      val size : set -> int
+      val union : set -> set -> set
+      val intersection : set -> set -> set
+      val difference : set -> set -> set
+      val toList : set -> Ord.t list
+      val fromList : Ord.t list -> set
+      val fromSexp : (Sexp.sexp -> Ord.t) -> Sexp.sexp -> set
+      val toSexp : (Ord.t -> Sexp.sexp) -> set -> Sexp.sexp
+      val toString : (Ord.t -> string) -> set -> string
+    end
+module SetTest :
+  functor (Set : SET) ->
+    sig
+      val setPrintFlag : bool -> unit
+      val setFromFile : string -> string Set.set
+      val testFile : string -> unit
+      val testTiny : unit -> unit
+      val testSmall : unit -> unit
+      val testMedium : unit -> unit
+      val testLarge : unit -> unit
+      val testSomeSmall : unit -> unit
+      val testAll : unit -> unit
+    end
+module SortedListSet : SET
+module OperationTreeSet : SET
+module OperationTreeSetTest :
+  sig
+    val setPrintFlag : bool -> unit
+    val setFromFile : string -> string OperationTreeSet.set
+    val testFile : string -> unit
+    val testTiny : unit -> unit
+    val testSmall : unit -> unit
+    val testMedium : unit -> unit
+    val testLarge : unit -> unit
+    val testSomeSmall : unit -> unit
+    val testAll : unit -> unit
+  end
+val setFromFile : string -> string OperationTreeSet.set = <fun>
+val testTiny : unit -> unit = <fun>
+val testSmall : unit -> unit = <fun>
+val testMedium : unit -> unit = <fun>
+val testLarge : unit -> unit = <fun>
+# testTiny();;
+Reading ../text/tiny-unsorted.txt into list ...done
+List has 16 elements
+Creating test set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0. seconds)
+done
+List has 16 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0. seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0. seconds)
+Testing toList ...(time = 0. seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0. seconds) OK!
+Testing size (nonEmpty) ...(time = 0. seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0. seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0. seconds) OK!
+Testing intersection ...(time = 0. seconds) OK!
+Testing difference ...(time = 0. seconds) OK!
+Testing toSexp/fromSexp ...(time = 0. seconds) OK!
+Testing toString ...(time = 0. seconds) OK!
+- : unit = ()
+# testMedium();;
+Reading ../text/medium-unsorted.txt into list ...done
+List has 5525 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.00699900000001 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.004999 seconds)
+done
+List has 5525 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.010998 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.00999899999999 seconds)
+Testing toList ...(time = 0.005999 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 1.222814 seconds) OK!
+Testing size (nonEmpty) ...(time = 0.005999 seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0.005999 seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0. seconds) OK!
+Testing intersection ...(time = 0. seconds) OK!
+Testing difference ...(time = 0. seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.00799900000001 seconds) OK!
+Testing toString ...(time = 0.005999 seconds) OK!
+- : unit = ()
+# testLarge();;
+Reading ../text/large-unsorted.txt into list ...done
+List has 45425 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.056992 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0.055991 seconds)
+done
+List has 45425 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.146978 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.145977 seconds)
+Testing toList ...(time = 0.06899 seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 83.384323 seconds) OK!
+Testing size (nonEmpty) ...(time = 0.06999 seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0.06899 seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0. seconds) OK!
+Testing intersection ...(time = 0. seconds) OK!
+Testing difference ...(time = 0. seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.06399 seconds) OK!
+Testing toString ...(time = 0.084987 seconds) OK!
+- : unit = ()
+# testSmall();;
+Reading ../text/small-unsorted.txt into list ...done
+List has 476 elements
+Creating test set1 from first 2/3 of list ...done (time = 0.001 seconds)
+Creating test set2 from last 2/3 of list ...done (time = 0. seconds)
+done
+List has 476 elements
+Creating standard set1 from first 2/3 of list ...done (time = 0.001 seconds)
+Creating standard set2 from last 2/3 of list ...done (time = 0.000999999999976 seconds)
+Testing toList ...(time = 0. seconds) OK!
+Testing insert ...(time = 0. seconds) OK!
+Testing delete ...(time = 0. seconds) OK!
+Testing member ...(time = 0.00899899999999 seconds) OK!
+Testing size (nonEmpty) ...(time = 0. seconds) OK!
+Testing size (empty) ...(time = 0. seconds) OK!
+Testing isEmpty (nonEmpty) ...(time = 0.001 seconds) OK!
+Testing isEmpty (empty) ...(time = 0. seconds) OK!
+Testing union ...(time = 0. seconds) OK!
+Testing intersection ...(time = 0. seconds) OK!
+Testing difference ...(time = 0. seconds) OK!
+Testing toSexp/fromSexp ...(time = 0.000999999999976 seconds) OK!
+Testing toString ...(time = 0.001 seconds) OK!
+- : unit = ()
+# 

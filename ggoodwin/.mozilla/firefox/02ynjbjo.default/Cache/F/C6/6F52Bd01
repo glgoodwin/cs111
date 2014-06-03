@@ -1,0 +1,467 @@
+<html>
+<head>
+ <title>Wellesley CS251 Programming Languages Spring 2013</title>
+ <!-- <link rel="stylesheet" type="text/css" href="../cs111.css"> -->
+ <link rel="stylesheet" type="text/css" 
+              href="calendar.css">
+ <style type = "text/css">
+   .tentative
+   {
+        font-style: italic;
+        color: gray;
+   }
+ </style>
+ <script type = "text/javascript" 
+         src = "calendar_obj.js">
+ </script>
+ <script type = "text/javascript" 
+         src = "calendar_wellesley_spr_2013_holidays_admin.js">
+ </script>
+ <script type="text/javascript">
+   var cal = wellesley_spring_2013_calendar; /* includes holidays, but not 
+                                                administrative dates */
+
+   cal.set_class("calendar");
+   cal.set_label_format("ddmmm");
+
+
+   var blank_line = ""; /* adding empty item makes a blank line in calendar */
+   var nodate = "";     /* something to use for unassigned lectures, etc.   */
+                        /* can give it a real date to make them all appear  */
+   
+   /* The definition below illustrated a more compact way that one might
+      want to write a lecture schedule.  I could write a function that
+      processes such a thing easily enough.  At the moment, nothing
+      uses this, however.
+    */
+/*   var lectures =
+   [["29Jan",
+     "Welcome",
+     ["Four Big Ideas: A BuggleWorld Appetizer", 
+      "lectures/01_intro_to_CS111.pdf",
+      true],
+     ["BuggleWorld.html",
+      "programs/lecture01/BreakfastWorld/BuggleWorld.html",
+      "code",
+      true],
+     ["BreakfastWorld.html",
+      "programs/lecture01/BreakfastWorld/BreakfastWorld.html",
+      "code",
+      true]],
+    ["01Feb",
+     ["Object-Oriented Programming in BuggleWorld",
+      "lectures/02_OOP.pdf",
+      true]],
+    ["05Feb",
+     ["The Java Execution Model (JEM) and Writing Methods",
+      "lectures/03_methods1.pdf",
+      true]],
+    [nodate,
+     ["Methods with parameters and fruitful methods in BuggleWorld",
+      "lectures/methods2.pdf",
+      false]],
+    [nodate,
+     ["Divide, Conquer, and Glue in BuggleWorld",
+      "lectures/buggle_divide_conquer_glue.pdf",
+      false],
+     ["SpiralsWorld.html",
+      "programs/lecture05/spirals/SpiralsWorld.html",
+      "code",
+      false]]
+];
+*/
+
+/***********************************************************************/
+/*                          Lectures                                   */
+/***********************************************************************/
+
+   cal.add_info(
+     "28Jan",  makeLink("Interpreters and Translators",
+			  	 	   "lectures/introduction-slides-handouts.pdf"),
+              makeLink("#1 Course Information", 
+                       "handouts/course-info.pdf"),
+              makeLink("#2 Linux, X, and Emacs",
+                       "handouts/linux.pdf"), 
+              makeLink("#3 Emacs Reference Card", 
+                       "handouts/emacs-refcard-letter.pdf"), 
+              makeLink("#4 CVS", 
+                       "handouts/cvs.pdf"),
+              makeLink("#5 Using OCaml", 
+                       "handouts/ocaml.pdf"),
+              makeLink("#6 OCaml Exercises", 
+                       "handouts/ocaml-exercises.pdf"),
+              makeLink("#7 Reflections on Trusting Trust", 
+                       "papers/trusting-trust.pdf"),
+              blank_line,
+              makeLink("#8 PS1",
+                       "ps/ps1.pdf"),
+              makeLink("Reading: Hickey, Chapters 1-5", 
+                       "http://files.metaprl.org/doc/ocaml-book.pdf")
+      );
+
+   cal.add_info(
+      "30Jan", makeLink("OCaml Overview",
+	  					 "lectures/ocaml-slides-handouts.pdf")
+      );
+
+
+   cal.add_info(
+      "31Jan",  makeLink("OCaml Lists",
+	  					 "lectures/ocaml-list-slides-handouts.pdf"),
+	  			makeLink("#9 List Processing in OCaml",
+                         "handouts/ocaml-list.pdf"),
+                blank_line,
+                makeLink("#10 PS2",
+                         "ps/ps2.pdf"),
+                fakeLink("PS 1 due (#11 PS1 Solns)",
+                        "protected/ps1-solns.pdf", 
+                        "due")
+      );
+
+   cal.add_info(
+      "04Feb", makeLink("More OCaml Lists",
+	  					 "lectures/ocaml-list-slides-2-handouts.pdf")
+       );
+
+   cal.add_info(
+      "06Feb", makeLink("The Substitution Model",
+	  					 "lectures/substitution-slides-handouts.pdf"),
+       makeLink("#12 The Substitution Model", 
+                "handouts/substitution.pdf")
+      );
+	  
+	
+	  
+	   cal.add_info(
+      "07Feb", makeLink("First-class Functions",
+	  	                "lectures/function-slides-handouts.pdf"),
+	   makeLink("#13 First-class Functions (not filled in)", 
+                "handouts/functions-fillin.pdf"),
+       makeLink("#13 First-class Functions (filled in)", 
+                "handouts/functions.pdf"),
+	   blank_line,
+	   makeLink("#14 PS3", "ps/ps3.pdf"),
+	   fakeLink("PS 2 due (#16 PS2 Solns)",
+                 "protected/ps2-solns.pdf", 
+                  "due")
+      );
+
+  cal.add_info(
+      "11Feb", makeLink("Map, Filter, and Foldr",
+              "lectures/holistfuns-slides-handouts.pdf"),
+	   makeLink("#15 Higher-Order List Functions (not filled in)", 
+                "handouts/holistfuns-fillin.pdf"),
+       makeLink("#15 Higher-Order List Functions (filled in)", 
+                "handouts/holistfuns.pdf")
+      );
+
+   cal.add_info(
+      "13Feb",  makeLink("More foldr and friends",
+              "lectures/holistfuns-slides-2-handouts.pdf")
+      );
+
+   cal.add_info(
+      "14Feb", makeLink("gen, iterate, and ana",
+              "lectures/holistfuns-slides-3-handouts.pdf")
+       );
+
+   
+   cal.add_info("19Feb", "Higher order list functions wrap up");
+
+   cal.add_info(
+      "20Feb", makeLink("Modules and ADTs in Ocaml",
+              "lectures/modules-slides-handouts.pdf"),
+               makeLink("#17 Modules", "handouts/modules.pdf"), 
+			                 blank_line,
+               makeLink("Reading: Hickey, Chapters 6, 12, 13", 
+                        "http://files.metaprl.org/doc/ocaml-book.pdf")
+      );
+	 
+
+   cal.add_info(
+      "21Feb", makeLink("Functional Data Structues (environments)",
+	           "lectures/environments-slides-handouts.pdf"),
+			   makeLink("#18 Backus Turing Lecture", "papers/backus-turing-lecture.pdf"),
+               makeLink("#19 Dean & Ghemawat MapReduce paper", "papers/mapreduce.pdf"),
+			    blank_line,
+			   makeLink("#20 PS4", "ps/ps4.pdf"),
+               fakeLink("PS 3 due (#22 PS3 Solns)",
+                        "protected/ps3-solns.pdf",
+                        "due")
+     );
+   
+   cal.add_info(
+      "25Feb", makeLink("Sum-of-products data structures",
+               "lectures/ocaml-data-slides-handouts.pdf"),
+               makeLink("#21 Sum-of-Products Data (not filled in)", 
+			   "handouts/ocaml-data-fillin.pdf"),
+               makeLink("#21 Sum-of-Products Data (filled in)", 
+			   "handouts/ocaml-data.pdf")
+     );
+
+   cal.add_info(
+      "27Feb", makeLink("Expression Trees",
+               "lectures/expression-trees-slides-handouts.pdf")
+     );
+
+   cal.add_info(
+      "28Feb", makeLink("Manipulating Intex programs and expressions",
+	          "lectures/intex-slides-handouts.pdf"),
+               makeLink("#23 Intex: An Introduction to Program Manipulation (not filled in)",
+			   "handouts/intex-fillin.pdf"), 
+               makeLink("#23 Intex: An Introduction to Program Manipulation (filled in)", 		
+			   "handouts/intex.pdf")
+
+      );
+	  
+   cal.add_info(
+      "04Mar", makeLink("S-Expression syntax of Intex",	
+	          "lectures/intex-slides2-handouts.pdf"),
+               blank_line, 
+               makeLink("#24 PS5", "ps/ps5.pdf"), 
+               fakeLink("PS 4 due (#26 PS4 Solns)",
+                        "protected/ps4-solns.pdf", 
+                        "due")
+
+     );
+
+   cal.add_info(
+      "06Mar", "Intex interpreter modifications",
+               "Intex progams, Intex REPL",
+                makeLink("Introduction to Bindex and naming",
+				"lectures/bindex-slides-handouts.pdf"),
+               makeLink("#25 Bindex: An Introduction to Naming (not filled in)", 	    
+			   "handouts/bindex-fillin.pdf"), 
+               makeLink("#25 Bindex: An Introduction to Naming (filled in)", 
+			   "handouts/bindex.pdf")
+      );
+
+
+   cal.add_info(
+      "07Mar", makeLink("Free variables and Renaming in Bindex",
+	                     "lectures/free-vars-slides-handouts.pdf")
+      );
+
+
+   cal.add_info(
+      "11Mar", makeLink("Substitution and Evaluation in Bindex",
+	                    "lectures/bindex-subst-slides-handouts.pdf")
+      );
+
+
+   cal.add_info(
+      "13Mar","Environment-model Evaluator in Bindex",
+              makeLink("Extending Bindex: call-by-name",
+			           "lectures/bindex-plus-slides-handouts.pdf"),
+               makeLink("#27 Extending Bindex (not filled in)", 
+			   "handouts/bindex-plus-fillin.pdf"), 
+               makeLink("#27 Extending Bindex (filled in)", 
+			   "handouts/bindex-plus.pdf")
+      );
+
+
+   cal.add_info(
+      "14Mar","Extending Bindex: sigma",
+              blank_line
+      );
+	  
+	cal.add_info(
+	  "25Mar", makeLink("Extending Bindex:bindpar and bindseq",
+	                    "lectures/bindpar-slides-handouts.pdf"),
+	  	blank_line,
+	    makeLink("#28 PS6","ps/ps6.pdf"),
+	    fakeLink("PS 5 due (#30 PS5 Solns)","protected/ps5-solns.pdf", 
+                 "due")
+		);
+
+   cal.add_info(
+      "27Mar",makeLink("An introduction to Valex", 
+	  		 "lectures/valex-slides-handouts.pdf"), 
+               makeLink("#29 Valex: Dynamic Type Checking and Desugaring (not filled in)", 	
+			   "handouts/valex-fillin.pdf"), 
+               makeLink("#29 Valex: Dynamic Type Checking and Desugaring (filled in)", 	
+			   "handouts/valex.pdf")
+      );
+	  
+
+   cal.add_info(
+      "28Mar",makeLink("The Valex Interpreter",
+	                    "lectures/valex-interp-slides-handouts.pdf")
+      );
+
+   cal.add_info(
+      "01Apr",makeLink("Dynamic Type Checking and Desugaring in Valex",
+	                   "lectures/valex-desugar-slides-handouts.pdf")
+      );
+	  
+	
+
+   cal.add_info(
+      "03Apr", makeLink("Introduction to HOFL",
+	                    "lectures/hofl-slides-handouts.pdf"),
+              makeLink("#31 An Introduction to HOFL, a Higher-Order Functional Language", 
+                       "handouts/hofl.pdf")
+     );
+
+   cal.add_info(
+      "04Apr", "More Introduction To HOFL",  
+               makeLink("Substitution Model in HOFL",
+			             "lectures/hofl-subst-slides-handouts.pdf")
+      );
+
+   cal.add_info(
+      "08Apr", makeLink("Static Scoping in HOFL","lectures/hofl-scoping-slides-handouts.pdf"),
+      makeLink("#32 Scoping in HOFL", "handouts/hofl-scoping.pdf"),
+      blank_line,
+	  makeLink("#33 PS7","ps/ps7.pdf"),
+      makeLink("PS 6 due (#37 PS6 Solns)",
+               "protected/ps6-solns.pdf", 
+               "due")
+      );
+
+   cal.add_info(
+      "10Apr", makeLink("Dynamic Scoping in HOFL", 
+	                    "lectures/hofl-dynamic-slides-handouts.pdf")
+      );
+
+   cal.add_info(
+      "11Apr", makeLink("Handling Bindrec in HOFL",
+	                    "lectures/hofl-bindrec-slides-handouts.pdf")
+      );
+
+   cal.add_info(
+      "17Apr", makeLink("FOFL and FOBS", 
+	                    "lectures/fofl-slides-handouts.pdf"),
+      makeLink("#34 FOFL and FOBS", "handouts/fofl-fobs.pdf")
+      );
+
+
+
+   cal.add_info(
+      "18Apr", makeLink("More FOFL and FOBS",
+	                    "lectures/fobs-slides-handouts.pdf")
+      );
+	 	  
+   cal.add_info(
+      "22Apr",  
+	  makeLink("Closure Conversion", "lectures/closure-slides-handouts.pdf"),
+      makeLink("#35 Closure conversion", "handouts/closure-conversion.pdf"),
+	                  blank_line, 
+		makeLink("#38 PS8", "ps/ps8.pdf"),
+        fakeLink("PS 7 due (#42 PS7 Solns)",
+                 "protected/ps7-solns.pdf", 
+                 "due")
+           
+      );
+
+   cal.add_info(
+      "25Apr", makeLink("HOILEC: State with Explicit Cells",
+	                    "lectures/hoilec-slides-handouts.pdf"),
+      makeLink("#36 HOILEC: Imperative Programming with Explicit Cells", 	
+	            "handouts/hoilec.pdf")
+      );
+
+   cal.add_info(
+      "29Apr", makeLink("HOILEC: Closures and Objects","lectures/hoilec-closure-slides-handouts.pdf")
+      );
+	  
+   cal.add_info(
+      "01May", "HOILEC: Thunks and Promises"
+      );
+
+   cal.add_info(
+      "02May", makeLink("HOILIC: State with Implicit Cells", 
+	           "lectures/hoilic-slides-handouts.pdf"),
+               makeLink("#39 HOILIC: Imperative Programming with Implicit Cells",
+			   "handouts/hoilic.pdf")
+      );
+
+   cal.add_info(
+      "06May", makeLink("Parameter Passing", "lectures/parameter-passing-2per.pdf")
+      );
+	  
+   cal.add_info(
+      "08May", makeLink("Laziness", "lectures/lazy-2per.pdf"),
+	           makeLink("#43 Haskell and HUGS", "handouts/haskell.pdf"),
+			   blank_line, 
+               fakeLink("PS 8 due (#49 PS8 Solns)",
+                        "protected/ps8-solns.pdf", 
+                        "due")
+      );
+
+/*
+   cal.add_info(
+      "08May", makeLink("Types", "lectures/types-slides-handouts.pdf"),
+	           makeLink("#45 Types", "handouts/types.pdf"),
+	           fakeLink("Final Review", "handouts/cs251-final-review-spr09.pdf")
+      );
+
+*/
+
+             
+/***********************************************************************/
+/*                       Administrative                                */
+/***********************************************************************/
+
+/*   add_wellesley_spring_2008_admin(cal); */
+ </script>
+</head>
+
+
+<body bgcolor=white>
+  <p><span style='font-size:13.5pt'><b>Computer Science 251<br>
+  Theory of Programming Languages<br>
+  Spring 2013</b></span>
+    <o:p></o:p></p>
+  <hr>
+<p><b><font size="3"><i>Welcome to CS251</i></font></b><br>
+  In this course you will learn the dimensions of modern programming language such as synatx, naming, state, data control, concurrency, nondeterminism, and types. These dimensions are explored via mini langauges interpreters written in OCaml, Scheme, and Haskell that students experiment with and extend. We will cover major programming paradigms including function-oriented, imperative, object-oriented, and logic programming.  
+  
+  <br>
+  Prerequisite: CS230 or permission of instructor<br>
+  Distribution: Mathematical modeling<br>
+  Semester: Fall, Unit: 1.00 </p>
+  <p><b><i>Textbook<br>
+  </i></b><span style='font-weight:normal;font-style:normal'>There is one textbook in this course: </span><span style='font-weight:normal'><a href="http://files.metaprl.org/doc/ocaml-book.pdf">Introduction to the Objective Caml Programming Language </a></span><span style='font-weight:normal;font-style:normal'>by Jason Hickey. We will use parts of this bookto learn the OCaml programming language, which will be our main implementation langauge in the course. This book will soon be published by Cambridge University Press; we will be using an on-line draft copy.</span>
+  
+  <p><b><i>Course Conference<br>
+  </i></b><span style='font-weight:normal;font-style:normal'>The course
+  conference will contain announcements and changes to the
+  schedule. Please check this conference before each class and especially
+  before an assign is due. In addition, the conference will contain a section
+  for CS251 students ask and answer questions among themselves concerning
+  course material and assignments. You may discuss the homework in general
+  terms, suggest where to go in the text or lecture notes to help someone get
+  started, or you may help clarify an ambiguous question. However, please do
+  not post your solutions either complete or partial. I will check the
+  conference regularly to help with any unanswered questions.
+  <o:p></o:p></span></p>
+  
+<p><b><i>Course Materials</i></b><span style='font-weight:normal;font-style:
+  normal'> <br>
+ <font face="Times">CS251 course materials for each class will be handed out
+  at the beginning of each lecture. Copies are available in .pdf format using
+  the links on this page and require the Adobe Acrobat Reader program for
+  on-screen viewing and printing.  The course <a href="resources.html">resource page</a> contains all manner of documentation for the languages and programs used in this course.
+        <o:p></o:p></span></p>
+  
+<div id = "maincontent">
+
+  
+   <script type = "text/javascript">
+   add_wellesley_spring_2013_admin(cal);
+   cal.render();
+  </script>
+  
+  <div id = "dogtag">
+   <p><font size="2">Randy Shull (<a href="mailto:rshull@wellesley.edu">rshull@wellesley.edu</a>)<br>
+   Based on JavaScript calendar program by Mark A. Sheldon (<a href="mailto:msheldon@wellesley.edu">msheldon@wellesley.edu</a>)<br>
+Computer Science 251, Spring 2013<br>
+Last Modified: April 17, 2013<br>
+        Page Expires: May 31, 2013</font></p>
+  </div> <!-- dogtag -->
+
+</div> <!-- maincontent -->
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+; SUM3: adds nested FUNREC to SUM1
+(fobs (n lo hi)
+  (funrec (sum-loop lo 0)
+    (def (multiple? x) (= 0 (rem x)))
+    (def (rem y) (% y n))
+    (def (sum-loop i sum)
+      (funrec (if (> i  hi)
+                  sum
+                  (sum-loop (+ i 1) (new-sum i)))
+        (def (new-sum z) (if (multiple? z) (inc z) sum))
+        (def (inc w) (+ sum w))))))
+
+

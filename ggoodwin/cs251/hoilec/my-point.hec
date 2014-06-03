@@ -1,0 +1,45 @@
+(def my-point
+  (bind num-points (cell 0) ; class variable
+    (fun (cmsg) ; class message
+     (cond
+       ((str= cmsg "count") (^ num-points)) ; Act like class method
+       ((str= cmsg "new") ; Act like constructor method
+        (fun (ix iy)
+          (bindpar ((x (cell ix)) (y (cell iy))) ; instance variables
+            (seq (:= num-points (+ (^ num-points) 1)) ; count points
+                 (bindrec ; create and return instance dispatcher function. 
+                   ((this ; Give the name "this" to instance dispatcher
+                     (fun (imsg) ; instance message
+                       (cond ((str= imsg "get-x") (^ x))
+                             ((str= imsg "get-y") (^ y))
+                             ((str= imsg "set-x") (fun (new-x) (:= x new-x)))
+                             ((str= imsg "set-y") (fun (new-y) (:= y new-y)))
+                             ((str= imsg "translate")
+                              (fun (dx dy)
+				;; Using "this" isn't neceessary here,
+				;;  but shows possibility
+				(seq ((this "set-x") (+ (^ x) dx))
+				     ((this "set-y") (+ (^ y) dy)))))
+			     ((str= imsg "to-string")
+     				;; Using "this" isn't neceessary here,
+			        ;;  but shows possibility
+			        (str+ "<"
+				      (str+ (toString (^ x))
+					    (str+ ","
+						  (str+ (toString (^ y))
+							">")))))
+                             (else (error "unknown instance message:" imsg))))))
+                   this))))) ; Return instance dispatcher as result of "new"
+       (else (error "unknown class message:" cmsg))))))
+
+(def (test-my-point)
+  (bindseq ((p1 ((my-point "new") 3 4))
+	    (p2 ((my-point "new") 5 6)))
+    (seq (println (list (p1 "to-string") (p2 "to-string")))
+	 ((p1 "set-x") (p2 "get-y"))
+	 (println (list (p1 "to-string") (p2 "to-string")))
+	 ((p2 "set-y") (my-point "count"))
+	 (println (list (p1 "to-string") (p2 "to-string")))
+	 ((p1 "translate") 1 2)
+	 (list (p1 "to-string") (p2 "to-string"))
+	 )))

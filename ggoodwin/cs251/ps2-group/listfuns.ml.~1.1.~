@@ -1,0 +1,41 @@
+let rec sum_multiples_of_3_or_5 (m,n) = 
+  (* replace this stub *)
+  0 
+
+let rec contains_multiple (n, xs) =
+  (* replace this stub *)
+  false
+
+let rec all_contain_multiple (n, xss) = 
+  (* replace this stub *)
+  false
+
+let rec merge (ys,zs) =
+  (* replace this stub *)
+  []
+
+let rec alts xs = 
+  (* replace this stub *)
+  ([],[])
+
+let rec cartesian_product (xs,ys) =
+  (* replace this stub *)
+  []
+
+(* assume n a non-negative integer *)
+let rec bits n = 
+  (* replace this stub *)
+  []
+
+let rec inserts (x, ys) = 
+  (* replace this stub *)
+  []
+
+(* assume xs has no dups *)
+let rec permutations xs = 
+  (* replace this stub *)
+  []
+
+
+
+

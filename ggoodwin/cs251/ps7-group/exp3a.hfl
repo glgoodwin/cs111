@@ -1,0 +1,5 @@
+;; Write your HOFL expression from PS7 Problem 3a here 
+(bind add (abs x (abs y (+ x y)))
+  (if (= ((add 1) 2) 3) 
+     (sym Static) 
+     (sym Dynamic)))

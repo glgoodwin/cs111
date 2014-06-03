@@ -1,0 +1,9 @@
+{states}
+<0M3>, <1M3>, <2M3>
+{start state}
+<0M3>
+{accepting states}
+<0M3>
+{transitions}
+<0M3>, 0 -> <0M3>; <0M3>, 1 -> <1M3>; <1M3>, 0 -> <2M3>; <1M3>, 1 -> <0M3>; <2M3
+>, 0 -> <1M3>; <2M3>, 1 -> <2M3>

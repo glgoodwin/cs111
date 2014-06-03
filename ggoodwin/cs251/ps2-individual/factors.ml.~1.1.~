@@ -1,0 +1,10 @@
+(* Assume n >= 2 *)  
+let smallestPrimeFactor n = 
+  (* replace this stub *)
+  n 
+
+(* Assume n >= 2 *)  
+let rec majorMinorFactors n 
+  (* replace this stub *)
+  = (n,1) 
+    

@@ -1,0 +1,1408 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:bx="http://www.backbase.com/bx" xmlns:s="http://www.backbase.com/s" xmlns:c="http://www.collegenet.com/c" xmlns:r25="http://www.collegenet.com/r25" xmlns:s25="http://www.collegenet.com/s25" style="display:none;">
+<style type="text/css">
+
+#s25 TABLE.RsrvWiz_DateTime_Table TD {
+padding:			3px;
+}
+#s25 TABLE.RsrvWiz_DateTime_Table TD.RsrvWiz_DateTime_Label {
+text-align:			right; 
+font-weight:		bold;
+}
+#s25 TABLE.RsrvWiz_DateTime_Table .peripheralDurations TD * {
+}
+#s25 TABLE.RsrvWiz_DateTime_Table .peripheralDurations SELECT {
+width:				auto;
+}
+#s25 TABLE.RsrvWiz_DateTime_Table .peripheralDurations SPAN {
+margin-right:		5px;
+font-size:			90%;
+}
+#s25 TABLE.RsrvWiz_DateTime_Table .peripheralDurations A {
+text-decoration:	none;
+}
+#s25 TABLE.RsrvWiz_DateTime_Table .peripheralDurations A:hover {
+text-decoration:	underline;
+}
+#s25 TABLE.RsrvWiz_DateTime_Table TD.peripheralResult {
+padding-left:		10px;
+}
+#s25 TABLE.RsrvWiz_DateTime_Table TD.peripheralResult SPAN {
+padding:			3px;
+background-color:	#eee;
+border:				1px solid #ccc;
+color:				#666;
+display:			none;
+}
+#s25 IMG.RsrvWiz_DateTime_Divider {
+background-color:	#ddd;
+width:				100%;
+width:				300px;
+margin:				10px 0px;
+height:				2px;
+}
+
+</style>
+<s:htmlstructure b:name="s25:rsrv_wiz_datetime" b:behavior="S25RsrvWizEditor::DateTime">
+<div><s:innercontent/></div>
+</s:htmlstructure>
+<s:behavior b:name="S25RsrvWizEditor::DateTime" b:behavior="S25RsrvWizEditor">
+<s:initatt c:purpose="datetime" c:status="pending"/>
+<s:event b:on="s25-focus">
+<s:if b:test="declared($tStartDatePickerText)">
+<s:task b:action="focus" b:target="$tStartDatePickerText"/>
+</s:if>
+</s:event>		
+<s:event b:on="Paint">
+
+<s:variable b:name="tContentOptions" b:scope="tag" b:select=""/>
+<s:variable b:name="tMoreSelect" b:scope="tag" b:select=""/>
+<s:variable b:name="tCurrentObject" b:scope="tag" b:select=""/>
+<s:variable b:name="tFavSelect" b:scope="tag" b:select=""/>
+<s:variable b:name="tFavIconContainer" b:scope="tag" b:select=""/>
+<s:variable b:name="tNoEdit" b:scope="tag" b:select="'F'"/>
+<s:with b:target="$tEvWiz">
+<s:task b:action="assign" b:target="$tDateTimeEditor" b:select="'T'"/>
+</s:with>
+<s:variable b:name="tEventStartDate" b:scope="tag" b:select="''"/>
+<s:variable b:name="tEventStartTime" b:scope="tag" b:select="''"/>
+<s:variable b:name="tEventEndDate" b:scope="tag" b:select="''"/>
+<s:variable b:name="tEventEndTime" b:scope="tag" b:select="''"/>
+<s:variable b:name="tReservationStartDate" b:scope="tag" b:select="''"/>
+<s:variable b:name="tReservationStartTime" b:scope="tag" b:select="''"/>
+<s:variable b:name="tReservationEndDate" b:scope="tag" b:select="''"/>
+<s:variable b:name="tReservationEndTime" b:scope="tag" b:select="''"/>
+</s:event>
+<s:event b:on="PaintControl">
+<s:task b:action="assign" b:target="$tEvWiz/$tInitStartDt" b:scope="tag" b:select="string($tEvWiz/$tProfile/r25:init_start_dt)"/> 
+<s:task b:action="assign" b:target="$tEvWiz/$tInitEndDt" b:scope="tag" b:select="string($tEvWiz/$tProfile/r25:init_end_dt)"/> 
+<s:variable b:name="lIncrement" b:scope="local" b:select="id('Prefs')/$tMinuteInc"/>
+<s:variable b:name="lThis" b:scope="local">ancestor::*[@c:editor='true'][1]</s:variable>
+<s:render b:destination="$tContent" b:mode="replacechildren">
+<div class="contentHeader">
+<span class="tooltipMarker">
+<bx:tooltip class="bxTooltipNoIcon" b:delay="5"/>
+<img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="iconHelp"/>
+</span>
+<div c:id="title"><s:textnode b:label="{@c:title}"/></div>
+</div>
+<div class="contentOptions" style="display:none">
+<table class="RsrvWiz_DateTime_Table" cellspacing="0" border="0" align="center">
+<tbody>
+<tr valign="middle" c:id="from">
+<td class="RsrvWiz_DateTime_Label">Start Date:</td>
+<td>
+<input name="startdate" b:behavior="datepickerInputFormat" b:observe="../b:datepicker[1]" style="font-size:100%">
+<s:event b:on="construct">
+<s:super/>
+<s:setatt c:init="1"/>
+</s:event>
+<s:event b:on="change">
+<s:super/>
+<s:if b:test="./@c:init = '1'">
+<s:with b:target="../b:datepicker[@c:purpose='startdate']">
+<s:setatt c:changed="T"/>
+</s:with>
+<s:task b:action="trigger" b:event="ValidateDateTime" b:target="{$lThis}"/>
+</s:if>
+</s:event>
+<s:whenactive>
+<s:keys b:keys="tab" b:bubble="false">
+<s:task b:action="focus" b:target="ancestor::tbody/tr[@c:id='from']/td/s25:time_spinner[@c:id='starttime']"/>
+</s:keys>
+</s:whenactive>
+</input>
+<b:datepicker b:type="float" b:input="." c:purpose="startdate" b:format="{id('Prefs')/$tDatePattern}" c:changed="F">
+<s:event b:on="change">
+<s:super/>
+<s:setatt c:changed="T"/>
+</s:event>
+</b:datepicker>
+</td>
+<td> </td>
+</tr>
+<tr valign="middle" c:id="from">
+<td class="RsrvWiz_DateTime_Label">Start Time:</td>
+<td>
+<s25:time_spinner c:id="starttime" c:purpose="starttime" b:step="{$lIncrement}" b:format="{string(id('Prefs')/$tTimeDisplay)}" b:style="width:64px">
+<s:whenactive>
+<s:keys b:keys="tab+shift" b:bubble="false">
+<s:with b:target="{$lThis}">
+<s:task b:action="focus" b:target="$tStartDatePickerText"/>
+</s:with>
+</s:keys>
+<s:keys b:keys="enter"><s:task b:action="trigger" b:event="change"/></s:keys>
+<s:keys b:keys="ctrl+190">
+<s:task b:action="trigger" b:event="OnClickNext" b:target="ancestor::s25:rsrv_wiz[1]"/>
+</s:keys>
+<s:keys b:keys="ctrl+188">
+<s:task b:action="trigger" b:event="OnClickPrevious" b:target="ancestor::s25:rsrv_wiz[1]"/>
+</s:keys>
+</s:whenactive>
+<s:event b:on="construct">
+<s:super/>
+<s:setatt c:init="1"/>
+</s:event>
+<s:event b:on="change">
+<s:super/>
+<s:if b:test="@c:init = '1'">
+<s:variable b:name="lChangesMade" b:select="'true'"/>
+<s:task b:action="trigger" b:event="ValidateDateTime" b:target="{$lThis}"/>
+</s:if>
+</s:event>
+</s25:time_spinner>
+</td>
+<td> </td>
+</tr>
+<tr class="peripheralDurations" c:id="pre-prompt">
+<td/>
+<td><a href="javascript:void(0)" onclick="return false" b:behavior="RsrvWizInput" b:action="trigger" b:event="ShowPreEventOptions" b:target="{$lThis}">Pre-Event/Setup durations?</a></td>
+<td> </td>
+</tr>
+<tr class="peripheralDurations" c:id="preevent-options" style="display:none">
+<td class="RsrvWiz_DateTime_Label">Pre-Event:</td>
+<td>
+<span>
+<select c:purpose="days" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+</select>Days
+</span>
+<span>
+<select c:purpose="hours" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
+</select>Hours
+</span>
+<span>
+<select c:purpose="minutes" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option><option value="30">30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option>
+</select>Minutes
+</span>
+</td>
+<td c:id="preevent-result" class="peripheralResult"><span> --- </span></td>
+</tr>
+<tr class="peripheralDurations" c:id="setup-options" style="display:none">
+<td class="RsrvWiz_DateTime_Label">Setup:</td>
+<td>
+<span>
+<select c:purpose="days" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+</select>Days
+</span>
+<span>
+<select c:purpose="hours" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
+</select>Hours
+</span>
+<span>
+<select c:purpose="minutes" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option><option value="30">30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option>
+</select>Minutes
+</span>
+</td>
+<td c:id="setup-result" class="peripheralResult"><span> --- </span></td>
+</tr>
+<tr align="center"><td colspan="3"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="RsrvWiz_DateTime_Divider"/></td></tr>
+<tr valign="middle" c:id="to">
+<td class="RsrvWiz_DateTime_Label">End Date:</td>
+<td>
+<input name="enddate" b:behavior="datepickerInputFormat" b:observe="../b:datepicker[1]" style="font-size:100%;"> 
+<s:event b:on="construct">
+<s:super/>
+<s:setatt c:init="1"/>
+</s:event>
+<s:event b:on="change">
+<s:super/>
+<s:if b:test="@c:init = '1'">
+<s:with b:target="../b:datepicker[@c:purpose='enddate']">
+<s:setatt c:changed="T"/>
+</s:with>
+<s:task b:action="trigger" b:event="ValidateDateTime" b:target="{$lThis}"/>
+</s:if>
+</s:event>
+<s:whenactive>
+<s:keys b:keys="tab" b:bubble="false">
+<s:task b:action="focus" b:target="ancestor::tbody/tr[@c:id='to']/td/s25:time_spinner[@c:id='endtime']"/>
+</s:keys>
+</s:whenactive>
+</input>
+<b:datepicker b:type="float" b:input="." c:purpose="enddate" b:format="{id('Prefs')/$tDatePattern}" c:changed="F">
+<s:event b:on="change">
+<s:super/>
+<s:setatt c:changed="T"/>
+</s:event>
+</b:datepicker> 
+</td>
+<td> </td>
+</tr>
+<tr valign="middle" c:id="to">
+<td class="RsrvWiz_DateTime_Label">End Time:</td>
+<td>
+<s25:time_spinner c:id="endtime" c:purpose="endtime" b:step="{$lIncrement}" b:format="{string(id('Prefs')/$tTimeDisplay)}" b:style="width:64px">
+<s:whenactive>
+<s:keys b:keys="enter"><s:task b:action="trigger" b:event="change"/></s:keys>
+<s:keys b:keys="ctrl+190">
+<s:task b:action="trigger" b:event="OnClickNext" b:target="ancestor::s25:rsrv_wiz[1]"/>
+</s:keys>
+<s:keys b:keys="ctrl+188">
+<s:task b:action="trigger" b:event="OnClickPrevious" b:target="ancestor::s25:rsrv_wiz[1]"/>
+</s:keys>
+</s:whenactive>
+<s:event b:on="construct">
+<s:super/>
+<s:setatt c:init="1"/>
+</s:event>
+<s:event b:on="change">
+<s:super/>
+<s:if b:test="@c:init = '1'">
+<s:variable b:name="lChangesMade" b:select="'true'"/>
+<s:task b:action="trigger" b:event="ValidateDateTime" b:target="{$lThis}"/>
+</s:if>
+</s:event>
+</s25:time_spinner>
+</td>
+<td> </td>
+</tr>
+<tr class="peripheralDurations" c:id="post-prompt">
+<td/>
+<td><a href="javascript:void(0)" onclick="return false" b:behavior="RsrvWizInput" b:action="trigger" b:event="ShowPostEventOptions" b:target="{$lThis}">Post-Event/Takedown durations?</a></td>
+<td> </td>
+</tr>
+<tr class="peripheralDurations" c:id="postevent-options" style="display:none">
+<td class="RsrvWiz_DateTime_Label">Post-Event:</td>
+<td>
+<span>
+<select c:purpose="days" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+</select>Days
+</span>
+<span>
+<select c:purpose="hours" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
+</select>Hours
+</span>
+<span>
+<select c:purpose="minutes" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option><option value="30">30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option>
+</select>Minutes
+</span>
+</td>
+<td c:id="postevent-result" class="peripheralResult"><span> --- </span></td>
+</tr>
+<tr class="peripheralDurations" c:id="takedown-options" style="display:none">
+<td class="RsrvWiz_DateTime_Label">Takedown:</td>
+<td>
+<span>
+<select c:purpose="days" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+</select>Days
+</span>
+<span>
+<select c:purpose="hours" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
+</select>Hours
+</span>
+<span>
+<select c:purpose="minutes" b:behavior="RsrvWizSelect">
+<s:event b:on="change"><s:super/><s:task b:action="trigger" b:event="UpdateDateTimeValues" b:target="{$lThis}"/></s:event>
+<option value="0">0</option><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option><option value="30">30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option>
+</select>Minutes
+</span>
+</td>
+<td c:id="takedown-result" class="peripheralResult"><span> --- </span></td>
+</tr>
+<tr align="center"><td colspan="3"><img src="https://25live-c.collegenet.com/hybridssl/v21.0/gfx/_.gif" class="RsrvWiz_DateTime_Divider"/></td></tr>
+</tbody>
+</table>
+<div c:id="repeats" align="center">
+<b>Event Repeats?</b>
+<select name="repeat_type" style="margin-left:5px; width:auto" b:behavior="RsrvWizSelect" c:init="0">
+<s:event b:on="change">
+<s:if b:test="@c:init = '2'">
+<s:task b:action="trigger" b:event="OnChangeRepeat" b:target="{$lThis}"/>
+</s:if>
+</s:event>
+<option value="none">No, Does Not Repeat</option>
+<option value="adhoc">Repeats Ad Hoc</option>
+<option value="daily">Repeats Daily</option>
+<option value="weekly">Repeats Weekly</option>
+<option value="monthly">Repeats Monthly</option>
+</select>
+<br/><br/>
+<div c:id="control"> 
+<div style="text-align:center; font-style:italic"><img c:id="checking" src="https://25live-b.collegenet.com/hybridssl/v21.0/gfx/loading_anim.gif"/>Loading...</div>
+</div>
+</div>
+</div>
+<div c:id="check_availability" class="RsrvWiz_CheckAvailabilityPrompt"> 
+<b:button b:disabled="true">
+<s:event b:on="command">
+<s:task b:action="trigger" b:event="Save" b:target="{$lThis}"/>
+</s:event>
+<div class="icon-resource">
+<div class="icon-space">
+<s:textnode b:label="Check for Location/Resource Conflicts"/>
+</div>
+</div>
+</b:button>
+</div>
+</s:render>
+<s:fxstyle b:time="1"/><s:task b:action="show" b:target="$tContent/div[@class='contentOptions']"/>
+<s:variable b:name="tCheckAvailabilityPrompt" b:scope="tag" b:select="$tContent/div[@c:id='check_availability']/b:button"/>
+<s:variable b:name="tTbody" b:scope="tag" b:select="$tContent/div/table[1]/tbody"/>
+<s:variable b:name="tStartDatePicker" b:scope="tag" b:select="$tTbody/tr[@c:id='from']/td/b:datepicker[@c:purpose='startdate']"/>
+<s:variable b:name="tStartDatePickerText" b:scope="tag" b:select="$tTbody/tr[@c:id='from']/td/input[@name='startdate']"/>
+<s:variable b:name="tStartTimeSpinner" b:scope="tag" b:select="$tTbody/tr[@c:id='from']/td/s25:time_spinner[@c:purpose='starttime']"/>
+<s:variable b:name="tEndDatePicker" b:scope="tag" b:select="$tTbody/tr[@c:id='to']/td/b:datepicker[@c:purpose='enddate']"/>
+<s:variable b:name="tEndDatePickerText" b:scope="tag" b:select="$tTbody/tr[@c:id='to']/td/input[@name='enddate']"/>
+<s:variable b:name="tEndTimeSpinner" b:scope="tag" b:select="$tTbody/tr[@c:id='to']/td/s25:time_spinner[@c:purpose='endtime']"/>
+<s:variable b:name="tPreEventSelects" b:scope="tag" b:select="$tTbody/tr[@c:id='preevent-options']/td//select"/>
+<s:variable b:name="tPreEventResult" b:scope="tag" b:select="$tTbody/tr[@c:id='preevent-options']/td[@c:id='preevent-result']/span"/>
+<s:variable b:name="tSetupSelects" b:scope="tag" b:select="$tTbody/tr[@c:id='setup-options']/td//select"/>
+<s:variable b:name="tSetupResult" b:scope="tag" b:select="$tTbody/tr[@c:id='setup-options']/td[@c:id='setup-result']/span"/>
+<s:variable b:name="tPostEventSelects" b:scope="tag" b:select="$tTbody/tr[@c:id='postevent-options']/td//select"/>
+<s:variable b:name="tPostEventResult" b:scope="tag" b:select="$tTbody/tr[@c:id='postevent-options']/td[@c:id='postevent-result']/span"/>
+<s:variable b:name="tTakedownSelects" b:scope="tag" b:select="$tTbody/tr[@c:id='takedown-options']/td//select"/>
+<s:variable b:name="tTakedownResult" b:scope="tag" b:select="$tTbody/tr[@c:id='takedown-options']/td[@c:id='takedown-result']/span"/>
+<s:variable b:name="tValidating" b:scope="tag" b:select="'false'"/>
+<s:variable b:name="tRepeats" b:scope="tag" b:select="$tContent/div/div[@c:id='repeats']"/>
+<s:variable b:name="tRepeatSelect" b:scope="tag" b:select="$tRepeats/select[@name='repeat_type']"/>
+<s:variable b:name="tDateDiff" b:scope="tag" b:select="0"/>
+<s:variable b:name="tEarliestDate" b:scope="tag" b:select="string(id('Prefs')/$tEarliestEventCreationDate)"/>
+<s:variable b:name="tLatestDate" b:scope="tag" b:select="string(id('Prefs')/$tLatestDate)"/>
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode = 'edit'">
+<s:if b:test="not($tEvWiz/$tDataXml//r25:state = '0')">
+<s:variable b:name="lParentResponse"/>
+<s:task b:action="load" b:method="GET" b:url="{concat(id('Config')/$tWsPrefix, 'event.xml?event_id=',$tEvWiz/$tDataXml//r25:parent_id)}" b:destination="$lParentResponse">
+<s:httpheader b:name="Content-Type" b:value="text/xml"/>
+</s:task>
+<s:task b:action="string2xml" b:variable="$lParentResponse"/>
+<s:task b:action="assign" b:target="$tEarliestDate" b:scope="tag" b:select="concat(substring($lParentResponse//r25:start_date,6,2), '/', substring($lParentResponse//r25:start_date,9,2), '/', substring($lParentResponse//r25:start_date,1,4) )"/>
+<s:task b:action="assign" b:target="$tLatestDate" b:scope="tag" b:select="concat(substring($lParentResponse//r25:end_date,6,2), '/', substring($lParentResponse//r25:end_date,9,2), '/', substring($lParentResponse//r25:end_date,1,4) )"/>
+</s:if>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lEarliestEventCreationDate" b:select="s25_format_date(id('Prefs')/$tEarliestEventCreationDate, 'yyyyMMdd')"/>
+<s:variable b:name="lToday" b:select="s25_format_date(current-date(), 'yyyyMMdd')"/>
+<s:if b:test="number($lEarliestEventCreationDate) gt number($lToday)">
+<s:task b:action="assign" b:target="$tEarliestDate" b:scope="tag" b:select="string(id('Prefs')/$tEarliestEventCreationDate)"/>
+</s:if>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="tEarliestSortValue" b:scope="tag"/>
+<s:variable b:name="tLatestSortValue" b:scope="tag"/>
+<s:script><![CDATA[
+
+bpc.setVariable('tEarliestSortValue', [s25_format_date(_vars['tEarliestDate'][0], 'yyyyMMdd')], 'tag', _current);
+bpc.setVariable('tLatestSortValue', [s25_format_date(_vars['tLatestDate'][0], 'yyyyMMdd')], 'tag', _current);
+
+]]></s:script>
+<s:variable b:name="tDisplayFormat" b:scope="tag" b:select="string(id('Prefs')/$tDatePattern)"/>
+<s:variable b:name="tEarliestDisplayValue" b:scope="tag"/>
+<s:variable b:name="tLatestDisplayValue" b:scope="tag"/>
+<s:script><![CDATA[
+
+bpc.setVariable('tEarliestDisplayValue', [s25_format_date(_vars['tEarliestDate'][0], _vars['tDisplayFormat'][0])], 'tag', _current);
+bpc.setVariable('tLatestDisplayValue', [s25_format_date(_vars['tLatestDate'][0], _vars['tDisplayFormat'][0])], 'tag', _current);
+
+]]></s:script>
+<s:task b:test="not(id('custom_listview_control')/*)" b:action="load" b:url="{concat($s25_controlpath,'b-listview/b-listview.xml')}" b:destination="id('custom_listview_control')" b:mode="replacechildren"/>
+<s:render b:destination="$tContent/div[1]/span[1]/bx:tooltip" b:mode="replacechildren"><div xmlns="">Select the date(s), and type the start/end times for the event. For example, for a 12-hour clock, you can select the current time and type &quot;2p&quot;, then press Tab to enter 2:00 pm.</div><div xmlns="">If the event ends at midnight or later, be sure to modify the End Date.</div><div xmlns="">Expand the links under the start/end times to enter pre-/post-event and setup/takedown durations.</div><div xmlns="">To select additional dates, change &quot;No, Does Not Repeat&quot; to specify a repeating meeting pattern (for example, Weekly) or, to select random dates, choose &quot;Repeats Ad Hoc.&quot; If you&apos;ve already selected locations/resources for the event and you&apos;re changing dates/times, be sure to check for location resource conflicts. (This check happens automatically when you change tabs or save the event.)</div><div xmlns="">You can add comments and cancel individual occurrences as needed.</div></s:render>
+<s:with b:target="$tRepeats/div[@c:id='control']">
+<s:task b:action="show"/>
+<s:render b:destination="." b:mode="replacechildren">
+<s25:rsrv_wiz_repeats/>
+</s:render>
+</s:with>
+</s:event>
+<s:event b:on="PaintText">
+<s:variable b:name="lProfileDescription" b:scope="local" b:select="$tEvWiz/$tProfile/r25:profile_description"/>
+<s:render b:destination="$tContent" b:mode="replacechildren">
+<div class="contentHeader">
+<s:textnode b:label="{@c:title}"/> <span c:flag="required" class="required">required</span>
+</div>
+<div class="contentOptions">
+<div c:id="txt" class="currentSelection" align="center">
+<div><b><s:textnode b:label="{$lProfileDescription}"/></b></div>
+<br/>
+<div class="input-note">Event Date and Time are not currently editable.</div>
+</div>
+</div>
+</s:render>
+</s:event>
+<s:event b:on="Reset">
+<s:variable b:name="lStartDt" b:scope="local" b:select=""/>
+<s:variable b:name="lStartHr" b:scope="local" b:select=""/>
+<s:variable b:name="lEndDt" b:scope="local" b:select=""/>
+<s:variable b:name="lStartTime" b:scope="local" b:select=""/>
+<s:variable b:name="lEndTime" b:scope="local" b:select=""/>
+<s:variable b:name="lStartDpVal" b:scope="" b:select=""/>
+<s:variable b:name="lStartDpSortVal" b:scope="" b:select=""/>
+<s:variable b:name="lEndDpVal" b:scope="" b:select=""/>
+<s:variable b:name="lEndDpSortVal" b:scope="" b:select=""/>
+<s:variable b:name="lPattern" b:scope="local" b:select="id('Prefs')/$tDatePattern"/>
+<s:if b:test="$tEvWiz/$tEvent/r25:event_start_dt/@required = 'T' or $tEvWiz/$tEvent/r25:event_end_dt/@required = 'T' or $tEvWiz/$tEvent/r25:reservation_start_dt/@required = 'T' or $tEvWiz/$tEvent/r25:reservation_end_dt/@required = 'T' or $tEvWiz/$tProfile/@required = 'T'">
+<s:setatt c:required="'true'"/>
+</s:if>
+<s:variable b:name="lRequiredContent" b:scope="local" b:select=""/>
+<s:if b:test="contains($tEvWiz/$tEvent/r25:event_start_dt/@required,'EvXML')">
+<s:task b:action="assign" b:target="$lRequiredContent" b:select="string($tEvWiz/$tEvent/r25:event_start_dt/@required)"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tEvent/r25:event_end_dt/@required,'EvXML')">
+<s:task b:action="assign" b:target="$lRequiredContent" b:select="string($tEvWiz/$tEvent/r25:event_end_dt/@required)"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tEvent/r25:reservation_start_dt/@required,'EvXML')">
+<s:task b:action="assign" b:target="$lRequiredContent" b:select="string($tEvWiz/$tEvent/r25:reservation_start_dt/@required)"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tEvent/r25:reservation_end_dt/@required,'EvXML')">
+<s:task b:action="assign" b:target="$lRequiredContent" b:select="string($tEvWiz/$tEvent/r25:reservation_end_dt/@required)"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tProfile/@required,'EvXML')">
+<s:task b:action="assign" b:target="$lRequiredContent" b:select="string($tEvWiz/$tProfile/@required)"/>
+</s:if>
+<s:variable b:name="lRequiredXpath" b:scope="local" b:select=""/>
+<s:task b:action="assign" b:target="$lRequiredXpath" b:select="replace($lRequiredContent,'EvXML','$tEvWiz/$tDataXml/r25:events/r25:event')"/>
+<s:if b:test="xpath($lRequiredXpath)">
+<s:setatt c:required="'true'"/>
+</s:if>
+<s:if b:test="string($tEvWiz/$tProfile//r25:reservation/r25:event_start_dt/@no_edit) = 'T' or string($tEvWiz/$tProfile//r25:reservation/r25:event_end_dt/@no_edit) = 'T' or string($tEvWiz/$tProfile//r25:reservation/r25:reservation_start_dt/@no_edit) = 'T' or string($tEvWiz/$tProfile//r25:reservation/r25:reservation_end_dt/@no_edit) = 'T' or $tEvWiz/$tEvent/r25:profile/@no_edit = 'T' or string(@c:no_edit) = 'true'">
+<s:task b:action="assign" b:target="$tNoEdit" b:scope="tag" b:select="'T'"/>
+</s:if>
+<s:if b:test="starts-with($tEvWiz/$tProfile/r25:profile_code, 'Y')">
+<s:task b:action="assign" b:target="$tNoEdit" b:scope="tag" b:select="'T'"/>
+</s:if>
+<s:variable b:name="lNoEditXpath" b:scope="local" b:select=""/>
+<s:variable b:name="lNoEditContent" b:scope="local" b:select=""/>
+<s:if b:test="contains($tEvWiz/$tProfile//r25:reservation/r25:event_start_dt/@no_edit,'EvXML')">
+<s:task b:action="assign" b:target="$lNoEditContent" b:select="string($tEvWiz/$tProfile//r25:reservation/r25:event_start_dt/@no_edit)"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tProfile//r25:reservation/r25:event_end_dt/@no_edit,'EvXML')">
+<s:task b:action="assign" b:target="$lNoEditContent" b:select="string($tEvWiz/$tProfile//r25:reservation/r25:event_end_dt/@no_edit)"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tProfile//r25:reservation/r25:reservation_start_dt/@no_edit,'EvXML')">
+<s:task b:action="assign" b:target="$lNoEditContent" b:select="string($tEvWiz/$tProfile//r25:reservation/r25:reservation_start_dt/@no_edit)"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tProfile//r25:reservation/r25:reservation_end_dt/@no_edit,'EvXML')">
+<s:task b:action="assign" b:target="$lNoEditContent" b:select="string($tEvWiz/$tProfile//r25:reservation/r25:reservation_end_dt/@no_edit)"/>
+</s:if>
+<s:if b:test="contains($tEvWiz/$tProfile/@no_edit,'EvXML')">
+<s:task b:action="assign" b:target="$lNoEditContent" b:select="string($tEvWiz/$tProfile/@no_edit)"/>
+</s:if>
+<s:task b:action="assign" b:target="$lNoEditXpath" b:select="replace($lNoEditContent,'EvXML', '$tEvWiz/$tDataXml/r25:events/r25:event')"/>
+<s:task b:action="assign" b:test="xpath($lNoEditXpath)" b:target="$tNoEdit" b:scope="tag" b:select="'T'"/>
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode = 'edit' or $tEvWiz/@c:mode = 'clone'">
+<s:choose>
+<s:when b:test="string($tNoEdit) = 'T'">
+<s:task b:action="trigger" b:event="PaintText" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="PaintControl" b:target="."/>
+<s:task b:action="assign" b:target="$lStartDt" b:select="string($tEvWiz/$tProfile/r25:init_start_dt)"/>
+<s:task b:action="assign" b:target="$lEndDt" b:select="string($tEvWiz/$tProfile/r25:init_end_dt)"/>
+<s:script><![CDATA[
+
+var sPat = _vars['lPattern'][0];
+var sDt = _vars['lStartDt'][0];
+sDt = sDt.replace(/-|:|T/g,'');
+var oDt = new Date(sDt.substr(0,4),sDt.substr(4,2)-1,sDt.substr(6,2),sDt.substr(8,2),sDt.substr(10,2));
+bpc.setVariable('lStartDt',[oDt.getTime()],'local');
+var o = {'lStartDpVal':sPat, 'lStartDpSortVal':'yyyyMMdd', 'lStartTime':'hh24mm'};
+for ( var n in o ) {
+bpc.setVariable(n,[s25_format_date(oDt,o[n])],'local');
+}
+sDt = _vars['lEndDt'][0];
+sDt = sDt.replace(/-|:|T/g,'');
+oDt = new Date(sDt.substr(0,4),sDt.substr(4,2)-1,sDt.substr(6,2),sDt.substr(8,2),sDt.substr(10,2));
+bpc.setVariable('lEndDt',[oDt.getTime()],'local');
+o = {'lEndDpVal':sPat, 'lEndDpSortVal':'yyyyMMdd', 'lEndTime':'hh24mm'};
+for ( var n in o ) {
+bpc.setVariable(n,[s25_format_date(oDt,o[n])],'local');
+}
+
+]]></s:script>
+<s:task b:action="trigger" b:event="SetupTakedownInit" b:target="."/>
+<s:setatt c:start_dt="{$lStartDt}" c:start_hr="{$lStartHr}" c:end_dt="{$lEndDt}"/>
+<s:with b:target="$tStartDatePicker">
+<s:setatt b:value="{$lStartDpVal}" b:sortvalue="{$lStartDpSortVal}"/>
+<s:task b:action="trigger" b:event="set"/>
+<s:task b:action="trigger" b:event="change"/>
+</s:with>
+<s:with b:target="$tEndDatePicker">
+<s:setatt b:value="{$lEndDpVal}" b:sortvalue="{$lEndDpSortVal}"/>
+<s:task b:action="trigger" b:event="change"/>
+<s:task b:action="trigger" b:event="set"/>
+</s:with>
+<s:with b:target="$tStartTimeSpinner">
+<s:setatt b:value="{$lStartTime}"/>
+<s:task b:action="trigger" b:event="input-change" b:target="."/>
+</s:with>
+<s:with b:target="$tEndTimeSpinner">
+<s:setatt b:value="{$lEndTime}"/>
+<s:task b:action="trigger" b:event="input-change" b:target="."/>
+</s:with>
+<s:task b:action="assign" b:target="$tEventStartDate" b:scope="tag" b:select="string($lStartDpSortVal)"/>
+<s:task b:action="assign" b:target="$tEventStartTime" b:scope="tag" b:select="string($lStartTime)"/>
+<s:task b:action="assign" b:target="$tEventEndDate" b:scope="tag" b:select="string($lEndDpSortVal)"/>
+<s:task b:action="assign" b:target="$tEventEndTime" b:scope="tag" b:select="string($lEndTime)"/>
+<s:variable b:name="lReservationStartDateTime" b:select="string($tEvWiz/$tRsrv/r25:reservation_start_dt)"/>
+<s:variable b:name="lReservationEndDateTime" b:select="string($tEvWiz/$tRsrv/r25:reservation_end_dt)"/>
+<s:script><![CDATA[
+
+var rawRsrvStartDateTime = _vars['lReservationStartDateTime'][0];
+bpc.setVariable('tReservationStartDate', [s25_format_date(rawRsrvStartDateTime, 'yyyyMMdd')], 'tag', _current);
+bpc.setVariable('tReservationStartTime', [s25_format_date(rawRsrvStartDateTime, 'h24mm')], 'tag', _current);
+var rawRsrvEndDateTime = _vars['lReservationEndDateTime'][0];
+bpc.setVariable('tReservationEndDate', [s25_format_date(rawRsrvEndDateTime, 'yyyyMMdd')], 'tag', _current);
+bpc.setVariable('tReservationEndTime', [s25_format_date(rawRsrvEndDateTime, 'h24mm')], 'tag', _current);
+
+]]></s:script>
+<s:variable b:name="lRecurrenceTypeID" b:select="string($tEvWiz/$tProfile/r25:rec_type_id)"/>
+<s:variable b:name="lProfileCode" b:select="string($tEvWiz/$tProfile/r25:profile_code)"/>
+<s:choose>
+<s:when b:test="$lRecurrenceTypeID = '1' and starts-with($lProfileCode, 'D')">
+<s:task b:action="select" b:target="$tRepeatSelect/option[@value='daily']"/>
+</s:when>
+<s:when b:test="$lRecurrenceTypeID = '1' and starts-with($lProfileCode, 'W')">
+<s:task b:action="select" b:target="$tRepeatSelect/option[@value='weekly']"/>
+</s:when>
+<s:when b:test="$lRecurrenceTypeID = '1' and starts-with($lProfileCode, 'M')">
+<s:task b:action="select" b:target="$tRepeatSelect/option[@value='monthly']"/>
+</s:when>
+<s:when b:test="$lRecurrenceTypeID = '2'">
+<s:task b:action="select" b:target="$tRepeatSelect/option[@value='adhoc']"/>
+</s:when>
+</s:choose>
+</s:otherwise>
+</s:choose>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="string($tNoEdit) = 'T'">
+<s:task b:action="trigger" b:event="PaintText" b:target="."/>
+</s:when>
+<s:otherwise>
+<s:task b:action="trigger" b:event="PaintControl" b:target="."/>
+<s:task b:action="assign" b:target="$lStartDt" b:scope="local" b:select="string($tEvWiz/@c:start_dt)"/>
+<s:task b:action="assign" b:target="$lEndDt" b:scope="local" b:select="string($tEvWiz/@c:end_dt)"/>
+<s:task b:action="assign" b:target="$lStartTime" b:scope="local" b:select="string($tEvWiz/@c:start_time)"/>
+<s:task b:action="assign" b:target="$lEndTime" b:scope="local" b:select="string($tEvWiz/@c:end_time)"/>
+<s:task b:action="assign" b:target="$lStartHr" b:scope="local" b:select="string($tEvWiz/@c:start_hr)"/>
+<s:script><![CDATA[
+
+var sPat = _vars['lPattern'][0];
+var sDt = _vars['lStartDt'][0];
+var oDt = new Date();
+if ( !(sDt.length == 0) ) {
+oDt  = new Date(Number(sDt));
+} else {
+oDt.setMinutes(0,0,0);
+}
+var iDt = s25_format_date(oDt,'yyyyMMdd');
+var tEarliestDate = _vars['tEarliestDate'][0];
+var oEarliestDate = new Date(tEarliestDate);
+var iEarliestDate = s25_format_date(oEarliestDate,'yyyyMMdd');
+if (iEarliestDate > iDt) {
+oDt = oEarliestDate;
+}
+bpc.setVariable('lStartDt',[oDt.getTime()],'local');
+var o = {'lStartDpVal':sPat, 'lStartDpSortVal':'yyyyMMdd'};
+for ( var n in o ) {
+bpc.setVariable(n,[s25_format_date(oDt,o[n])],'local');
+}
+sDt = _vars['lEndDt'][0];
+oDt = new Date(oDt.getTime());
+if ( !(sDt.length == 0) ) {
+oDt  = new Date(Number(sDt));
+} else {
+oDt.setHours(oDt.getHours()+1,0,0,0);
+}
+bpc.setVariable('lEndDt',[oDt.getTime()],'local');
+o = {'lEndDpVal':sPat, 'lEndDpSortVal':'yyyyMMdd'};
+for ( var n in o ) {
+bpc.setVariable(n,[s25_format_date(oDt,o[n])],'local');
+}
+var startTime = _vars['lStartTime'][0];
+var endTime = _vars['lEndTime'][0];
+if (startTime != '') {
+if (endTime == '') endTime += 100;
+bpc.setVariable('lStartTime', [startTime], 'local');
+bpc.setVariable('lEndTime', [endTime], 'local');
+} 
+else 
+{
+var sHr = _vars['lStartHr'][0];
+var sEndHr;
+if (sHr != '') {
+sEndHr = (Number(sHr) + 1);
+} else {
+sHr = ( new Date() ).getHours();
+sEndHr = (Number(sHr) + 1);
+}
+sEndHr = sEndHr.toString();
+sEndHr = sEndHr + "00";
+sHr = sHr.toString() + "00";
+bpc.setVariable('lStartTime', [sHr], 'local');
+bpc.setVariable('lEndTime', [sEndHr], 'local');
+}
+
+]]></s:script> 
+<s:with b:target="$tStartDatePicker">
+<s:setatt b:value="{$lStartDpVal}" b:sortvalue="{$lStartDpSortVal}"/>
+<s:task b:action="trigger" b:event="change" b:target="."/>
+<s:task b:action="trigger" b:event="set" b:target="."/>
+</s:with>
+<s:with b:target="$tEndDatePicker">
+<s:setatt b:value="{$lEndDpVal}" b:sortvalue="{$lEndDpSortVal}"/>
+<s:task b:action="trigger" b:event="change" b:target="."/>
+<s:task b:action="trigger" b:event="set" b:target="."/>
+</s:with>
+<s:with b:target="$tStartTimeSpinner">
+<s:setatt b:value="{$lStartTime}"/>
+<s:task b:action="trigger" b:event="input-change" b:target="."/>
+</s:with>
+<s:with b:target="$tEndTimeSpinner">
+<s:setatt b:value="{$lEndTime}"/>
+<s:task b:action="trigger" b:event="input-change" b:target="."/>
+</s:with>
+<s:task b:action="assign" b:target="$tEventStartDate" b:scope="tag" b:select="string($lStartDpSortVal)"/>
+<s:task b:action="assign" b:target="$tEventStartTime" b:scope="tag" b:select="string($lStartTime)"/>
+<s:task b:action="assign" b:target="$tEventEndDate" b:scope="tag" b:select="string($lEndDpSortVal)"/>
+<s:task b:action="assign" b:target="$tEventEndTime" b:scope="tag" b:select="string($lEndTime)"/>
+<s:task b:action="assign" b:target="$tReservationStartDate" b:scope="tag" b:select="string($lStartDpSortVal)"/>
+<s:task b:action="assign" b:target="$tReservationStartTime" b:scope="tag" b:select="string($lStartTime)"/>
+<s:task b:action="assign" b:target="$tReservationEndDate" b:scope="tag" b:select="string($lEndDpSortVal)"/>
+<s:task b:action="assign" b:target="$tReservationEndTime" b:scope="tag" b:select="string($lEndTime)"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+<s:if b:test="string($tNoEdit) = 'F'">
+<s:with b:target="$tRepeatSelect">
+<s:setatt c:init="2"/>
+</s:with>
+</s:if>
+<s:variable b:name="lInstanceMessage" b:scope="local" b:select="$tEvWiz/$tProfile/r25:reservation[1]/r25:event_start_dt/@message"/>
+<s:task b:test="string-length($lInstanceMessage) = 0" b:action="assign" b:target="$lInstanceMessage" b:select="$tEvWiz/$tProfile/r25:reservation[1]/r25:event_end_dt/@message"/>
+<s:task b:test="string-length($lInstanceMessage) = 0" b:action="assign" b:target="$lInstanceMessage" b:select="$tEvWiz/$tProfile/r25:reservation[1]/r25:reservation_start_dt/@message"/>
+<s:task b:test="string-length($lInstanceMessage) = 0" b:action="assign" b:target="$lInstanceMessage" b:select="$tEvWiz/$tProfile/r25:reservation[1]/r25:reservation_end_dt/@message"/>
+<s:if b:test="string-length($lInstanceMessage) = 0">
+<s:task b:action="assign" b:target="$lInstanceMessage" b:select="string(@c:message)"/>
+</s:if>
+<s:render b:test="not(string-length($lInstanceMessage) = 0)" b:destination="$tContent//*[@class='contentOptions']" b:mode="before">
+<div class="contentMessage"><s:textnode b:label="{$lInstanceMessage}"/></div>
+</s:render>
+<s:variable b:name="lEditorSupplementaryText" b:select="ancestor::div[@b:behavior='S25RsrvWizCard']/$tEditor[@name='datetime']/info"/>
+<s:task b:action="xml2string" b:variable="$lEditorSupplementaryText"/>
+<s:if b:test="not(string-length($lEditorSupplementaryText) = 0)">
+<s:script><![CDATA[
+
+var lText = _vars['lEditorSupplementaryText'][0];
+lText = lText.replace(/&lt;/g, '<');
+lText = lText.replace(/&gt;/g, '>');
+var destination = "div[@c:id='container']/div[@c:id='content']//div[@class='contentOptions']";
+bpc.render('<div class="contentMessage">' + lText + '</div>', 'before', destination, _current);
+
+]]></s:script>
+</s:if>
+<s:fxstyle b:time="1000"/>
+<s:if b:test="$tEvWiz/@c:mode = 'clone'">
+<s:setatt c:init="1"/>
+<s:task b:action="trigger" b:event="ValidateDateTime" b:target="."/>
+</s:if>
+<s:with b:target="$tEvWiz/$tAvailabilityControl">
+<s:if b:test="count(div[@c:id = 'space_conflicts']/div[@c:space_id]) = 0 and  count(div[@c:id = 'resource_conflicts']/div[@c:resource_id]) = 0">
+<s:task b:action="hide" b:target="div[@c:id = 'no_dates']"/>
+<s:task b:action="show" b:target="div[@c:id = 'no_conflicts']"/>
+</s:if>
+</s:with>
+<s:if b:test="string($tNoEdit) = 'F'">
+<s:task b:action="trigger" b:event="OnChangeRepeat"/>
+<s:task b:action="trigger" b:event="Save"/>
+</s:if>
+</s:event>
+<s:event b:on="select">
+<s:choose>
+<s:when b:test="$tEvWiz/@c:mode='edit' and not($tEvWiz/$tEvent)">
+</s:when>
+<s:otherwise>
+<s:super/>
+</s:otherwise>
+</s:choose>
+</s:event>
+<s:event b:on="ObserveRsrvWizard">
+<s:variable b:name="lEvent" b:scope="local" b:select="$tEvWiz/$tRaisedEvent"/>
+<s:choose>
+<s:when b:test="$lEvent='LoadSuccess'">
+<s:task b:test="not(@c:init = '1')" b:action="trigger" b:event="select"/>
+</s:when>
+</s:choose>
+</s:event>
+<s:event b:on="BroadcastChange">
+<s:setatt c:status="pending"/>
+<s:task b:action="trigger" b:event="DateChangePending" b:target="$tEvWiz/$tAvailabilityControl"/>
+<s:if b:test="$tEvWiz/$tHasSpaces = 'T' or $tEvWiz/$tHasResources = 'T'">
+<s:task b:action="enable" b:target="$tCheckAvailabilityPrompt"/>
+</s:if>
+<s:variable b:name="pEvent" b:scope="local" b:select="'DateChangePending'"/>
+<s:task b:action="trigger" b:event="NotifyObservers"/>
+</s:event>
+<s:event b:on="ShowPreEventOptions">
+<s:task b:action="hide" b:target="$tTbody/tr[@c:id='pre-prompt']"/>
+<s:task b:action="show" b:target="$tTbody/tr[@c:id='preevent-options']"/>
+<s:task b:action="show" b:target="$tTbody/tr[@c:id='setup-options']"/>
+<s:task b:action="focus" b:target="$tPreEventSelects[@c:purpose='days']"/>
+</s:event>
+<s:event b:on="ShowPostEventOptions">
+<s:task b:action="hide" b:target="$tTbody/tr[@c:id='post-prompt']"/>
+<s:task b:action="show" b:target="$tTbody/tr[@c:id='postevent-options']"/>
+<s:task b:action="show" b:target="$tTbody/tr[@c:id='takedown-options']"/>
+<s:task b:action="focus" b:target="$tPostEventSelects[@c:purpose='days']"/>
+</s:event>
+<s:event b:on="UpdateDateTimeValues">
+<s:variable b:name="lEventStartDate" b:select="string($tEventStartDate)"/>
+<s:variable b:name="lEventStartTime" b:select="string($tEventStartTime)"/>
+<s:variable b:name="lEventEndDate" b:select="string($tEventEndDate)"/>
+<s:variable b:name="lEventEndTime" b:select="string($tEventEndTime)"/>
+<s:variable b:name="lReservationStartDate" b:select="string($tReservationStartDate)"/>
+<s:variable b:name="lReservationStartTime" b:select="string($tReservationStartTime)"/>
+<s:variable b:name="lReservationEndDate" b:select="string($tReservationEndDate)"/>
+<s:variable b:name="lReservationEndTime" b:select="string($tReservationEndTime)"/>
+<s:task b:action="assign" b:target="$tEventStartDate" b:scope="tag" b:select="string($tStartDatePicker/@b:sortvalue)"/>
+<s:task b:action="assign" b:target="$tEventStartTime" b:scope="tag" b:select="string($tStartTimeSpinner/@b:stored-value)"/>
+<s:task b:action="assign" b:target="$tEventEndDate" b:scope="tag" b:select="string($tEndDatePicker/@b:sortvalue)"/>
+<s:task b:action="assign" b:target="$tEventEndTime" b:scope="tag" b:select="string($tEndTimeSpinner/@b:stored-value)"/>
+<s:task b:action="assign" b:target="$tReservationStartDate" b:scope="tag" b:select="string($tEventStartDate)"/>
+<s:variable b:name="lPreEventDays" b:select="number($tPreEventSelects[@c:purpose='days']/@value)"/>
+<s:variable b:name="lPreEventHours" b:select="number($tPreEventSelects[@c:purpose='hours']/@value)"/>
+<s:variable b:name="lPreEventMinutes" b:select="number($tPreEventSelects[@c:purpose='minutes']/@value)"/>
+<s:choose>
+<s:when b:test="$lPreEventDays = 0 and $lPreEventHours = 0 and $lPreEventMinutes = 0">
+<s:task b:action="hide" b:target="$tPreEventResult"/>
+</s:when>
+<s:when b:test="exists($tStartDatePicker/@b:sortvalue)">
+<s:variable b:name="lPreEventResultText" b:select="''"/>
+<s:script><![CDATA[
+
+var startDtRaw = bpc.getBXMLAttribute('b:sortvalue', _vars['tStartDatePicker'][0]);
+var startDtStr = startDtRaw.substring(0,4) + "/" + startDtRaw.substring(4,6) + "/" + startDtRaw.substring(6,8); 
+var startTimeRaw = bpc.getBXMLAttribute('b:value', _vars['tStartTimeSpinner'][0]);
+startDtStr += " " + startTimeRaw;
+var startDt = new Date(startDtStr);
+var preeventDt = new Date(startDt);
+preeventDt.setDate(startDt.getDate() - _vars['lPreEventDays'][0]);
+preeventDt.setHours(startDt.getHours() - _vars['lPreEventHours'][0]);
+preeventDt.setMinutes(startDt.getMinutes() - _vars['lPreEventMinutes'][0]);
+bpc.setVariable('tReservationStartDate', [s25_format_date(preeventDt, 'yyyyMMdd')], 'tag', _current);
+bpc.setVariable('tReservationStartTime', [s25_format_date(preeventDt, 'h24mm')], 'tag', _current);
+var preeventResult = s25_format_date(preeventDt, bpc.getVariable('tTimePattern', 'tag', document.getElementById('Prefs')), 'input');
+if (bpc.getVariable('tTimeDisplay', 'tag', document.getElementById('Prefs')) == '12')
+preeventResult += " " + s25_format_date(preeventDt, "a");
+if (preeventDt.getDate() != startDt.getDate())
+{
+preeventResult += " (" + 
+s25_format_date(preeventDt, bpc.getVariable('tDatePattern', 'tag', document.getElementById('Prefs')), 'input') + 
+")";
+}
+bpc.setVariable('lPreEventResultText', [preeventResult])
+
+]]></s:script>
+<s:task b:action="settext" b:target="$tPreEventResult" b:value="{$lPreEventResultText}"/>
+<s:task b:action="show" b:target="$tPreEventResult"/>
+</s:when>
+</s:choose>
+<s:variable b:name="lSetupDays" b:select="number($tSetupSelects[@c:purpose='days']/@value)"/>
+<s:variable b:name="lSetupHours" b:select="number($tSetupSelects[@c:purpose='hours']/@value)"/>
+<s:variable b:name="lSetupMinutes" b:select="number($tSetupSelects[@c:purpose='minutes']/@value)"/>
+<s:choose>
+<s:when b:test="$lSetupDays = 0 and $lSetupHours = 0 and $lSetupMinutes = 0">
+<s:task b:action="hide" b:target="$tSetupResult"/>
+</s:when>
+<s:when b:test="exists($tStartDatePicker/@b:sortvalue)">
+<s:variable b:name="lSetupResultText" b:select="''"/>
+<s:script><![CDATA[
+
+var startDtRaw = bpc.getBXMLAttribute('b:sortvalue', _vars['tStartDatePicker'][0]);
+var startDtStr = startDtRaw.substring(0,4) + "/" + startDtRaw.substring(4,6) + "/" + startDtRaw.substring(6,8); 
+var startTimeRaw = bpc.getBXMLAttribute('b:value', _vars['tStartTimeSpinner'][0]);
+startDtStr += " " + startTimeRaw;
+var startDt = new Date(startDtStr);
+var setupDt = new Date(startDt);
+setupDt.setDate(startDt.getDate() - _vars['lPreEventDays'][0] - _vars['lSetupDays'][0]);
+setupDt.setHours(startDt.getHours() - _vars['lPreEventHours'][0] - _vars['lSetupHours'][0]);
+setupDt.setMinutes(startDt.getMinutes() - _vars['lPreEventMinutes'][0] - _vars['lSetupMinutes'][0]);
+bpc.setVariable('tReservationStartDate', [s25_format_date(setupDt, 'yyyyMMdd')], 'tag', _current);
+bpc.setVariable('tReservationStartTime', [s25_format_date(setupDt, 'h24mm')], 'tag', _current);
+var setupResult = s25_format_date(setupDt, bpc.getVariable('tTimePattern', 'tag', document.getElementById('Prefs')), 'input');
+if (bpc.getVariable('tTimeDisplay', 'tag', document.getElementById('Prefs')) == '12')
+setupResult += " " + s25_format_date(setupDt, "a");
+if (setupDt.getDate() != startDt.getDate())
+{
+setupResult += " (" + 
+s25_format_date(setupDt, bpc.getVariable('tDatePattern', 'tag', document.getElementById('Prefs')), 'input') + 
+")";
+}
+bpc.setVariable('lSetupResultText', [setupResult])
+
+]]></s:script>
+<s:task b:action="settext" b:target="$tSetupResult" b:value="{$lSetupResultText}"/>
+<s:task b:action="show" b:target="$tSetupResult"/>
+</s:when>
+</s:choose>
+<s:if b:test="$lPreEventDays = 0 and $lPreEventHours = 0 and $lPreEventMinutes = 0 and $lSetupDays = 0 and $lSetupHours = 0 and $lSetupMinutes = 0">
+<s:task b:action="assign" b:target="$tReservationStartTime" b:scope="tag" b:select="string($tEventStartTime)"/>
+</s:if>
+<s:task b:action="assign" b:target="$tReservationEndDate" b:scope="tag" b:select="string($tEventEndDate)"/>
+<s:variable b:name="lPostEventDays" b:select="number($tPostEventSelects[@c:purpose='days']/@value)"/>
+<s:variable b:name="lPostEventHours" b:select="number($tPostEventSelects[@c:purpose='hours']/@value)"/>
+<s:variable b:name="lPostEventMinutes" b:select="number($tPostEventSelects[@c:purpose='minutes']/@value)"/>
+<s:choose>
+<s:when b:test="$lPostEventDays = 0 and $lPostEventHours = 0 and $lPostEventMinutes = 0">
+<s:task b:action="hide" b:target="$tPostEventResult"/>
+</s:when>
+<s:when b:test="exists($tEndDatePicker/@b:sortvalue)">
+<s:variable b:name="lPostEventResultText" b:select="''"/>
+<s:script><![CDATA[
+
+var endDtRaw = bpc.getBXMLAttribute('b:sortvalue', _vars['tEndDatePicker'][0]);
+var endDtStr = endDtRaw.substring(0,4) + "/" + endDtRaw.substring(4,6) + "/" + endDtRaw.substring(6,8); 
+var endTimeRaw = bpc.getBXMLAttribute('b:value', _vars['tEndTimeSpinner'][0]);
+endDtStr += " " + endTimeRaw;
+var endDt = new Date(endDtStr);
+var posteventDt = new Date(endDt);
+posteventDt.setDate(endDt.getDate() + _vars['lPostEventDays'][0]);
+posteventDt.setHours(endDt.getHours() + _vars['lPostEventHours'][0]);
+posteventDt.setMinutes(endDt.getMinutes() + _vars['lPostEventMinutes'][0]);
+bpc.setVariable('tReservationEndDate', [s25_format_date(posteventDt, 'yyyyMMdd')], 'tag', _current);
+bpc.setVariable('tReservationEndTime', [s25_format_date(posteventDt, 'h24mm')], 'tag', _current);
+var posteventResult = s25_format_date(posteventDt, bpc.getVariable('tTimePattern', 'tag', document.getElementById('Prefs')), 'input');
+if (bpc.getVariable('tTimeDisplay', 'tag', document.getElementById('Prefs')) == '12')
+posteventResult += " " + s25_format_date(posteventDt, "a");
+if (posteventDt.getDate() != endDt.getDate())
+{
+posteventResult += " (" + 
+s25_format_date(posteventDt, bpc.getVariable('tDatePattern', 'tag', document.getElementById('Prefs')), 'input') + 
+")";
+}
+bpc.setVariable('lPostEventResultText', [posteventResult])
+
+]]></s:script>
+<s:task b:action="settext" b:target="$tPostEventResult" b:value="{$lPostEventResultText}"/>
+<s:task b:action="show" b:target="$tPostEventResult"/>
+</s:when>
+</s:choose>
+<s:variable b:name="lTakedownDays" b:select="number($tTakedownSelects[@c:purpose='days']/@value)"/>
+<s:variable b:name="lTakedownHours" b:select="number($tTakedownSelects[@c:purpose='hours']/@value)"/>
+<s:variable b:name="lTakedownMinutes" b:select="number($tTakedownSelects[@c:purpose='minutes']/@value)"/>
+<s:choose>
+<s:when b:test="$lTakedownDays = 0 and $lTakedownHours = 0 and $lTakedownMinutes = 0">
+<s:task b:action="hide" b:target="$tTakedownResult"/>
+</s:when>
+<s:when b:test="exists($tEndDatePicker/@b:sortvalue)">
+<s:variable b:name="lTakedownResultText" b:select="''"/>
+<s:script><![CDATA[
+
+var endDtRaw = bpc.getBXMLAttribute('b:sortvalue', _vars['tEndDatePicker'][0]);
+var endDtStr = endDtRaw.substring(0,4) + "/" + endDtRaw.substring(4,6) + "/" + endDtRaw.substring(6,8); 
+var endTimeRaw = bpc.getBXMLAttribute('b:value', _vars['tEndTimeSpinner'][0]);
+endDtStr += " " + endTimeRaw;
+var endDt = new Date(endDtStr);
+var takedownDt = new Date(endDt);
+takedownDt.setDate(endDt.getDate() + _vars['lPostEventDays'][0] + _vars['lTakedownDays'][0]);
+takedownDt.setHours(endDt.getHours() + _vars['lPostEventHours'][0] + _vars['lTakedownHours'][0]);
+takedownDt.setMinutes(endDt.getMinutes() + _vars['lPostEventMinutes'][0] + _vars['lTakedownMinutes'][0]);
+bpc.setVariable('tReservationEndDate', [s25_format_date(takedownDt, 'yyyyMMdd')], 'tag', _current);
+bpc.setVariable('tReservationEndTime', [s25_format_date(takedownDt, 'h24mm')], 'tag', _current);
+var takedownResult = s25_format_date(takedownDt, bpc.getVariable('tTimePattern', 'tag', document.getElementById('Prefs')), 'input');
+if (bpc.getVariable('tTimeDisplay', 'tag', document.getElementById('Prefs')) == '12')
+takedownResult += " " + s25_format_date(takedownDt, "a");
+if (takedownDt.getDate() != endDt.getDate())
+{
+takedownResult += " (" + 
+s25_format_date(takedownDt, bpc.getVariable('tDatePattern', 'tag', document.getElementById('Prefs')), 'input') + 
+")";
+}
+bpc.setVariable('lTakedownResultText', [takedownResult])
+
+]]></s:script>
+<s:task b:action="settext" b:target="$tTakedownResult" b:value="{$lTakedownResultText}"/>
+<s:task b:action="show" b:target="$tTakedownResult"/>
+</s:when>
+</s:choose>
+<s:if b:test="$lPostEventDays = 0 and $lPostEventHours = 0 and $lPostEventMinutes = 0 and $lTakedownDays = 0 and $lTakedownHours = 0 and $lTakedownMinutes = 0">
+<s:task b:action="assign" b:target="$tReservationEndTime" b:scope="tag" b:select="string($tEventEndTime)"/>
+</s:if>
+<s:if b:test="@c:init = '1'">
+<s:if b:test="not($tEventStartDate = $lEventStartDate) or not($tEventStartTime = $lEventStartTime) or  not($tEventEndDate = $lEventEndDate) or not($tEventEndTime = $lEventEndTime) or  not($tReservationStartDate = $lReservationStartDate) or not($tReservationStartTime = $lReservationStartTime) or  not($tReservationEndDate = $lReservationEndDate) or not($tReservationEndTime = $lReservationEndTime)">
+<s:task b:action="trigger" b:event="UpdateRepeats"/>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="ValidateDateTime">
+<s:sequential><s:lock>
+<s:if b:test="@c:init = '1' and $tValidating = 'false'">
+<s:task b:action="assign" b:target="$tValidating" b:scope="tag" b:select="'true'"/>
+<s:if b:test="not(declared($lChangesMade))">
+<s:variable b:name="lChangesMade" b:select="'false'"/>
+</s:if>
+<s:choose>
+<s:when b:test="(number($tStartDatePicker/@b:sortvalue) lt number($tEarliestSortValue)) or  (number($tStartDatePicker/@b:sortvalue) gt number($tLatestSortValue)) or  (number($tEndDatePicker/@b:sortvalue) gt number($tLatestSortValue)) ">
+<s:choose>
+<s:when b:test="number($tStartDatePicker/@b:sortvalue) lt number($tEarliestSortValue)">
+<s:task b:action="set" b:target="$tStartDatePickerText/@value" b:value="{$tEarliestDisplayValue}"/>
+</s:when>
+<s:when b:test="number($tStartDatePicker/@b:sortvalue) gt number($tLatestSortValue)">
+<s:task b:action="set" b:target="$tStartDatePickerText/@value" b:value="{$tLatestDisplayValue}"/>
+</s:when>
+<s:when b:test="number($tEndDatePicker/@b:sortvalue) gt number($tLatestSortValue)">
+<s:task b:action="set" b:target="$tEndDatePickerText/@value" b:value="{$tLatestDisplayValue}"/>
+</s:when>
+</s:choose>
+<s:task b:action="assign" b:target="$lChangesMade" b:select="'true'"/>
+<s:task b:action="alert" b:value="{concat('Selected dates must be between ', $tEarliestDisplayValue, ' and ', $tLatestDisplayValue)}"/>
+</s:when>
+<s:when b:test="$tStartDatePicker/@c:changed = 'T'">
+<s:script><![CDATA[
+
+var iDateDiff = _vars['tDateDiff'][0];
+var startDtRaw = bpc.getBXMLAttribute('b:sortvalue', _vars['tStartDatePicker'][0]);
+var startDtStr = startDtRaw.substring(0,4) + "/" + startDtRaw.substring(4,6) + "/" + startDtRaw.substring(6,8); 
+var startDt = new Date(startDtStr);
+var endDt = startDt;
+endDt.setDate(endDt.getDate() + iDateDiff);
+var endDtNew = (endDt.getMonth() + 1) + "/" + endDt.getDate() + "/" + endDt.getFullYear();
+var endDtFormatted = s25_format_date(endDtNew, bpc.getVariable('tDatePattern', 'tag', document.getElementById('Prefs')));
+bpc.setBXMLAttribute('value', endDtFormatted, _vars['tEndDatePickerText'][0])
+
+]]></s:script>
+<s:task b:action="assign" b:target="$lChangesMade" b:select="'true'"/>
+</s:when>
+<s:when b:test="$tEndDatePicker/@c:changed = 'T' and number($tEndDatePicker/@b:sortvalue) = number($tStartDatePicker/@b:sortvalue)">
+<s:if b:test="number($tEndTimeSpinner/@b:stored-value) lt number($tStartTimeSpinner/@b:stored-value)">
+<s:task b:action="set" b:target="$tEndTimeSpinner/@b:value" b:value="{string($tStartTimeSpinner/@b:value)}"/>
+<s:task b:action="trigger" b:event="input-change" b:target="$tEndTimeSpinner"/>
+<s:task b:action="assign" b:target="$lChangesMade" b:select="'true'"/>
+</s:if>
+<s:task b:action="assign" b:target="$tDateDiff" b:scope="tag" b:select="0"/>
+</s:when>
+<s:when b:test="$tEndDatePicker/@c:changed = 'T' and number($tEndDatePicker/@b:sortvalue) lt number($tStartDatePicker/@b:sortvalue)">
+<s:task b:action="set" b:target="$tStartDatePickerText/@value" b:value="{string($tEndDatePickerText/@value)}"/>
+<s:task b:action="set" b:target="$tStartDatePicker/@b:value" b:value="{string($tEndDatePicker/@b:value)}"/>
+<s:task b:action="set" b:target="$tStartDatePicker/@b:sortvalue" b:value="{string($tEndDatePicker/@b:sortvalue)}"/>
+<s:task b:action="assign" b:target="$tDateDiff" b:scope="tag" b:select="0"/>
+<s:task b:action="assign" b:target="$lChangesMade" b:select="'true'"/>
+</s:when>
+<s:when b:test="$tEndDatePicker/@c:changed = 'T' and number($tEndDatePicker/@b:sortvalue) gt number($tStartDatePicker/@b:sortvalue)">
+<s:script><![CDATA[
+
+var startDtRaw = bpc.getBXMLAttribute('b:sortvalue', _vars['tStartDatePicker'][0]);
+var startDtStr = startDtRaw.substring(0,4) + "/" + startDtRaw.substring(4,6) + "/" + startDtRaw.substring(6,8); 
+var startDt = new Date(startDtStr);
+var endDtRaw = bpc.getBXMLAttribute('b:sortvalue', _vars['tEndDatePicker'][0]);
+var endDtStr = endDtRaw.substring(0,4) + "/" + endDtRaw.substring(4,6) + "/" + endDtRaw.substring(6,8); 
+var endDt = new Date(endDtStr);
+bpc.setVariable('tDateDiff', [dateDiff(startDt, endDt)], 'tag', _current);
+
+]]></s:script>
+<s:task b:action="assign" b:target="$lChangesMade" b:select="'true'"/>
+</s:when>
+
+</s:choose>
+<s:if b:test="number($tEndDatePicker/@b:sortvalue) = number($tStartDatePicker/@b:sortvalue)">
+<s:if b:test="number($tEndTimeSpinner/@b:stored-value) lt number($tStartTimeSpinner/@b:stored-value)">
+<s:task b:action="set" b:target="$tEndTimeSpinner/@b:value" b:value="{string($tStartTimeSpinner/@b:value)}"/>
+<s:task b:action="trigger" b:event="input-change" b:target="$tEndTimeSpinner"/>
+<s:task b:action="assign" b:target="$lChangesMade" b:select="'true'"/>
+</s:if>
+</s:if>
+<s:fxstyle b:time="500"/>
+<s:if b:test="$lChangesMade = 'true'">
+<s:task b:action="trigger" b:event="UpdateDateTimeValues"/>
+</s:if>
+<s:task b:action="assign" b:target="$tValidating" b:scope="tag" b:select="'false'"/>
+</s:if>
+<s:with b:target="$tStartDatePicker"><s:setatt c:changed="F"/></s:with>
+<s:with b:target="$tEndDatePicker"><s:setatt c:changed="F"/></s:with>
+</s:lock></s:sequential>
+</s:event>
+<s:event b:on="Validate">
+<s:setatt c:valid="true"/>
+<s:if b:test="string($tNoEdit) = 'F'">
+<s:if b:test="$tRepeats/div[@c:id='control']/s25:rsrv_wiz_repeats/@c:valid = 'false'">
+<s:setatt c:valid="false"/>
+</s:if>
+</s:if>
+</s:event>
+<s:event b:on="Save">
+<s:if b:test="$tNoEdit = 'F' and @c:status = 'pending'">
+<s:variable b:name="lStartDate" b:select="string($tStartDatePicker/@b:sortvalue)"/>
+<s:variable b:name="lEndDate" b:select="string($tEndDatePicker/@b:sortvalue)"/>
+<s:variable b:name="lStartTime" b:select="string($tStartTimeSpinner/@b:stored-value)"/>
+<s:variable b:name="lEndTime" b:select="string($tEndTimeSpinner/@b:stored-value)"/>
+<s:variable b:name="lEventStartDate" b:select=""/>
+<s:variable b:name="lEventEndDate" b:select=""/>
+<s:variable b:name="lRsrvStartDate" b:select=""/>
+<s:variable b:name="lRsrvEndDate" b:select=""/>
+<s:variable b:name="lProfileName" b:select=""/>
+<s:variable b:name="lPreEventDurations" b:select="concat('P',$tPreEventSelects[1]/option[@b:state='selected']/@value,'DT',$tPreEventSelects[2]/option[@b:state='selected']/@value,'H',$tPreEventSelects[3]/option[@b:state='selected']/@value,'M')"/>
+<s:variable b:name="lSetupDurations" b:select="concat('P',$tSetupSelects[1]/option[@b:state='selected']/@value,'DT',$tSetupSelects[2]/option[@b:state='selected']/@value,'H',$tSetupSelects[3]/option[@b:state='selected']/@value,'M')"/>
+<s:variable b:name="lPostEventDurations" b:select="concat('P',$tPostEventSelects[1]/option[@b:state='selected']/@value,'DT',$tPostEventSelects[2]/option[@b:state='selected']/@value,'H',$tPostEventSelects[3]/option[@b:state='selected']/@value,'M')"/>
+<s:variable b:name="lTakedownDurations" b:select="concat('P',$tTakedownSelects[1]/option[@b:state='selected']/@value,'DT',$tTakedownSelects[2]/option[@b:state='selected']/@value,'H',$tTakedownSelects[3]/option[@b:state='selected']/@value,'M')"/>
+<s:script><![CDATA[
+
+var startDt = String(bpc.getVariable('lStartDate', 'local', _current));
+var endDt = String(bpc.getVariable('lEndDate', 'local', _current));
+var startTime = String(bpc.getVariable('lStartTime', 'local', _current));
+var endTime = String(bpc.getVariable('lEndTime', 'local', _current));
+while (startTime.length < 4) {
+startTime = '0' + startTime;
+}
+while (endTime.length < 4) {
+endTime = '0' + endTime;
+}
+var oStartDt = new Date(Number(startDt.substr(0,4)),
+Number(startDt.substr(4,2))-1,Number(startDt.substr(6,2)),
+Number(startTime.substr(0,2)),Number(startTime.substr(2,2)),0,0);
+var oEndDt = new Date(Number(endDt.substr(0,4)),
+Number(endDt.substr(4,2))-1,Number(endDt.substr(6,2)),
+Number(endTime.substr(0,2)),Number(endTime.substr(2,2)),0,0);
+var sPat = 'yyyy-MM-dd';
+bpc.setVariable('lEventStartDate',[s25_format_date(oStartDt,sPat)],'local');
+bpc.setVariable('lEventEndDate',[s25_format_date(oEndDt,sPat)],'local');
+sPat = 'yyyy-MM-ddThh24:mm:00';
+bpc.setVariable('lRsrvStartDate',[s25_format_date(oStartDt,sPat)],'local');
+bpc.setVariable('lRsrvEndDate',[s25_format_date(oEndDt,sPat)],'local');
+
+]]></s:script>
+<s:script><![CDATA[
+
+var ts = (new Date()).getTime();
+bpc.setVariable('lProfileName', ['RSRV_' + ts], 'local');
+
+]]></s:script>
+<s:if b:test="string-length($tEvWiz/$tProfile/r25:profile_name)=0">
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:profile_name" b:value="{$lProfileName}"/>
+</s:if>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:init_start_dt" b:value="{$lRsrvStartDate}"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:init_end_dt" b:value="{$lRsrvEndDate}"/>
+<s:choose>
+<s:when b:test="$lPreEventDurations = 'P0DT0H0M'">
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:pre_event" b:value=""/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:pre_event" b:value="{$lPreEventDurations}"/>
+</s:otherwise>
+</s:choose>
+<s:choose>
+<s:when b:test="$lPostEventDurations = 'P0DT0H0M'">
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:post_event" b:value=""/>
+</s:when>
+<s:otherwise>
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:post_event" b:value="{$lPostEventDurations}"/>
+</s:otherwise>
+</s:choose>
+<s:choose>
+<s:when b:test="$lSetupDurations = 'P0DT0H0M'">
+<s:task b:action="set" b:target="$tEvWiz/$tProfile/r25:setup_profile/@status" b:value="del"/>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="exists($tEvWiz/$tProfile/r25:setup_profile)">
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:setup_profile/r25:setup_tm" b:value="{$lSetupDurations}"/>
+<s:task b:action="set" b:target="$tEvWiz/$tProfile/r25:setup_profile/@status" b:value="mod"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lSetupProfile">
+<r25:setup_profile status="new">
+<r25:setup_profile_id/>
+<r25:setup_tm/>
+</r25:setup_profile>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lSetupProfile"/>
+<s:task b:action="set" b:target="$lSetupProfile/r25:setup_profile/r25:setup_tm" b:select="{$lSetupDurations}"/>
+<s:task b:action="copy" b:source="$lSetupProfile/r25:setup_profile" b:destination="$tEvWiz/$tRsrv" b:mode="before"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+<s:choose>
+<s:when b:test="$lTakedownDurations = 'P0DT0H0M'">
+<s:task b:action="set" b:target="$tEvWiz/$tProfile/r25:takedown_profile/@status" b:value="del"/>
+</s:when>
+<s:otherwise>
+<s:choose>
+<s:when b:test="exists($tEvWiz/$tProfile/r25:takedown_profile)">
+<s:task b:action="settext" b:target="$tEvWiz/$tProfile/r25:takedown_profile/r25:tdown_tm" b:value="{$lTakedownDurations}"/>
+<s:task b:action="set" b:target="$tEvWiz/$tProfile/r25:takedown_profile/@status" b:value="mod"/>
+</s:when>
+<s:otherwise>
+<s:variable b:name="lTakedownProfile">
+<r25:takedown_profile status="new">
+<r25:takedown_profile_id/>
+<r25:tdown_tm/>
+</r25:takedown_profile>
+</s:variable>
+<s:task b:action="string2xml" b:variable="$lTakedownProfile"/>
+<s:task b:action="set" b:target="$lTakedownProfile/r25:takedown_profile/r25:tdown_tm" b:select="{$lTakedownDurations}"/>
+<s:task b:action="copy" b:source="$lTakedownProfile/r25:takedown_profile" b:destination="$tEvWiz/$tRsrv" b:mode="before"/>
+</s:otherwise>
+</s:choose>
+</s:otherwise>
+</s:choose>
+<s:task b:action="trigger" b:event="OutputCurrentXmlData" b:target="$tEvWiz"/>
+<s:if b:test="not($tEvWiz/$tEvent/@status='new')">
+<s:task b:action="set" b:target="$tEvWiz/$tEvent/@status" b:value="mod"/>
+<s:task b:action="set" b:target="$tEvWiz/$tProfile/@status" b:value="mod"/>
+<s:task b:action="set" b:target="$tEvWiz/$tRsrv/@status" b:value="mod"/>
+</s:if>
+<s:if b:test="$tEvWiz/$tEvent/@status='new'">
+<s:task b:action="settext" b:target="$tEvWiz/$tEvent/r25:start_date" b:value="{$lEventStartDate}"/>
+<s:task b:action="settext" b:target="$tEvWiz/$tEvent/r25:end_date" b:value="{$lEventEndDate}"/>
+</s:if>
+<s:variable b:name="lRepeatValue" b:select="$tContent//select[@name='repeat_type']/@value"/>
+<s:variable b:name="lRepeatEditor" b:select="$tRepeats/div[@c:id='control']/s25:rsrv_wiz_repeats"/>
+<s:task b:action="trigger" b:event="Save" b:target="$lRepeatEditor"/>
+<s:variable b:scope="local" b:name="lDisplayStartDate"/>
+<s:variable b:scope="local" b:name="lDisplayStartTime"/>
+<s:variable b:scope="local" b:name="lDisplayEndDate"/>
+<s:variable b:scope="local" b:name="lDisplayEndTime"/>
+<s:variable b:scope="local" b:name="lDatePattern" b:select="string(id('Prefs')/$tDatePattern)"/>
+<s:variable b:scope="local" b:name="lTimeDisplay" b:select="string(id('Prefs')/$tTimeDisplay)"/>
+<s:script><![CDATA[
+
+var datePattern = _vars['lDatePattern'][0];
+var timePattern = (_vars['lTimeDisplay'][0] == '12' ? 'h:mma' : 'h24:mm');
+var fDisplayStartDate = s25_format_date(_vars['lRsrvStartDate'][0], datePattern);
+bpc.setVariable('lDisplayStartDate', [fDisplayStartDate], 'local');
+var fDisplayStartTime = s25_format_date(_vars['lRsrvStartDate'][0], timePattern);
+bpc.setVariable('lDisplayStartTime', [fDisplayStartTime], 'local');
+var fDisplayEndDate = s25_format_date(_vars['lRsrvEndDate'][0], datePattern);
+bpc.setVariable('lDisplayEndDate', [fDisplayEndDate], 'local');
+var fDisplayEndTime = s25_format_date(_vars['lRsrvEndDate'][0], timePattern);
+bpc.setVariable('lDisplayEndTime', [fDisplayEndTime], 'local');
+
+]]></s:script>
+<s:variable b:name="lCrumbText" b:select=""/>
+<s:choose>
+<s:when b:test="not($lDisplayStartDate = $lDisplayEndDate)">
+<s:task b:action="assign" b:target="$lCrumbText" b:select="concat($lDisplayStartDate, ' ', $lDisplayStartTime, ' - ', $lDisplayEndDate, ' ', $lDisplayEndTime)"/>
+</s:when>
+<s:otherwise>
+<s:task b:action="assign" b:target="$lCrumbText" b:select="concat($lDisplayStartDate, ' ', $lDisplayStartTime, ' - ', $lDisplayEndTime)"/>
+</s:otherwise>
+</s:choose>
+<s:variable b:name="lRepeatFrequency" b:select="''"/>
+<s:variable b:name="lRepeatDays" b:select="''"/>
+<s:variable b:name="lRepeatDuration" b:select="''"/>
+<s:variable b:name="lAnd" b:select="' and '"/>
+<s:if b:test="count($lRepeatEditor/$tOccurrenceList/tr[@c:purpose='occurrence']) gt 0">
+<s:choose>
+<s:when b:test="string($tEvWiz/$tProfile/r25:rec_type_id) = '1'">
+<s:choose>
+<s:when b:test="$lRepeatValue = 'daily'">
+<s:variable b:name="lDailyRepeats" b:select="$lRepeatEditor/$tRepeatDeck/div[@c:purpose='daily']"/>
+<s:task b:action="assign" b:target="$lRepeatFrequency" b:select="string($lDailyRepeats//select[@c:purpose='repeat_frequency']/option[@b:state='selected']/text())"/>
+<s:choose>
+<s:when b:test="$lDailyRepeats//input[@c:purpose='repeat_duration' and @value='date']/@checked = 'checked' and  string-length($lDailyRepeats//b:datepicker[@c:purpose='repeat_duration_date']/@b:sortvalue) = 8">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat(' until ', s25_format_date(string($lDailyRepeats//b:datepicker[@c:purpose='repeat_duration_date']/@b:value), $lDatePattern, 'input'))"/> 
+</s:when>
+<s:when b:test="$lDailyRepeats//input[@c:purpose='repeat_duration' and @value='occurrences']/@checked = 'checked' and isNaN(number($lDailyRepeats//input[@c:purpose='repeat_occurrences']/@value)) = false()">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat(' for ', $lDailyRepeats//input[@c:purpose='repeat_occurrences']/@value, ' iterations')"/>
+</s:when>
+</s:choose>
+<s:task b:action="assign" b:target="$lCrumbText" b:select="concat($lCrumbText, ' ', 'repeating every ', $lRepeatFrequency, $lRepeatDuration)"/>
+</s:when>
+<s:when b:test="$lRepeatValue = 'weekly'">
+<s:variable b:name="lWeeklyRepeats" b:select="$lRepeatEditor/$tRepeatDeck/div[@c:purpose='weekly']"/>
+<s:task b:action="assign" b:target="$lRepeatFrequency" b:select="string($lWeeklyRepeats//select[@c:purpose='repeat_frequency']/option[@b:state='selected']/text())"/>
+<s:for-each b:target="$lWeeklyRepeats//input[@name='weekly_repeat_day' and @checked='checked']">
+<s:sequential><s:lock>
+<s:if b:test="not($lRepeatDays = '')">
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="replace($lRepeatDays, $lAnd, ', ')"/>
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="concat($lRepeatDays, $lAnd)"/>
+</s:if>
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="concat($lRepeatDays, $_target/@c:full_name)"/>
+</s:lock></s:sequential>
+</s:for-each>
+<s:task b:test="not($lRepeatDays = '')" b:action="assign" b:target="$lRepeatDays" b:select="concat(' on ', $lRepeatDays)"/>
+<s:choose>
+<s:when b:test="$lWeeklyRepeats//input[@c:purpose='repeat_duration' and @value='date']/@checked = 'checked' and  string-length($lWeeklyRepeats//b:datepicker[@c:purpose='repeat_duration_date']/@b:sortvalue) = 8">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat(' until ', s25_format_date(string($lWeeklyRepeats//b:datepicker[@c:purpose='repeat_duration_date']/@b:value), $lDatePattern, 'input'))"/>
+</s:when>
+<s:when b:test="$lWeeklyRepeats//input[@c:purpose='repeat_duration' and @value='occurrences']/@checked = 'checked' and isNaN(number($lWeeklyRepeats//input[@c:purpose='repeat_occurrences']/@value)) = false()">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat(' for ', $lWeeklyRepeats//input[@c:purpose='repeat_occurrences']/@value, ' iterations')"/>
+</s:when>
+</s:choose>
+<s:task b:action="assign" b:target="$lCrumbText" b:select="concat($lCrumbText, ' ', 'repeating every ', $lRepeatFrequency, ' ', $lRepeatDays, $lRepeatDuration)"/>
+</s:when>
+<s:when b:test="$lRepeatValue = 'monthly'">
+<s:variable b:name="lMonthlyRepeats" b:select="$lRepeatEditor/$tRepeatDeck/div[@c:purpose='monthly']"/>
+<s:task b:action="assign" b:target="$lRepeatFrequency" b:select="string($lMonthlyRepeats//select[@c:purpose='repeat_frequency']/option[@b:state='selected']/text())"/>
+<s:choose>
+<s:when b:test="$lMonthlyRepeats//input[@c:purpose='monthly_repeat_type' and @value='day']/@checked = 'checked'">
+<s:for-each b:target="$lMonthlyRepeats//div[@c:purpose='monthly_repeat_by_day']">
+<s:sequential><s:lock>
+<s:if b:test="not($lRepeatDays = '')">
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="replace($lRepeatDays, $lAnd, ', ')"/>
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="concat($lRepeatDays, $lAnd)"/>
+</s:if>
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="concat($lRepeatDays, $_target/select[@c:purpose='monthly_repeat_day']/option[@b:state='selected']/text(),  ' from the ', $_target/select[@c:purpose='monthly_repeat_position']/option[@b:state='selected']/text())"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:when>
+<s:when b:test="$lMonthlyRepeats//input[@c:purpose='monthly_repeat_type' and @value='position']/@checked = 'checked'">
+<s:for-each b:target="$lMonthlyRepeats//div[@c:purpose='monthly_repeat_by_position']">
+<s:sequential><s:lock>
+<s:if b:test="not($lRepeatDays = '')">
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="replace($lRepeatDays, $lAnd, ', ')"/>
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="concat($lRepeatDays, $lAnd)"/>
+</s:if>
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="concat($lRepeatDays, ' on the ', $_target/select[@c:purpose='monthly_repeat_position']/option[@b:state='selected']/text(),  ' ', $_target/select[@c:purpose='monthly_repeat_day']/option[@b:state='selected']/text())"/>
+</s:lock></s:sequential>
+</s:for-each>
+</s:when>
+</s:choose>
+<s:choose>
+<s:when b:test="$lMonthlyRepeats//input[@c:purpose='repeat_duration' and @value='date']/@checked = 'checked' and  string-length($lMonthlyRepeats//b:datepicker[@c:purpose='repeat_duration_date']/@b:sortvalue) = 8">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat(' until ', s25_format_date(string($lMonthlyRepeats//b:datepicker[@c:purpose='repeat_duration_date']/@b:value), $lDatePattern, 'input'))"/>
+</s:when>
+<s:when b:test="$lMonthlyRepeats//input[@c:purpose='repeat_duration' and @value='occurrences']/@checked = 'checked' and isNaN(number($lMonthlyRepeats//input[@c:purpose='repeat_occurrences']/@value)) = false()">
+<s:task b:action="assign" b:target="$lRepeatDuration" b:select="concat(' for ', $lMonthlyRepeats//input[@c:purpose='repeat_occurrences']/@value, ' iterations')"/>
+</s:when>
+</s:choose>
+<s:task b:action="assign" b:target="$lCrumbText" b:select="concat($lCrumbText, ' ', 'repeating every ', $lRepeatFrequency, $lRepeatDays, $lRepeatDuration)"/>
+</s:when>
+</s:choose>
+</s:when>
+<s:when b:test="string($tEvWiz/$tProfile/r25:rec_type_id) = '2'">
+<s:for-each b:target="$lRepeatEditor/$tAdHocDataIsland/tr">
+<s:sequential><s:lock>
+<s:if b:test="not($lRepeatDays = '')">
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="replace($lRepeatDays, $lAnd, ', ')"/> 
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="concat($lRepeatDays, $lAnd)"/> 
+</s:if>
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="concat($lRepeatDays, $_target/@c:date)"/> 
+</s:lock></s:sequential>
+</s:for-each>
+<s:if b:test="not($lRepeatDays = '')">
+<s:task b:action="assign" b:target="$lRepeatDays" b:select="concat(' ', 'repeating ad hoc on ', $lRepeatDays)"/> 
+</s:if>
+<s:task b:action="assign" b:target="$lCrumbText" b:select="concat($lCrumbText, $lRepeatDays)"/>
+</s:when>
+</s:choose>
+</s:if>
+<s:setatt c:crumb="{string($lCrumbText)}"/>
+<s:task b:action="disable" b:target="$tCheckAvailabilityPrompt"/>
+<s:setatt c:status="ready"/>
+<s:variable b:name="lRsrvWizPurpose" b:select="string($tEvWiz/@c:purpose)"/>
+<s:script><![CDATA[
+window.setTimeout('bpc.execute(\']]><s:task b:action="trigger" b:event="InitiateAvailabilityCheck" b:target="//s25:rsrv_wiz[@c:purpose=\\\'' + _vars['lRsrvWizPurpose'][0] + '\\\']/$tAvailabilityControl"/><![CDATA[\')', 500);
+]]></s:script>
+</s:if>
+</s:event>
+<s:event b:on="SetupTakedownInit">
+<s:if b:test="not(string-length($tEvWiz/$tProfile/r25:pre_event) = 0)">
+<s:variable b:name="lPreEventDurations" b:select="string($tEvWiz/$tProfile/r25:pre_event)"/>
+<s:variable b:name="lPreEventDays" b:select=""/>
+<s:variable b:name="lPreEventHours" b:select=""/>
+<s:variable b:name="lPreEventMinutes" b:select=""/>
+<s:script><![CDATA[
+
+var durationsArray = parsePrePostSetupTakedown(_vars['lPreEventDurations'][0]);
+bpc.setVariable('lPreEventDays', [durationsArray[0]]);
+bpc.setVariable('lPreEventHours', [durationsArray[1]]);
+bpc.setVariable('lPreEventMinutes', [durationsArray[2]]);
+
+]]></s:script>
+<s:task b:action="select" b:target="$tPreEventSelects[@c:purpose='days']/option[@value = $lPreEventDays]"/>
+<s:task b:action="select" b:target="$tPreEventSelects[@c:purpose='hours']/option[@value = $lPreEventHours]"/>
+<s:task b:action="select" b:target="$tPreEventSelects[@c:purpose='minutes']/option[@value = $lPreEventMinutes]"/>
+<s:task b:action="trigger" b:event="ShowPreEventOptions"/>
+</s:if>
+<s:if b:test="not(string-length($tEvWiz/$tProfile/r25:setup_profile/r25:setup_tm) = 0)">
+<s:variable b:name="lSetupDurations" b:select="string($tEvWiz/$tProfile/r25:setup_profile/r25:setup_tm)"/>
+<s:variable b:name="lSetupDays" b:select=""/>
+<s:variable b:name="lSetupHours" b:select=""/>
+<s:variable b:name="lSetupMinutes" b:select=""/>
+<s:script><![CDATA[
+
+var durationsArray = parsePrePostSetupTakedown(_vars['lSetupDurations'][0]);
+bpc.setVariable('lSetupDays', [durationsArray[0]]);
+bpc.setVariable('lSetupHours', [durationsArray[1]]);
+bpc.setVariable('lSetupMinutes', [durationsArray[2]]);
+
+]]></s:script>
+<s:task b:action="select" b:target="$tSetupSelects[@c:purpose='days']/option[@value = $lSetupDays]"/>
+<s:task b:action="select" b:target="$tSetupSelects[@c:purpose='hours']/option[@value = $lSetupHours]"/>
+<s:task b:action="select" b:target="$tSetupSelects[@c:purpose='minutes']/option[@value = $lSetupMinutes]"/>
+<s:task b:action="trigger" b:event="ShowPreEventOptions"/>
+</s:if>
+<s:if b:test="not(string-length($tEvWiz/$tProfile/r25:post_event) = 0)">
+<s:variable b:name="lPostEventDurations" b:select="string($tEvWiz/$tProfile/r25:post_event)"/>
+<s:variable b:name="lPostEventDays" b:select=""/>
+<s:variable b:name="lPostEventHours" b:select=""/>
+<s:variable b:name="lPostEventMinutes" b:select=""/>
+<s:script><![CDATA[
+
+var durationsArray = parsePrePostSetupTakedown(_vars['lPostEventDurations'][0]);
+bpc.setVariable('lPostEventDays', [durationsArray[0]]);
+bpc.setVariable('lPostEventHours', [durationsArray[1]]);
+bpc.setVariable('lPostEventMinutes', [durationsArray[2]]);
+
+]]></s:script>
+<s:task b:action="select" b:target="$tPostEventSelects[@c:purpose='days']/option[@value = $lPostEventDays]"/>
+<s:task b:action="select" b:target="$tPostEventSelects[@c:purpose='hours']/option[@value = $lPostEventHours]"/>
+<s:task b:action="select" b:target="$tPostEventSelects[@c:purpose='minutes']/option[@value = $lPostEventMinutes]"/>
+<s:task b:action="trigger" b:event="ShowPostEventOptions"/>
+</s:if>
+<s:if b:test="not(string-length($tEvWiz/$tProfile/r25:takedown_profile/r25:tdown_tm) = 0)">
+<s:variable b:name="lTakedownDurations" b:select="string($tEvWiz/$tProfile/r25:takedown_profile/r25:tdown_tm)"/>
+<s:variable b:name="lTakedownDays" b:select=""/>
+<s:variable b:name="lTakedownHours" b:select=""/>
+<s:variable b:name="lTakedownMinutes" b:select=""/>
+<s:script><![CDATA[
+
+var durationsArray = parsePrePostSetupTakedown(_vars['lTakedownDurations'][0]);
+bpc.setVariable('lTakedownDays', [durationsArray[0]]);
+bpc.setVariable('lTakedownHours', [durationsArray[1]]);
+bpc.setVariable('lTakedownMinutes', [durationsArray[2]]);
+
+]]></s:script>
+<s:task b:action="select" b:target="$tTakedownSelects[@c:purpose='days']/option[@value = $lTakedownDays]"/>
+<s:task b:action="select" b:target="$tTakedownSelects[@c:purpose='hours']/option[@value = $lTakedownHours]"/>
+<s:task b:action="select" b:target="$tTakedownSelects[@c:purpose='minutes']/option[@value = $lTakedownMinutes]"/>
+<s:task b:action="trigger" b:event="ShowPostEventOptions"/>
+</s:if>
+</s:event>
+<s:event b:on="OnChangeRepeat">
+<s:sequential><s:lock>
+<s:task b:action="hide" b:target="$tEvWiz/$tAvailabilityControl/div[@c:id='resourceCheck']"/>
+<s:task b:action="hide" b:target="$tEvWiz/$tAvailabilityControl/div[@c:id='spaceCheck']"/>
+<s:variable b:name="lRepeatType" b:scope="local" b:select="$tRepeatSelect/@value"/>
+<s:with b:target="$tRepeats/div[@c:id='control']/s25:rsrv_wiz_repeats">
+<s:task b:action="assign" b:target="$tRepeatType" b:scope="tag" b:select="string($lRepeatType)"/>
+<s:task b:action="trigger" b:event="ChangeRepeatType" b:target="."/>
+</s:with>
+</s:lock></s:sequential>
+</s:event>
+<s:event b:on="UpdateRepeats">
+<s:variable b:name="lStartDateChanged" b:select="boolean(string($tStartDatePicker/@c:changed) = 'T')"/>
+<s:if b:test="@c:init = '1'">
+<s:fxstyle b:time="1000"/>
+<s:with b:target="$tRepeats/div[@c:id='control']/s25:rsrv_wiz_repeats">
+<s:task b:action="trigger" b:event="UpdateOccurrenceList"/>
+</s:with>
+</s:if>
+</s:event>
+</s:behavior>
+</div>

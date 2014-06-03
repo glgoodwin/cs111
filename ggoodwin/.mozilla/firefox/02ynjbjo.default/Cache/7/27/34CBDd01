@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?><div xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.backbase.com/b" xmlns:s="http://www.backbase.com/s" style="display:none;">
+<script type="text/javascript"><![CDATA[
+
+var _aLocaleDate = {
+Months:['January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+Days:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+DefaultFormat: 'MM/dd/yyyy',
+StartDay: 0 //Sunday
+};
+function debug_datepicker(s) {
+}
+function datepicker_PullDownToggle(oDatepicker){
+oDatepicker = oDatepicker.parentNode;
+if(!bpc.checkEventBlock(oDatepicker))return;
+if(oDatepicker.oPulldown.style.display == 'none'){
+document.body.appendChild(oDatepicker.oPulldown);
+oDatepicker.oPulldown.style.display = 'block';
+bpc.place(oDatepicker.oPulldown, oDatepicker.oImage);
+} else
+oDatepicker.oPulldown.style.display = 'none';
+}
+function _datepicker_SetDateEvent(eEvent){
+if(!eEvent) eEvent = event;
+var oElm = eEvent.target ? eEvent.target : eEvent.srcElement;
+if(!bpc.checkEventBlock(oElm.oDatepicker))return;
+datepicker_SetDate(oElm.iYear, oElm.iMonth, oElm.iDay, oElm.oDatepicker, true);
+if(!oElm.oDatepicker.bInline) oElm.oDatepicker.oPulldown.style.display = 'none';
+}
+function datepicker_SetDate( iYear, iMonth, iDay, oDatepicker, bWriteout){
+debug_datepicker('datepicker_SetDate(' + iYear + ', ' + iMonth + ', ' + iDay + ', ' + oDatepicker + ', ' + bWriteout + ')');
+if(typeof iYear != 'number' || typeof iMonth != 'number' || typeof iDay !='number'){
+debug_datepicker("datepicker_SetDate: bpc.getBXMLAttribute('b:value',oDatepicker) = " + bpc.getBXMLAttribute('b:value',oDatepicker) + "\n" + 
+"datepicker_SetDate: bpc.getBXMLAttribute('b:format',oDatepicker) = " + bpc.getBXMLAttribute('b:format',oDatepicker) + "\n" + 
+"");
+var oDate	= datepicker_getDateFromFormat(bpc.getBXMLAttribute('b:value',oDatepicker), bpc.getBXMLAttribute('b:format',oDatepicker));
+iYear    	= oDate.getFullYear();
+iMonth    	= oDate.getMonth();
+iDay    	= oDate.getDate();
+if(!bpc.getBXMLAttribute('b:value',oDatepicker).length) bWriteout = false;
+}
+if(isNaN(iMonth) || isNaN(iYear) || isNaN(iDay)) {
+var oDate 	= new Date();
+iYear    	= oDate.getFullYear();
+iMonth    	= oDate.getMonth();
+iDay    	= oDate.getDate();
+}
+oDatepicker.iCurrentMonth 	= (iYear*12)+iMonth;
+oDatepicker.iCurrentDay		= iDay;
+if(bWriteout) _datepicker_SetDatetoInput(iYear, iMonth, iDay, oDatepicker);
+_datepicker_RedrawTable(iYear, iMonth, iDay, oDatepicker.oTable, bWriteout);
+oDatepicker.oMonth.innerHTML 	= _aLocaleDate.Months[iMonth];
+oDatepicker.oYear.innerHTML 	= iYear;
+}
+function datepicker_ChangeMonth( sMonth, oElm ) {
+var oDatepicker = oElm.parentNode.parentNode.oDatepicker;
+if(!bpc.checkEventBlock(oDatepicker))return;
+oDatepicker.iCurrentMonth += parseInt(sMonth,10);
+debug_datepicker('trigger datepicker_SetDate() - VVV')
+datepicker_SetDate(Math.floor(oDatepicker.iCurrentMonth / 12), oDatepicker.iCurrentMonth % 12, oDatepicker.iCurrentDay, oDatepicker,false);
+}
+function _datepicker_RedrawTable(iYear, iMonth, iDay, oTable, bWriteout){
+debug_datepicker('_datepicker_RedrawTable(' + iYear + ', ' + iMonth + ', ' + iDay + ', ' + oTable + ', ' + bWriteout + ')');
+var iMonthPrevious	= (iMonth==0) ? 11 : iMonth - 1;
+var iMonthAfter		= (iMonth==11)?  0 : iMonth + 1;
+var iDaysInMonthPrevious	= _datepicker_GetDaysInMonth(iMonthPrevious, iYear);
+var iDaysInMonthCurrent		= _datepicker_GetDaysInMonth(iMonth, 		 iYear);
+var iDaysInMonthAfter		= _datepicker_GetDaysInMonth(iMonthAfter,    iYear);
+if(iDay > iDaysInMonthCurrent) iDay = iDaysInMonthCurrent;
+var iFirst = 0;
+var sDay = _aLocaleDate.Days[new Date(iYear,iMonth,1).getDay()+7];
+debug_datepicker('_datepicker_RedrawTable: sDay = ' + sDay);
+var oThs = oTable.getElementsByTagName('th');
+for(var i = 0; i < 7; i++){
+var j = _aLocaleDate.StartDay + i;
+if( j > 6 )j -= 7;
+oThs[i].innerHTML = _aLocaleDate.Days[j+7].substring(0,1);
+if(_aLocaleDate.Days[j+7]==sDay) iFirst = i;
+}
+var iDayCount = 0;
+var iDayInMonthBefore = iFirst - 1;
+var iDayInMonthAfter = 1;
+var oDate 	= new Date();
+var oTrs = oTable.lastChild.getElementsByTagName('tr');
+for(var i = 0; i < oTrs.length; i++){
+var oTds = oTrs[i].childNodes;
+for(var j = 0; j < oTds.length; j++) {
+var oTd = oTds[j];
+if(!oTd.onclick) 		oTd.onclick = _datepicker_SetDateEvent;
+if(!oTd.oDatepicker)	oTd.oDatepicker = oTable.parentNode.oDatepicker;
+if(i == 0 &&  j < iFirst) {
+oTd.className = 'prev-month'
+oTd.iYear 	= (iMonthPrevious==11)? iYear-1 : iYear;
+oTd.iMonth	= iMonthPrevious;
+oTd.iDay	= iDaysInMonthPrevious - iDayInMonthBefore;
+iDayInMonthBefore--;
+}
+else if(iDayCount >= iDaysInMonthCurrent) {
+oTd.className = 'next-month'
+oTd.iYear 	= (iMonthAfter==0) ? iYear+1 : iYear;
+oTd.iMonth	= iMonthAfter;
+oTd.iDay		= iDayInMonthAfter;
+iDayInMonthAfter++;
+}
+else {
+oTd.className = 'current-month';
+iDayCount++;
+oTd.iYear 	= iYear;
+oTd.iMonth	= iMonth;
+oTd.iDay		= iDayCount;
+if(iDayCount==iDay && bWriteout) oTd.className = 'current-day';
+if(iYear == oDate.getFullYear() && iMonth == oDate.getMonth() && iDayCount == oDate.getDate()) oTd.className += ' today';
+}
+oTd.innerHTML = oTd.iDay;
+}
+}
+}
+function datepicker_HandleKey(oDatepicker, sKey){
+var iYear 	= Math.floor(oDatepicker.iCurrentMonth / 12);
+var iMonth 	= oDatepicker.iCurrentMonth%12;
+iMonth = (iMonth<9)? '0'+ (iMonth+1) : iMonth+1;
+var iDay	= oDatepicker.iCurrentDay;
+var sFormat = 'yyyy-MM-dd';
+switch(sKey){
+case 'space':
+if(oDatepicker.oPulldown.style.display == 'none'){
+datepicker_PullDownToggle(oDatepicker.firstChild);
+}else{
+var oDate = datepicker_getDateFromFormat(iYear+'-'+iMonth+'-'+iDay, sFormat);
+datepicker_SetDate(oDate.getFullYear(), oDate.getMonth(), oDate.getDate(), oDatepicker, true);
+if(!oDatepicker.bInline) oDatepicker.oPulldown.style.display = 'none';
+}
+break;
+case 'left':
+if(oDatepicker.oPulldown.style.display != 'none'){
+var oDate = datepicker_getDateFromFormat(iYear+'-'+iMonth+'-'+(iDay-1), sFormat);
+datepicker_SetDate(oDate.getFullYear(), oDate.getMonth(), oDate.getDate(), oDatepicker, true);
+}
+break;
+case 'right':
+if(oDatepicker.oPulldown.style.display != 'none'){
+var oDate = datepicker_getDateFromFormat(iYear+'-'+iMonth+'-'+(iDay+1), sFormat);
+datepicker_SetDate(oDate.getFullYear(), oDate.getMonth(), oDate.getDate(), oDatepicker, true);
+}
+break;
+case 'up':
+var oDate = datepicker_getDateFromFormat(iYear+'-'+iMonth+'-'+(iDay-7), sFormat);
+datepicker_SetDate(oDate.getFullYear(), oDate.getMonth(), oDate.getDate(), oDatepicker, true);
+break;
+case 'down':
+var oDate = datepicker_getDateFromFormat(iYear+'-'+iMonth+'-'+(iDay+7), sFormat);
+datepicker_SetDate(oDate.getFullYear(), oDate.getMonth(), oDate.getDate(), oDatepicker, true);
+break;
+default:
+if(!oDatepicker.bInline) oDatepicker.oPulldown.style.display = 'none';
+break;
+}
+}
+function datepicker_getDateFromFormat(sValue, sFormat){
+debug_datepicker('datepicker_getDateFromFormat(' + sValue + ', ' + sFormat + ')');
+if(!sValue || sValue=='')return new Date();
+var iValue  = 0;
+var iFormat = 0;
+var cChar,sToken;
+var oDate 	= new Date();
+var sYear	= oDate.getFullYear()+'';
+var sMonth	= oDate.getMonth()+1+'';
+var sDate 	= oDate.getDate()+'';
+while(iFormat < sFormat.length){
+cChar  = sFormat.charAt(iFormat);
+sToken = '';
+while((sFormat.charAt(iFormat) == cChar) && (iFormat < sFormat.length)) sToken += sFormat.charAt(iFormat++);
+if(sToken=='yyyy' || sToken=='yy'){
+sYear = _datepicker_getInt(sValue,iValue,sToken.length,sToken.length);
+if(sYear == null) sYear = oDate.getFullYear()+'';
+iValue += sYear.length;
+if(sYear.length==2){
+iYear = parseInt(sYear,10);
+sYear = (iYear > oDate.getYear()-90)? (1900+iYear) : (2000+iYear);
+}
+}else if(sToken=='MMMMM' || sToken=='MMMM' || sToken=='MMM'){
+for(var i = 0; i < _aLocaleDate.Months.length; i++){
+if(sValue.substring(iValue, iValue+_aLocaleDate.Months[i].length).toLowerCase() == _aLocaleDate.Months[i].toLowerCase() ){
+if( sToken=='MMMM' || ( (sToken == 'MMMMM' || sToken == 'MMM') && i > 11 ) ){
+sMonth = (i > 11) ? i-11 : i+1;
+iValue += _aLocaleDate.Months[i].length;
+break;
+}
+}
+}
+}else if(sToken=='ddd' || sToken=='dddd' || sToken=='ddddd'){
+for(var i = 0; i < _aLocaleDate.Days.length; i++){
+if(sValue.substring(iValue,iValue+_aLocaleDate.Days[i].length).toLowerCase() == _aLocaleDate.Days[i].toLowerCase()){
+iValue += _aLocaleDate.Days[i].length;
+break;
+}
+}
+}else if(sToken=='MM' || sToken=='M'){
+sMonth = _datepicker_getInt(sValue,iValue,sToken.length,2);
+if(sMonth==null) 
+sMonth = oDate.getMonth()+1+'';
+else
+sMonth = sMonth.replace('-','');	// added by Adam 7/22/08
+iValue += sMonth.length;
+}else if(sToken=='dd' || sToken=='d'){
+sDate = _datepicker_getInt(sValue,iValue,sToken.length,2);
+if(sDate==null) sDate = oDate.getDate()+'';
+iValue += sDate.length;
+}
+else{
+if(sValue.substring(iValue,iValue+sToken.length)!=sToken){}
+else iValue += sToken.length;
+}
+}
+debug_datepicker('datepicker_getDateFromFormat(): \n' + 
+'sYear = ' + sYear + '\n' + 
+'sMonth-1 = ' + (sMonth-1) + '\n' + 
+'parseInt(sDate, 10) = ' + parseInt(sDate, 10) + '\n' + 
+'new Date(..) = ' + (new Date(sYear, sMonth-1, parseInt(sDate, 10))) + '\n' + 
+'');
+return new Date(sYear, sMonth-1, parseInt(sDate, 10));
+}
+var _oIntPattern = /^[-\d]{1,}$/;
+function _datepicker_getInt(sValue, i, iMin, iMax){
+for(var j = iMax; j >= iMin; j--){
+var sToken = sValue.substring(i, i+j);
+if(_oIntPattern.test(sToken)) return sToken;
+}
+return null;
+}
+function _datepicker_GetDaysInMonth( iMonth, iYear ) {
+if(iMonth==1 && (iYear % 4 ==0 && (iYear % 100 != 0 || iYear % 400 == 0))) return 29;
+return [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ][iMonth];
+}
+function _datepicker_SetDatetoInput(iYear, iMonth, iDay, oDatepicker){
+debug_datepicker('_datepicker_SetDatetoInput(' + iYear + ', ' + iMonth + ', ' + iDay + ', ' + oDatepicker + ')');
+var sValue = '';
+if(navigator.userAgent.toLowerCase().indexOf('msie 5.0') != -1){
+sValue = iMonth+'/'+iDay+'/'+iYear;
+}else{
+sValue = bpc.getBXMLAttribute('b:format',oDatepicker).replace(/(yyyy|yy|MMMMM|MMMM|MMM|MM|M|ddddd|dddd|ddd|dd|d)/g,
+function($1){
+debug_datepicker('_datepicker_SetDatetoInput(): \n' + 
+'iYear = ' + iYear + '\n' + 
+'iMonth = ' + iMonth + '\n' + 
+'iDay = ' + iDay + '\n' + 
+'new Date(iYear, iMonth, iDay) = ' + new Date(iYear, iMonth, iDay) + '\n' + 
+'new Date(iYear, iMonth, iDay).getDay() = ' + new Date(iYear, iMonth, iDay).getDay() + '\n' + 
+'');
+switch ($1){
+case 'yyyy': 	return iYear;
+case 'yy': 		return (''+iYear).substr(2,4);
+case 'MMMMM': 	return _aLocaleDate.Months[iMonth+12].toUpperCase();
+case 'MMMM': 	return _aLocaleDate.Months[iMonth];
+case 'MMM':  	return _aLocaleDate.Months[iMonth+12];
+case 'MM':  	return (iMonth<9)? '0'+ (iMonth+1) : iMonth+1;
+case 'M':		return iMonth+1;
+case 'ddddd': 	return _aLocaleDate.Days[new Date(iYear, iMonth, iDay).getDay()].toUpperCase().substring(0,3);
+case 'dddd': 	return _aLocaleDate.Days[new Date(iYear, iMonth, iDay).getDay()];
+case 'ddd': 	return _aLocaleDate.Days[new Date(iYear, iMonth, iDay).getDay()].substring(0,3);
+case 'dd':   	return (iDay<10) ? '0' + iDay : iDay;
+case 'd':   	return iDay;
+}
+});
+}
+if(oDatepicker.sValue != sValue){
+oDatepicker.sValue = sValue;
+debug_datepicker('_datepicker_SetDatetoInput: sValue = ' + sValue);
+bpc.setBXMLAttribute('b:value',sValue,oDatepicker);
+if(oDatepicker.bExternalInput)
+oDatepicker.oInput.value = sValue;
+bpc.setBXMLAttribute('b:sortvalue',iYear+''+((iMonth<9)?'0'+(iMonth+1):iMonth+1)+''+((iDay<10) ? '0' + iDay : iDay), oDatepicker);
+bpc.trigger('change',oDatepicker);
+}
+}
+if(window.addEventListener)
+window.addEventListener('beforeunload', clearDatepickersAtUnload, true);
+else if(window.attachEvent)
+window.attachEvent('onbeforeunload',clearDatepickersAtUnload);
+function clearDatepickersAtUnload(){
+var aDatepickers = bpc.xpath('//b:datepicker'), oDatepicker, i = 0;
+while(oDatepicker = aDatepickers[i++]){
+clearDatepicker(oDatepicker);
+}
+}
+function clearDatepicker(oElm){
+oElm.oPulldown.oDatepicker = null;
+oElm.oPulldown.innerHTML = '';
+oElm.oPulldown = null;
+oElm.oImage.onclick = null;
+oElm.oImage 	= null;
+oElm.oInput.oDatepicker = null;
+oElm.oInput.onchange = null;
+oElm.oInput 	= null;
+oElm.oTable 	= null;
+oElm.oMonth 	= null;
+oElm.oYear 		= null;
+}
+
+]]></script>
+<s:behavior b:name="b-datepicker">
+<s:initatt b:focusitem="true" b:focusgroup="true"/>
+<s:state b:on="deselect" b:normal="b-datepicker-normal" b:disabled="b-datepicker-disabled"/>
+<s:event b:on="remove"><s:script><![CDATA[
+ 
+clearDatepicker(_current); 
+
+]]></s:script></s:event>
+<s:event b:on="construct">
+<s:render b:mode="aslastchild"><div class="b-datepicker" b:textselect="false"/></s:render>
+<s:script><![CDATA[
+
+if (aMonF.length == 0) {
+populateMonthDayArrays();
+for (m = 0; m < 12; m++) {
+_aLocaleDate.Months[m] = aMonF[m];
+_aLocaleDate.Months[m + 12] = aMon[m];
+}
+for (d = 0; d < 7; d++) {
+_aLocaleDate.Days[d] = aDayF[d];
+_aLocaleDate.Days[d + 7] = aDay[d];
+}
+}
+_current.oPulldown 	= bpc.getPreviousElementByTagName('div',_current.lastChild);
+var sControl		= '<div class="b-datepicker-control">';
+sControl 			+= '<div class="b-datepicker-button b-datepicker-button-rew" onclick="if(bpc.checkEventBlock(this)){datepicker_ChangeMonth(\'-12\', this);}" onmouseover="__addClass(\'b-datepicker-button-hover\',this);" onmouseout="__removeClass(\'b-datepicker-button-hover\', this);"></div>';
+sControl 			+= '<div class="b-datepicker-button b-datepicker-button-prev" onclick="if(bpc.checkEventBlock(this)){datepicker_ChangeMonth(\'-1\',  this);}" onmouseover="__addClass(\'b-datepicker-button-hover\',this);" onmouseout="__removeClass(\'b-datepicker-button-hover\', this);"></div>';
+sControl 			+= '<div class="b-datepicker-button-month"></div><div class="b-datepicker-button-year"></div>';
+sControl 			+= '<div class="b-datepicker-button b-datepicker-button-next" onclick="if(bpc.checkEventBlock(this)){datepicker_ChangeMonth(\'+1\',  this);}" onmouseover="__addClass(\'b-datepicker-button-hover\',this);" onmouseout="__removeClass(\'b-datepicker-button-hover\', this);"></div>';
+sControl 			+= '<div class="b-datepicker-button b-datepicker-button-ff" onclick="if(bpc.checkEventBlock(this)){datepicker_ChangeMonth(\'+12\', this);}" onmouseover="__addClass(\'b-datepicker-button-hover\',this);" onmouseout="__removeClass(\'b-datepicker-button-hover\', this);"></div>';
+sControl 			+= '</div><table cellpadding="0" cellspacing="0" border="0" class="b-datepicker-table"><thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>';
+_current.oPulldown.innerHTML = sControl;
+_current.oImage	= bpc.getNextElementByTagName('img', _current.firstChild);
+_current.bInline 	= (bpc.getBXMLAttribute('b:type', _current) == 'inline');
+var sInput	= bpc.getBXMLAttribute('b:input', _current);
+if(sInput && sInput!=''){
+_current.oInput = bpc.xpath('exactly-one('+sInput+')', _current)[0];
+_current.oInput.oDatepicker = _current;
+_current.bExternalInput = true;
+bpc.getNextElementByTagName('input', _current.firstChild).style.display = 'none';
+}else
+_current.oInput = bpc.getNextElementByTagName('input', _current.firstChild);
+_current.oPulldown.oDatepicker = _current;
+_current.oInput.oDatepicker = _current;
+_current.oInput.onchange = function(){
+debug_datepicker('_current.oInput.onchange: this.value = ' + this.value);
+bpc.setBXMLAttribute('b:value',this.value, this.oDatepicker);
+datepicker_SetDate(null,null,null,this.oDatepicker,true);
+};
+if(bpc.getBXMLAttribute('b:value', _current) == null) {
+bpc.setBXMLAttribute('b:value', '', _current);
+}
+_current.sValue = bpc.getBXMLAttribute('b:value', _current);
+_current.oTable 	= _current.oPulldown.lastChild;
+_current.oMonth 	= _current.oPulldown.firstChild.childNodes[2];
+_current.oYear 		= _current.oPulldown.firstChild.childNodes[3];
+var sFormat 		= bpc.getBXMLAttribute('b:format', _current);
+if(!sFormat || sFormat =='') bpc.setBXMLAttribute('b:format', _aLocaleDate.DefaultFormat, _current);
+datepicker_SetDate(null,null,null,_current,true);
+if(_current.bInline){
+_current.removeChild(_current.oImage);
+bpc.getNextElementByTagName('input', _current.firstChild).style.display = 'none';
+}else{
+_current.oImage.src	= _vars['bpc_controlpath'][0]+'b-datepicker/calendar.gif';
+_current.oImage.onclick	= function(){datepicker_PullDownToggle(this);};
+_current.oPulldown.style.display = 'none';
+_current.oPulldown.style.position = 'absolute';
+document.body.appendChild(_current.oPulldown);
+}
+
+]]></s:script>
+</s:event>
+<s:event b:on="focus">
+<s:script><![CDATA[
+ 
+if(!_current.bInline) bpc.addClass('b-datefocus', _current.getElementsByTagName('img')[0]);
+if(!_current.bInline && !_current.bExternalInput) _current.getElementsByTagName('input')[0].focus();
+
+]]></s:script>
+</s:event>
+<s:event b:on="inactive">
+<s:script><![CDATA[
+ 
+if(!_current.bInline){ bpc.removeClass('b-datefocus',_current.getElementsByTagName('img')[0]); _current.oPulldown.style.display = 'none'; }
+
+]]></s:script>
+</s:event>
+<s:event b:on="set">
+<s:script><![CDATA[ 
+_current.sValue = bpc.getBXMLAttribute('b:value',_current); 
+datepicker_SetDate(null,null,null,_current,true);
+]]></s:script>
+</s:event>
+<s:event b:on="UpdateSortValue">
+<s:script><![CDATA[
+ 
+var sSortValue = s25_format_date( bpc.getBXMLAttribute('b:value', _current), 'yyyyMMdd', 'input');
+bpc.setBXMLAttribute('b:sortvalue', [sSortValue], _current);
+
+]]></s:script>
+</s:event>
+<s:event b:on="SelectToday">
+<s:variable b:name="relDatepickerFormat" b:select="string(@b:format)"/>
+<s:script><![CDATA[
+
+var formattedToday = s25_format_date( (new Date()), _vars['relDatepickerFormat'][0] );
+debug_datepicker('SelectToday: formattedToday = ' + formattedToday);
+bpc.setBXMLAttribute('b:value', formattedToday, _current);
+
+]]></s:script>
+<s:task b:action="trigger" b:event="UpdateSortValue"/>
+<s:task b:action="trigger" b:event="set"/>
+</s:event>
+<s:whenactive>
+<s:keys b:keys="space enter"><s:script><![CDATA[ 
+datepicker_HandleKey(_current, 'space');
+]]></s:script></s:keys>
+<s:keys b:keys="27" b:bubble="false"><s:script><![CDATA[ 
+datepicker_HandleKey(_current, 'esc');
+]]></s:script></s:keys>
+<s:keys b:keys="right"><s:script><![CDATA[ 
+datepicker_HandleKey(_current, 'right');
+]]></s:script></s:keys>
+<s:keys b:keys="left"><s:script><![CDATA[ 
+datepicker_HandleKey(_current, 'left');
+]]></s:script></s:keys>
+<s:keys b:keys="up" b:bubble="false"><s:script><![CDATA[ 
+datepicker_HandleKey(_current, 'up');
+]]></s:script></s:keys>
+<s:keys b:keys="down" b:bubble="false"><s:script><![CDATA[ 
+datepicker_HandleKey(_current, 'down');
+]]></s:script></s:keys>
+</s:whenactive>
+</s:behavior>
+<s:htmlstructure b:behavior="b-datepicker" b:name="b:datepicker"><span><input class="b-datepicker-input" type="text"><s:attribute b:name="style" b:value="{@b:inputstyle}"/><s:attribute b:name="name" b:value="{@b:name}"/><s:attribute b:name="value" b:value="{@b:value}"/></input><img class="b-datepicker-image"/></span></s:htmlstructure>
+</div>

@@ -1,0 +1,19 @@
+{states}
+A, B, C, D, E, F, G, H
+{start state}
+B
+{accepting states}
+E, F, G, H
+{transitions}
+A, 0 -> A; A, 1 -> A; A, 2 -> A; A, 3 -> A; A, 4 -> A; A, 5 -> A; A, 6 -> A;
+A, 7 -> A; A, 8 -> A; A, 9 -> A; B, 0 -> G; B, 1 -> C; B, 2 -> F; B, 3 -> H;
+B, 4 -> E; B, 5 -> F; B, 6 -> H; B, 7 -> C; B, 8 -> F; B, 9 -> H; C, 0 -> E;
+C, 1 -> D; C, 2 -> H; C, 3 -> C; C, 4 -> F; C, 5 -> H; C, 6 -> E; C, 7 -> D;
+C, 8 -> H; C, 9 -> C; D, 0 -> F; D, 1 -> H; D, 2 -> E; D, 3 -> D; D, 4 -> H;
+D, 5 -> E; D, 6 -> F; D, 7 -> H; D, 8 -> E; D, 9 -> D; E, 0 -> E; E, 1 -> D;
+E, 2 -> H; E, 3 -> C; E, 4 -> F; E, 5 -> H; E, 6 -> E; E, 7 -> D; E, 8 -> H;
+E, 9 -> C; F, 0 -> F; F, 1 -> H; F, 2 -> E; F, 3 -> D; F, 4 -> H; F, 5 -> E;
+F, 6 -> F; F, 7 -> H; F, 8 -> E; F, 9 -> D; G, 0 -> A; G, 1 -> A; G, 2 -> A;
+G, 3 -> A; G, 4 -> A; G, 5 -> A; G, 6 -> A; G, 7 -> A; G, 8 -> A; G, 9 -> A;
+H, 0 -> H; H, 1 -> C; H, 2 -> F; H, 3 -> H; H, 4 -> E; H, 5 -> F; H, 6 -> H;
+H, 7 -> C; H, 8 -> F; H, 9 -> H

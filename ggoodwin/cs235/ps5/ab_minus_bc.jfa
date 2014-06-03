@@ -1,0 +1,10 @@
+{states}
+A, B, C, D, E, F
+{start state}
+A
+{accepting states}
+
+{transitions}
+A, a -> B; A, b -> E; A, c -> A; B, a -> B; B, b -> C; B, c -> A; C, a -> D; D, 
+b -> C; C, b -> C; C, c -> F; D, a -> D; D, c -> D; E, b -> E; E, a -> B; E, c -
+> F; F, a -> F; F, b -> F; F, c -> F
