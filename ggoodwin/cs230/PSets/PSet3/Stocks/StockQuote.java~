@@ -1,0 +1,73 @@
+
+public class StockQuote{
+
+    //instance Variables
+
+    CS230Date stockDate;
+    double price;
+
+    //constructor
+    public StockQuote(CS230Date stockDate, double price){
+	this.stockDate = stockDate;
+	this.price = price;
+    }
+
+    public CS230Date getDate(){
+	return stockDate;
+    }
+
+    public double getPrice(){
+	return price;
+    }
+
+    public boolean equals(StockQuote q){
+	if ((this.stockDate == q.stockDate)&&(this.price == q.price))
+	    return true;
+	else return false;
+    }
+
+    public int compareTo(StockQuote q){
+	if(this.price<q.price) return 1;
+	else if(this.price>q.price)return -1;
+	else if(this.stockDate == q.stockDate) return 0;
+	else return -1;
+	
+    }
+
+    public java.lang.String toString(){
+	return "\ndate: " + stockDate + " price: " + price;
+    }
+
+    public static StockQuote fromLine(java.lang.String line){
+	//Get rid of the extra information on the line
+	String date = line.substring(0,line.indexOf(','));//get the string that represents the date
+
+	line = line.substring((line.indexOf(','))+1);
+       	while(line.indexOf(',')!=-1){//get rid of stuff in middle
+	    line = line.substring((line.indexOf(','))+1);
+	}
+	double a = Double.parseDouble(line);//turn price into a string	
+
+	CS230Date l = CS230Date.fromString(date);
+	StockQuote v = new StockQuote(l,a); //create new StockObject
+	return v;
+ }
+
+    public static void main(java.lang.String[] args){
+	StockQuote bob = new StockQuote((CS230Date.fromString("2009-06-13")),541.25);
+    StockQuote jim = new StockQuote((CS230Date.fromString("2010-02-15")),221.00);
+	System.out.println(bob.getDate());
+	System.out.println(bob.getPrice());
+	System.out.println(bob.equals(jim));
+	StockQuote ben = fromLine("2007-01-16,507.55,513.00,503.30,504.28,7568900,504.28");
+	System.out.println(ben.getPrice());
+	
+	
+       
+    }}
+
+	
+	
+	
+	
+	

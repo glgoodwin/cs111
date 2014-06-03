@@ -1,0 +1,108 @@
+/** 
+Gabrielle Goodwin
+MidTerm3 
+Problem 2
+Table List
+**/
+
+public class TableList<ListNode<TableEntry<V>>>{
+    
+    //instance variables
+    private ListNode<TableEntry<V>> front;
+    private int size;
+
+    //constructor
+    public TableList(){
+	front = null;
+	size = 0;
+    }
+    
+    public boolean isEmpty(){//O(n)
+	if(front.value() = null)
+	    return true;
+	else return false;
+    }//end isEmpty
+
+
+    public void clear(){//O(n)
+	front.setValue(null);
+	size = 0;
+    }//end Clear
+
+
+    public void insert(TableEntry<V> newEntry){//O(n)
+	ListNode<TableEntry<V>> g = front;
+	if(!contains(newEntry)){//if contains is true, value is already inserted
+	    while(g.value != null){
+		g = g.next(); //goes to end of the list
+	    }
+	    g.key = newEntry.key();
+	    g.setValue(newEntry.value());
+	}
+	    size = size +1;
+
+	
+    }//end Insert
+    
+    public boolean contains(TableEntry<V> newEntry){//helper method for insert
+	ListNode<TableEntry<V>> g = front;
+	boolean result = false;// initialize to false, will only change if an entry with the same key is found
+	while(g != null){
+	    if(g.key() = newEntry.key()){
+		g.setValue(newEntry.value());
+		result = true;
+		break;
+		    }else{
+		g = g.next();
+	    }return result;}
+    }
+
+    public void delete(String key){//O(n)
+       	ListNode<TableEntry<V>> g = front;
+	while(!g.isEmpty()){
+	    if(g.key() = key){//when the key to delete is found
+		size = size -1;
+		while(g.value !=null){//need to shift all of the values down one
+		   ListNode<TableEntry<V>> h = g.next();
+		    g.key() = h.key(); 
+		    g.setValue(h.value());
+		    g = g.next();
+		}
+	    }else{//leave as is and move on to next value
+		g = g.next();
+	    }
+	}
+    }//end delete
+
+
+    public V search(String key){ //O(n)
+	ListNode<TableEntry<V>> g = front;
+	while(g.value != null){
+	    if(g.key() = key){
+		return g;
+		    }else{
+		g = g.next();
+	    }}
+
+    }//end search
+
+
+    public int size(){ //O(1)
+	return size;
+    }//end size
+
+
+    public String toString(){ //O(n)
+      	ListNode<TableEntry<V>> g = front;
+	while(g != null){
+	    g.toString();
+	}
+    }//end toString
+
+
+
+
+
+    
+
+}//end TableList

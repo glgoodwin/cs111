@@ -1,0 +1,41 @@
+/** Gabe Goodwin
+    11/30/2010
+    Lab 12
+    Task.java
+**/
+
+
+public class Task implements comparable{
+
+    //instance variables
+    private String name;
+    private int timeNeeded;
+    private int timeIn;
+    private int priority;
+  
+
+    //constructor
+    public Task(String name, int timeNeeded, int priority){
+	this.name = name;
+	this.timeNeeded = timeNeeded;
+	this.priority = priority;
+	this.timeIn = 0; //initialize time in to 0, will be set by Scheduler class
+    }//end constructor
+
+
+    public int getPriority(){
+	return priority;
+    }
+
+	//compareTo
+    public int compareTo(Task t){
+	if(this.getPriority() == t.getPriority()){
+	    return 0;
+	}else if( this.getPriority() > t.getPriority()){
+	    return 1;
+	}else{
+	    return -1;
+	}}
+
+
+}//end Task class

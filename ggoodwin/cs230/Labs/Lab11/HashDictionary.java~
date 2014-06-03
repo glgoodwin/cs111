@@ -1,0 +1,22 @@
+/**
+ * Reads a dictionary from the input file, into a hash table. 
+ * Each line in the file contains only one word.
+ * The input file should not contain empty lines. 
+ * An empty line signals the end of the file.
+ * 
+ */
+
+
+public class HashDictionary implements Dictionary {
+  
+    Hashtable<String,String> hashDictionary;
+
+  
+  
+  
+  
+    public static void main(String[] args) {
+    
+  }
+  
+}

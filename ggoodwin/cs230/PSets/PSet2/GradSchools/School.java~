@@ -1,0 +1,123 @@
+/** Defines a class of School objects that store information
+ * about individual graduate schools
+ * @author
+ */
+public class School {  
+
+  // instance variables 
+
+  // ratings are assumed to be an integer from 1 to 10
+  private String name;         // name of school
+  private int rateWomen;       // rating of percentage of women PhD's
+  private int rateAI; 	       // rating of AI program
+  private int rateSys;	       // rating of Computer Systems program
+  private int rateTheory;      // rating of Theory program 
+  private int rateEffect;      // rating of effectiveness in educating 
+                               // research scholars 
+  private int ratePubs;	       // rating of impact of faculty publications
+  private int overallRating;   // overall rating that uses all six factors
+  private int rankValue;       // value used to rank schools, based on one
+                               // factor or all factors combined
+	
+  // 1. Code required to complete the assignment:
+  /** 7-argument constructor
+      Has the user input 7 values associated with the school. rankValue and overallRating are set to a default of 0
+   */
+    public School(String schoolName, int schoolRateWomen, int schoolRateAI, int schoolRateSys, int schoolRateTheory, int schoolRateEffect, int schoolRatePubs){
+	overallRating = 0;
+	rankValue = 0;
+	name = schoolName;
+	rateWomen = schoolRateWomen;
+	rateAI = schoolRateAI;
+	rateSys = schoolRateSys;
+	rateTheory = schoolRateTheory;
+	rateEffect = schoolRateEffect;
+	ratePubs = schoolRatePubs;
+    }
+	
+  // instance methods that each return the value of one instance variable
+
+  public String getName () {
+    return name;
+  }
+
+  public int getRateWomen () {
+    return rateWomen;
+  }
+
+  public int getRateAI () {
+    return rateAI;
+  }
+
+  public int getRateSys () {
+    return rateSys;
+  }
+
+  public int getRateTheory () {
+    return rateTheory;
+  }
+
+  public int getRateEffect () {
+    return rateEffect;
+  }
+
+  public int getRatePubs () {
+    return ratePubs;
+  }
+
+  public int getOverallRating () {
+    return overallRating;
+  }
+
+  public int getRankValue () {
+    return rankValue;
+  }
+  
+  // instance method that sets the rankValue instance variable to a new value
+
+  public void setRankValue (int newValue) {
+    rankValue = newValue;
+  }
+
+  /** instance method that returns a String containing the information
+   * stored in a single School object
+   */
+  public String toString () {
+    String S = "\n Name: " + name;
+    S = S + "\n Rating of number of women PhD's: " + rateWomen;
+    S = S + "\n Rating of AI program: " + rateAI;
+    S = S + "\n Rating of Systems program: " + rateSys;
+    S = S + "\n Rating of Theory program: " + rateTheory;
+    S = S + "\n Rating of effectiveness: " + rateEffect;
+    S = S + "\n Rating of faculty publications: " + ratePubs;
+    S = S + "\n Overall rating: " + overallRating;
+    S = S + "\n Current rank value: " + rankValue;
+    return S;
+  }
+	
+  // 2. Code required to complete the assignment:
+  /** instance method that computes overallRating for a School that considers 
+   * all six factors, given input weights for the individual factors
+   */
+  public void computeRating(int weightWomen, int weightAI, int weightSys, int weightTheory, int weightEffect, int weightPubs){
+      int a = (weightWomen*rateWomen);
+      int b = (weightAI*rateAI);
+      int c = (weightSys*rateSys);
+      int d = (weightTheory*rateTheory);
+      int e = (weightEffect*rateEffect);
+      int f = (weightPubs*ratePubs);
+      
+      overallRating = (a+b+c+d+e+f);
+  }
+
+    //testing for the constructor and computeRating method
+    public static void main(String[]args){
+	School Univ = new School("New University",50,60,20,70,30,51);
+	System.out.print(Univ);
+	Univ.computeRating(1,1,1,1,1,1);
+	System.out.print(Univ);
+    }
+
+	
+}
+

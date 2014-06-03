@@ -1,0 +1,36 @@
+/* Introduction.java
+   Purpose: practice emacs
+   CS230 Lab 1 
+   Written by: CS230
+   Modified by:
+   Modified date:
+*/
+import java.util.Scanner;
+
+public class Introduction {
+    public static void main (String[] args) {      String name = name;
+      // String city = "Capitan";
+      //String state = "New Mexico";
+      //String country = "US";
+      //String fave1 = "Bungee Jump";
+      //String thing1 = "sleep";
+      //String candy1 = "Tootsie Rolls";
+      //Scanner scan = new Scanner(System.in);
+      System.out.print("Enter name:");
+      name = scan.nextLine();
+      
+      System.out.println ("Hello my name is "+name+""."")
+      //System.out.println ("I am from "+city+ " which is in "+state+", which is in "+country+".");
+      //System.out.println("One thing I really like to do is "+fave1+".");
+      //System.out.println("One of the best things I did this summer was "+thing1+".");
+      //System.out.println("One of my favorite candies is "+candy1+".");
+      //System.out.println(); // I add this here just for some space when executing the program
+     
+    }
+}
+
+
+
+
+
+

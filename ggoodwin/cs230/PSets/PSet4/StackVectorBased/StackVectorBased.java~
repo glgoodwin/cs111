@@ -1,0 +1,40 @@
+/* Gabe Goodwin
+   cs230 Pset 4
+   10/17/2010
+   Task 2
+*/
+
+import java.util.*;
+
+public class StackVectorBased<E> implements StackInterface<E> {
+    //is empty
+    private Vector() items;
+
+    //constructor
+    public StackVectorBased(){
+	items = new Vector();
+    }
+
+    public boolean isEmpty(){
+	return items.isEmpty();
+    }
+
+    public void push(E newItem){
+	items.add(E o);//adds item to the end of the vector
+    }
+
+    public E pop() throws StackException {
+	if(!isEmpty()){//takes last item of vector, since I am adding to the end it will be the last item that was added
+	    return items.remove(items.lastElement());
+	} else{
+		throw new StacException("Cannot pop, stack is empty");
+	    }
+	}
+    public E peek() throws StackException {
+	if (!isEmpty()){
+	    return items.lastElement();
+	}else{
+	    throw new StackException("Cannot peek, stack is empty");
+    }
+    }
+}

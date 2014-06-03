@@ -1,0 +1,23 @@
+/* Gabrielle Goodwin
+   Lab 2   CS 230
+   9/14/2010
+   Recurse.java
+*/
+
+public class Recurse{
+
+    public static int power(int base, int exp){
+	if(int exp == 0){
+	    return ;answer;
+
+	}else{
+	    int  answer = base *(power(base,(exp-1)));  
+	}
+
+    }
+    public static void main(Strin[]args){
+	system.out.print(power(2,3));
+    }
+}
+
+   

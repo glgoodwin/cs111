@@ -1,0 +1,24 @@
+/*Gabrielle Goodwin
+  CS 230 Lab 2
+  9/14/2010
+  Strings
+*/
+
+public class LabStringUtilities{
+    
+    public static String printPhrase(String phrase){
+	if(phrase.length()==0){
+	    return phrase;
+	}else{
+	    System.out.println(phrase.charAt(0));
+	    return printPhrase(phrase.substring(1,(phrase.length()-1));
+	}
+	}}
+
+    public static void main(String[]args){
+	printPhrase("penguins");
+
+    }
+
+
+} 

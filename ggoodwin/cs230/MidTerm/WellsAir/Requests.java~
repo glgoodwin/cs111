@@ -1,0 +1,19 @@
+/** Gabe Goodwin
+
+requests
+*/
+
+public Class Requests{
+    //instance variables
+    String fromCity;
+    String toCity;
+    
+
+    public Requests(String fromCity, String toCity){
+	this.fromCity = fromCity;
+	this.toCity = toCity;
+    }
+
+    public static Requests fromLine(String Line){
+	String[] temp = Line.split(" ");
+	String fromCity = 

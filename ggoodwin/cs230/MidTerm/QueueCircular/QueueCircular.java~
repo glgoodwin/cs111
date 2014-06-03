@@ -1,0 +1,47 @@
+public class QueueCircular<E> implements QueueInterface<E> {
+    // a circular LinkedList is used to store a queue
+
+
+    //instance variable
+    private ListNode<E> back; //null by default
+
+    //constructor
+    public QueueCircular(){
+	back = null; 
+    }
+
+    //Instance methods
+    public boolean empty(){
+	return (back == null);
+    }
+    
+    public void enQ(E newItem){
+	if(empty()){
+	    E first = newItem;
+	    back = new ListNode(newItem,newItem);
+	}else{
+	    back.next = new ListNode(newItem, first);
+	    back = back.next;
+	}}
+
+    public E deQ(){
+
+    }
+    
+    public E front(){
+
+    }
+
+    public int size(){
+
+    }
+
+    public void clear(){
+
+    }
+
+    public String toString(){
+
+    }
+
+}

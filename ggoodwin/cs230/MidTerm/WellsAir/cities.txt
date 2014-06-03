@@ -1,0 +1,13 @@
+ATL Atlanta, GA
+BOS Boston, MA
+CIN Cincinnati, OH
+DAL Dallas, TX
+LAX LosAngeles, CA
+SDI SanDiego, CA
+WDC Washington, DC
+CHI Chicago, IL
+ALB Albuquerque, NM
+NYC NewYork, NY
+SEA Seattle, WA
+MIA Miami, FL
+DEN Denver, CO

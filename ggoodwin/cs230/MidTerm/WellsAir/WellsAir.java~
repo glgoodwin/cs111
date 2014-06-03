@@ -1,0 +1,50 @@
+/** reads in all the information and creates the neccesary ADTs for the process to work*/
+
+public class WellsAir{
+    //instacen variables
+    private Queue<Strings> requests;
+    private Cities[] cities; // an array of city objects
+    private LinkedList<GraphNode> flights; //a graph of all the available flights
+    public WellsAir(String requestFileName, String cityFileName, String flightsFilename){
+	requests = getRequests(requestFileName);
+	flights = getFlights(flightsFileName);
+	cities = getCities(cityFileName);
+    }
+	
+    public Queue<Strings> getRequests(String fileName){
+	
+
+    }
+
+    public LinkedList<GraphNode> getFlights(String fileName) throws FileNotFoundException{
+	scanner reader = new scanner(new File(fileName));
+	LinkedList<String> nodes = new LinkedList<String>;
+	while(reader.hasNext()){
+	    Flights p =fromLine(reader.nextLine());
+	    if(nodes.contains(p.getFromCity())){
+		Flights q =nodes.get(indexOf(p.getFromCity()));
+		 q.addNeighbor(p.getToCity());
+	       }else{
+		  GraphNode r =  p.addNewNode(p.getFromCity(),p.getToCity());
+		  flights.addFirst(r);
+	    }}
+	reader.close();}
+		   
+		       
+		   
+	    
+
+    }
+
+
+ 
+    public static void main(String[]args){
+	
+
+
+
+
+    }
+
+
+}

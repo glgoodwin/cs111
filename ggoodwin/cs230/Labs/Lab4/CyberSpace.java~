@@ -1,0 +1,34 @@
+/** cs230 Lab 4
+    Gabe Goodwin
+    9/28/2010
+**/
+
+public class CyberSpace{
+
+    //instance variables
+    private LinkedList<WebPages> pages;
+    private int numURLs;
+
+
+    //constructor
+    public CyberSpace(){
+	pages = new LinkedList<WebPages>();
+	numURLs = 0;
+
+    public String toString(){
+	String webString = "Results from visiting " + numURLs + ".";
+	WebPage page;
+	for(int i = 0; i<pages.size();i++){
+	    page = pages.get(i);
+	    webString += page;
+	}
+	return webString;
+    }
+
+
+
+
+
+
+
+}

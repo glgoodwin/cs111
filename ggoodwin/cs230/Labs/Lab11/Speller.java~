@@ -1,0 +1,16 @@
+/**    CS230
+ *     Fall 2010
+ *     Speller.java
+ *     Simple hash table spell checker program
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class Speller  {
+  
+  
+  public static void main (String[] args)  throws IOException {
+    
+  }	
+}

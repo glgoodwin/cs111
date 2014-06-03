@@ -1,0 +1,56 @@
+/** Gabe Goodwin
+    
+*/
+import java.util.*;
+import java.io.*;
+import java.net.*;
+
+public class Cities{
+    //instance variables
+    private String Abbr;
+    private String City;
+    private String State;
+
+    public Cities(String Abbr, String City, String State){
+	this.Abbr = Abbr;
+	this.City = City;
+	this.State = State;
+    }
+
+    //instance methods
+
+    public String getAbbr(){
+	return Abbr;
+    }
+
+    public String getCity(){
+	return City;
+    }
+
+    public String getState(){
+	return State;
+    }
+    
+    public true isCity(String Abbrev){//checks if the 
+	if(Abbrev.equals(this.getAbbr())){
+	       return true;
+	   }else{
+	       return false;
+	}}
+	       
+
+    public static Cities fromLine(String Line){
+	String[] temp = Line.split(" ");
+       	String abbre = temp[0];
+	String cityName = temp[1];
+	String cityState= temp[2];
+
+
+	return new Cities(abbre, cityName, cityState);
+    }
+    public String toString(){
+	return City + ", " + State;
+    }
+	
+
+}

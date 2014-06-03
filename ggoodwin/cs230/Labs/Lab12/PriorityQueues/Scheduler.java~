@@ -1,0 +1,40 @@
+/** Gabe Goodwin
+    11/30/2010
+    Lab 12
+    Task.java
+**/
+
+public class Scheduler{
+
+    private priorityQueue tasks;
+    private int clock;
+
+    public Scheduler(){
+	tasks = new PriorityQueue();
+	clock = 0; 
+
+    }
+
+    public void setClock(int i){
+	clock = i;
+    }
+
+
+    public void add(task t){
+	t.setTimeIn(clock);
+	tasks.enQ(t);
+    }
+
+
+    public void runTask(){
+	Task r = tasks.deQ();
+	System.out.println("running "+ r.getName() + " for " +
+			   r.getTimeNeeded() + " minutes.");
+	clock = clock + r.getTimeNeeded();
+	System.out.println(r.getName() + " was int the system for " + 
+			   (clock - r.getTimeIn()) + " cycles.");
+	System.out.println("The clock now reads " + clock + " cycles.");
+    }
+}
+			   
+	

@@ -1,0 +1,109 @@
+/*Gabe Goodwin
+  Sept. 21 2010
+  Lab 3 Credit Card
+*/
+
+
+public class CreditCard{
+    // Static Vaiables
+    private static double  baseRate = 5.5;
+    private static int lastAccountNumber = 1234567;
+
+    //Instance Variables
+    public String accountHolder;
+    public int accountNumber;
+    public int creditScore;
+    public double rate;
+    public double balance;
+    public int creditLimit;
+
+
+    //Constructor
+    /**
+       Makes a new credit card account using the specified information and the
+       table given.
+       @param accountHolder  The name of the credit card holder
+       @param creditScore    The credit score of the card holder
+    */
+       
+    public CreditCard(String accountHolder,int creditScore){
+	accountNumber = lastAccountNumber+1;
+	lastAccountNumber = lastAccountNumber+1 ;   
+	this.accountHolder= accountHolder; 
+	this.creditScore = creditScore;
+	balance = 0;
+	if(creditScore<300){
+	    rate =(baseRate+(baseRate*.1));
+	    creditLimit = 1000;
+	}else if(creditScore<500){
+	    rate = (baseRate+(baseRate*.07));
+	    creditLimit = 3000;
+	}else if(creditScore<700){
+	    rate = (baseRate+(baseRate*.04));
+	    creditLimit = 7000;
+	}else{
+	    rate = (baseRate+(baseRate*.01));
+	    creditLimit = 15000;
+	}
+    }
+
+    public String toString(){
+	String result = "";
+	result += "Account Holder: " +getAccountHolder()+ "\n";
+	result += "Account Number: " +getAccoutnNumber()+"\n";
+	result += "Credit Score: " +getCreditScore()+ "\n";
+	result += "Rate: " +getRate()+ "\n";
+      	result += "Balance: " +getBalance()+ "\n";
+      	result += "Credit Limit: " +getCreditLimit()+ "\n";
+      	result += "Base Rate: " +getBaseRate()+ "\n";
+      	result += "Last Account Number: " +getLastAccountNumber()+ "\n";
+    }
+    //Instance Methods
+    public String getAccountHolder(){
+	return accountHolder;
+    }
+
+    public int getAccountNumber(){
+	return accountNumber;
+    }
+
+    public int getCreditScore(){
+	return creditScore;
+    }
+
+    public double getRate(){
+	return rate;
+    }
+
+    public double getBalance(){
+	return balance;
+    }
+
+    public int getCreditLimit(){
+	return creditLimit;
+    }
+
+    //Class Methods
+    public static double getBaserate(){
+	return baseRate;
+    }
+
+    public static int getLastAccountNumber(){
+	return lastAccountNumber;
+    }
+
+    
+    public static void main(){
+	CreditCard Gabe = new CreditCard(Gabe,600);
+	System.out.println(toString());
+
+
+
+
+
+    }
+	
+
+
+
+}

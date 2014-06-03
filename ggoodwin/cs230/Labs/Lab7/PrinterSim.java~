@@ -1,0 +1,74 @@
+/**
+ * PrinterSim.java
+ * 
+ */
+import java.io.*;
+import java.util.*;
+
+public class PrinterSim {
+
+    // code to simulate a printer queue
+
+    // instance variables
+
+    private double probJob;      // probability of request arriving
+    private int totalTime;       // total time *steps* in simulation
+
+
+  /**
+   * Creates a PrinterSim object to run a simulation of a printer queue
+   *
+   * @param fileName  the text file containing items for the printer queue
+   * @param probability the probability that a new item will be added to the queue (0-1)
+   * @param time the number of time cycles to run the simulation (here, once cycle = 5 secs)
+   * @return a PrinterSim object
+   *
+   */
+    public PrinterSim (String fileName, double probability, int time) {
+	probJob = probability;
+	totalTime = time;
+
+	// Read data from file into memory
+
+
+    }
+
+
+  /**  
+   *
+   * Reads in the printer queue items from a text file.  Each line in the
+   * text file is assumed to be of the form "username filename pages".
+   * This method uses split() to parse the string, so it is important that
+   * each word in the file is separated by a single space.
+   *
+   *  @param fileName  the name of the text file containing the printer queue items
+   */
+  private void readData (String fileName) {
+    // reads information about print requests from a text file and places
+    // the information in a data structure in memory
+    
+    try {             // set up file for reading line by line
+      FileReader fr = new FileReader(fileName);
+      BufferedReader br = new BufferedReader(fr);
+      String S = br.readLine();      // get first line in the file
+      String [] printInfo = null;
+
+      while (S != null) {
+	// if S is not empty, assume it contains user, file and pages
+	if (!S.equals(""))  {
+	  printInfo = S.split(" ");	  
+	  jobs.addLast(new PrintJob(printInfo[0],printInfo[1],Integer.parseInt(printInfo[2])));
+	}
+	S = br.readLine();        // read next line of file and create
+      }
+      fr.close();    // close file
+    }
+    catch (IOException e) {
+      System.out.println("Error in reading data file: " +fileName);
+    }
+    
+  }
+
+  
+  
+} // PrinterSim

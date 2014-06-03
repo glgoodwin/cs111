@@ -1,0 +1,148 @@
+/** Defines a class for maintaining an array of School objects
+ * @author
+ */
+public class GradSchools {
+	
+  // instance variables
+  
+  private School[] schools;	 // array of School objects
+  private int numSchools;	 // number of School objects stored in array
+  
+  // 3. Code required to complete the assignment:
+  /** constructor 
+   */ 
+    public GradSchools(int size){
+      schools = new School[size];
+      numSchools = 0;
+    }
+
+
+  // 4. Code required to complete the assignment:
+  /** instance method to add a new School object to the schools array
+   */
+    public void addSchool(String name, int rateWomen, int rateAI, int rateSys, int rateTheory, int rateEffect, int ratePubs){
+	if (numSchools<schools.length){
+	    schools[numSchools] = new School(name, rateWomen, rateAI, rateSys, rateTheory, rateEffect, ratePubs);
+	    numSchools++;
+	}else{
+	    System.out.println("No space to fit more schools in the array");
+		}
+    }
+
+	
+  /** instance method that prints information about all of the School objects
+   * in the schools array
+   */
+  public void printGradSchools () {
+    System.out.println("There are " + numSchools + " schools in the database:");
+    for (int i = 0; i < numSchools; i++)
+      System.out.println(schools[i]);
+    System.out.println();
+  }
+  
+  // 5. Code required to complete the assignment:
+  /** instance method that computes overallRating for each School object
+   */	
+    public void computeRatings(int weightWomen, int weightAI, int weightSys, int weightTheory, int weightEffect, int weightPubs){
+	int i =0;
+	while(i<schools.length){
+	    School a = schools[i];
+	    a.computeRating(weightWomen, weightAI, weightSys, weightTheory,
+			    weightEffect, weightPubs);
+	    i++;
+	}
+ }
+
+  // 7. Code required to complete the assignment:
+  /** instance method that rank orders the School objects in the schools
+   * array, either by a single factor or the overallRating as specified
+   * by an input String, and prints the names of the schools in order
+   * from highest to lowest rank
+   */
+    public void rankSchools(String factor){
+	int i = 0;
+	while(i<schools.length){
+	    School a = schools[i];
+	    a.setRankValue(factor);
+	    i++
+	}
+	int[] arrayB = new int[numSchools];
+	int j = 0;
+	while(j<schools.length){
+	    School b = schools[j];
+	    arrayB[j]= schools[j].getRankValue();
+	    
+
+    }
+    
+      
+
+
+
+  // 6. Documentation required to complete the assignment:
+  /** instance method that sorts the School objects in the schools array in 
+   * order of increasing rankValue
+   * Sorting strategy for original sortArray() method:
+   */
+    //this method goes through the whole array checking each element. It puts them in order by taking the highest int that it has found so far and putting it in the back of the array. 
+  public static void sortArray (int[] arrayA) {
+    // sorts the integers in arrayA in decreasing order
+    int minNum;        // maximum integer
+    int maxIndex;      // index of maximum integer
+    int i, j;
+    for (j = arrayA.length - 1; j > 0; j--) {
+      maxIndex = 0;
+      minNum = arrayA[0];
+      for (i = 1; i <= j; i++) //changed the value sign so that it moves a number                              // when it is the lowest rather than the highest
+	if (arrayA[i] < minNum) {
+	  minNum = arrayA[i];
+	  maxIndex = i;
+	}
+      swap(arrayA, maxIndex, j);
+    }   
+    
+  }
+
+  /** exchanges the contents of arrayA[i] and arrayA[j]
+   */
+  private static void swap (int[] arrayA, int i, int j) {
+    // exchanges the contents of locations i and j in arrayA
+    int temp = arrayA[i];
+    arrayA[i] = arrayA[j];
+    arrayA[j] = temp;
+  }
+  
+  /** Provides code for testing the methods defined in the
+   * GradSchools class for maintaining an array of School objects
+   */
+  public static void main (String[] args) {
+    GradSchools myGradSchools = new GradSchools(10);
+    // Disclaimer: The ratings here are somewhat arbitrary
+    /* myGradSchools.addSchool("MIT", 5, 10, 9, 10, 10, 7);
+    myGradSchools.addSchool("Stanford", 9, 8, 5, 8, 10, 9);
+    myGradSchools.addSchool("CMU", 6, 9, 9, 7, 8, 6);
+    myGradSchools.addSchool("UC Berkeley", 4, 6, 8, 9, 9, 9);
+    myGradSchools.addSchool("Cornell", 9, 5, 8, 9, 9, 8);
+    myGradSchools.addSchool("Univ. of Illinois", 4, 7, 7, 7, 7, 7);
+    myGradSchools.addSchool("Univ. of Washington", 7, 5, 7, 8, 8, 8);
+    myGradSchools.addSchool("Princeton", 8, 4, 5, 8, 7, 10);
+    int weightWomen = 5;
+    int weightAI = 5; 
+    int weightSys = 2;
+    int weightTheory = 0;
+    int weightEffect = 5;
+    int weightPubs = 4;
+    myGradSchools.computeRatings(weightWomen, weightAI, weightSys, weightTheory,         weightEffect, weightPubs);
+    myGradSchools.printGradSchools();*/
+    int[] arrayA = {1,5,7,3,9,2};
+    sortArray(arrayA);
+    
+
+    
+  // 8. Code required to complete the assignment:
+
+    
+  }
+
+  
+}
