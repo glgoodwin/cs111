@@ -1,0 +1,15 @@
+import java.awt.*; 
+
+class SpinnerAnimation extends Animation
+{ 
+    public SpinnerAnimation()
+    {
+        addSprite(new Spinner(200,100,50,3,Color.red,Color.blue));
+        addSprite(new Spinner(250,150,125,1,Color.yellow,Color.green));
+        addSprite(new Spinner(300,200,50,5,Color.pink,Color.gray));
+        addSprite(new Spinner(400,200,100,2,Color.cyan,Color.magenta));
+        setNumberFrames(Animation.NO_MAX_FRAMES);
+        //this.setNumberRepeats(Animation.FOREVER);
+
+    }
+}

@@ -1,0 +1,24 @@
+import java.io.*;
+import java.util.*;
+public class CS111Students{
+     //instance variables
+     Student [] csStudents;
+     int number;
+     //constructor
+     public cs111Student(String filename){
+          Scanner reader = new Scanner(PicOps.getFolder()+ filename);
+          csStudents = new Student[];
+       for(int i =0;reader.hasNextLine();i++){
+            Student s1 = reader.nextLine();
+            csStudent[i] = s1;
+       }
+       public getLabGroup(){
+            Scanner reader2 = new Scanner(system.in);
+            System.out.println("Enter lab group: ");
+            String group = reader2.nextLine();
+            
+                 
+            
+                                          
+     
+}

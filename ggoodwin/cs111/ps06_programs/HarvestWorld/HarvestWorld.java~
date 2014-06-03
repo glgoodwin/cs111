@@ -1,0 +1,28 @@
+import java.awt.*;
+
+public class HarvestWorld extends BagelBuggleWorld
+{
+
+        public static void main (String[] args)
+        {
+                runAsApplication(new HarvestWorld(), "HarvestWorld"); 
+        }
+
+        public void run ()
+        {
+                Harvester hannah = new Harvester();
+                hannah.brushUp();
+                params.setIntResult("bagels", hannah.harvestField());
+        }
+        
+}
+
+
+// Define your Harvester class here.
+// Don't forget that the specified methods MUST
+// meet the invariant that the buggle's state
+// (position, heading, color, and brush state) will
+// not be changed by execution of the methods.
+// Assume the buggle's brush is initially up when each
+// method is called.
+

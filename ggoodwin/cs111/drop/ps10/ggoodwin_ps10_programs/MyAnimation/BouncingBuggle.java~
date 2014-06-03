@@ -1,0 +1,37 @@
+import java.awt.*; // use graphics
+
+public class BouncingBuggle extends Sprite{//draws a buggle that bounces up and down
+  //instance variables
+  private int x;
+  private int y;
+  private int size;
+  private int inity;
+  private Color color;
+  
+    public BouncingBuggle(Color c, int xx, int yy, int howBig){
+    x = xx;
+    y = yy;
+    size = howBig;
+    color = c;
+    inity = yy;
+
+  }
+    public void drawState(){
+    g.setColor(color);
+    Polygon bouncingBuggle = new Polygon();
+    bouncingBuggle.addPoint(x,y);
+    bouncingBuggle.addPoint(x+size,y+(size/2));
+    bouncingBuggle.addPoint(x,y+size);
+    g.drawPolygon(bouncingBuggle);
+    g.fillPolygon(bouncingBuggle);
+    }
+     public void updateState(){
+    if(y == inity){
+      y = y-5;
+    }else{
+      y = inity;}}
+     
+     public void resetState(){
+       y = inity;
+     }
+}

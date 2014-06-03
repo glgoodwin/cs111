@@ -1,0 +1,55 @@
+import java.awt.*;
+//import javax.swing.*;
+
+public class TriangleWorld extends BuggleWorld
+{
+  
+    //-------------------------------------------------------------------------
+    // The main() method is needed to run the applet as an application
+  
+    public static void main (String[] args)
+    {
+	runAsApplication(new TriangleWorld(), "TriangleWorld"); 
+    }
+  
+    // Instance variables
+    String parameterNames [] = {"triangleSize", "buggleColor"};
+    String resultNames [] = {"droppedBagels"};
+    protected ParameterFrame params;
+  
+    public void setup ()
+    {
+	// Set up parameter window
+	params = new ParameterFrame("TriangleWorld", 300, 200,
+				    parameterNames, resultNames);
+	params.setIntParam("triangleSize", 16);
+	params.setColorParam("buggleColor", Color.red);
+	params.show();
+    }
+  
+    public void reset ()
+    {
+	int triangleSize = params.getIntParam("triangleSize");
+	int gridSize = 2 * triangleSize;
+	setDimensions(gridSize, gridSize);
+	params.setIntResult("droppedBagels", 0);
+	super.reset();
+    }
+  
+    public void run ()
+    {
+	TriangleBuggle tristen = new TriangleBuggle();
+	tristen.brushUp();
+	tristen.setColor(params.getColorParam("buggleColor"));
+	int side = params.getIntParam("triangleSize");
+	params.setIntResult("droppedBagels", tristen.drawAllTriangles(side));
+    }
+  
+} // class TriangleWorld
+
+
+// Add your TriangleBuggle class definition below.
+  
+  
+
+

@@ -1,0 +1,58 @@
+// ----------------------------------------------------------------------
+// Put your name here
+// ----------------------------------------------------------------------
+// This is the skeleton for CS111 PS1 Task 2. 
+// Flesh out the run() method to draw the Buggle Olympics symbol.
+
+import java.awt.*;
+
+public class Rings extends BuggleWorld
+{
+        public void setup ()
+        {
+                setDimensions(31, 31);   //set up 31 x 31 grid
+        } 
+  
+        public void run () {
+
+                // ------------------------------------------------------------
+                // Create and initialize the five buggle Olympians. 
+                // Do not modify this code!
+
+                Buggle rex = new Buggle();
+                rex.setPosition(new Location(8, 11));
+
+                Buggle cy = new Buggle();
+                cy.setColor(Color.cyan);
+                cy.setPosition(new Location(7, 15));
+
+                Buggle maggie = new Buggle();
+                maggie.setColor(Color.magenta);
+                maggie.setPosition(new Location(17, 7));
+                maggie.setHeading(Direction.NORTH);
+
+                Buggle blithe = new Buggle();
+                blithe.setColor(Color.blue);
+                blithe.setPosition(new Location(11, 17));
+
+                Buggle yelena = new Buggle();
+                yelena.setColor(Color.yellow);
+                yelena.setPosition(new Location(9, 23));
+                yelena.setHeading(Direction.SOUTH);
+
+                // ------------------------------------------------------------
+                // Put your code here:
+
+    
+        } // end of the run() method
+
+        //---------------------------------------------------------------------
+        // The following main() method allows this applet to run as an application
+
+        public static void main (String[] args)
+        {
+                runAsApplication(new Rings(), "Rings"); 
+        }
+
+  
+} // class Rings

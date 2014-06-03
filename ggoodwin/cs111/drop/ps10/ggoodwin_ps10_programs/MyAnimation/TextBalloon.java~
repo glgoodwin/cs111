@@ -1,0 +1,40 @@
+import java.awt.*; // use graphics
+
+public class TextBalloon extends Sprite{//creates a text balloon  
+  //instance methods
+  private Color c1;// text color
+  private int x;
+  private int y;
+  private int inity;
+  private String string; // the string of text that will appear in the balloon
+  
+  
+  public TextBalloon(Color c_1, String string1, int xx, int yy){
+    c1 = c_1;
+    string = string1;
+    x = xx;
+    y = yy;
+    inity = yy ;
+  }
+  
+  public void drawState(Graphics g){
+    g.setColor(c1);
+    g.drawOval(x,y,50,25);
+
+  }
+  
+  public void updateState(){
+    if(y == inity){
+      y = y-2;
+    }else{
+      y= y-2;
+    }}
+      
+  
+  public void resetState(){
+    y = inity;
+  }
+  
+}
+  
+  

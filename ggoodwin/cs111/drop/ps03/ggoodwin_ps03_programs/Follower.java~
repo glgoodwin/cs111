@@ -1,0 +1,47 @@
+/* Gabrielle Goodwin
+ * CS 111 PS 3
+ * Task 1 Follower
+ * 2/10/2010
+ * */
+
+public class Follower extends TickBuggle 
+{
+public void tick()
+{ if (!(isOverBagel())){
+  ;}else{
+  pickUpBagel();
+
+  if (isFacingBagelTrail()) {
+    forward();
+  }else{
+    left();
+    if (isFacingBagelTrail()){ 
+    forward();
+    }else{
+      right();
+      right();
+      if (isFacingBagelTrail()){
+        forward();
+      }else{ 
+        left();
+        ;
+  }
+
+
+    
+    }}}}public boolean isFacingBagelTrail(){
+  if (isFacingWall()) {
+    return false;
+  }else{
+    brushUp();
+    forward();
+    boolean result = isOverBagel();
+    backward();
+    brushDown();
+    return result;
+  }}
+}
+ 
+
+
+   

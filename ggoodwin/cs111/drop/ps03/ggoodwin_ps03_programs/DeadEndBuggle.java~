@@ -1,0 +1,52 @@
+/*Gabrielle Goodwin
+ * 2/11/2010
+ * CS 111 PS 3
+ * Task 2
+ */ 
+
+
+public class DeadEndBuggle extends TickBuggle
+{
+    // This location is helpful for stopping the buggle 
+    // when it returns to its starting position. 
+    Location start = new Location(1, 1);
+
+    // Override the default tick method of the TickBuggle class. 
+    // Keep "right finger" of buggle on right wall to explore maze.
+    // Drop bagels in dead ends.
+    public void tick()
+    {if ((((getPosition().x==1) && (getPosition().y==1) && (getHeading().equals(Direction.SOUTH)))||(getPosition().x==1) && (getPosition().y==1)&&(isOverBagel()))){
+      ;}else
+      if(!(isFacingWall())){
+      right();
+      if (isFacingWall()){
+        left();
+        forward();//keeps buggle in Straight line 
+      }
+      else{//when buggle finds a opening in the wall
+        left();
+        right();
+        forward();
+      }}
+    else{//when the buggle is facing a wall, looks for corners
+        right();
+        if(isFacingWall()){
+        left();
+        left();
+        if(isFacingWall()&&(!(isOverBagel()))){
+        dropBagel();// buggle is in corner at this point
+        left(); 
+        }}else{ 
+          forward();}}}} // when the opening is on the left hand side
+      
+        
+  
+        
+    
+   // Add your auxiliary methods below: 
+   
+      
+    
+            
+
+

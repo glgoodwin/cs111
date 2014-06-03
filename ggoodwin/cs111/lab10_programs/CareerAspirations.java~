@@ -1,0 +1,27 @@
+// CS111 Spring 2010
+
+public class CareerAspirations {
+ // instance variables
+  SecretCareer [] scArray;
+  int number;
+  
+  // constructor
+  public CareerAspirations(String filename)
+  {
+      // can assume the max size of array is 20
+    
+    
+  }
+  
+  public String toString()
+  {
+    
+    
+  }
+  
+  public static void main (String [] args)
+  {
+    CareerAspirations careerA = new CareerAspirations(args[0]);
+    System.out.println(careerA);
+  }
+}

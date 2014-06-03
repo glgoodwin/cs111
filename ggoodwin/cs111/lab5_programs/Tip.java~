@@ -1,0 +1,15 @@
+//Gabrielle Goodwin
+//Lab 5
+
+public class Tip{ //determines the total bill with tip 
+     public double convert (double dollars)
+     { double tip = dollars * 1.2;
+          return tip;
+     }
+     public static void main (string [] args)
+     {    double bill= 100.00; 
+          Tip tip = new tip();
+          double bill+tip = con.convert(bill);
+          System.out.print( "your total bill is " + money + "." + "With tip is " + tip + ".";
+                           }
+               }

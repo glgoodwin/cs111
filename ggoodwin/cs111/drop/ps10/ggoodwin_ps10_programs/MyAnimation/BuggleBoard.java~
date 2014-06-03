@@ -1,0 +1,34 @@
+import java.awt.*; // use graphics
+
+public class BuggleBoard extends Sprite{//draws a buggle board with a few buggles moving around on it
+  //instance methods
+  private Color c1;//Colors of the three buggles on the boards
+  private Color c2;
+  private Color c3;
+  private int x1;//X coord of the location of the three buggles
+  private int x2;
+  private int x3;
+  private int y1;//y coord of the three buggles
+  private int y2;
+  private int y3;
+  
+  //constructor
+  public BuggleBoard(Color col1, Color col2, Color c3, int x_1, int x_2, int x_3, int y_1, int y_2, 
+                     int y_3){
+    c1 = col1;
+    c2 = col2;
+    c3 = col3;
+    x1 = x_1;
+    x2 = x_2;
+    x3 = x_3;
+    y1 = y_1;
+    y2 = y_2;
+    y3 = y_3;
+    
+  }
+  
+  protected void drawState(Graphics g){
+    g.setColor(black);
+    g.drawLine(20,20,20,100);
+    g.drawLine(40,20,40,100);
+    g.drawLine(60,20,60,100);

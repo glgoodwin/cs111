@@ -1,0 +1,30 @@
+import java.awt.*;
+
+/* cs111 Lab1
+ * Write CS in buggleworld
+ * Gabrielle Goodwin
+ * 1.27.2010
+ */
+
+public class Cs extends BuggleWorld {
+     public void setup() {
+          setDimensions(13,13); // Creates a 13x13 buggleworld grid
+     }
+     
+     public void run() {
+          // all the code in here is executed when the user clicks the run button
+          // this program will draw a heart in buggleworld
+          Buggle red= new Buggle();
+          red.brushUp();
+          red.left();
+          red.forward(7);
+          red.right();
+          red.forward(3);
+          red.brushDown();
+          red.forward(2);
+          red.brushUp();
+          red.forward(3);
+          red.brushDown();
+          red.forward(2);
+          
+     }

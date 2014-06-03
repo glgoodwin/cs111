@@ -1,0 +1,68 @@
+/** FILE NAME: LabOps.java
+ * AUTHOR: CS111 Staff
+ *
+ *
+ * COMMENTS: You should write your class methods for this lab here.
+ * Notice that this class extends StringListOps, which extends StringList.
+ * Therefore, all methods defined in these two classes are inhereted here.
+ * 
+ * In particular:
+ * The following methods are inherited from StringList:
+ * public static StringList empty();
+ * public static boolean isEmpty (StringList L);
+ * public static StringList prepend (String s, StringList L);
+ * public static String head (StringList L);
+ * public static StringList tail (StringList L);
+ * public static boolean equals (StringList L1, StringList L2);
+ * public static String toString (StringList L);
+ * public static String fromString (String s);
+ * 
+ * The following methods are inherited from StringList:
+ * public static int length (StringList L);
+ * public static StringList append (StringList L1, StringList L2);
+ * public static StringList postpend (StringList L, String s);
+ * public static StringList reverse (StringList L);
+ * 
+ * All the above methods can be used in this file without the explicit 
+ * "StringList." or "StringListOps." prefixes.
+ * For example, you can write "head(L)" rather than "StringList.head(L)",
+ * and "length(L)" rather than "StringListOps.length(L)".
+ * 
+ * MODIFICATION HISTORY:
+*/    
+
+public class LabOps extends StringListOps {
+ // Write your methods here:
+ 
+ 
+  
+   public static void main (String [] args) {
+     //testing the f=given auxiliary methods
+  System.out.println("first(\"cs111\") = \"" + first("cs111") + "\"");
+  System.out.println("butFirst(\"cs111\") = \"" + butFirst("cs111") + "\"");
+  System.out.println("fromString(\"[I,do,not,like,green,eggs,and,ham]\") = "
+                      + fromString("[I,do,not,like,green,eggs,and,ham]"));  
+  
+  // Add your testing code here: 
+
+
+ }
+ //---------------------------------------------------------------
+ // The following auxiliary methods are helpful for defining explode()
+ 
+ // Given a string s, returns a one-character string containing
+ // the first character of s. 
+ public static String first (String s) {
+  return new Character(s.charAt(0)).toString();
+ }
+
+ 
+ // Given a string s, returns the substring of s that contains
+ // all characters except the first. 
+ public static String butFirst (String s) {
+  return s.substring(1,s.length());
+ }
+
+ 
+}
+
